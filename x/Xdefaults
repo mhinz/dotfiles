@@ -1,0 +1,186 @@
+!!!  MISC  !!!
+Xcursor.theme:            redglass
+Xcursor.size:             28
+
+Eclipse*fontList:         -*-terminus-*-*-*-*-*-*-*-*-*-*-*-*
+gitk*font:                -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
+
+xpdf*background:          #eeeeec
+xpdf*fontList:            -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
+xpdf*foreground:          #2e3436
+xpdf*initialZoom:         width
+xpdf*shadowThickness:     1
+
+urxvt*foreground:         #bebebe
+urxvt*background:         #202020
+!urxvt*background:         #412e21
+urxvt*boldMode:           false
+!urxvt*letterSpace: +1
+!urxvt*font:               xft:Inconsolata:pixelsize=12:dpi=96
+!urxvt*font:               -xos4-terminus-medium-r-normal--14-*-*-*-*-*-iso10646-*
+urxvt*font:               xft:DejaVu Sans Mono:pixelsize=12
+
+
+!!!  URXVT  !!!
+urxvt*cursorColor:        #ffaa77
+urxvt*matcher.button:     1
+urxvt*matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-=]*[\\w/-]
+urxvt*matcher.pattern.2:  \\bhttps?:\/\/[\\w-.]*\/[\\w./?&@#-=]*.(jpg|jpeg|png)
+urxvt*matcher.launcher.2: feh $0
+urxvt*perl-lib:           .urxvt
+urxvt*perl-ext-common:    default,matcher
+urxvt*urlLauncher:        firefox
+urxvt*pointerColor:       yellow
+urxvt*saveLines:          10000
+urxvt*scrollBar:          false
+urxvt*termName:           rxvt-256color
+urxvt*tripleclickwords:   true
+urxvt*underlineColor:     #CC6666
+!urxvt*fading:            20
+!urxvt*shading:           5
+!urxvt*transparent:       true
+
+! black
+urxvt*color0:   #000000
+urxvt*color8:   #505050
+! red
+urxvt*color1:   #ff669d
+urxvt*color9:   #d04c63
+! green
+urxvt*color2:   #B3D38C
+urxvt*color10:  #93D6A9
+! yellow
+urxvt*color3:   #efaf7f
+urxvt*color11:  #f4a45f
+! blue
+urxvt*color4:   #344863
+urxvt*color12:  #80c0d9
+! magenta
+urxvt*color5:   #CCA3B3
+urxvt*color13:  #AA66AA
+! cyan
+urxvt*color6:   #0b94a0
+urxvt*color14:  #96cccc
+! white
+urxvt*color7:   white
+urxvt*color15:  darkgray
+
+! black
+urxvt2*color0:   #000000
+urxvt2*color8:   #505050
+! red
+urxvt2*color1:   #ff669d
+urxvt2*color9:   #d04c63
+! green
+urxvt2*color2:   #B3D38C
+urxvt2*color10:  #93D6A9
+! yellow
+urxvt2*color3:   #efaf7f
+urxvt2*color11:  #f4a45f
+! blue
+urxvt2*color4:   #344863
+urxvt2*color12:  #80c0d9
+! magenta
+urxvt2*color5:   #CCA3B3
+urxvt2*color13:  #AA66AA
+! cyan
+urxvt2*color6:   #0b94a0
+urxvt2*color14:  #96cccc
+! white
+urxvt2*color7:   white
+urxvt2*color15:  darkgray
+
+! Pnevma 2
+!urxvt*color0:  #2F2E2D
+!urxvt*color8:  #4A4845
+!urxvt*color1:  #A36666
+!urxvt*color9:  #D78787
+!urxvt*color2:  #8FA57E
+!urxvt*color10: #A9BA9C
+!urxvt*color3:  #D7AF87
+!urxvt*color11: #E4C9AF
+!urxvt*color4:  #7FA5BD
+!urxvt*color12: #A1BDCE
+!urxvt*color5:  #C79EC4
+!urxvt*color13: #D7BEDA
+!urxvt*color6:  #8ADBB4
+!urxvt*color14: #B1E7DD
+!urxvt*color7:  #D0D0D0
+!urxvt*color15: #EFEFEF
+
+!urxvt2*font:               -xos4-terminus-medium-r-normal--18-140-72-72-c-80-iso10646-1
+!urxvt2*font:               -*-terminus-medium-r-*-*-24-*-*-*-*-*-*-*
+urxvt2*foreground:         #222
+!urxvt2*background:         #f5f5f0
+urxvt2*background:         #ccc
+urxvt2*font:               xft:DejaVu Sans Mono:pixelsize=16:style=bold
+!urxvt2*font:               xft:DejaVu Sans Mono:pixelsize=16
+!urxvt2*foreground:         #000
+!urxvt2*background:         #eee
+!urxvt2*cursorColor:        #000
+
+urxvt2*cursorColor:        #2069ff
+urxvt2*boldMode:           true
+urxvt2*matcher.button:     1
+urxvt2*matcher.launcher.2: feh $0
+urxvt2*matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+urxvt2*matcher.pattern.2:  \\bhttps?:\/\/[\\w-.]*\/[\\w./?&@#=-]*.(jpg|jpeg|png)
+urxvt2*perl-ext-common:    default,matcher
+urxvt2*pointerColor:       yellow
+urxvt2*saveLines:          10000
+urxvt2*scrollBar:          false
+urxvt2*termName:           rxvt-256color
+urxvt2*tripleclickwords:   true
+urxvt2*underlineColor:     #CC6666
+urxvt2*urlLauncher:        iceweasel
+
+
+!!!  XTERM  !!!
+xterm*allowWindowOps:     true
+!xterm*background:         #eee
+xterm*boldMode:           true
+xterm*colorMode:          true
+xterm*cursorColor:        #f77
+xterm*dynamicColors:      true
+xterm*eightBitInput:      false
+!xterm*faceName:           DejaVu Sans Mono:pixelsize=12:style=bold
+!xterm*foreground:         #000
+xterm*printAtrributes:    2
+xterm*utf8:               true
+
+xterm*foreground:         #bebebe
+xterm*background:         #202020
+
+xft*dpi:                  96
+xft*antialias:            true
+xft*rgba:                 rgb
+xft*hinting:              true
+
+!black
+!*color0: #1B1D1E
+!*color8: #505354
+!*color0: #262729
+!*color8: #554444
+!red
+!*color1: #F92672
+!*color9: #FF669D
+!green
+!*color2: #A6E22E
+!*color10: #BEED5F
+!yellow
+!*color3: #FD971F
+!*color11: #E6DB74
+!blue
+!*color4: #66D9EF
+!*color12: #66D9EF
+!magenta
+!*color5: #9E6FFE
+!*color13: #9E6FFE
+!cyan
+!*color6: #5E7175
+!*color14: #A3BABF
+!white
+!*color7: #CCCCC6
+!*color15: #F8F8F2
+
+
