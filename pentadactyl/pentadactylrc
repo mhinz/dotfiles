@@ -1,0 +1,24 @@
+set autocomplete=
+set defsearch=g
+set editor='urxvt -e vim'
+set followhints=0
+set showtabline=multitab
+set guioptions=rbsCM
+"set wildcase=smart
+
+nmap -builtin h H
+nmap -builtin H h
+nmap -builtin l L
+nmap -builtin L l
+
+nmap -builtin <C-b> <C-v><C-b>
+nmap -builtin ;d :tabopen dict.cc<cr>
+nmap -builtin ;h :tabopen http://news.ycombinator.com<cr>
+
+nmap -builtin <F8> :set fs<CR>
+nmap -builtin <F9> :set nofs<CR>
+
+"color desert
+color myseaweed
+
+com config :source! ~/.pentadactylrc
