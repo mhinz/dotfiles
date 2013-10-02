@@ -1,0 +1,12 @@
+directory  = /data/torrents/downloads
+session    = /data/torrents/session
+
+schedule   = low_diskspace,5,60,close_low_diskspace=50M
+
+ip = 127.0.0.1
+
+port_range   = 32537-32537
+port_random  = no
+
+dht           = off
+peer_exchange = false
