@@ -1,0 +1,38 @@
+[ui]
+username = Marco Hinz <mh.codebro@gmail.com>
+
+[pager]
+pager = LESS='FRX' less
+
+[alias]
+a    = add
+b    = branch
+bi   = bisect
+bm   = bookmark
+c    = commit
+cl   = clone
+co   = checkout
+d    = diff
+g    = grep
+h    = help
+l    = !hg log | LESS=FRX less
+m    = merge
+p    = push
+pl   = pull
+r    = revert
+rank = !hg churn -t '{author}' -c | less -FRX
+s    = status
+u    = update
+
+[extensions]
+color =
+pager =
+churn =
+
+[hooks]
+changegroup = rm -f .hg/tags && ctags --fields=+S --tag-relative -R -f .hg/tags --exclude=.hg
+commit = rm -f .hg/tags && ctags --fields=+S --tag-relative -R -f .hg/tags --exclude=.hg
+update = rm -f .hg/tags && ctags --fields=+S --tag-relative -R -f .hg/tags --exclude=.hg
+
+[color]
+diff.trailingwhitespace = bold red_background
