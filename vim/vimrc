@@ -1,0 +1,872 @@
+" vim: et sts=2 sw=2
+"
+"
+"   You are about to experience a potent dosage of Vim. Watch your steps.
+"
+"                ╔══════════════════════════════════════════╗
+"                ║           ⎋ HERE BE VIMPIRES ⎋           ║
+"                ╚══════════════════════════════════════════╝
+"
+" init {{{1
+silent! call pathogen#runtime_append_all_bundles()
+
+filetype plugin indent on
+syntax   on
+
+autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
+"let b:asmsyntax = 'armasm'
+let b:debug_highlight = 0
+
+if &term =~# '^rxvt|\xterm'
+    let &t_SI = "\<Esc>]12;1\x7"
+    let &t_EI = "\<Esc>]12;3\x7"
+endif
+
+" set {{{1
+set nocompatible
+
+" indent settings
+set autoindent
+set cinoptions    =>4,l1,p0,)50,*50,t0
+set expandtab
+set shiftwidth    =4
+set softtabstop   =4
+
+" backup/swap/info settings
+set backup
+set backupdir     =$HOME/.vim/files/backup/
+set backupext     =-vimbackup
+set backupskip    =
+set directory     =$HOME/.vim/files/swap//
+set updatecount   =100
+set viminfo       ='100,n$HOME/.vim/files/info/viminfo
+
+" better navigation
+set cursorline
+set foldmethod    =marker
+set foldtext      =Foldy()
+set hlsearch
+set ignorecase
+set incsearch
+set mouse         =a
+set scrolloff     =4
+set sidescroll    =5
+set smartcase
+
+" misc settings
+set backspace     =indent,eol,start
+set cpoptions    +=n
+set cpoptions    -=e
+set cscopetag
+set fileformats   =unix,dos,mac
+set hidden
+set history       =10000
+set lazyredraw
+set more
+set mousemodel    =popup
+set noautoread
+set noautowrite
+set noautowriteall
+set noequalalways
+set noerrorbells
+set nofsync
+set nrformats     =hex
+set report        =0
+set showfulltag
+set showtabline   =1
+set splitbelow
+set splitright
+set switchbuf     =useopen,usetab
+set synmaxcol     =200
+set timeout
+set timeoutlen    =1000
+set titlestring   =VIM:\ %f
+set ttimeout
+set ttimeoutlen   =100
+set ttyfast
+set virtualedit   =onemore,block
+set whichwrap     =
+
+" wild stuff
+set suffixes     +=.a,.1
+set wildignore   +=*.o,*.so
+set wildmenu
+set wildmode      =list:longest
+
+" display settings
+set fillchars     =
+set laststatus    =2
+set list
+set modeline
+set modelines     =1
+set nonumber
+set nostartofline
+set numberwidth   =1
+set ruler
+set shortmess     =aoOTI
+set showcmd
+set showmatch
+set showmode
+
+set pastetoggle=<F5>
+
+if has('multi_byte') && &enc ==# 'utf-8'
+    "set listchars =tab:▸\ ,extends:❯,precedes:❮,trail:·,nbsp:±
+    set listchars =tab:│\ ,extends:❯,precedes:❮,trail:·,nbsp:±
+    let &showbreak = '↪'
+else
+    set listchars =tab:>\ ,extends:>,precedes:<,trail:.,nbsp:.
+endif
+
+if v:version >= 703
+    set cryptmethod    =blowfish
+    set relativenumber
+    set undodir        =$HOME/.vim/files/undo/
+    set undofile
+end
+
+if executable('ack-grep')
+    set grepprg=ack-grep
+end
+
+" mapping {{{1
+digraph ./ 8230
+
+let mapleader = ';'
+
+vnoremap ;rv c<c-o>:set revins<cr><c-r>"<Esc>:set norevins<cr>
+
+cnoremap <c-p> <up>
+cnoremap <c-n> <down>
+
+nnoremap <space> :CtrlP<cr>
+
+nnoremap <silent> ]q :cnext<cr>
+nnoremap <silent> [q :cprevious<cr>
+
+nnoremap <silent> ]l :lnext<cr>
+nnoremap <silent> [l :lprevious<cr>
+
+noremap <silent><leader>rr :source %<cr>
+nmap <leader><space> <leader>c<space>
+
+noremap <silent><F1> :TagbarToggle<CR>
+noremap <silent><F2> :call ToggleNumbers()<CR>
+noremap <silent><F4> :NERDTreeToggle<CR>
+noremap <silent><F6> :call CreateTags()<CR>
+nnoremap <silent><F9> :silent! make<CR>:redraw!<CR>:cwindow<CR>
+
+nnoremap <leader>gv `[v`]
+
+xnoremap < <gv
+xnoremap > >gv
+
+nnoremap & :&&<cr>
+vnoremap & :&&<cr>
+
+nnoremap n nzz
+nnoremap N Nzz
+
+nnoremap Q gqap
+
+"nnoremap <leader>f   ciw
+
+noremap <Down>       <C-w>+
+noremap <Up>         <C-w>-
+"noremap <Left>       <C-w>>
+"noremap <Right>      <C-w><
+noremap <C-n>        :tabn<CR>
+noremap <C-p>        :tabp<CR>
+"noremap <C-i>        gk
+
+nnoremap <tab>       %
+nnoremap ,f          :tabedit %<CR>
+nnoremap ,d          :tabclose<CR>
+nnoremap ,c          :cclose<CR>
+nnoremap <leader>co  :botright copen 5<CR><C-w>p
+nnoremap <leader>cn  :cnext<CR>
+nnoremap -           :cnext<CR>
+nnoremap <Right>     :cnext<CR>
+nnoremap <leader>cp  :cprevious<CR>
+nnoremap <Left>      :cprevious<CR>
+nnoremap <leader>ce  :clast<CR>
+
+"nnoremap ql          ^vg_gq
+
+nnoremap <leader>aa  :call ToggleCommentColor()<CR>
+
+"nnoremap <leader>g   :grep <c-r>
+nnoremap <leader>b   :ls<cr>:b<space>
+nnoremap <leader>v   `[v`]
+nnoremap <leader>j   <C-^>
+nnoremap <silent> <leader>n   :bn<cr>
+nnoremap <silent> <leader>p   :bp<cr>
+nnoremap <silent> <leader>q   :call Exit()<cr>
+nnoremap <leader>s   :call ToggleScratchpad(0)<cr>
+nnoremap <leader>d   :call ToggleScratchpad(1)<cr>
+nnoremap <silent> <leader>w   :up<cr>
+nnoremap <leader>x   :x<cr>
+nnoremap <silent><leader>l :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+nnoremap <BS>        <C-T>
+nnoremap <C-H>       <C-W>h
+nnoremap <C-J>       <C-W>j
+nnoremap <C-K>       <C-W>k
+nnoremap <C-L>       <C-W>l
+nnoremap <CR>        g<C-]>
+nnoremap <F10>       :call <SID>ToggleTooLongHL()<cr>
+"nnoremap <silent>F   :pu=''<CR>
+"nnoremap <Space>     za
+nnoremap '           `
+nnoremap `           '
+
+inoremap <C-F>       <C-x><C-o>
+inoremap <C-B>       <C-x><C-u>
+inoremap jf          <Esc>
+
+vmap <space>         <leader>c<space>
+vnoremap Y           "+y
+
+cnoremap <C-B>       <Left>
+cnoremap <C-F>       <Right>
+cnoremap <C-A>       <Home>
+cnoremap <C-E>       <End>
+
+" autocmd {{{1
+" autocmd -> misc {{{2
+"au BufRead,BufNewFile       *                silent! call mkdir(expand('<afile>:p:h'), 'p', 0700) | e <afile>
+"au BufEnter                 *                if &ft != 'help' | silent! cd %:p:h | endif
+au BufRead,BufNewFile       *.s,*.S          let b:asmsyntax = 'gas'
+au BufRead,BufNewFile       /etc/nginx/*     setf nginx
+au BufRead,BufNewFile       /data/workspace/signavio/* set tags+=/data/workspace/signavio/tags
+au BufRead,BufNewFile       Makefile.*       setf make
+au BufRead,BufNewFile       Pkgfile          setl ft=sh sts=8 sw=8 noet
+au BufRead,BufNewFile       /data/repo/vim/* setl tags+=/data/repo/vim/.hg/tags
+au BufRead,BufNewFile       *.md,*.markdown  setl ft=markdown tw=80
+au BufRead,BufNewFile       ~/.dotfiles/ssh/config  setf sshconfig
+au BufReadPost              *                LastPos
+au BufReadPost              fugitive://      set bufhidden=delete
+au BufWritePost             ~/.Xdefaults     redraw | echo system('xrdb ' . expand('<amatch>'))
+au BufWritePost,CursorHold  *                unlet! b:statusline_long_line_warning
+au BufWritePost,CursorHold  *                unlet! b:statusline_tab_warning
+au BufWritePost,CursorHold  *                unlet! b:statusline_trailing_space_warning
+au FileType                 c,cpp            if !has('gui_running') | colorscheme minerva | endif
+"au FileType                 go               if !has('gui_running') | colorscheme go | endif
+au FileType                 text,git         setl tw=78 fo+=t
+au FileType                 text             if expand('%:t') =~? '\(rfc\|std\)\d\+.txt' | setl ft=rfc | endif
+au FileType                 help             execute "silent normal \<c-w>T"
+"au VimEnter                 *                if isdirectory(expand('<afile>')) | Ex | endif
+"autocmd VimEnter * if !argc() | Startify | NERDTree | execute "normal \<c-w>w" | endif
+
+"au FileType go
+            "\ if !has('gui_running') |
+            "\   colorscheme lucius |
+            "\   silent! LuciusDark |
+            "\ endif
+
+" autocmd -> special {{{2
+au BufEnter $VIMRUNTIME/doc/*
+            \ if &buftype == "help" |
+            \ setl scrolloff   =0 |
+            \ setl statusline  =\ \[HELP\] |
+            \ setl statusline +=\ \%F |
+            \ setl statusline +=%=\ %P\  |
+            \ endif |
+            \ nnoremap <buffer> q :q!<CR>
+
+au FileType qf
+            \ setl statusline  =\ \[Compiler\ Messages\] |
+            \ setl statusline +=%=\ %P\ 
+
+au FileType taglist setl statusline=\ 
+
+au FileType man
+            \ setl statusline=%=%Y\ <%l\,%L>\ %p%% |
+            \ setl nocul nomod nolist nonu nornu
+
+aug mail
+    au!
+    au FileType mail setl tw=70 wrap lbr
+aug end
+
+aug binary
+    au! 
+    au BufReadPost  * if &bin | silent! exe '%!xxd'    | set ft=xxd | endif
+    au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
+    au BufWritePost * if &bin | silent! exe '%!xxd'    | set nomod | endif
+augroup end
+
+" commands {{{1
+com! LastPos if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+com! -bar T  call Tags()
+com! -nargs=* -complete=help H helpgrep <args>
+
+" functions {{{1
+function! s:count_characters(bang) range abort
+  let nchars = 0
+  let lines  = a:bang ? range(1, line('$')) : range(a:firstline, a:lastline)
+
+  for line in lines
+    let nchars += strlen(getline(line))
+  endfor
+
+  if a:bang
+    echomsg '>>> The file contains '. nchars .' characters.'
+  else
+    echomsg '>>> Lines '. a:firstline .' to '. a:lastline .' contain '. nchars .' characters.'
+  endif
+endfunction
+
+command! -range -bang -bar Count <line1>,<line2>call s:count_characters(<bang>0)
+
+fun! EvalVimScriptRegion(s,e)
+    let lines = getline(a:s,a:e)
+    let file = tempname()
+    cal writefile(lines,file)
+    redir @e
+    silent exec ':source '.file
+    cal delete(file)
+    redraw
+    redir END
+    echo "Region evaluated."
+
+    if strlen(getreg('e')) > 0
+        10new
+        redraw
+        silent file "EvalResult"
+        setlocal noswapfile buftype=nofile bufhidden=wipe
+        setlocal nobuflisted nowrap cursorline nonumber fdc=0
+        " syntax init
+        set filetype="eval"
+        syn match ErrorLine +^E\d\+:.*$+
+        hi link ErrorLine Error
+        silent $put =@e
+    endif
+endf
+
+augroup VimEval
+    au!
+    au filetype vim :command! -range Eval :cal EvalVimScriptRegion(<line1>,<line2>)
+    au filetype vim :vnoremap <silent> e :Eval<CR>
+augroup END
+
+function! s:putty(reg) abort
+  echomsg 'Got register '. a:reg
+  let regline = getreg(a:reg)
+  call setreg(a:reg, substitute(regline, 'foo', 'bar', 'g'))
+  execute 'normal! "'. a:reg .'p'
+  call setreg(a:reg, regline)
+endfunction
+
+command! -register Putty call s:putty(<reg>'"')
+nnoremap <silent> <leader>t :call <sid>putty(v:register)<cr>
+
+function! Foldy()
+    let linelen = &tw ? &tw : 80
+    let marker  = strpart(&fmr, 0, stridx(&fmr, ',')) . '\d*'
+    let range   = foldclosedend(v:foldstart) - foldclosed(v:foldstart) + 1
+
+    let left    = substitute(getline(v:foldstart), marker , '', '')
+    let leftlen = len(left)
+
+    let right    = range . ' [' . v:foldlevel . ']'
+    let rightlen = len(right)
+
+    let tmp    = strpart(left, 0, linelen - rightlen)
+    let tmplen = len(tmp)
+
+    if leftlen > len(tmp)
+        let left    = strpart(tmp, 0, tmplen - 4) . '... '
+        let leftlen = tmplen
+    endif
+
+    let fill = repeat(' ', linelen - (leftlen + rightlen))
+
+    return left . fill . right
+endfunction
+
+function! Exit()
+    let nlisted = len(filter(range(0, bufnr('$')), 'buflisted(v:val)'))
+    if (nlisted > 1) || ((nlisted == 1) && !buflisted(bufnr('%')))
+        bd
+    else
+        q
+    endif
+endfunction
+
+function! Tags()
+    if executable('ctags')
+        silent! !ctags -R
+    else
+        echoerr 'No ctags installed!'
+    endif
+    if has('cscope') && executable('cscope')
+        silent! !cscope -Rbq
+        redraw!
+    else
+        echoerr 'No cscope installed!'
+    endif
+endfunction
+
+function! ToggleScratchpad(cmd)
+    let cmd = (a:cmd) ? ('e ' . expand('%:p') . '.scratch') : 'e ~/.scratchpad'
+
+    if !exists('t:scratch_toggle')
+        let t:scratch_toggle = 1
+        let scratch_height   = &previewheight
+        let &previewheight   = 5
+        exe 'above pedit +' . cmd
+        if &readonly == 1 || &modifiable == 0
+            wincmd p
+            set noreadonly
+            set modifiable
+            wincmd p
+        endif
+        let &previewheight = scratch_height
+    else
+        unlet t:scratch_toggle
+        pclose
+    endif
+endfunction
+
+function! OpenURL(url)
+    if has('win32')
+        exe "!start cmd /cstart /b " . a:url . ""
+    elseif $DISPLAY !~ '^w'
+        exe "silent !firefox \"" . a:url . "\""
+    else
+        exe "silent !firefox -new-tab \"" . a:url . "\""
+    endif
+    redraw!
+endfunction
+nnoremap gb :call OpenURL("<cfile>")<CR>
+nnoremap gG :call OpenURL("http://www.google.com/search?q=<cword>")<CR>
+nnoremap gW :call OpenURL("http://www.dict.cc/?s=<cword>")<CR>
+
+function! ToggleNumbers()
+    if !exists('s:cur')
+        let s:cur = -1
+    else
+        let s:cur = (s:cur + 1) % 3
+    endif
+
+    if s:cur == 0
+        set nornu nonu
+    elseif &rnu == 1
+        set nu
+    else
+        set rnu
+    endif
+endfunction
+
+function! ToggleCommentColor()
+    if !exists("g:ToggleCommentColor")
+        hi comment ctermfg=83 cterm=none
+        let g:ToggleCommentColor = 1
+    else
+        hi comment ctermfg=240 cterm=none
+        unlet g:ToggleCommentColor
+    endif
+endfunction
+
+function! CreateTags()
+    let b:choice = input("(s)ingle or whole (f)older? ", "s")
+    if (b:choice == 's')
+        silent! !ctags %
+        redraw!
+        echo "tags file created (single)"
+    elseif (b:choice == 'f')
+        silent! !ctags -R .
+        redraw!
+        echo "tags file created (folder)"
+    else
+        echo "Wrong input."
+    endif
+endfunction
+
+function! StatuslineTrailingSpaceWarning()
+    if !exists("b:statusline_trailing_space_warning")
+        if search('\s\+$', 'nw') != 0
+            let b:statusline_trailing_space_warning = '[\s]'
+        else
+            let b:statusline_trailing_space_warning = ''
+        endif
+    endif
+    return b:statusline_trailing_space_warning
+endfunction
+
+function! StatuslineLongLineWarning()
+    if !exists("b:statusline_long_line_warning")
+        let long_line_lens = <SID>LongLines()
+        if len(long_line_lens) > 0
+            let b:statusline_long_line_warning = "[#" . len(long_line_lens) . "]"
+        else
+            let b:statusline_long_line_warning = ""
+        endif
+    endif
+    return b:statusline_long_line_warning 
+endfunction
+
+" return a list containing the lengths of the long lines in this buffer
+function! <SID>LongLines()
+    let threshold = &tw ? &tw : 80
+    let spaces = repeat(" ", &ts)
+    let long_line_lens = []
+
+    let i = 1
+    while i <= line("$")
+        let len = strlen(substitute(getline(i), '\t', spaces, 'g'))
+        if len > threshold
+            call add(long_line_lens, len)
+        endif
+        let i += 1
+    endwhile
+
+    return long_line_lens
+endfunction
+
+function! StatuslineTabWarning()
+    if !exists("b:statusline_tab_warning")
+        let tabs = search('^\t', 'nw') != 0
+        let spaces = search('^ ', 'nw') != 0
+
+        if tabs && spaces
+            let b:statusline_tab_warning = '[mixed]' 
+        elseif (spaces && !&et) || (tabs && &et)
+            let b:statusline_tab_warning = '[&et]'
+        else
+            let b:statusline_tab_warning = ''
+        endif
+    endif
+    return b:statusline_tab_warning
+endfunction
+
+function! <SID>ToggleTooLongHL()
+    if exists('*matchadd')
+        if ! exists("w:TooLongMatchNr")
+            let last = (&tw <= 0 ? 80 : &tw)
+            let w:TooLongMatchNr = matchadd('ErrorMsg', '.\%>' . (last+1) . 'v', 0)
+            echo "Long Line Highlight"
+        else
+            call matchdelete(w:TooLongMatchNr)
+            unlet w:TooLongMatchNr
+            echo "No Long Line Highlight"
+        endif
+    endif
+endfunction
+
+function! FileSize()
+    let bytes = getfsize(expand("%:p"))
+    if bytes <= 0
+        return
+    elseif bytes < 1024
+        return bytes
+    else
+        return (bytes / 1024) . "K"
+    endif
+endfunction
+
+function! EatChar(pat)
+    let c = nr2char(getchar(0))
+    return (c =~ a:pat) ? '' : c
+endfunction
+
+xnoremap * :<c-u>call PowerSearch()<cr>//<cr>
+xnoremap # :<c-u>call PowerSearch()<cr>??<cr>
+
+function! PowerSearch() abort
+    let regsave = @@
+    normal! gvy
+    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+    let @@ = regsave
+endfunction
+
+xnoremap <silent><leader>* :<c-u>silent! execute PowerSearchAll()<cr>
+
+function! PowerSearchAll() abort
+    call PowerSearch()
+    call setqflist([])
+    execute 'bufdo vimgrepadd! /'. @/ .'/ %'
+endfunction
+
+" abbreviations {{{1
+iabbr _m  Marco Hinz <mh.codebro@gmail.com><C-R>=EatChar('\s')<CR>
+iabbr _d  <C-R>=strftime("%a, %d %b %Y %H:%M:%S %z")<CR><C-R>=EatChar('\s')<CR>
+
+" colors {{{1
+if has('gui_running')
+  set background=light
+  for scheme in ['pyte', 'zenburn', 'solarized', 'strawimodo']
+    try
+      execute 'colorscheme ' scheme
+      break
+    catch
+    endtry
+  endfor
+  set gcr        =a:blinkoff0
+  set mousehide
+  set guioptions =a
+  set guifont    =DejaVu\ Sans\ Mono\ 9
+else
+  set background=dark
+  for scheme in ['jana', 'zenburn', 'cool', 'simple', 'xoria256', 'tango2']
+    try
+      execute 'colorscheme' scheme
+      break
+    catch
+    endtry
+  endfor
+endif
+
+highlight DiffAdd    cterm=bold ctermbg=none ctermfg=119
+highlight DiffDelete cterm=bold ctermbg=none ctermfg=167
+highlight DiffChange cterm=bold ctermbg=none ctermfg=227
+
+" statusline {{{1
+hi User1 ctermfg=167 ctermbg=237 cterm=bold
+
+if has('statusline') && (version >= 700)
+    set statusline =[%n]\ 
+    set statusline+=%<%F%m%r%h%w\ 
+    set statusline+=(%{FileSize()})\ 
+    "set statusline+=%{fugitive#statusline()}
+    set statusline+=%=\ 
+
+    "set statusline+=%#error#
+    "set statusline+=%{SyntasticStatuslineFlag()}
+    "set statusline+=%*\ 
+
+    set statusline+=%#error#
+    set statusline+=%{&paste?'[paste]':''}
+    set statusline+=%*\ 
+
+    set statusline+=%#warningmsg#
+    set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+    set statusline+=%*\ 
+
+    set statusline+=%#warningmsg#
+    set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+    set statusline+=%*\ 
+
+    set statusline+=%#error#
+    "set statusline+=%{StatuslineTabWarning()}
+    set statusline+=%*\ 
+
+    "set statusline+=%#warningmsg#
+    "set statusline+=%{StatuslineLongLineWarning()}
+    "set statusline+=%*\ 
+
+    "set statusline+=%#warningmsg#
+    "set statusline+=%{StatuslineTrailingSpaceWarning()}
+    "set statusline+=%*\ 
+
+    if (b:debug_highlight == 1)
+        set statusline+=%#warningmsg#
+        set statusline+=\[\ 
+        set statusline+=%{synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name')}
+        set statusline+=\ 
+        set statusline+=%{synIDattr(synID(line('.'),col('.'),1),'name')}\ 
+        set statusline+=\ ]%*\ 
+    endif
+
+    set statusline+=%Y\ 
+    set statusline+=<%c\,
+    set statusline+=%l\,%L>\ 
+    set statusline+=%p%%\ 
+endif
+
+" plugins {{{1
+" plugins -> misc {{{2
+let g:is_bash      = 1
+let g:lisp_rainbow = 1
+
+let g:loaded_2html_plugin     = 1
+let g:loaded_getscriptPlugin  = 1
+let g:loaded_gzip             = 1
+let g:loaded_rrhelper         = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin        = 1
+let g:loaded_vimballPlugin    = 1
+let g:loaded_zipPlugin        = 1
+
+" plugins -> easymotion {{{2
+hi EasyMotionTarget ctermbg=none ctermfg=173 cterm=bold
+hi EasyMotionShade  ctermbg=none ctermfg=239
+
+" plugins -> minerva {{{2
+let g:minerva_additions = 0
+let g:minerva_gcc       = 1
+
+" plugins -> surround {{{2
+let g:surround_indent = 1
+let g:surround_{char2nr('e')} = "\\emph{\r}"
+let g:surround_{char2nr('-')} = "<% \r %>"
+let g:surround_{char2nr('=')} = "<%= \r %>"
+let g:surround_{char2nr('8')} = "/* \r */"
+let g:surround_{char2nr('s')} = " \r"
+let g:surround_{char2nr('^')} = "/^\r$/"
+
+" plugins -> syntastic {{{2
+let g:loaded_syntastic_plugin       = 1
+
+let g:syntastic_enable_signs        = 1
+let g:syntastic_check_on_open       = 1
+let g:syntastic_enable_highlighting = 1
+let g:syntastic_auto_jump           = 1
+let g:syntastic_quiet_warnings      = 0
+
+let g:syntastic_mode_map = {
+      \ 'mode':              'passive',
+      \ 'active_filetypes':  ['c', 'ruby'],
+      \ 'passive_filetypes': []
+      \ }
+
+let g:syntastic_c_compiler_options   = '-std=c11 -pedantic -Wall -Wextra -Wfloat-equal -ftrapv'
+let g:syntastic_cpp_compiler_options = '-std=c++11 -pedantic -Wall -Wextra -Weffc++'
+
+" plugins -> nerdtree {{{2
+let NERDTreeHijackNetrw = 0
+let NERDTreeWinPos      = 'left'
+let NERDTreeWinSize     = 20
+
+" plugins -> tagbar {{{2
+let g:tagbar_width     = 40
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_compact   = 1
+let g:tagbar_type_go   = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+" plugins -> java.vim {{{2
+let g:java_highlight_java_lang_ids = 1
+let g:java_highlight_java_io       = 1
+let g:java_highlight_functions     = 'style'
+
+" plugins -> netrw {{{2
+let g:loaded_netrwPlugin = 1
+let g:netrw_banner       = 0
+let g:netrw_keepdir      = 0
+let g:netrw_liststyle    = 1
+let g:netrw_sort_options = 'i'
+
+" plugins -> ctrlp.vim {{{2
+let g:ctrlp_reuse_window = 'startify'
+
+" plugins -> vim-blockify {{{2
+let g:loaded_blockify = 1
+let g:blockify_pairs = {
+            \ 'scss.css': [ '{', '}' ],
+            \ }
+
+" plugins -> vim-tmuxify {{{2
+let g:tmuxify_run = {
+            \ 'sh':   'bash %',
+            \ 'go':   'go build %',
+            \ 'ruby': 'ruby %',
+            \ }
+
+" plugins -> vim-signify {{{2
+"let g:loaded_signify = 1
+
+highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+
+let g:signify_vcs_list           = [ 'git', 'hg' ]
+"let g:signify_skip_filetype      = { 'help': 1 }
+"let g:signify_cursorhold_insert  = 1
+"let g:signify_cursorhold_normal  = 1
+"let g:signify_disable_by_default = 1
+"let g:signify_line_highlight     = 1
+"let g:signify_sign_overwrite     = 0
+"let g:signify_update_on_bufenter = 1
+
+" plugins -> vim-startify {{{2
+"let g:loaded_startify = 1
+
+hi StartifyBracket ctermfg=240
+hi StartifyNumber  ctermfg=215
+hi StartifyPath    ctermfg=245
+hi StartifySlash   ctermfg=240
+hi StartifySpecial ctermfg=240
+hi StartifyHeader  ctermfg=114
+hi StartifyFooter  ctermfg=240
+"hi StartifyFile    ctermfg=111
+
+let g:startify_session_persistence = 1
+let g:startify_session_autoload = 1
+let g:startify_change_to_dir  = 1
+let g:startify_enable_special = 0
+"let g:startify_restore_position = 1
+"let g:startify_list_order = ['files', 'bookmarks', 'sessions', 'dir']
+"let g:startify_custom_indices = ['a','s','d','f','g','q','w','e','r','z','x','c','v']
+
+let g:startify_skiplist = [
+            \ 'COMMIT_EDITMSG',
+            \ $VIMRUNTIME .'/doc',
+            \ 'bundle/.*/doc',
+            \ '.vimgolf',
+            \ ]
+
+let g:startify_bookmarks = [
+            \ '~/.vim/vimrc',
+            \ '/data/vim/golfing',
+            \ ]
+
+"let g:startify_custom_footer = ['','', "   Vim is charityware. Please read ':help uganda'."]
+let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') +
+      \ ['','']
+
+"let g:startify_custom_header = [
+            "\ '                                 ________  __ __        ',
+            "\ '            __                  /\_____  \/\ \\ \       ',
+            "\ '    __  __ /\_\    ___ ___      \/___//''/''\ \ \\ \    ',
+            "\ '   /\ \/\ \\/\ \ /'' __` __`\        /'' /''  \ \ \\ \_ ',
+            "\ '   \ \ \_/ |\ \ \/\ \/\ \/\ \      /'' /''__  \ \__ ,__\',
+            "\ '    \ \___/  \ \_\ \_\ \_\ \_\    /\_/ /\_\  \/_/\_\_/  ',
+            "\ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
+            "\ '',
+            "\ '',
+            "\ ]
+
+" plugins -> vim-gopher {{{2
+let gopher = {
+            \ 'format on save':         0,
+            \ 'enable scope indicator': 1,
+            \ 'enable signs':           1,
+            \ 'enable signs jump':      1,
+            \ }
+
+highlight goMatchParen ctermfg=1 guifg=#ff0000
+
+function! s:go_settings()
+  setlocal tabstop=4
+  nnoremap <buffer> <F8> :Run<cr>
+  nnoremap <buffer> <F9> :Build<cr>
+endfunction
+
+autocmd FileType go call s:go_settings()
