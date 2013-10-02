@@ -1,0 +1,99 @@
+[core]
+    editor       = vim
+    excludesfile = ~/.git/gitignore
+    autocrlf     = false
+    filemode     = false
+
+[user]
+    name  = Marco Hinz
+    email = mh.codebro@gmail.com
+
+[diff]
+    tool = vimdiff
+
+[pager]
+    diff =
+
+[alias]
+    a     = add
+    au    = add -u
+    b     = branch
+    bi    = bisect
+    bl    = blame
+    c     = commit
+    cl    = clone
+    co    = checkout
+    cp    = cherry-pick
+    d     = diff --no-ext-diff
+    dc    = describe --contains
+    dc    = diff --no-ext-diff --cached
+    ds    = diff --no-ext-diff --stat
+    dsc   = diff --no-ext-diff --stat --cached
+    dt    = difftool
+    f     = fetch
+    fp    = format-patch
+    g     = grep
+    h     = help
+    l     = log --graph --oneline --decorate --date=relative -50
+    la    = log --graph --all --oneline --decorate --date=relative -50
+    lsr   = ls-remote
+    m     = merge
+    p     = push
+    pl    = pull --ff-only
+    r     = reset
+    rank  = shortlog -sn --no-merges
+    re    = rebase
+    rem   = remote
+    ri    = rebase -i
+    rl    = rev-list
+    s     = status -uno
+    sb    = show-branch
+    sh    = show
+    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+    ss    = status
+    st    = stash
+    t     = tag
+    vd    = diff
+    w     = whatchanged -50
+    what  = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+    whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+
+    root = rev-parse --show-toplevel
+
+    upstream = !git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+    upstream-remote = !git upstream | sed -e 's/\\/.*$//g'
+
+    ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
+    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+
+[advice]
+    statusHints = no
+
+[rerere]
+    enabled = true
+
+[color]
+    branch      = auto
+    diff        = auto
+    interactive = auto
+    status      = auto
+    ui          = auto
+
+[color "diff"]
+    frag       = 104
+    func       = 74
+    meta       = 137 bold
+    new        = 114
+    old        = 167
+    plain      = 240
+    whitespace = 24 24
+
+[color "status"]
+    header = 240
+    branch = yellow
+
+[init]
+    templatedir = ~/.git/template
+
+[push]
+    default = simple
