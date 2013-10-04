@@ -870,3 +870,16 @@ function! s:go_settings()
 endfunction
 
 autocmd FileType go call s:go_settings()
+
+" plugins -> vim-toplevel {{{2
+"let g:loaded_toplevel = 1
+
+let toplevel = {
+      \ 'rootlist': ['git', 'hg'],
+      \ 'cdlist': [
+            \ ['.git', 'finddir' ],
+            \ ['.hg',  'finddir' ]]}
+
+augroup toplevel
+  autocmd BufEnter * silent Cd
+augroup END
