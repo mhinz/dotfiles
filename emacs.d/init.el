@@ -3,7 +3,13 @@
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
+;; page-break-mode
 (load "~/.emacs.d/modes/site-page-break-mode.el")
+
+;; opal mode
+(setq load-path (cons "/data/opal/lib/emacs" load-path))
+(defvar opal-novice t)
+(require 'opal-mode)
 
 ;; gnus
 (setq-default

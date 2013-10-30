@@ -15,7 +15,7 @@ syntax   on
 
 autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
-let b:debug_highlight = 0
+let b:debug_highlight = 1
 
 if &term =~# '^rxvt|\xterm'
     let &t_SI = "\<Esc>]12;1\x7"
@@ -70,6 +70,7 @@ set noautowriteall
 set noequalalways
 set noerrorbells
 set nofsync
+set nojoinspaces
 set nrformats     =hex
 set report        =0
 set showfulltag
@@ -111,8 +112,8 @@ set showmode
 set pastetoggle=<F5>
 
 if has('multi_byte') && &enc ==# 'utf-8'
-    "set listchars =tab:▸\ ,extends:❯,precedes:❮,trail:·,nbsp:±
-    set listchars =tab:│\ ,extends:❯,precedes:❮,trail:·,nbsp:±
+    set listchars =tab:▸\ ,extends:❯,precedes:❮,trail:·,nbsp:±
+    "set listchars =tab:│\ ,extends:❯,precedes:❮,trail:·,nbsp:±
     let &showbreak = '↪'
 else
     set listchars =tab:>\ ,extends:>,precedes:<,trail:.,nbsp:.
@@ -120,7 +121,7 @@ endif
 
 if v:version >= 703
     set cryptmethod    =blowfish
-    set relativenumber
+    "set relativenumber
     set undodir        =$HOME/.vim/files/undo/
     set undofile
 end
@@ -185,7 +186,7 @@ nnoremap ,d          :tabclose<CR>
 nnoremap ,c          :cclose<CR>
 nnoremap <leader>co  :botright copen 5<CR><C-w>p
 nnoremap <leader>cn  :cnext<CR>
-nnoremap -           :cnext<CR>
+"nnoremap -           :cnext<CR>
 nnoremap <Right>     :cnext<CR>
 nnoremap <leader>cp  :cprevious<CR>
 nnoremap <Left>      :cprevious<CR>
@@ -254,6 +255,7 @@ au FileType                 c,cpp            if !has('gui_running') | colorschem
 au FileType                 text,git         setl tw=78 fo+=t
 au FileType                 text             if expand('%:t') =~? '\(rfc\|std\)\d\+.txt' | setl ft=rfc | endif
 au FileType                 help             execute "silent normal \<c-w>T"
+au VimEnter                 *                if isdirectory(expand('<afile>')) | quit | endif
 "au VimEnter                 *                if isdirectory(expand('<afile>')) | Ex | endif
 "autocmd VimEnter * if !argc() | Startify | NERDTree | execute "normal \<c-w>w" | endif
 
@@ -301,6 +303,20 @@ com! -bar T  call Tags()
 com! -nargs=* -complete=help H helpgrep <args>
 
 " functions {{{1
+
+" several things are wrong with this
+function! Transform(prefix, suffix)
+  let [startcol, endcol ] = [col("'<"), col("'>") ]
+  let [startline, endline] = [line("'<"), line("'>")]
+
+  let startcol = '%'. (startcol ? startcol : 1) .'c'
+  let endcol = endcol ? ('%'. (endcol) .'c') : '%10c'
+
+  execute startline.','.endline.'s/\v'.startcol.'(.*)'.endcol.'/'.a:prefix.'\1'.a:suffix.'/'
+endfunction
+
+vnoremap <leader>M :<c-u>call Transform('<% ', ' %>')<cr>
+
 function! s:count_characters(bang) range abort
   let nchars = 0
   let lines  = a:bang ? range(1, line('$')) : range(a:firstline, a:lastline)
@@ -408,24 +424,24 @@ function! Tags()
 endfunction
 
 function! ToggleScratchpad(cmd)
-    let cmd = (a:cmd) ? ('e ' . expand('%:p') . '.scratch') : 'e ~/.scratchpad'
+  let cmd = (a:cmd) ? ('e ' . expand('%:p') . '.scratch') : 'e ~/.scratchpad'
 
-    if !exists('t:scratch_toggle')
-        let t:scratch_toggle = 1
-        let scratch_height   = &previewheight
-        let &previewheight   = 5
-        exe 'above pedit +' . cmd
-        if &readonly == 1 || &modifiable == 0
-            wincmd p
-            set noreadonly
-            set modifiable
-            wincmd p
-        endif
-        let &previewheight = scratch_height
-    else
-        unlet t:scratch_toggle
-        pclose
+  if !exists('t:scratch_toggle')
+    let t:scratch_toggle = 1
+    let scratch_height   = &previewheight
+    let &previewheight   = 5
+    exe 'above pedit +' . cmd
+    if &readonly == 1 || &modifiable == 0
+      wincmd p
+      set noreadonly
+      set modifiable
+      wincmd p
     endif
+    let &previewheight = scratch_height
+  else
+    unlet t:scratch_toggle
+    pclose
+  endif
 endfunction
 
 function! OpenURL(url)
@@ -700,10 +716,11 @@ let g:minerva_gcc       = 1
 let g:surround_indent = 1
 let g:surround_{char2nr('e')} = "\\emph{\r}"
 let g:surround_{char2nr('-')} = "<% \r %>"
-let g:surround_{char2nr('=')} = "<%= \r %>"
+"let g:surround_{char2nr('=')} = "<%= \r %>"
 let g:surround_{char2nr('8')} = "/* \r */"
 let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
+let g:surround_{char2nr('=')} = "== \r =="
 
 " plugins -> syntastic {{{2
 let g:loaded_syntastic_plugin       = 1
@@ -802,11 +819,22 @@ let g:signify_vcs_list           = [ 'git', 'hg' ]
 "let g:signify_cursorhold_normal  = 1
 "let g:signify_disable_by_default = 1
 "let g:signify_line_highlight     = 1
-"let g:signify_sign_overwrite     = 0
+let g:signify_sign_overwrite     = 1
 "let g:signify_update_on_bufenter = 1
 
 " plugins -> vim-startify {{{2
 "let g:loaded_startify = 1
+
+let g:startify_list_order = [
+      \ ['   LRU:'],
+      \ 'files',
+      \ ['   Sessions:'],
+      \ 'sessions',
+      \ ['   Bookmarks:'],
+      \ 'bookmarks',
+      \ ]
+
+"let g:startify_session_savevars = ['g:foo']
 
 hi StartifyBracket ctermfg=240
 hi StartifyNumber  ctermfg=215
@@ -815,15 +843,16 @@ hi StartifySlash   ctermfg=240
 hi StartifySpecial ctermfg=240
 hi StartifyHeader  ctermfg=114
 hi StartifyFooter  ctermfg=240
-"hi StartifyFile    ctermfg=111
+hi StartifyFile    ctermfg=111
 
+"let g:startify_files_number = 5
 let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
-let g:startify_change_to_dir  = 1
+"let g:startify_change_to_dir  = 1
 let g:startify_enable_special = 0
 "let g:startify_restore_position = 1
-"let g:startify_list_order = ['files', 'bookmarks', 'sessions', 'dir']
 "let g:startify_custom_indices = ['a','s','d','f','g','q','w','e','r','z','x','c','v']
+"let g:startify_list_order = ['files', 'bookmarks', 'sessions', 'dir']
 
 let g:startify_skiplist = [
             \ 'COMMIT_EDITMSG',
@@ -837,9 +866,8 @@ let g:startify_bookmarks = [
             \ '/data/vim/golfing',
             \ ]
 
-"let g:startify_custom_footer = ['','', "   Vim is charityware. Please read ':help uganda'."]
-let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') +
-      \ ['','']
+"let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
+"let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
 
 "let g:startify_custom_header = [
             "\ '                                 ________  __ __        ',
@@ -880,6 +908,9 @@ let toplevel = {
             \ ['.git', 'finddir' ],
             \ ['.hg',  'finddir' ]]}
 
-augroup toplevel
-  autocmd BufEnter * silent Cd
-augroup END
+"augroup toplevel
+  "autocmd BufEnter * silent Cd
+"augroup END
+
+" plugins -> vim-hugefile {{{2
+"let g:hugefile_trigger_size = 0.001
