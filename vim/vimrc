@@ -15,7 +15,7 @@ syntax   on
 
 autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
-let b:debug_highlight = 1
+let b:debug_highlight = 0
 
 if &term =~# '^rxvt|\xterm'
     let &t_SI = "\<Esc>]12;1\x7"
@@ -58,6 +58,7 @@ set backspace     =indent,eol,start
 set cpoptions    +=n
 set cpoptions    -=e
 set cscopetag
+set cscopetagorder=0
 set fileformats   =unix,dos,mac
 set hidden
 set history       =10000
@@ -121,7 +122,7 @@ endif
 
 if v:version >= 703
     set cryptmethod    =blowfish
-    "set relativenumber
+    set relativenumber
     set undodir        =$HOME/.vim/files/undo/
     set undofile
 end
@@ -147,6 +148,9 @@ nnoremap <silent> [q :cprevious<cr>
 
 nnoremap <silent> ]l :lnext<cr>
 nnoremap <silent> [l :lprevious<cr>
+
+nnoremap <silent> ]b :bnext<cr>
+nnoremap <silent> [b :bprevious<cr>
 
 noremap <silent><leader>rr :source %<cr>
 nmap <leader><space> <leader>c<space>
@@ -301,6 +305,7 @@ augroup end
 com! LastPos if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 com! -bar T  call Tags()
 com! -nargs=* -complete=help H helpgrep <args>
+com! Kill bprevious | split | bnext | bdelete
 
 " functions {{{1
 
@@ -621,7 +626,7 @@ if has('gui_running')
   set gcr        =a:blinkoff0
   set mousehide
   set guioptions =a
-  set guifont    =DejaVu\ Sans\ Mono\ 9
+  let &guifont    = 'DejaVu Sans Mono 9'
 else
   set background=dark
   for scheme in ['jana', 'zenburn', 'cool', 'simple', 'xoria256', 'tango2']
@@ -741,7 +746,7 @@ let g:syntastic_c_compiler_options   = '-std=c11 -pedantic -Wall -Wextra -Wfloat
 let g:syntastic_cpp_compiler_options = '-std=c++11 -pedantic -Wall -Wextra -Weffc++'
 
 " plugins -> nerdtree {{{2
-let NERDTreeHijackNetrw = 0
+let NERDTreeHijackNetrw = 1
 let NERDTreeWinPos      = 'left'
 let NERDTreeWinSize     = 20
 
@@ -784,7 +789,7 @@ let g:java_highlight_java_io       = 1
 let g:java_highlight_functions     = 'style'
 
 " plugins -> netrw {{{2
-let g:loaded_netrwPlugin = 1
+"let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
 let g:netrw_keepdir      = 0
 let g:netrw_liststyle    = 1
@@ -794,10 +799,10 @@ let g:netrw_sort_options = 'i'
 let g:ctrlp_reuse_window = 'startify'
 
 " plugins -> vim-blockify {{{2
-let g:loaded_blockify = 1
-let g:blockify_pairs = {
-            \ 'scss.css': [ '{', '}' ],
-            \ }
+"let g:loaded_blockify = 1
+"let g:blockify_pairs = {
+            "\ 'scss.css': [ '{', '}' ],
+            "\ }
 
 " plugins -> vim-tmuxify {{{2
 let g:tmuxify_run = {
@@ -914,3 +919,7 @@ let toplevel = {
 
 " plugins -> vim-hugefile {{{2
 "let g:hugefile_trigger_size = 0.001
+
+" plugins -> vim-opal {{{2
+highlight OpalParens     ctermfg=173
+highlight OpalAssignment ctermfg=173
