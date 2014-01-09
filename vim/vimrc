@@ -8,7 +8,7 @@
 "                ╚══════════════════════════════════════════╝
 "
 " init {{{1
-silent! call pathogen#runtime_append_all_bundles()
+execute pathogen#infect()
 
 filetype plugin indent on
 syntax   on
@@ -135,6 +135,9 @@ end
 digraph ./ 8230
 
 let mapleader = ';'
+
+nnoremap <silent> <c-d> :call smooth_scroll#down(&scroll, 20, 2)<cr>
+nnoremap <silent> <c-u> :call smooth_scroll#up(&scroll, 6, 2)<cr>
 
 vnoremap ;rv c<c-o>:set revins<cr><c-r>"<Esc>:set norevins<cr>
 
@@ -702,12 +705,12 @@ let g:lisp_rainbow = 1
 
 let g:loaded_2html_plugin     = 1
 let g:loaded_getscriptPlugin  = 1
-let g:loaded_gzip             = 1
+"let g:loaded_gzip             = 1
 let g:loaded_rrhelper         = 1
 let g:loaded_spellfile_plugin = 1
-let g:loaded_tarPlugin        = 1
+"let g:loaded_tarPlugin        = 1
 let g:loaded_vimballPlugin    = 1
-let g:loaded_zipPlugin        = 1
+"let g:loaded_zipPlugin        = 1
 
 " plugins -> easymotion {{{2
 hi EasyMotionTarget ctermbg=none ctermfg=173 cterm=bold
@@ -805,6 +808,7 @@ let g:ctrlp_reuse_window = 'startify'
             "\ }
 
 " plugins -> vim-tmuxify {{{2
+let g:tmuxify_custom_command = 'tmux split-window -d -l 10'
 let g:tmuxify_run = {
             \ 'sh':   'bash %',
             \ 'go':   'go build %',
@@ -818,18 +822,19 @@ highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
-let g:signify_vcs_list           = [ 'git', 'hg' ]
+"let g:signify_vcs_list           = [ 'git', 'hg' ]
 "let g:signify_skip_filetype      = { 'help': 1 }
 "let g:signify_cursorhold_insert  = 1
 "let g:signify_cursorhold_normal  = 1
 "let g:signify_disable_by_default = 1
 "let g:signify_line_highlight     = 1
-let g:signify_sign_overwrite     = 1
+"let g:signify_sign_overwrite     = 1
 "let g:signify_update_on_bufenter = 1
 
 " plugins -> vim-startify {{{2
 "let g:loaded_startify = 1
 
+let g:startify_relative_path = 1
 let g:startify_list_order = [
       \ ['   LRU:'],
       \ 'files',
@@ -840,6 +845,7 @@ let g:startify_list_order = [
       \ ]
 
 "let g:startify_session_savevars = ['g:foo']
+"let g:startify_session_savecmds = [ 'colo molokai' ]
 
 hi StartifyBracket ctermfg=240
 hi StartifyNumber  ctermfg=215
@@ -848,7 +854,7 @@ hi StartifySlash   ctermfg=240
 hi StartifySpecial ctermfg=240
 hi StartifyHeader  ctermfg=114
 hi StartifyFooter  ctermfg=240
-hi StartifyFile    ctermfg=111
+"hi StartifyFile    ctermfg=111
 
 "let g:startify_files_number = 5
 let g:startify_session_persistence = 1
@@ -872,7 +878,7 @@ let g:startify_bookmarks = [
             \ ]
 
 "let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
-"let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
+let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
 
 "let g:startify_custom_header = [
             "\ '                                 ________  __ __        ',
