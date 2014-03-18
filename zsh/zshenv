@@ -6,7 +6,6 @@ autoload -Uz vcs_info
 
 zmodload -i zsh/complist
 
-fpath=(~/.zsh ${fpath})
 bindkey -e
 umask 077
 
@@ -318,6 +317,8 @@ compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbs
 compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 
 # paths {{{1
+fpath=(~/.zsh $fpath)
+
 for dir in \
     $HOME/bin \
     $HOME/local/bin \
@@ -327,7 +328,7 @@ for dir in \
     #/data/languages/go/bin \
     #$PLAN9/bin
 do
-    [[ -d ${dir} ]] && PATH=${dir}:${PATH}
+    [[ -d $dir ]] && path=($dir $path)
 done
 
 # functions {{{1
@@ -434,3 +435,28 @@ bindkey '^X^X' tmux-pane-words-anywhere
 zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
 zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
 zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
+
+rationalise-dot() {
+    local MATCH dir split
+    split=(${(z)LBUFFER})
+    if (( $#split > 1 )); then
+        dir=$split[-1]
+    else
+        dir=$split
+    fi
+    if [[ $LBUFFER =~ '(^|/| | |'$'\n''|\||;|&)\.\./$' ]]; then
+        zle self-insert
+        zle self-insert
+        LBUFFER+=/
+        [[ -e $dir ]] && zle -M $dir(:a:h)
+    elif [[ $LBUFFER[-1] == '.' ]]; then
+        zle self-insert
+        LBUFFER+=/
+        [[ -e $dir ]] && zle -M $dir(:a:h)
+    else
+        zle self-insert
+    fi
+}
+
+zle -N rationalise-dot
+bindkey '.' rationalise-dot
