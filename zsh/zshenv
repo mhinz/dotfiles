@@ -1,0 +1,436 @@
+#!/usr/bin/zsh
+
+autoload -Uz compinit && compinit
+autoload -Uz edit-command-line
+autoload -Uz vcs_info
+
+zmodload -i zsh/complist
+
+fpath=(~/.zsh ${fpath})
+bindkey -e
+umask 077
+
+[[ $DISPLAY == screen* ]] && stty erase '^?'
+
+# options {{{1
+setopt \
+    autocd \
+    autopushd \
+    cdablevars \
+    checkjobs \
+    completeinword \
+    correct \
+    globcomplete \
+    interactivecomments \
+    listpacked \
+    longlistjobs \
+    nohup \
+    nolog \
+    notify \
+    promptsubst
+    #extendedglob
+
+unsetopt \
+    listrowsfirst \
+    nobeep \
+    rmstarsilent \
+    nomatch
+
+# git {{{1
+blue="%{$(echoti setaf 111)%}"
+orange="%{$(echoti setaf 216)%}"
+white="%{$(echoti setaf 255)%}"
+red="%{$(echoti setaf 168)%}"
+green="%{$(echoti setaf 84)%}"
+yellow="%{$(echoti setaf 222)%}"
+gray="%{$(echoti setaf 240)%}"
+reset="%{$(echoti sgr0)%}"
+
+# set formats
+# %b - branchname
+# %u - unstagedstr (see below)
+# %c - stangedstr (see below)
+# %a - action (e.g. rebase-i)
+# %R - repository path
+# %S - path in the repository
+
+zstyle ':vcs_info:*:prompt:*' check-for-changes true
+zstyle ':vcs_info:*:prompt:*' stagedstr         '%F{240}:%F{49}↻%F{reset}'
+zstyle ':vcs_info:*:prompt:*' unstagedstr       '%F{240}:%F{81}↻%F{reset}'
+zstyle ':vcs_info:*:prompt:*' disable-patterns  "/data/linux/stable(|/*)"
+
+precmd() {
+    vcs_info 'prompt'
+}
+
+lprompt_dark() {
+    local brackets=$1
+    local color1=$2
+    local color2=$3
+    local color3=$4
+
+    local br_left="${color1}${brackets[1]}"
+    local br_right="${color1}${brackets[2]}"
+    local jobs="%1(j.${orange}%j${color1}:.)"
+    #local userhost="${color3}%m"
+    local branch='${${vcs_info_msg_0_##*/}:-$(hostname)}'
+    #local branch='${vcs_info_msg_0_:-$userhost}'
+
+    PROMPT="%B${br_left}${jobs}${color2}${branch}${br_right}%b "
+}
+
+rprompt_dark() {
+    local vcs_cwd='${${vcs_info_msg_1_%.}/$HOME/~}'
+
+    RPROMPT="%B${vcs_cwd}${reset}"
+}
+
+vcs_dark() {
+    local color1=$1
+    local color2=$2
+    local color3=$3
+
+    local sep1="${color1}${4[1]}"
+    local sep2="${color1}${4[2]}"
+
+    local fmt_path="${color1}%R"
+    local fmt_path2="${color1}%R/${color3}%S"
+    local fmt_branch="${color2}%b%u%c"
+
+    zstyle ':vcs_info:*:prompt:*' formats         "${fmt_path}${sep1}${fmt_branch}" "${fmt_path2}"
+    zstyle ':vcs_info:*:prompt:*' actionformats   "%a"  "${fmt_path}"
+    zstyle ':vcs_info:*:prompt:*' nvcsformats     ""    "${gray}%~"
+}
+
+if [[ $TERM == xterm* ]]; then
+    local red="%{$(echoti setaf 160)%}"
+    local blue="%{$(echoti setaf 27)%}"
+    local jobs="%1(j.${red}[${blue}%j${red}] .)"
+    local vcs='vcs_info_msg_0_'
+
+    PROMPT="> "
+    RPROMPT=""
+    #PROMPT="%B${jobs}${vcs}${red}%U%m%u%b${reset} "
+    #RPROMPT="${red}%B-={${blue} %~ ${red}}=-%b${reset}"
+    #zstyle ':vcs_info:*:prompt:*' formats       "${red}[${blue}%b%u%c${red}]" "%S"
+else
+    lprompt_dark '⚡⚡' $gray $yellow $green
+    rprompt_dark $gray $yellow
+    vcs_dark $gray $red $yellow ':>'
+fi
+
+# zstyle {{{1
+
+# tolerante Fehlereingabe
+zstyle -e ':completion:*:approximate:*' max-errors '(( reply=($#PREFX+$#SUFFIX)/3 ))'
+# German umlauts
+zstyle ':completion:*' matcher-list \
+    'm:ss=Ã m:ue=Ã¼ m:ue=Ã m:oe=Ã¶ m:oe=Ã m:ae=Ã¤ m:ae=Ã m:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
+# farbige Completion
+zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}" 'ma=(01);(38;05;255);(48;05;24)'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
+#zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+
+# schoenere Completion
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
+
+# durch die Optionen tabben
+zstyle ':completion:*' menu select=2
+
+# cd ..<tab><tab>
+zstyle ':completion:*' special-dirs true
+zstyle ':completion::complete:*' use-cache 1
+
+# zle {{{1
+
+_ciw() {
+    setopt localoptions extendedglob
+    LBUFFER=${LBUFFER%%[^ ]#}
+    RBUFFER=${RBUFFER##[^ ]#}
+    #zle vi-insert
+}
+
+_insert_last_typed_word() {
+        zle insert-last-word -- 0 -1
+}
+
+_jump_after_first_word() {
+    CURSOR=$#BUFFER[(w)1]
+}
+
+_run_with_sudo() {
+    LBUFFER="sudo $LBUFFER"
+}
+
+zle_keymap_select() {
+    [[ $KEYMAP == vicmd ]] && local main="$(tput setaf 197)"
+    zle reset-prompt
+}
+
+zle -N edit-command-line
+zle -N _insert_last_typed_word
+zle -N _jump_after_first_word
+zle -N _zle_keymap_select
+
+bindkey -M menuselect 'h' backward-char
+bindkey -M menuselect 'j' down-line-or-history
+bindkey -M menuselect 'k' up-line-or-history
+bindkey -M menuselect 'l' forward-char
+bindkey -M menuselect 'i' accept-and-menu-complete
+
+bindkey ';f'   _insert_last_typed_word
+bindkey ';g'   _jump_after_first_word
+
+bindkey ''   vi-backward-kill-word
+bindkey ''   up-line-or-search
+bindkey ''   down-line-or-search
+bindkey 'e'  edit-command-line
+bindkey 'n'  list-expand
+bindkey 'm'  expand-word
+
+# variables {{{1
+export EDITOR=vim
+export NNTPSERVER=news.fu-berlin.de
+export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
+export GOARCH=amd64 GOOS=linux GOPATH=/data/go
+export PLAN9=/data/repo/plan9port
+
+# prompts {{{1
+
+[[ $UID -eq 0 ]] && local main="$(tput setaf 160)" || local main="$(tput setaf 84)"
+
+local orange="%{$(tput setaf 215)%}"
+local reset="%{$(tput sgr0)%}"
+
+#PROMPT='
+#%{${main}%}%B%{${vimode}%}%1(j.[%{${orange}%}%j%{${main}%}] .)${SSH_CONNETION:-$}%b %{${reset}%}'
+#RPROMPT="%{${main}%}%B%~%{${reset}%}"
+
+SPROMPT="${orange}%R -> %r:${reset} "
+PROMPT2="${orange}+${reset} "
+PROMPT3="${orange}Select:${reset} "
+
+# hashes {{{1
+hash -d g='/data/github'
+hash -d b='/data/books'
+hash -d c='/data/programming/c'
+hash -d asm='/data/programming/asm'
+hash -d torrents='/data/torrents/downloads'
+
+# aliases {{{1
+alias add='cmus-remote -l'
+alias big='dpkg-query -W --showformat="\${Installed-Size}\t\${Package}\n" | sort -n'
+alias c11='( zathura /data/c/standards/n1516.pdf & ) && exit'
+alias c='edit_configs'
+alias cr='cmus-remote'
+alias dis='gcc -S -masm=intel'
+alias e='emacs'
+alias g='git'
+alias gdb='gdb -q'
+alias gitk='gitk --all'
+alias grep='grep --color=always'
+alias here='command urxvtc -cd $PWD'
+alias i='$EDITOR /data/life/ideas'
+alias kdwm='killall startdwm'
+alias ls='ls --color=always'
+alias m='cd ~torrents'
+alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
+alias mps='ps $@ f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
+alias n2t='sh /data/nand2tetris/nand2tetris/tools/HardwareSimulator.sh'
+alias n='ls -lhS *(DOL[1,5]^/)'
+alias ob='objdump -Mintel'
+alias p1='patch -p1 -g1 --dry-run'
+alias rt='cd ~torrents/../session && xtitle rtorrent && rtorrent'
+alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
+alias t='$EDITOR /data/life/todo'
+alias v='vim'
+alias val='valgrind -v --leak-check=full --show-reachable=yes'
+alias z='zathura'
+
+alias h="cd ..; l"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+alias j='ls -lhd *(D-/)'
+alias k='ls -lhX *(D-^/)'
+alias l='ls -lh --group-directories-first'
+alias ll='ls -lhX --group-directories-first'
+alias la='ls -lhXa --group-directories-first'
+
+alias 1='fg %1'
+alias 2='fg %2'
+alias 3='fg %3'
+alias 11='bg %1'
+alias 22='bg %2'
+alias 33='bg %3'
+
+if [[ -x ${commands[sudo]} ]]
+then
+    alias ap='sudo aptitude'
+    alias apt-cache='sudo apt-cache'
+    alias arp='sudo arp'
+    alias dpkg-reconfigure='sudo dpkg-reconfigure'
+    alias dpkg='sudo dpkg'
+    alias dud='sudo apt-get update'
+    alias dug='sudo aptitude safe-upgrade'
+    alias halt='sudo shutdown -h now'
+    alias orp='sudo deborphan'
+    alias orph='sudo deborphan --libdevel --find-config'
+    alias pt='sudo powertop'
+    alias reboot='sudo shutdown -r now'
+else
+    echo "Please install 'sudo'"
+fi
+
+# completion {{{1
+
+compctl -g '*.class'      java
+compctl -g '*.(c|o|a)':   cc gcc
+compctl -g '*.el'         erl erlc
+compctl -g '*.(hs|hls)'   hugs ghci
+compctl -g '*.java'       javac
+compctl -g '*.pl'         perl
+compctl -g '*.py'         python
+compctl -g '*.rb'         ruby
+
+compctl -g '*.pdf'        acrorad xpdf zathura z
+compctl -g '*.chm'        chmsee c
+compctl -g '*.djvu'       djview
+compctl -g '*.lyx'        lyx
+compctl -g '*.ps'         gs ghostview ps2pdf ps2ascii
+compctl -g '*.tex'        tex latex slitex pdflatex
+compctl -g '*.dvi'        dvips dvipdf xdvi dviselect dvitype
+
+compctl -g '*.(bz2|tbz2)' tar bzip2 bunzip2
+compctl -g '*.(gz|tgz)'   tar gzip gunzip
+compctl -g '*.pax'        pax
+compctl -g '*.rar'        rar unrar
+compctl -g '*.zip'        zip unzip
+
+compctl -g '*.(htm|html|php)' firefox iceweasel opera lynx w3m link2 dillo uzbl surf
+
+compctl -fg '*.(avi|mp*g|mp4|wmv|ogm|mkv|xvid|divx)' mplayer gmplayer vlc
+compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbsetbg
+compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
+
+# paths {{{1
+for dir in \
+    $HOME/bin \
+    $HOME/local/bin \
+    $GOPATH/bin \
+    /sbin \
+    /data/opal/bin
+    #/data/languages/go/bin \
+    #$PLAN9/bin
+do
+    [[ -d ${dir} ]] && PATH=${dir}:${PATH}
+done
+
+# functions {{{1
+command_not_found_handler() { ~/bin/shell_function_missing $* }
+
+foo() {
+    base="${1%.*}"
+    [[ $# -eq 2 ]] && time="${2}ns" || time="100ns"
+    ghdl -a "$1"
+    ghdl -e "$base"
+    ghdl -r "$base" --vcd=wave.vcd --stop-time="${time}"
+}
+bar() { gtkwave wave.vcd }
+
+chmsee() { command chmsee $@ && rm -r ~/.chmsee }
+colors() { for i ({0..255}) ( tput setab $i && echo -n " $i " ) }
+df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
+f()      { find -iname "*$@*" }
+hx()     { printf "%d\n" "$1" }
+lman()   { PAGER=less man $1 | less -p $2 }
+md()     { command mkdir $1 && builtin cd $1 }
+mount()  { command mount $@ | awk '{ print $1, $3, $5, $6 }' | sort -V | column -t }
+o()      { objdump -Mintel -wrzD $2 | awk "/^.*<$1>:$/,/^$/" }
+om()     { objdump -Mintel -wrzD -j .text $1 | awk '/^.*<main>:$/,/^$/'; }
+rd()     { dir=$PWD builtin cd .. && command rmdir $dir || builtin cd $dir }
+secs()   { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
+slrn()   { awk '/hinz/ { print $4 }' ~/.slrnrc && command slrn }
+top()    { [[ -x ${commands[htop]} ]] && htop $@ || command top $@ }
+
+urxvtc() {
+    command urxvtc $@
+    [[ $? -eq 2 ]] && urxvtd -q -f && command urxvtc $@
+}
+
+edit_configs() {
+    local -A configs
+    configs=(
+        b           ~/.bashrc
+        dwm         ~/.dotfiles/dwm/config.h
+        v           ~/.vim/vimrc
+        x           ~/.Xdefaults
+        xi          ~/.xinitrc
+        z           ~/.zshenv
+        g           ~/.gitconfig
+        t           ~/.tmux.conf
+        p           ~/.pentadactyl/pentadactylrc
+    )
+    #select i in ${(k)configs}; do $EDITOR ${configs[$i]}; break; done
+
+    tput setaf 204
+    [[ -z $1 ]] && echo "${(k)configs}\n" && return 0
+
+    for i in ${(k)configs}
+    do
+        [[ $1 == $i ]] && $EDITOR ${configs[$i]} && return 0
+    done
+
+    echo "ERROR: Config not found." && return 1
+}
+
+asm() {
+    green=$(echoti setaf 119)
+    reset=$(echoti sgr0)
+    tmp=${1%.*}
+
+    nasm -g -felf -Fdwarf -o $tmp.o $1 && printf "%-11s %s\n" Assembling: ${green}OK${reset}
+    #as -gstabs -o $tmp.o $1 && printf "%-11s %s\n" Assembling: ${green}OK${reset}
+    #[[ $? == 0 ]] && ld -o $tmp $tmp.o && printf "%-11s %s\n" Linking: ${green}OK${reset}
+    [[ $? == 0 ]] && gcc -g -nostdlib -o $tmp $tmp.o && printf "%-11s %s\n" Linking: ${green}OK${reset}
+}
+
+tm() {
+    if [[ $# -ge 1 ]]; then
+        tmux has-session -t $1 && tmux attach -t $1 || tmux new-session -s $1
+    else
+        tmux attach
+    fi
+}
+
+_tmux-sessions() {
+    local expl
+    local -a sessions
+    sessions=( ${${(f)"$(command tmux list-sessions)"}/:[ $'\t']##/:} )
+    _describe -t sessions 'sessions' sessions "$@"
+}
+compdef _tmux-sessions tm
+
+_tmux_pane_words() {
+    local expl
+    local -a w
+    if [[ -z $TMUX_PANE ]]
+    then
+        _message "not running inside tmux!"
+        return 1
+    fi
+    w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
+    _wanted values expl 'words from current tmux pane' compadd -a w
+}
+
+zle -C tmux-pane-words-prefix   complete-word _generic
+zle -C tmux-pane-words-anywhere complete-word _generic
+bindkey '^Xt' tmux-pane-words-prefix
+bindkey '^X^X' tmux-pane-words-anywhere
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
+zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
