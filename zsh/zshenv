@@ -258,7 +258,7 @@ alias j='ls -lhd *(D-/)'
 alias k='ls -lhX *(D-^/)'
 alias l='ls -lh --group-directories-first'
 alias ll='ls -lhX --group-directories-first'
-alias la='ls -lhXa --group-directories-first'
+alias la='ls -lhXA --group-directories-first'
 
 alias 1='fg %1'
 alias 2='fg %2'
@@ -275,7 +275,7 @@ then
     alias dpkg-reconfigure='sudo dpkg-reconfigure'
     alias dpkg='sudo dpkg'
     alias dud='sudo apt-get update'
-    alias dug='sudo aptitude safe-upgrade'
+    alias dug='sudo apt-get upgrade'
     alias halt='sudo shutdown -h now'
     alias orp='sudo deborphan'
     alias orph='sudo deborphan --libdevel --find-config'
@@ -331,6 +331,8 @@ do
     [[ -d $dir ]] && path=($dir $path)
 done
 
+unset dir
+
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
@@ -348,15 +350,26 @@ colors() { for i ({0..255}) ( tput setab $i && echo -n " $i " ) }
 df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
 f()      { find -iname "*$@*" }
 hx()     { printf "%d\n" "$1" }
-lman()   { PAGER=less man $1 | less -p $2 }
 md()     { command mkdir $1 && builtin cd $1 }
 mount()  { command mount $@ | awk '{ print $1, $3, $5, $6 }' | sort -V | column -t }
 o()      { objdump -Mintel -wrzD $2 | awk "/^.*<$1>:$/,/^$/" }
 om()     { objdump -Mintel -wrzD -j .text $1 | awk '/^.*<main>:$/,/^$/'; }
-rd()     { dir=$PWD builtin cd .. && command rmdir $dir || builtin cd $dir }
 secs()   { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
 slrn()   { awk '/hinz/ { print $4 }' ~/.slrnrc && command slrn }
 top()    { [[ -x ${commands[htop]} ]] && htop $@ || command top $@ }
+
+rd() {
+    dir=$PWD
+    builtin cd ..
+    if command rmdir $dir 2>/dev/null; then
+        echo 'Removed empty directory:' $dir
+    else
+        builtin cd $dir
+        echo 'Directory is not empty:'
+        ls -A
+    fi
+    unset dir
+}
 
 urxvtc() {
     command urxvtc $@
