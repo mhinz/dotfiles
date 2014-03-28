@@ -71,9 +71,7 @@ lprompt_dark() {
     local br_left="${color1}${brackets[1]}"
     local br_right="${color1}${brackets[2]}"
     local jobs="%1(j.${orange}%j${color1}:.)"
-    #local userhost="${color3}%m"
     local branch='${${vcs_info_msg_0_##*/}:-$(hostname)}'
-    #local branch='${vcs_info_msg_0_:-$userhost}'
 
     PROMPT="%B${br_left}${jobs}${color2}${branch}${br_right}%b "
 }
@@ -96,27 +94,14 @@ vcs_dark() {
     local fmt_path2="${color1}%R/${color3}%S"
     local fmt_branch="${color2}%b%u%c"
 
-    zstyle ':vcs_info:*:prompt:*' formats         "${fmt_path}${sep1}${fmt_branch}" "${fmt_path2}"
-    zstyle ':vcs_info:*:prompt:*' actionformats   "%a"  "${fmt_path}"
-    zstyle ':vcs_info:*:prompt:*' nvcsformats     ""    "${gray}%~"
+    zstyle ':vcs_info:*:prompt:*' formats       "${fmt_path}${sep1}${fmt_branch}" "${fmt_path2}"
+    zstyle ':vcs_info:*:prompt:*' actionformats "%a" "${fmt_path}"
+    zstyle ':vcs_info:*:prompt:*' nvcsformats   "" "${gray}%~"
 }
 
-if [[ $TERM == xterm* ]]; then
-    local red="%{$(echoti setaf 160)%}"
-    local blue="%{$(echoti setaf 27)%}"
-    local jobs="%1(j.${red}[${blue}%j${red}] .)"
-    local vcs='vcs_info_msg_0_'
-
-    PROMPT="> "
-    RPROMPT=""
-    #PROMPT="%B${jobs}${vcs}${red}%U%m%u%b${reset} "
-    #RPROMPT="${red}%B-={${blue} %~ ${red}}=-%b${reset}"
-    #zstyle ':vcs_info:*:prompt:*' formats       "${red}[${blue}%b%u%c${red}]" "%S"
-else
-    lprompt_dark '⚡⚡' $gray $yellow $green
-    rprompt_dark $gray $yellow
-    vcs_dark $gray $red $yellow ':>'
-fi
+lprompt_dark '⚡⚡' $gray $yellow $green
+rprompt_dark $gray $yellow
+vcs_dark $gray $red $yellow ':>'
 
 # zstyle {{{1
 
@@ -140,7 +125,7 @@ zstyle ':completion:*:descriptions' format $'%{[(00);(38;05;167)m%}=> %d%{[0m%
 zstyle ':completion:*' menu select=2
 
 # cd ..<tab><tab>
-zstyle ':completion:*' special-dirs true
+zstyle ':completion:*'           special-dirs true
 zstyle ':completion::complete:*' use-cache 1
 
 # zle {{{1
@@ -270,17 +255,22 @@ alias 33='bg %3'
 if [[ -x ${commands[sudo]} ]]
 then
     alias ap='sudo aptitude'
-    alias apt-cache='sudo apt-cache'
-    alias arp='sudo arp'
-    alias dpkg-reconfigure='sudo dpkg-reconfigure'
+    alias ag='sudo apt-get'
+
+    alias upg='sudo apt-get update && sudo apt-get upgrade'
+    alias cache='sudo apt-cache'
+
     alias dpkg='sudo dpkg'
-    alias dud='sudo apt-get update'
-    alias dug='sudo apt-get upgrade'
-    alias halt='sudo shutdown -h now'
+    alias dpkg-reconfigure='sudo dpkg-reconfigure'
+
     alias orp='sudo deborphan'
     alias orph='sudo deborphan --libdevel --find-config'
+
+    alias arp='sudo arp'
     alias pt='sudo powertop'
+
     alias reboot='sudo shutdown -r now'
+    alias halt='sudo shutdown -h now'
 else
     echo "Please install 'sudo'"
 fi
@@ -324,6 +314,7 @@ for dir in \
     $HOME/local/bin \
     $GOPATH/bin \
     /sbin \
+    /data/languages/rust/installation/bin \
     /data/opal/bin
     #/data/languages/go/bin \
     #$PLAN9/bin

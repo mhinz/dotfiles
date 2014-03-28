@@ -11,7 +11,9 @@ test -r ~/.Xmodmap    && xmodmap ~/.Xmodmap
 xset b off
 xset m 2 5
 
-feh --bg-max /data/wallpapers/github/octowhite.png
+#feh --bg-max /data/pics/wallpapers/github/octowhite.png
+#feh --bg-max /data/pics/wallpapers/trigonometry.jpg
+feh --bg-max /data/pics/wallpapers/fp_is_the_right_way.jpg
 
 pgrep urxvtd || urxvtd -f -q -o
 pgrep ssh-agent || eval $(ssh-agent) && SSH_ASKPASS=ssh-askpass ssh-add < /dev/null
