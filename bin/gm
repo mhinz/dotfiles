@@ -1,0 +1,6 @@
+#!/bin/sh
+
+clear
+echo "\n  [*] Fetching mails from gmail..\n"
+getmail -v | sed '1,3d'
+echo

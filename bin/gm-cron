@@ -1,0 +1,3 @@
+#!/bin/bash
+
+if ping -c1 google.com &>/dev/null; then getmail -q; fi

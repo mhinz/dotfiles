@@ -1,0 +1,1 @@
+xrandr --output LVDS --auto --output VGA --same-as LVDS

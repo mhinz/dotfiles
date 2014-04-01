@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function connect()
+{
+    echo "[*] Setting up wlan0.."
+    sudo ifconfig wlan0 up
+    echo "[*] Connect to router.."
+    sudo wpa_supplicant -B -i wlan0 -D wext -c /etc/wpa_supplicant/wpa_supplicant.conf -f /etc/wpa_supplicant/wlan.log
+    echo "[*] Getting local IP address.."
+    sudo dhclient -q wlan0
+    echo "[*] Connected to WLAN!" | osd_cat -c yellow -d 2 -p middle -A center -f -*-terminus-*-r-*-*-32-*-*-*-*-*-iso10646-* &
+}
+
+function disconnect()
+{
+    echo "[-] Terminating wpa_supplicant.."
+    sudo killall -q -2 wpa_supplicant
+    echo "[-] Terminating dhclient.."
+    sudo killall -q -2 dhclient
+    echo "[-] Shutting down wlan interface.."
+    sudo ifconfig wlan0 down
+    echo "[-] Disconnected from WLAN!" | osd_cat -d 2 -p middle -A center -f -*-terminus-*-r-*-*-32-*-*-*-*-*-iso10646-* &
+}
+
+function reconnect()
+{
+    disconnect
+    connect
+}
+
+while getopts "cdr" opt;
+do
+    case "$opt" in
+        c) connect;;
+        d) disconnect;;
+        r) reconnect;;
+    esac
+done
+
+echo "[*] ./${0##*/} executed!"
