@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+use feature 'say';
+
+use Term::ANSIColor qw( :constants );
+use List::MoreUtils qw( uniq );
+
+my %seen;
+my @log = `svn log --quiet --xml` or die 'svn log failed!';
+
+# count number of revisions by author
+my @sorted = sort grep { /<author>(.*)<\/author>/ && $seen{$1}++ } @log;
+
+# print revision ranking
+foreach my $author (sort { $seen{$a} <=> $seen{$b} } keys %seen) {
+    printf "%20s  %s\n", GREEN.$seen{$author}, YELLOW.$author;
+}
+
+printf "\n%20s  %s\n", GREEN.scalar @sorted, YELLOW."Number of revisions";
+printf "%20s  %s\n", GREEN.scalar (uniq @sorted), YELLOW."Number of authors";
