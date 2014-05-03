@@ -181,6 +181,7 @@ export NNTPSERVER=news.fu-berlin.de
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
 export GOARCH=amd64 GOOS=linux GOPATH=/data/go
 export PLAN9=/data/repo/plan9port
+export PKG_CONFIG_PATH=/data/lib/lib/pkgconfig
 
 # prompts {{{1
 
@@ -198,6 +199,7 @@ PROMPT2="${orange}+${reset} "
 PROMPT3="${orange}Select:${reset} "
 
 # hashes {{{1
+hash -d neo='/data/neo/neovim'
 hash -d g='/data/github'
 hash -d b='/data/books'
 hash -d c='/data/programming/c'
@@ -205,9 +207,21 @@ hash -d asm='/data/programming/asm'
 hash -d torrents='/data/torrents/downloads'
 
 # aliases {{{1
+alias ju='java -cp ".:test:../junit.jar" org.junit.runner.JUnitCore'
+alias jc='javac -cp ".:../junit.jar"'
+
+alias mars='java -jar /data/uni/techgi2/code/Mars4_4.jar'
+
+alias nvim='VIMRUNTIME=~/local/share/vim/vim74 /data/neo/neovim/build/bin/nvim'
+alias scan='make clean && make cmake CMAKE_EXTRA_FLAGS="-DCMAKE_C_COMPILER=/usr/share/clang/scan-build/ccc-analyzer" && scan-build --use-analyzer=/usr/bin/clang make'
+
 alias add='cmus-remote -l'
 alias big='dpkg-query -W --showformat="\${Installed-Size}\t\${Package}\n" | sort -n'
+
 alias c11='( zathura /data/c/standards/n1516.pdf & ) && exit'
+alias j8='( zathura /data/programming/java/standards/jls8.pdf & ) && exit'
+alias j8v='( zathura /data/programming/java/standards/jvms8.pdf & ) && exit'
+
 alias c='edit_configs'
 alias cr='cmus-remote'
 alias dis='gcc -S -masm=intel'
@@ -220,14 +234,13 @@ alias here='command urxvtc -cd $PWD'
 alias i='$EDITOR /data/life/ideas'
 alias kdwm='killall startdwm'
 alias ls='ls --color=always'
-alias m='cd ~torrents'
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
 alias mps='ps $@ f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
 alias n2t='sh /data/nand2tetris/nand2tetris/tools/HardwareSimulator.sh'
 alias n='ls -lhS *(DOL[1,5]^/)'
 alias ob='objdump -Mintel'
 alias p1='patch -p1 -g1 --dry-run'
-alias rt='cd ~torrents/../session && xtitle rtorrent && rtorrent'
+alias rt='cd ~torrents/../session && rtorrent'
 alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
 alias t='$EDITOR /data/life/todo'
 alias v='vim'
@@ -312,11 +325,13 @@ fpath=(~/.zsh $fpath)
 for dir in \
     $HOME/bin \
     $HOME/local/bin \
+    $HOME/.cabal/bin \
     $GOPATH/bin \
     /sbin \
     /data/languages/rust/installation/bin \
-    /data/opal/bin
-    #/data/languages/go/bin \
+    /data/languages/go/bin \
+    /data/opal/bin \
+    /data/coursera/progfun/sbt
     #$PLAN9/bin
 do
     [[ -d $dir ]] && path=($dir $path)
@@ -325,6 +340,10 @@ done
 unset dir
 
 # functions {{{1
+vt() {
+    nvim -u unix.vim -U NONE --noplugin -s dotest.in test_${*}.in
+}
+
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
 foo() {
@@ -337,7 +356,8 @@ foo() {
 bar() { gtkwave wave.vcd }
 
 chmsee() { command chmsee $@ && rm -r ~/.chmsee }
-colors() { for i ({0..255}) ( tput setab $i && echo -n " $i " ) }
+#colors() { for i ({0..255}) ( tput setab $i && echo -n " $i " && [[ $[$i % 8] -eq 0 ]] && echo )}
+colors() { for i ({0..255}) ( tput setab $i && printf " %-6s" $i && [[ $[$i % 8] -eq 0 ]] && echo )}
 df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
 f()      { find -iname "*$@*" }
 hx()     { printf "%d\n" "$1" }
