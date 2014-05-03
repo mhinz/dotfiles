@@ -3,4 +3,4 @@
 # Before svn 1.9 there was no:
 # svn cleanup --remove-unversioned
 
-rm -r $(svn st | grep '^?' | awk '{print $2}' | xargs)
+svn status | awk '/^\?/ {print $2}' | xargs rm -r --
