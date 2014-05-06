@@ -2,8 +2,11 @@
 # encoding: utf-8
 
 tips = [
+  "If you don't start with a spec, every piece of code you write is a patch. -- Leslie Lamport",
   "Caches are bugs waiting to happen. -- Rob Pike",
   "Abstraction is not about vagueness, it is about being precise at a new semantic level. -- Dijkstra",
+  "dd is horrible on purpose. It's a joke about OS/360 JCL. But today it's an internationally standardized joke. I guess that says it all. -- Rob Pike",
+  "All loops are infinite ones for faulty RAM modules. -- graphitemaster",
   "All idioms must be learned. Good idioms only need to be learned once. -- Alan Cooper",
   "For a successful technology, reality must take precedence over public relations, for Nature cannot be fooled. -- Richard Feynman",
   "If programmers were electricians, parallel programmers would be bomb disposal experts. Both cut wires. -- Bartosz Milewski",
