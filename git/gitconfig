@@ -42,8 +42,11 @@
     pl    = pull --ff-only
     r     = reset
     rank  = shortlog -sn --no-merges
-    re    = rebase
     rem   = remote
+    re    = rebase
+    rc    = rebase --continue
+    rs    = rebase --skip
+    ra    = rebase --abort
     ri    = rebase -i
     rl    = rev-list
     s     = status -uno
@@ -66,11 +69,13 @@
     ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
     theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
+    plog = "log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+
 [advice]
     statusHints = no
 
 [rerere]
-    enabled = true
+    enabled = false
 
 [color]
     branch      = auto
