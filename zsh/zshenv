@@ -210,7 +210,12 @@ hash -d torrents='/data/torrents/downloads'
 alias ju='java -cp ".:test:../junit.jar" org.junit.runner.JUnitCore'
 alias jc='javac -cp ".:../junit.jar"'
 
+alias sc='systemctl'
+alias sda='systemd-analyze'
+
 alias mars='java -jar /data/uni/techgi2/code/Mars4_4.jar'
+
+alias xssh='ssh -XCc arcfour,blowfish-cbc'
 
 alias nvim='VIMRUNTIME=~/local/share/vim/vim74 /data/neo/neovim/build/bin/nvim'
 alias scan='make clean && make cmake CMAKE_EXTRA_FLAGS="-DCMAKE_C_COMPILER=/usr/share/clang/scan-build/ccc-analyzer" && scan-build --use-analyzer=/usr/bin/clang make'
@@ -271,6 +276,7 @@ then
     alias ag='sudo apt-get'
 
     alias upg='sudo apt-get update && sudo apt-get upgrade'
+    alias pur='sudo apt-get remove --purge'
     alias cache='sudo apt-cache'
 
     alias dpkg='sudo dpkg'
@@ -325,13 +331,12 @@ fpath=(~/.zsh $fpath)
 for dir in \
     $HOME/bin \
     $HOME/local/bin \
+    /sbin \
     $HOME/.cabal/bin \
     $GOPATH/bin \
-    /sbin \
-    /data/languages/rust/installation/bin \
-    /data/languages/go/bin \
-    /data/opal/bin \
-    /data/coursera/progfun/sbt
+    /data/languages/go/bin
+    #/data/opal/bin \
+    #/data/coursera/progfun/sbt
     #$PLAN9/bin
 do
     [[ -d $dir ]] && path=($dir $path)
