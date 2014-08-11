@@ -15,10 +15,13 @@ urxvt*foreground:         #bebebe
 urxvt*background:         #202020
 !urxvt*background:         #412e21
 urxvt*boldMode:           false
+urxvt*meta8:              false
 !urxvt*letterSpace: +1
 !urxvt*font:               xft:Inconsolata:pixelsize=12:dpi=96
 !urxvt*font:               -xos4-terminus-medium-r-normal--14-*-*-*-*-*-iso10646-*
 urxvt*font:               xft:DejaVu Sans Mono:pixelsize=12
+!urxvt*font:               xft:Ubuntu Mono:style=Regular:pixelsize=14
+!urxvt*font:               xft:Droid Sans Mono:style=Regular:pixelsize=13
 
 
 !!!  URXVT  !!!
@@ -182,5 +185,3 @@ xft*hinting:              true
 !white
 !*color7: #CCCCC6
 !*color15: #F8F8F2
-
-
