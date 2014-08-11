@@ -2,7 +2,6 @@
 
 use warnings;
 use strict;
-use feature 'say';
 
 use Term::ANSIColor qw( :constants );
 use List::MoreUtils qw( uniq );
