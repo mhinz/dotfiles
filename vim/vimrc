@@ -13,7 +13,7 @@ execute pathogen#infect()
 filetype plugin indent on
 syntax   on
 
-autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
+"autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
 let b:debug_highlight = 0
 
@@ -74,6 +74,7 @@ set nofsync
 set nojoinspaces
 set nrformats     =hex
 set report        =0
+set shiftround
 set showfulltag
 set showtabline   =1
 set splitbelow
@@ -135,9 +136,6 @@ end
 digraph ./ 8230
 
 let mapleader = ';'
-
-nnoremap <silent> <c-d> :call smooth_scroll#down(&scroll, 20, 2)<cr>
-nnoremap <silent> <c-u> :call smooth_scroll#up(&scroll, 6, 2)<cr>
 
 vnoremap ;rv c<c-o>:set revins<cr><c-r>"<Esc>:set norevins<cr>
 
@@ -251,16 +249,21 @@ au BufRead,BufNewFile       Pkgfile          setl ft=sh sts=8 sw=8 noet
 au BufRead,BufNewFile       /data/repo/vim/* setl tags+=/data/repo/vim/.hg/tags
 au BufRead,BufNewFile       *.md,*.markdown  setl ft=markdown tw=80
 au BufRead,BufNewFile       ~/.dotfiles/ssh/config  setf sshconfig
+au BufRead,BufNewFile       /data/uni/techgi2/*.{s,asm} setl ft=mips
+au BufRead,BufNewFile       /data/uni/mpgi2/*.java setl et sts=2 sw=2
 au BufReadPost              *                LastPos
 au BufReadPost              fugitive://      set bufhidden=delete
 au BufWritePost             ~/.Xdefaults     redraw | echo system('xrdb ' . expand('<amatch>'))
 au BufWritePost,CursorHold  *                unlet! b:statusline_long_line_warning
 au BufWritePost,CursorHold  *                unlet! b:statusline_tab_warning
 au BufWritePost,CursorHold  *                unlet! b:statusline_trailing_space_warning
+au BufLeave                 *.{c,cpp}        normal! mC
+au BufLeave                 *.h              normal! mH
 au FileType                 c,cpp            if !has('gui_running') | colorscheme minerva | endif
 "au FileType                 go               if !has('gui_running') | colorscheme go | endif
 au FileType                 text,git         setl tw=78 fo+=t
 au FileType                 text             if expand('%:t') =~? '\(rfc\|std\)\d\+.txt' | setl ft=rfc | endif
+au FileType                 scala            setl et sts=2 sw=2
 au FileType                 help             execute "silent normal \<c-w>T"
 au VimEnter                 *                if isdirectory(expand('<afile>')) | quit | endif
 "au VimEnter                 *                if isdirectory(expand('<afile>')) | Ex | endif
@@ -828,7 +831,7 @@ let g:signify_vcs_list           = [ 'git', 'hg' ]
 "let g:signify_cursorhold_normal  = 1
 "let g:signify_disable_by_default = 1
 "let g:signify_line_highlight     = 1
-let g:signify_sign_overwrite     = 1
+let g:signify_sign_overwrite     = 0
 "let g:signify_update_on_bufenter = 1
 
 function! RunOnModifiedLines(lnums) abort
@@ -842,10 +845,11 @@ endfunction
 " plugins -> vim-startify {{{2
 "let g:loaded_startify = 1
 
-let g:startify_relative_path = 1
 let g:startify_list_order = [
       \ ['   LRU:'],
       \ 'files',
+      \ ['   LRU within this dir:'],
+      \ 'dir',
       \ ['   Sessions:'],
       \ 'sessions',
       \ ['   Bookmarks:'],
@@ -864,13 +868,15 @@ hi StartifyHeader  ctermfg=114
 hi StartifyFooter  ctermfg=240
 "hi StartifyFile    ctermfg=111
 
-"let g:startify_files_number = 5
+"let g:startify_relative_path = 1
+let g:startify_files_number = 10
 let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
-"let g:startify_change_to_dir  = 1
+"let g:startify_session_delete_buffers = 0
+let g:startify_change_to_dir  = 1
 let g:startify_enable_special = 0
 "let g:startify_restore_position = 1
-"let g:startify_custom_indices = ['a','s','d','f','g','q','w','e','r','z','x','c','v']
+"let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
 "let g:startify_list_order = ['files', 'bookmarks', 'sessions', 'dir']
 
 let g:startify_skiplist = [
@@ -880,10 +886,11 @@ let g:startify_skiplist = [
             \ '.vimgolf',
             \ ]
 
-let g:startify_bookmarks = [
-            \ '~/.vim/vimrc',
-            \ '/data/vim/golfing',
-            \ ]
+let g:startify_bookmarks = [ expand ('<sfile>:p:~') ]
+"let g:startify_bookmarks = [
+            "\ '~/.vim/vimrc',
+            "\ '/data/vim/golfing',
+            "\ ]
 
 "let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
 let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
