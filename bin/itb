@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+import sys
+import requests
+
+args  = ' '.join(sys.argv[1:])
+req   = requests.get('http://it-ebooks-api.info/v1/search/' + args).json()
+
+for i, book in list(enumerate(req['Books'])):
+    print "\033[32m%-5d \033[33m%s" % (i, book['Title'])
+
+try:
+    choice = raw_input("\033[31mSelect>\033[0m ")
+except KeyboardInterrupt:
+    sys.exit(1)
+
+bookid = req['Books'][int(choice)]['ID']
+req    = requests.get('http://it-ebooks-api.info/v1/book/' + str(bookid)).json()
+
+print "\033[32m%-14s\033[0m%s" % ('Title',       req['Title'])
+print "\033[32m%-14s\033[0m%s" % ('Subtitle',    req['SubTitle'])
+print "\033[32m%-14s\033[0m%s" % ('Author',      req['Author'])
+print "\033[32m%-14s\033[0m%s" % ('Year',        req['Year'])
+print "\033[32m%-14s\033[0m%s" % ('Publisher',   req['Publisher'])
+print "\033[32m%-14s\033[0m%s" % ('ISBN',        req['ISBN'])
+print "\033[32m%-14s\033[0m%s" % ('Image',       req['Image'])
+print "\033[32m%-14s\033[0m%s" % ('Download',    req['Download'])
+print "\033[32m%-14s\033[0m%s" % ('Description', req['Description'])
