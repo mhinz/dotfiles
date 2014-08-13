@@ -3,8 +3,8 @@
 import sys
 import requests
 
-args  = ' '.join(sys.argv[1:])
-req   = requests.get('http://it-ebooks-api.info/v1/search/' + args).json()
+args = ' '.join(sys.argv[1:])
+req  = requests.get('http://it-ebooks-api.info/v1/search/' + args).json()
 
 for i, book in list(enumerate(req['Books'])):
     print "\033[32m%-5d \033[33m%s" % (i, book['Title'])
