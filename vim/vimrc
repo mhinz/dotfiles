@@ -8,6 +8,36 @@
 "                ╚══════════════════════════════════════════╝
 "
 " init {{{1
+call plug#begin('~/.vim/plugged')
+
+Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-tmuxify'
+Plug 'mhinz/vim-toplevel'
+
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+Plug 'jimenezrick/vimerl',   { 'for': 'erlang' }
+Plug 'nsf/gocode',           { 'for': 'go', 'rtp': 'vim' }
+Plug 'tpope/vim-fireplace',  { 'for': 'clojure' }
+
+Plug 'Harenome/vim-mipssyntax'
+Plug 'jamessan/vim-gnupg'
+Plug 'jonathanfilip/vim-lucius'
+Plug 'majutsushi/tagbar'
+Plug 'mattn/gist-vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-pathogen'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/armasm'
+Plug 'vim-scripts/rfc-syntax'
+
+call plug#end()
+
+" local plugins
 execute pathogen#infect()
 
 filetype plugin indent on
