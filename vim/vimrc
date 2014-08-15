@@ -15,19 +15,18 @@ Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-tmuxify'
 Plug 'mhinz/vim-toplevel'
 
-Plug 'davidhalter/jedi-vim', { 'for': 'python' }
-Plug 'jimenezrick/vimerl',   { 'for': 'erlang' }
-Plug 'nsf/gocode',           { 'for': 'go', 'rtp': 'vim' }
-Plug 'tpope/vim-fireplace',  { 'for': 'clojure' }
-
 Plug 'Harenome/vim-mipssyntax'
+Plug 'davidhalter/jedi-vim',    { 'for': 'python' }
 Plug 'jamessan/vim-gnupg'
+Plug 'jimenezrick/vimerl',      { 'for': 'erlang' }
 Plug 'jonathanfilip/vim-lucius'
-Plug 'majutsushi/tagbar'
-Plug 'mattn/gist-vim'
+Plug 'majutsushi/tagbar',       { 'on': 'TagbarToggle' }
+Plug 'mattn/gist-vim',          { 'on': 'Gist' }
+Plug 'nsf/gocode',              { 'for': 'go', 'rtp': 'vim' }
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree',     { 'on': 'NERDTree' }
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fireplace',     { 'for': 'clojure' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-pathogen'
 Plug 'tpope/vim-rsi'
