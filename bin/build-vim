@@ -1,0 +1,35 @@
+#!/bin/bash
+
+dir='/data/repo/vim'
+prefix="${HOME}/local"
+flags="--prefix=${prefix} --disable-darwin --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-pythoninterp=yes --with-python-config-dir=/usr/lib/python2.7/config --enable-rubyinterp=yes --enable-pythoninterp=yes --enable-cscope --disable-workshop --disable-netbeans --disable-sniff --disable-hangulinput --enable-fontset --enable-gui=gtk2 --enable-largefile --disable-acl --disable-gpm --disable-sysmouse --with-x --with-features=huge --with-compiledby=mhi"
+
+version() {
+    major=$(vim --version | head -1 | cut -d' ' -f5)
+    minor=$(vim --version | head -2 | tail -1 | cut -d'-' -f2)
+    full="${major}.${minor}"
+}
+
+cd "$dir"
+echo '[*] Cleaning directory..'
+make distclean 1>/dev/null
+
+if [[ $1 != '-n' ]]; then
+    echo '[*] Pulling changes..'
+    if hg pull -u | grep 'no changes found' &>/dev/null; then
+        echo '[!] No changes found.'
+        version
+        echo "[*] Current version: $full"
+        exit 1
+    fi
+fi
+
+echo '[*] Configure..'
+./configure $flags >build.log
+echo '[*] Compile sources..'
+make >>build.log
+echo '[*] Install..'
+make install >>build.log
+echo "[*] Build log: ${dir}/build.log"
+version
+echo "[*] New version: $full"
