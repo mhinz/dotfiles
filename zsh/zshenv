@@ -71,7 +71,8 @@ lprompt_dark() {
     local br_left="${color1}${brackets[1]}"
     local br_right="${color1}${brackets[2]}"
     local jobs="%1(j.${orange}%j${color1}:.)"
-    local branch='${${vcs_info_msg_0_##*/}:-$(hostname)}'
+    #local branch='${${vcs_info_msg_0_##*/}:-$(hostname)}'
+    local branch='${${vcs_info_msg_0_##*/}:-λ}'
 
     PROMPT="%B${br_left}${jobs}${color2}${branch}${br_right}%b "
 }
@@ -489,3 +490,16 @@ rationalise-dot() {
 
 zle -N rationalise-dot
 bindkey '.' rationalise-dot
+
+fancy-ctrl-z() {
+    if [[ $#BUFFER -eq 0 ]]; then
+        BUFFER=fg
+        zle accept-line
+    else
+        zle push-input
+        zle clear-screen
+    fi
+}
+
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
