@@ -1,3 +1,43 @@
+(require 'cl)
+
+(defvar packages
+  '(color-theme
+    zenburn
+    rainbow-mode
+    haskell-mode
+    erlang))
+
+(defvar configs
+  '("global"
+    "haskell"
+    "erlang"
+    "evil"))
+
+(loop for name in packages
+      do (progn (unless (fboundp name)
+                  (add-to-list 'load-path
+                               (concat (file-name-directory (or load-file-name
+                                                                (buffer-file-name)))
+                                       "packages/"
+                                       (symbol-name name)))
+                  (require name))))
+
+(add-to-list 'load-path
+             (concat (file-name-directory load-file-name)
+                     "packages/"))
+
+(loop for name in configs
+      do (load (concat (file-name-directory load-file-name)
+                       "configs/"
+                       name ".el")))
+
+(show-paren-mode 1)
+(line-number-mode 1)
+(column-number-mode 1)
+(size-indication-mode 1)
+(transient-mark-mode 1)
+(delete-selection-mode 1)
+
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -7,9 +47,9 @@
 (load "~/.emacs.d/modes/site-page-break-mode.el")
 
 ;; opal mode
-(setq load-path (cons "/data/opal/lib/emacs" load-path))
-(defvar opal-novice t)
-(require 'opal-mode)
+;;(setq load-path (cons "/data/opal/lib/emacs" load-path))
+;;(defvar opal-novice t)
+;;(require 'opal-mode)
 
 ;; gnus
 (setq-default
@@ -23,6 +63,7 @@
  gnus-sum-thread-tree-root ""
  gnus-sum-thread-tree-single-leaf "╰► "
  gnus-sum-thread-tree-vertical "│")
+nil
 
 ;; ido-mode
 (require 'ido)
@@ -33,18 +74,3 @@
 (defun my-sml-mode-hook ()
   (electric-indent-mode 1))
 (add-hook 'sml-mode-hook 'my-sml-mode-hook)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tango-dark)))
- '(inhibit-startup-screen t)
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 87 :width normal)))))
