@@ -218,7 +218,7 @@ alias mars='java -jar /data/uni/techgi2/code/Mars4_4.jar'
 
 alias xssh='ssh -XCc arcfour,blowfish-cbc'
 
-alias nvim='VIMRUNTIME=~/local/share/vim/vim74 /data/neo/neovim/build/bin/nvim'
+alias nvim='VIMRUNTIME=~/local/share/nvim/runtime /data/neovim/neovim/build/bin/nvim'
 alias scan='make clean && make cmake CMAKE_EXTRA_FLAGS="-DCMAKE_C_COMPILER=/usr/share/clang/scan-build/ccc-analyzer" && scan-build --use-analyzer=/usr/bin/clang make'
 
 alias add='cmus-remote -l'
@@ -250,6 +250,7 @@ alias rt='cd ~torrents/../session && rtorrent'
 alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
 alias t='$EDITOR /data/life/todo'
 alias v='vim'
+alias nv='nvim'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias z='zathura'
 
