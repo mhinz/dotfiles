@@ -63,12 +63,14 @@ set expandtab
 set shiftwidth    =4
 set softtabstop   =4
 
-" backup/swap/info settings
+" backup/swap/info/undo settings
 set backup
 set backupdir     =$HOME/.vim/files/backup/
 set backupext     =-vimbackup
 set backupskip    =
 set directory     =$HOME/.vim/files/swap//
+set undodir        =$HOME/.vim/files/undo/
+set undofile
 set updatecount   =100
 set viminfo       ='100,n$HOME/.vim/files/info/viminfo
 
@@ -104,6 +106,8 @@ set noerrorbells
 set nofsync
 set nojoinspaces
 set nrformats     =hex
+set pastetoggle=<F5>
+set relativenumber
 set report        =0
 set shiftround
 set showfulltag
@@ -142,25 +146,15 @@ set showcmd
 set showmatch
 set showmode
 
-set pastetoggle=<F5>
-
 if has('multi_byte') && &enc ==# 'utf-8'
-    set listchars =tab:▸\ ,extends:❯,precedes:❮,trail:·,nbsp:±
-    "set listchars =tab:│\ ,extends:❯,precedes:❮,trail:·,nbsp:±
-    let &showbreak = '↪'
+  set listchars =tab:▸\ ,extends:❯,precedes:❮,trail:·,nbsp:±
+  let &showbreak = '↪'
 else
-    set listchars =tab:>\ ,extends:>,precedes:<,trail:.,nbsp:.
+  set listchars =tab:>\ ,extends:>,precedes:<,trail:.,nbsp:.
 endif
 
-if v:version >= 703
-    set cryptmethod    =blowfish
-    set relativenumber
-    set undodir        =$HOME/.vim/files/undo/
-    set undofile
-end
-
 if executable('ack-grep')
-    set grepprg=ack-grep
+  set grepprg=ack-grep
 end
 
 " mapping {{{1
