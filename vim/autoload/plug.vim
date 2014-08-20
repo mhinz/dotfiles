@@ -5,7 +5,7 @@
 "
 "   mkdir -p ~/.vim/autoload
 "   curl -fLo ~/.vim/autoload/plug.vim \
-"     https://raw.github.com/junegunn/vim-plug/master/plug.vim
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 "
 " Edit your .vimrc
 "
@@ -68,7 +68,7 @@ let g:loaded_plug = 1
 let s:cpo_save = &cpo
 set cpo&vim
 
-let s:plug_source = 'https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+let s:plug_source = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 let s:plug_buf = get(s:, 'plug_buf', -1)
 let s:mac_gui = has('gui_macvim') && has('gui_running')
 let s:is_win = has('win32') || has('win64')
@@ -458,11 +458,15 @@ function! s:lastline(msg)
   return get(lines, -1, '')
 endfunction
 
+function! s:new_window()
+  execute get(g:, 'plug_window', 'vertical topleft new')
+endfunction
+
 function! s:prepare()
   if bufexists(s:plug_buf)
     let winnr = bufwinnr(s:plug_buf)
     if winnr < 0
-      vertical topleft new
+      call s:new_window()
       execute 'buffer ' . s:plug_buf
     else
       execute winnr . 'wincmd w'
@@ -470,7 +474,7 @@ function! s:prepare()
     setlocal modifiable
     silent %d _
   else
-    vertical topleft new
+    call s:new_window()
     nnoremap <silent> <buffer> q  :if b:plug_preview==1<bar>pc<bar>endif<bar>q<cr>
     nnoremap <silent> <buffer> R  :silent! call <SID>retry()<cr>
     nnoremap <silent> <buffer> D  :PlugDiff<cr>
