@@ -20,6 +20,8 @@ Plug 'davidhalter/jedi-vim',    { 'for': 'python' }
 Plug 'jamessan/vim-gnupg'
 Plug 'jimenezrick/vimerl',      { 'for': 'erlang' }
 Plug 'jonathanfilip/vim-lucius'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 Plug 'majutsushi/tagbar',       { 'on': 'TagbarToggle' }
 Plug 'mattn/gist-vim',          { 'on': 'Gist' }
 Plug 'nsf/gocode',              { 'for': 'go', 'rtp': 'vim' }
@@ -185,11 +187,11 @@ nnoremap <silent> [b :bprevious<cr>
 noremap <silent><leader>rr :source %<cr>
 nmap <leader><space> <leader>c<space>
 
-noremap <silent><F1> :TagbarToggle<CR>
-noremap <silent><F2> :call ToggleNumbers()<CR>
-noremap <silent><F4> :NERDTreeToggle<CR>
-noremap <silent><F6> :call CreateTags()<CR>
-nnoremap <silent><F9> :silent! make<CR>:redraw!<CR>:cwindow<CR>
+noremap <silent><f1> :TagbarToggle<cr>
+noremap <silent><f2> :call ToggleNumbers()<cr>
+noremap <silent><f4> :NERDTreeToggle<cr>
+noremap <silent><f6> :call CreateTags()<cr>
+nnoremap <silent><f9> :silent! make<cr>:redraw!<cr>:cwindow<cr>
 
 nnoremap <leader>gv `[v`]
 
@@ -201,17 +203,17 @@ vnoremap & :&&<cr>
 
 nnoremap n nzz
 nnoremap N Nzz
-
 nnoremap Q gqap
+nnoremap g; g;zz
 
 "nnoremap <leader>f   ciw
 
-noremap <Down>       <C-w>+
-noremap <Up>         <C-w>-
+noremap <down>       <c-w>+
+noremap <up>         <c-w>-
 "noremap <Left>       <C-w>>
 "noremap <Right>      <C-w><
-noremap <C-n>        :tabn<CR>
-noremap <C-p>        :tabp<CR>
+noremap <c-n>        :tabn<cr>
+noremap <c-p>        :tabp<cr>
 "noremap <C-i>        gk
 
 nnoremap <tab>       %
@@ -221,9 +223,9 @@ nnoremap ,c          :cclose<CR>
 nnoremap <leader>co  :botright copen 5<CR><C-w>p
 nnoremap <leader>cn  :cnext<CR>
 "nnoremap -           :cnext<CR>
-nnoremap <Right>     :cnext<CR>
+nnoremap <right>     :cnext<CR>
 nnoremap <leader>cp  :cprevious<CR>
-nnoremap <Left>      :cprevious<CR>
+nnoremap <left>      :cprevious<CR>
 nnoremap <leader>ce  :clast<CR>
 
 "nnoremap ql          ^vg_gq
@@ -243,28 +245,28 @@ nnoremap <leader>d   :call ToggleScratchpad(1)<cr>
 nnoremap <silent> <leader>w   :up<cr>
 nnoremap <leader>x   :x<cr>
 nnoremap <silent><leader>l :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
-nnoremap <BS>        <C-T>
-nnoremap <C-J>       <C-W>j
-nnoremap <C-K>       <C-W>k
-nnoremap <C-L>       <C-W>l
-nnoremap <CR>        g<C-]>
-nnoremap <F10>       :call <SID>ToggleTooLongHL()<cr>
+nnoremap <bs>        <c-t>
+nnoremap <c-j>       <c-w>j
+nnoremap <c-k>       <c-w>k
+nnoremap <c-l>       <c-w>l
+nnoremap <cr>        g<C-]>
+nnoremap <f10>       :call <SID>ToggleTooLongHL()<cr>
 "nnoremap <silent>F   :pu=''<CR>
 "nnoremap <Space>     za
 nnoremap '           `
 nnoremap `           '
 
-inoremap <C-F>       <C-x><C-o>
-inoremap <C-B>       <C-x><C-u>
-inoremap jf          <Esc>
+inoremap <c-f>       <c-x><c-o>
+inoremap <c-b>       <c-x><c-u>
+inoremap jf          <esc>
 
 vmap <space>         <leader>c<space>
 vnoremap Y           "+y
 
-cnoremap <C-B>       <Left>
-cnoremap <C-F>       <Right>
-cnoremap <C-A>       <Home>
-cnoremap <C-E>       <End>
+cnoremap <c-b>       <left>
+cnoremap <c-f>       <right>
+cnoremap <c-a>       <home>
+cnoremap <c-e>       <end>
 
 " autocmd {{{1
 " autocmd -> misc {{{2
@@ -337,12 +339,22 @@ aug binary
 augroup end
 
 " commands {{{1
-com! LastPos if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-com! -bar T  call Tags()
-com! -nargs=* -complete=help H helpgrep <args>
-com! Kill bprevious | split | bnext | bdelete
+command! LastPos if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+command! -bar T  call Tags()
+command! -nargs=* -complete=help H helpgrep <args>
+command! Kill bprevious | split | bnext | bdelete
+command! Focus call s:toggle_focus()
 
 " functions {{{1
+function! s:toggle_focus()
+  if !exists('s:focus_enabled')
+    Goyo | Limelight
+    let s:focus_enabled = 1
+  else
+    Goyo! | Limelight!
+    unlet s:focus_enabled
+  endif
+endfunction
 
 " several things are wrong with this
 function! Transform(prefix, suffix)
