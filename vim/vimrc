@@ -192,6 +192,13 @@ nnoremap <leader>gv `[v`]
 xnoremap < <gv
 xnoremap > >gv
 
+nnoremap }  }zz
+nnoremap {  {zz
+nnoremap ]] ]]zz
+nnoremap [[ [[zz
+nnoremap [] []zz
+nnoremap ][ ][zz
+
 nnoremap & :&&<cr>
 vnoremap & :&&<cr>
 
