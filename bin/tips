@@ -88,4 +88,4 @@ tips = [
   "Sign Your Work\n\nCraftsmen of an earlier age were proud to sign their work. You should be, too."
 ]
 
-puts tips[(0...tips.length).to_a.sample]
+puts tips.sample
