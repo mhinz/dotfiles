@@ -277,6 +277,8 @@ then
     alias ap='sudo aptitude'
     alias ag='sudo apt-get'
 
+    alias aps='sudo aptitude search'
+    alias api='sudo aptitude install'
     alias upg='sudo apt-get update && sudo apt-get upgrade'
     alias pur='sudo apt-get remove --purge'
     alias cache='sudo apt-cache'
@@ -504,3 +506,8 @@ fancy-ctrl-z() {
 
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+# environments {{{1
+
+# OPAM configuration
+. ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
