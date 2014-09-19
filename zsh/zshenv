@@ -200,7 +200,6 @@ PROMPT2="${orange}+${reset} "
 PROMPT3="${orange}Select:${reset} "
 
 # hashes {{{1
-hash -d neo='/data/neo/neovim'
 hash -d g='/data/github'
 hash -d b='/data/books'
 hash -d c='/data/programming/c'
@@ -218,7 +217,6 @@ alias mars='java -jar /data/uni/techgi2/code/Mars4_4.jar'
 
 alias xssh='ssh -XCc arcfour,blowfish-cbc'
 
-alias nvim='VIMRUNTIME=~/local/share/nvim/runtime /data/neovim/neovim/build/bin/nvim'
 alias scan='make clean && make cmake CMAKE_EXTRA_FLAGS="-DCMAKE_C_COMPILER=/usr/share/clang/scan-build/ccc-analyzer" && scan-build --use-analyzer=/usr/bin/clang make'
 
 alias add='cmus-remote -l'
@@ -238,7 +236,7 @@ alias gitk='gitk --all'
 alias grep='grep --color=always'
 alias here='command urxvtc -cd $PWD'
 alias i='$EDITOR /data/life/ideas'
-alias kdwm='killall startdwm'
+alias kdwm='killall dwm'
 alias ls='ls --color=always'
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
 alias mps='ps $@ f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
@@ -250,7 +248,6 @@ alias rt='cd ~torrents/../session && rtorrent'
 alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
 alias t='$EDITOR /data/life/todo'
 alias v='vim'
-alias nv='nvim'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias z='zathura'
 
@@ -279,6 +276,7 @@ then
 
     alias aps='sudo aptitude search'
     alias api='sudo aptitude install'
+    alias aga='sudo apt-get autoremove --purge'
     alias upg='sudo apt-get update && sudo apt-get upgrade'
     alias pur='sudo apt-get remove --purge'
     alias cache='sudo apt-cache'
@@ -333,15 +331,16 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 fpath=(~/.zsh $fpath)
 
 for dir in \
-    $HOME/bin \
-    $HOME/local/bin \
     /sbin \
+    $HOME/local/dwm/bin \
+    $HOME/local/erlang/bin \
+    $HOME/local/git/bin \
+    $HOME/local/tmux/bin \
+    $HOME/local/vim/bin \
+    $HOME/bin \
     $HOME/.cabal/bin \
     $GOPATH/bin \
     /data/languages/go/bin
-    #/data/opal/bin \
-    #/data/coursera/progfun/sbt
-    #$PLAN9/bin
 do
     [[ -d $dir ]] && path=($dir $path)
 done
@@ -349,10 +348,6 @@ done
 unset dir
 
 # functions {{{1
-vt() {
-    nvim -u unix.vim -U NONE --noplugin -s dotest.in test_${*}.in
-}
-
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
 foo() {
@@ -365,8 +360,8 @@ foo() {
 bar() { gtkwave wave.vcd }
 
 chmsee() { command chmsee $@ && rm -r ~/.chmsee }
-#colors() { for i ({0..255}) ( tput setab $i && echo -n " $i " && [[ $[$i % 8] -eq 0 ]] && echo )}
-colors() { for i ({0..255}) ( tput setab $i && printf " %-6s" $i && [[ $[$i % 8] -eq 0 ]] && echo )}
+colors() { for i ({0..255}) ( tput setab $i && echo -n " $i "  )}
+#colors() { for i ({0..255}) ( tput setab $i && printf " %-6s" $i && [[ $[$i % 8] -eq 0 ]] && echo )}
 df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
 f()      { find -iname "*$@*" }
 hx()     { printf "%d\n" "$1" }

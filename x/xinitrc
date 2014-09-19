@@ -31,5 +31,5 @@ while true; do
     sleep 1m
 done &
 
-startdwm
+exec dwm
 #xmonad

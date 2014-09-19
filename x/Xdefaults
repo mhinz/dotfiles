@@ -116,7 +116,8 @@ urxvt2*color15:  darkgray
 urxvt2*foreground:         #222
 !urxvt2*background:         #f5f5f0
 urxvt2*background:         #ccc
-urxvt2*font:               xft:DejaVu Sans Mono:pixelsize=16:style=bold
+!urxvt2*font:               xft:DejaVu Sans Mono:pixelsize=16:style=bold
+urxvt2*font:               xft:DejaVu Sans Mono:pixelsize=12
 !urxvt2*font:               xft:DejaVu Sans Mono:pixelsize=16
 !urxvt2*foreground:         #000
 !urxvt2*background:         #eee

@@ -12,7 +12,15 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
-static const int nmaster            = 1;    /* number of clients in master area */
+static const int nmaster            = 1;        /* number of clients in master area */
+static char dmenumon[2]             = "0";      /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[]       = { "dmenu_run", \
+                                        "-m", dmenumon, \
+                                        "-fn", font,\
+                                        "-nb", normbgcolor, \
+                                        "-nf", normfgcolor, \
+                                        "-sb", selbgcolor, \
+                                        "-sf", selfgcolor, NULL };
 
 static const char *tags[] = { "inet", "work", "media", "irc", "tmp1", "tmp2" };
 
@@ -75,9 +83,8 @@ static Key keys[] = {
         { MODKEY,             XK_e,       spawn,           SHCMD("/data/firefox/firefox/firefox") },
         { MODKEY,             XK_f,       spawn,           {.v = cmd_urxvt } },
         { MODKEY,             XK_g,       spawn,           SHCMD("killall -q conky || conky -q") },
-	//{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	//{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-
+        { MODKEY,             XK_i,       incnmaster,      {.i = +1 } },
+        { MODKEY,             XK_d,       incnmaster,      {.i = -1 } },
         { MODKEY,             XK_h,       setmfact,        {.f = -0.05} },
         { MODKEY,             XK_i,       spawn,           SHCMD("echo 4 > /proc/acpi/ibm/cmos") },
         { MODKEY,             XK_j,       focusstack,      {.i = +1 } },
