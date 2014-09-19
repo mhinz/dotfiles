@@ -200,10 +200,11 @@ PROMPT2="${orange}+${reset} "
 PROMPT3="${orange}Select:${reset} "
 
 # hashes {{{1
-hash -d g='/data/github'
+hash -d asm='/data/programming/asm'
 hash -d b='/data/books'
 hash -d c='/data/programming/c'
-hash -d asm='/data/programming/asm'
+hash -d g='/data/github'
+hash -d neo='/data/repo/neovim'
 hash -d torrents='/data/torrents/downloads'
 
 # aliases {{{1
@@ -247,9 +248,12 @@ alias p1='patch -p1 -g1 --dry-run'
 alias rt='cd ~torrents/../session && rtorrent'
 alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
 alias t='$EDITOR /data/life/todo'
-alias v='vim'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias z='zathura'
+
+alias v='vim'
+alias nv=nvim
+alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
 alias h="cd ..; l"
 alias ..="cd .."
