@@ -2,7 +2,6 @@
 
 autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
-autoload -Uz vcs_info
 
 zmodload -i zsh/complist
 
@@ -34,100 +33,6 @@ unsetopt \
     nobeep \
     rmstarsilent \
     nomatch
-
-# git {{{1
-blue="%{$(echoti setaf 111)%}"
-orange="%{$(echoti setaf 216)%}"
-white="%{$(echoti setaf 255)%}"
-red="%{$(echoti setaf 168)%}"
-green="%{$(echoti setaf 84)%}"
-yellow="%{$(echoti setaf 222)%}"
-gray="%{$(echoti setaf 240)%}"
-reset="%{$(echoti sgr0)%}"
-
-# set formats
-# %b - branchname
-# %u - unstagedstr (see below)
-# %c - stangedstr (see below)
-# %a - action (e.g. rebase-i)
-# %R - repository path
-# %S - path in the repository
-
-zstyle ':vcs_info:*:prompt:*' check-for-changes true
-zstyle ':vcs_info:*:prompt:*' stagedstr         '%F{240}:%F{49}↻%F{reset}'
-zstyle ':vcs_info:*:prompt:*' unstagedstr       '%F{240}:%F{81}↻%F{reset}'
-zstyle ':vcs_info:*:prompt:*' disable-patterns  "/data/linux/stable(|/*)"
-
-precmd() {
-    vcs_info 'prompt'
-}
-
-lprompt_dark() {
-    local brackets=$1
-    local color1=$2
-    local color2=$3
-    local color3=$4
-
-    local br_left="${color1}${brackets[1]}"
-    local br_right="${color1}${brackets[2]}"
-    local jobs="%1(j.${orange}%j${color1}:.)"
-    #local branch='${${vcs_info_msg_0_##*/}:-$(hostname)}'
-    local branch='${${vcs_info_msg_0_##*/}:-λ}'
-
-    PROMPT="%B${br_left}${jobs}${color2}${branch}${br_right}%b "
-}
-
-rprompt_dark() {
-    local vcs_cwd='${${vcs_info_msg_1_%.}/$HOME/~}'
-
-    RPROMPT="%B${vcs_cwd}${reset}"
-}
-
-vcs_dark() {
-    local color1=$1
-    local color2=$2
-    local color3=$3
-
-    local sep1="${color1}${4[1]}"
-    local sep2="${color1}${4[2]}"
-
-    local fmt_path="${color1}%R"
-    local fmt_path2="${color1}%R/${color3}%S"
-    local fmt_branch="${color2}%b%u%c"
-
-    zstyle ':vcs_info:*:prompt:*' formats       "${fmt_path}${sep1}${fmt_branch}" "${fmt_path2}"
-    zstyle ':vcs_info:*:prompt:*' actionformats "%a" "${fmt_path}"
-    zstyle ':vcs_info:*:prompt:*' nvcsformats   "" "${gray}%~"
-}
-
-lprompt_dark '⚡⚡' $gray $yellow $green
-rprompt_dark $gray $yellow
-vcs_dark $gray $red $yellow ':>'
-
-# zstyle {{{1
-
-# tolerante Fehlereingabe
-zstyle -e ':completion:*:approximate:*' max-errors '(( reply=($#PREFX+$#SUFFIX)/3 ))'
-# German umlauts
-zstyle ':completion:*' matcher-list \
-    'm:ss=Ã m:ue=Ã¼ m:ue=Ã m:oe=Ã¶ m:oe=Ã m:ae=Ã¤ m:ae=Ã m:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
-# farbige Completion
-zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}" 'ma=(01);(38;05;255);(48;05;24)'
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
-#zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
-
-# schoenere Completion
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:descriptions' format $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
-
-# durch die Optionen tabben
-zstyle ':completion:*' menu select=2
-
-# cd ..<tab><tab>
-zstyle ':completion:*'           special-dirs true
-zstyle ':completion::complete:*' use-cache 1
 
 # zle {{{1
 
@@ -176,6 +81,91 @@ bindkey 'e'  edit-command-line
 bindkey 'n'  list-expand
 bindkey 'm'  expand-word
 
+# zstyle {{{1
+
+# tolerante Fehlereingabe
+zstyle -e ':completion:*:approximate:*' max-errors '(( reply=($#PREFX+$#SUFFIX)/3 ))'
+# German umlauts
+zstyle ':completion:*' matcher-list \
+    'm:ss=Ã m:ue=Ã¼ m:ue=Ã m:oe=Ã¶ m:oe=Ã m:ae=Ã¤ m:ae=Ã m:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
+# farbige Completion
+zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}" 'ma=(01);(38;05;255);(48;05;24)'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
+#zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+
+# schoenere Completion
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
+
+# durch die Optionen tabben
+zstyle ':completion:*' menu select=2
+
+# cd ..<tab><tab>
+zstyle ':completion:*'           special-dirs true
+zstyle ':completion::complete:*' use-cache 1
+
+# prompt {{{1
+
+autoload -U colors && colors
+autoload -Uz vcs_info
+
+precmd() {
+    vcs_info
+}
+
+typeset -A c p
+
+# Color definitions.
+c[blue]='%F{111}'
+c[gray]='%F{240}'
+c[green]='%F{84}'
+c[orange]='%F{216}'
+c[red]='%F{168}'
+c[white]='%F{255}'
+c[yellow]='%F{222}'
+
+# Prompt configuration.
+p[deli_left]="${c[gray]}⚡%f"
+p[deli_right]="${c[gray]}⚡%f"
+p[jobcount]="%(1j.${c[orange]}%j${c[gray]}:%f.)"
+
+p[colon]="${c[gray]}:%f"
+p[vcs]="${c[green]}%s${p[colon]}"
+p[repo]="${c[yellow]}%r${p[colon]}"
+p[branch]="${c[red]}%b%f"
+p[action]="${p[colon]}${c[orange]}%a%f"
+p[host]="${c[gray]}%M:%f"
+
+p[staged]="${p[colon]}%F{49}↻%f"
+p[unstaged]="${p[colon]}%F{81}↻%f"
+
+p[l_nvcsformats]="${c[yellow]}λ%f"
+p[r_nvcsformats]="${c[gray]}%~%f"
+
+p[l_formats]="${p[vcs]}${p[repo]}${p[branch]}%u%c"
+p[r_formats]="${c[gray]}%R/${c[yellow]}%S%f"
+
+p[l_actionformats]="${p[vcs]}${p[repo]}${p[action]}${p[branch]}%u%c"
+
+zstyle ':vcs_info:*'  enable             git hg svn darcs bzr cvs
+zstyle ':vcs_info:*'  disable-patterns   '/data/linux/stable(|/*)'
+zstyle ':vcs_info:*'  check-for-changes  true
+
+zstyle ':vcs_info:*'  stagedstr          $p[staged]
+zstyle ':vcs_info:*'  unstagedstr        $p[unstaged]
+
+zstyle ':vcs_info:*'  nvcsformats        $p[l_nvcsformats]   $p[r_nvcsformats]
+zstyle ':vcs_info:*'  formats            $p[l_formats]       $p[r_formats]
+zstyle ':vcs_info:*'  actionformats      $p[l_actionformats]
+
+PROMPT='%B$p[deli_left]$p[jobcount]${vcs_info_msg_0_}$p[deli_right]%b '
+RPROMPT='%B$p[host]${vcs_info_msg_1_}%b'
+SPROMPT="${p[orange]}%R -> %r:%f "
+PROMPT2="${p[orange]}+%f "
+PROMPT3="${p[orange]}Select:%f "
+
 # variables {{{1
 export EDITOR=vim
 export NNTPSERVER=news.fu-berlin.de
@@ -183,21 +173,6 @@ export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
 export GOARCH=amd64 GOOS=linux GOPATH=/data/go
 export PLAN9=/data/repo/plan9port
 export PKG_CONFIG_PATH=/data/lib/lib/pkgconfig
-
-# prompts {{{1
-
-[[ $UID -eq 0 ]] && local main="$(tput setaf 160)" || local main="$(tput setaf 84)"
-
-local orange="%{$(tput setaf 215)%}"
-local reset="%{$(tput sgr0)%}"
-
-#PROMPT='
-#%{${main}%}%B%{${vimode}%}%1(j.[%{${orange}%}%j%{${main}%}] .)${SSH_CONNETION:-$}%b %{${reset}%}'
-#RPROMPT="%{${main}%}%B%~%{${reset}%}"
-
-SPROMPT="${orange}%R -> %r:${reset} "
-PROMPT2="${orange}+${reset} "
-PROMPT3="${orange}Select:${reset} "
 
 # hashes {{{1
 hash -d asm='/data/programming/asm'
@@ -227,7 +202,7 @@ alias c11='( zathura /data/c/standards/n1516.pdf & ) && exit'
 alias j8='( zathura /data/programming/java/standards/jls8.pdf & ) && exit'
 alias j8v='( zathura /data/programming/java/standards/jvms8.pdf & ) && exit'
 
-alias c='edit_configs'
+alias conf='edit_configs'
 alias cr='cmus-remote'
 alias dis='gcc -S -masm=intel'
 alias e='emacs'
@@ -275,8 +250,8 @@ alias 33='bg %3'
 
 if [[ -x ${commands[sudo]} ]]
 then
-    alias ap='sudo aptitude'
-    alias ag='sudo apt-get'
+    alias app='sudo aptitude'
+    alias apg='sudo apt-get'
 
     alias aps='sudo aptitude search'
     alias api='sudo aptitude install'
@@ -339,6 +314,7 @@ for dir in \
     $HOME/local/dwm/bin \
     $HOME/local/erlang/bin \
     $HOME/local/git/bin \
+    $HOME/local/liferea/bin \
     $HOME/local/tmux/bin \
     $HOME/local/vim/bin \
     $HOME/bin \
@@ -354,6 +330,25 @@ unset dir
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
+c() { cd *$1* }
+
+vt() {
+    nv -u unix.vim -U NONE --noplugin -s dotest.in $1
+    test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | colordiff
+}
+
+m() {
+    neo=/data/repo/neovim
+
+    if [[ $PWD =~ "^${neo}" ]]; then
+        if test -f ${neo}/local.mk; then
+            make -sC ${neo} rebuild
+        else
+            echo "${neo}/local.mk not found."
+        fi
+    fi
+}
+
 foo() {
     base="${1%.*}"
     [[ $# -eq 2 ]] && time="${2}ns" || time="100ns"
@@ -364,7 +359,7 @@ foo() {
 bar() { gtkwave wave.vcd }
 
 chmsee() { command chmsee $@ && rm -r ~/.chmsee }
-colors() { for i ({0..255}) ( tput setab $i && echo -n " $i "  )}
+pcolors() { for i ({0..255}) ( tput setab $i && echo -n " $i "  )}
 #colors() { for i ({0..255}) ( tput setab $i && printf " %-6s" $i && [[ $[$i % 8] -eq 0 ]] && echo )}
 df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
 f()      { find -iname "*$@*" }
