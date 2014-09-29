@@ -144,12 +144,13 @@ p[unstaged]="${p[colon]}%F{81}↻%f"
 p[l_nvcsformats]="${c[yellow]}λ%f"
 p[r_nvcsformats]="${c[gray]}%~%f"
 
-p[l_formats]="${p[vcs]}${p[repo]}${p[branch]}%u%c"
+#p[l_formats]="${p[vcs]}${p[repo]}${p[branch]}%u%c"
+p[l_formats]="${p[repo]}${p[branch]}%u%c"
 p[r_formats]="${c[gray]}%R/${c[yellow]}%S%f"
 
 p[l_actionformats]="${p[vcs]}${p[repo]}${p[action]}${p[branch]}%u%c"
 
-zstyle ':vcs_info:*'  enable             git hg svn darcs bzr cvs
+zstyle ':vcs_info:*'  enable             git hg svn
 zstyle ':vcs_info:*'  disable-patterns   '/data/linux/stable(|/*)'
 zstyle ':vcs_info:*'  check-for-changes  true
 
@@ -162,17 +163,19 @@ zstyle ':vcs_info:*'  actionformats      $p[l_actionformats]
 
 PROMPT='%B$p[deli_left]$p[jobcount]${vcs_info_msg_0_}$p[deli_right]%b '
 RPROMPT='%B$p[host]${vcs_info_msg_1_}%b'
-SPROMPT="${p[orange]}%R -> %r:%f "
-PROMPT2="${p[orange]}+%f "
-PROMPT3="${p[orange]}Select:%f "
+SPROMPT="${c[orange]}%R -> %r:%f "
+PROMPT2="${c[orange]}+%f "
+PROMPT3="${c[orange]}Select:%f "
 
 # variables {{{1
 export EDITOR=vim
-export NNTPSERVER=news.fu-berlin.de
+export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
+
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
 export GOARCH=amd64 GOOS=linux GOPATH=/data/go
-export PLAN9=/data/repo/plan9port
+export NNTPSERVER=news.fu-berlin.de
 export PKG_CONFIG_PATH=/data/lib/lib/pkgconfig
+export PLAN9=/data/repo/plan9port
 
 # hashes {{{1
 hash -d asm='/data/programming/asm'
@@ -181,6 +184,7 @@ hash -d c='/data/programming/c'
 hash -d g='/data/github'
 hash -d neo='/data/repo/neovim'
 hash -d torrents='/data/torrents/downloads'
+hash -d z='/data/repo/zsh'
 
 # aliases {{{1
 alias ju='java -cp ".:test:../junit.jar" org.junit.runner.JUnitCore'
@@ -307,7 +311,7 @@ compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbs
 compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 
 # paths {{{1
-fpath=(~/.zsh $fpath)
+fpath=(~/.zsh ~/local/zsh/share/zsh/5.0.6-dev-0/functions $fpath)
 
 for dir in \
     /sbin \
@@ -317,6 +321,7 @@ for dir in \
     $HOME/local/liferea/bin \
     $HOME/local/tmux/bin \
     $HOME/local/vim/bin \
+    $HOME/local/zsh/bin \
     $HOME/bin \
     $HOME/.cabal/bin \
     $GOPATH/bin \
