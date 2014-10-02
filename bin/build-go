@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd /data/languages/go/src
+echo '>> Looking for changes..'
+hg pull -u | grep 'no changes found' && exit 1
+echo '>> Start compiling..'
+./all.bash

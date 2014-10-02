@@ -1,0 +1,38 @@
+#!/usr/bin/env pypy
+
+import sys
+import fileinput
+import random
+
+class Markov:
+    def __init__(self):
+        self.suffixes = {}
+        self.build_table()
+
+    def read_input(self):
+        lines = []
+        for line in fileinput.input():
+            lines.append(line)
+        return ''.join(lines).split()
+
+    def build_table(self):
+        prefix1 = '\n'
+        prefix2 = '\n'
+        for suffix in self.read_input():
+            self.suffixes.setdefault((prefix1, prefix2), []).append(suffix)
+            prefix1, prefix2 = prefix2, suffix
+        self.suffixes.setdefault((prefix1, prefix2), []).append('\n')
+
+    def generate_output(self, maxwords=500):
+        prefix1 = '\n'
+        prefix2 = '\n'
+        for i in xrange(maxwords):
+            new = random.choice(self.suffixes[prefix1, prefix2])
+            if new == '\n':
+                sys.exit()
+            sys.stdout.write(new + ' ')
+            prefix1, prefix2 = prefix2, new
+
+if __name__ == '__main__':
+    m = Markov()
+    m.generate_output()

@@ -1,0 +1,68 @@
+#!/bin/zsh
+
+#
+# Author: Marco Hinz <mh.codebro@gmail.com>
+# URL:    http://github.com/mhinz
+# Desc:   This script outputs information about processes taken from /proc.
+# Input:  Either a PID or (part of) a process name. Several arguments possible.
+#
+
+typeset -A stat
+zmodload -ab zsh/stat stat
+
+if [[ $terminfo[colors] -eq 256 ]] {
+    red=$(echoti setaf 167)
+    yellow=$(echoti setaf 215)
+} else {
+    red=$(echoti setaf 1)
+    yellow=$(echoti setaf 3)
+}
+green=$(echoti setaf 2)
+reset=$(echoti sgr0)
+
+get_info()
+{
+    builtin stat -H link +link exe
+
+    cd /proc/$1 2>/dev/null || return
+
+    comm=$(< comm)
+    cmdline=(${(0)"$(< cmdline)"})
+
+    echo "${yellow}${comm} ($1)${reset}"
+    echo "  ${red}* Status:${reset}"
+
+    printf "    ${green}%-10s${reset} %s\n" "Bin:" $link[link]
+    printf "    ${green}%-10s${reset} %s" "Flags:" "${cmdline[2,-1]:-(none)}"
+
+    # The perl code here does exactly the same
+    # as the following while and for loop.
+    #perl -ne 'use Term::ANSIColor; /^(State|Pid|PPid|Threads):\s+(.+)/ &&
+        #printf "\n    %-19s %s ", colored("$1:", 'green'), $2' status
+
+    while { read k v } {
+        stat[$k]=$v
+    } < status
+
+    for i (State: Pid: PPid: Threads:) {
+        printf "\n    ${green}%-10s${reset} %s" $i "$stat[$i]"
+    }
+
+    echo " (" task/*(N:t) ")"
+    echo "  ${red}* Descriptors:${reset}"
+
+    for i (fd/*(nN)) {
+        builtin stat -H link +link "$i"
+        printf "    ${green}%-10s${reset} %s\n" "$i:" "$link"
+    }
+}
+
+main()
+{
+    for i ($@) {
+        [[ $i == <-> ]] && get_info $i && continue
+        main $(pgrep $i)
+    }
+}
+
+main $@

@@ -1,0 +1,65 @@
+#!/bin/sh
+
+red="\033[31m"
+green="\033[32m"
+yellow="\033[33m"
+blue="\033[34m"
+reset="\033[0m"
+
+check_file() {
+    if ! which "$1" >/dev/null; then
+        echo " ${yellow}${1}${reset} % ${red}is not available${reset}"
+    elif [ -e "$2" ]; then
+        if [ -L "$2" ]; then
+            echo " ${yellow}${2}${reset} % ${blue}is already symlinked${reset}"
+        else
+            echo " ${yellow}${2}${reset} % ${red}is no symlink${reset}"
+        fi
+    else
+        ln -s "$3" "$2"
+        echo " ${yellow}${2}${reset} % ${green}-> ${3}${reset}"
+    fi
+}
+
+{
+    check_file  bochs     ~/.bochsrc                       .dotfiles/bochs/bochsrc
+    check_file  cmus      ~/.cmus/kuku.theme               ~/.dotfiles/cmus/kuku.theme
+    check_file  conky     ~/.conkyrc                       .dotfiles/conky/conkyrc
+    check_file  emacs     ~/.emacs.d                       .dotfiles/emacs.d
+    check_file  firefox   ~/.mozilla                       .dotfiles/mozilla
+    check_file  gdb       ~/.gdbinit                       .dotfiles/gdb/gdbinit
+    check_file  gem       ~/.gemrc                         .dotfiles/gem/gemrc
+    check_file  getmail   ~/.getmail                       .dotfiles/getmail
+    check_file  git       ~/.git                           .dotfiles/git
+    check_file  git       ~/.gitconfig                     .dotfiles/git/gitconfig
+    check_file  gitk      ~/.gitk                          .dotfiles/git/gitk
+    check_file  gpg       ~/.gnupg                         .dotfiles/gnupg
+    check_file  hg        ~/.hgrc                          .dotfiles/hg/hgrc
+    check_file  irssi     ~/.irssi                         .dotfiles/irssi
+    check_file  liferea   ~/.liferea_1.8                   .dotfiles/liferea/liferea_1.8
+    check_file  liferea   ~/feedlist.opml                  .dotfiles/liferea/feedlist.opml
+    check_file  msmtp     ~/.msmtprc                       .dotfiles/msmtp/msmtprc
+    check_file  mutt      ~/.muttrc                        .dotfiles/mutt/muttrc
+    check_file  procmail  ~/.procmailrc                    .dotfiles/procmail/procmailrc
+    check_file  rtorrent  ~/.rtorrent.rc                   .dotfiles/rtorrent/rtorrent.rc
+    check_file  skype     ~/.Skype                         .dotfiles/skype
+    check_file  slrn      ~/.slrn                          .dotfiles/slrn
+    check_file  slrn      ~/.slrnrc                        .dotfiles/slrn/slrnrc
+    check_file  ssh       ~/.ssh                           .dotfiles/ssh
+    check_file  startx    ~/.Xdefaults                     .dotfiles/x/Xdefaults
+    check_file  startx    ~/.Xmodmap                       .dotfiles/x/Xmodmap
+    check_file  startx    ~/.config/fontconfig/fonts.conf  .dotfiles/fonts/fonts.conf
+    check_file  startx    ~/.fonts                         .dotfiles/fonts/fonts
+    check_file  startx    ~/.icons                         .dotfiles/icons
+    check_file  startx    ~/.xinitrc                       .dotfiles/x/xinitrc
+    check_file  tmux      ~/.tmux.conf                     .dotfiles/tmux/tmux.conf
+    check_file  true      ~/.pentadactyl                   .dotfiles/pentadactyl
+    check_file  true      ~/.pentadactylrc                 .dotfiles/pentadactyl/pentadactylrc
+    check_file  true      ~/.terminfo                      .dotfiles/terminfo
+    check_file  true      ~/bin                            .dotfiles/bin
+    check_file  true      ~/mail                           /data/mail
+    check_file  vim       ~/.vim                           .dotfiles/vim
+    check_file  xmonad    ~/.xmonad                        .dotfiles/xmonad
+    check_file  zsh       ~/.zsh                           .dotfiles/zsh
+    check_file  zsh       ~/.zshenv                        .dotfiles/zsh/zshenv
+} | column -t -s %

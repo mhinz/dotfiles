@@ -1,0 +1,130 @@
+#!/usr/bin/env ruby
+
+class NumSys
+  # initalize {{{1
+  def initialize(args)
+    @Input = args.dup.freeze
+
+    if args.empty?
+      $stderr.puts "usage: #{__FILE__} <number>"
+      exit 1
+    end
+  end
+
+  # validate_input {{{1
+  def validate_input(arg)
+    case arg
+    when /^([01]+)(?:b)?$/               then { sys: 'bin', val: $1 }
+    when /^(\d+)(?:d)?$/                 then { sys: 'dec', val: $1 }
+    when /^(?:0x)?([0-9a-fA-F]+)(?:h)?$/ then { sys: 'hex', val: $1 }
+    else
+      $stderr.puts "Wait, what? What is '#{arg}' supposed to mean?"
+      nil
+    end
+  end
+
+  # converting {{{1
+  def c2to16(val)
+    lookup = {
+      '0000' => :'0', '0001' => :'1', '0010' => :'2', '0011' => :'3',
+      '0100' => :'4', '0101' => :'5', '0110' => :'6', '0111' => :'7',
+      '1000' => :'8', '1001' => :'9', '1010' => :'a', '1011' => :'b',
+      '1100' => :'c', '1101' => :'d', '1110' => :'e', '1111' => :'f',
+    }
+    ret = []
+    val = val.scan(/./)
+    ret.unshift(lookup[val.pop(4).join.rjust(4, '0')]) while not val.empty?
+    ret.join
+  end
+
+  def c16to2(val)
+    lookup = {
+      :'0' => 0,    :'1' => 1,    :'2' => 10,   :'3' => 11,
+      :'4' => 100,  :'5' => 101,  :'6' => 110,  :'7' => 111,
+      :'8' => 1000, :'9' => 1001, :'a' => 1010, :'b' => 1011,
+      :'c' => 1100, :'d' => 1101, :'e' => 1110, :'f' => 1111,
+    }
+    ret = ''
+    val.downcase.each_char do |char|
+      ret << '%.4d' % lookup[char.to_sym]
+    end
+    ret
+  end
+
+  def c10to16(val)
+    new   = val
+    queue = []
+
+    while val != 0
+      new = (val / 16).floor
+      rem = val % 16
+      queue.unshift('%x' % rem)
+      val = new
+    end
+
+    queue.join
+  end
+
+  def c2to10(val)
+    i   = 0
+    ret = 0
+    val.reverse.each_char do |char|
+      ret += (1 << i) if char.to_i == 1
+      i += 1
+    end
+    ret.to_s
+  end
+
+  # pretty_print {{{1
+  def pretty_print(results)
+    results.each do |res|
+      res.each_key do |sys|
+        res[sys].gsub!(/^0+/, '')
+        res[sys] = '0' if res[sys].empty?
+      end
+
+      printf "%-24s | 0x%-12s | %s\n", res[:bin], res[:hex], res[:dec]
+    end
+  end
+
+  # handle_base {{{1
+  def handle_base_02(bin)
+    hex = c2to16(bin)
+    dec = c2to10(bin)
+    { bin: bin, dec: dec, hex: hex }
+  end
+
+  def handle_base_10(dec)
+    hex = c10to16(dec.to_i)
+    bin = c16to2(hex)
+    { bin: bin, dec: dec, hex: hex }
+  end
+
+  def handle_base_16(hex)
+    bin = c16to2(hex)
+    dec = c2to10(bin)
+    { bin: bin, dec: dec, hex: hex }
+  end
+
+  # run {{{1
+  def run
+    @Input.each do |arg|
+      tmp     = validate_input(arg)
+      results = []
+
+      if tmp
+        case tmp[:sys]
+        when 'bin' then results << handle_base_02(tmp[:val])
+        when 'dec' then results << handle_base_10(tmp[:val])
+        when 'hex' then results << handle_base_16(tmp[:val])
+        end
+      end
+
+      pretty_print results
+    end
+  end
+
+end
+# }}}
+
+NumSys.new(ARGV).run

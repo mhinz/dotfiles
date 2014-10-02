@@ -1,0 +1,92 @@
+#!/bin/bash
+
+header[0]='      o__ __o                                            o                '
+header[1]='     /v     v\                                          <|>               '
+header[2]='    />       <\                                         / \               '
+header[3]='  o/                 \o__ __o     o__ __o        __o__  \o/  o/      __o__'
+header[4]=' <|                   |     |>   /v     v\      />  \    |  /v      />  \ '
+header[5]='  \\                 / \   < >  />       <\   o/        / \/>       \o    '
+header[6]='    \         /      \o/        \         /  <|         \o/\o        v\   '
+header[7]='     o       o        |          o       o    \\         |  v\        <\  '
+header[8]='     <\__ __/>       / \         <\__ __/>     _\o__</  / \  <\  _\o__</  '
+
+draw_char()
+{
+    local voff_x=$1
+    local voff_y=$2
+
+    tput cup $[off_y + voff_y] $[off_x + voff_x]
+    printf %c ${header[voff_y]:voff_x:1}
+}
+
+#
+# check color support
+#
+if [[ $(tput colors) -ne 256 ]]; then
+    echo "$0: This terminal does not support 256 colors." 2>&1
+    exit 1
+fi
+
+#
+# set trap handlers
+#
+trap 'tput cnorm; tput clear' EXIT
+trap 'exit 1' INT TERM
+
+#
+# calculate header position
+#
+while getopts ':x:y:' opt; do
+    [[ $opt =~ [\?:] ]] && continue
+    case $opt in
+        x)
+            cols=$OPTARG
+            ;;
+        y)
+            rows=$OPTARG
+            ;;
+        *)
+            echo "usage: $0 [-t] [-x \$cols] [-y \$rows]" 2>&1
+            exit 1
+    esac
+done
+
+#
+# if no cols or rows were set:
+#   - try to determine them
+#   - set default values otherwise
+#
+[[ -z $cols ]] && { cols=$(tput cols)  || cols=80; }
+[[ -z $rows ]] && { rows=$(tput lines) || rows=24; }
+
+#
+# get width and height of the header
+#
+header_width=${#header[0]}
+header_height=${#header[@]}
+
+#
+# check if header is bigger than the actual terminal size; truncate otherwise
+#
+[[ $cols -lt $header_width  ]] && { off_x=0; header_width=$cols;  } || off_x=$[ (cols - header_width)  / 2 ]
+[[ $rows -lt $header_height ]] && { off_y=0; header_height=$rows; } || off_y=$[ (rows - header_height) / 2 ]
+
+#
+# prepare screen
+#
+tput civis
+clear
+
+#
+# main loop
+#
+while :; do
+    for c in {136..166}; do
+        tput setaf $c
+        for ((x = 0; x < $header_width; x++)); do
+            for ((y = 0; y < $header_height; y++)); do
+                draw_char $x $y
+            done
+        done
+    done
+done
