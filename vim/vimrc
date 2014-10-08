@@ -40,7 +40,6 @@ syntax   on
 
 "autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
-let b:debug_highlight = 0
 
 " set {{{1
 " indent settings
@@ -111,13 +110,14 @@ set ttimeout
 set ttimeoutlen   =10
 set ttyfast
 set virtualedit   =onemore,block
-set whichwrap     =
+set whichwrap     =h,l
 
 " wild stuff
 set suffixes     +=.a,.1,.class
 set wildignore   +=*.o,*.so,*.zip,*.png
 set wildmenu
 set wildmode      =list,full
+set wildoptions   =tagfile
 
 " display settings
 set laststatus    =2
@@ -138,7 +138,9 @@ set linebreak
 set breakindent
 set breakindentopt=min:40
 "set highlight    +=@:SpecialKey
-"set cpoptions    +=n
+
+set cpoptions     =aABcefFqsZ
+set formatoptions =tcrqanj
 
 if has('multi_byte') && &encoding ==# 'utf-8'
   let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
@@ -165,6 +167,7 @@ digraph ./ 8230
 let mapleader = ';'
 
 nnoremap <c-g>       :FileInfo<cr>
+nnoremap <f11>       :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
 nnoremap <f12>       :set spell!<cr>
 nnoremap K           :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
@@ -263,30 +266,12 @@ au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
 au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make
 au BufReadPost        fugitive://                 setlocal bufhidden=delete
 au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
-au FileType           help                        silent wincmd T
-au FileType           mail                        setlocal textwidth=72 wrap linebreak
 au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
 
 au User fugitive
       \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
       \   nnoremap <buffer> .. :edit %:h<cr> |
       \ endif
-
-au BufEnter $VIMRUNTIME/doc/*
-      \ if &buftype == "help" |
-      \   setl scrolloff   =0 |
-      \   setl statusline  =\ \[HELP\] |
-      \   setl statusline +=\ \%F |
-      \   setl statusline +=%=\ %P\  |
-      \ endif |
-      \ nnoremap <buffer> q :q!<CR>
-
-au FileType qf
-      \ nnoremap <buffer> q :q<cr>
-
-au FileType man
-      \ setl nocul nomod nolist nonu nornu |
-      \ nnoremap <buffer> q :q<cr>
 
 augroup binary
   autocmd!
@@ -430,6 +415,7 @@ else
       \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
   endif
 endif
+
 " statusline {{{1
 function! SetStatusline()
   let stl = ' %4*%<%F%*'
@@ -447,7 +433,7 @@ function! SetStatusline()
         \ . '%#WarningMsg#%{&ff != "unix" ? " ".&ff." ":""}%* '
         \ . '%#warningmsg#%{&fenc != "utf-8" && &fenc != "" ? " ".&fenc." " :""}%* '
 
-  if get(b:, 'debug_highlight')
+  if get(g:, 'stl_group_info')
       let stl .=
             \   '%#WarningMsg#['
             \ . '%{synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")} '
