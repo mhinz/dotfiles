@@ -16,6 +16,7 @@ call plug#begin('~/.vim/bundle')
   " Plug 'majutsushi/tagbar',      { 'on': 'TagbarToggle'                 }
 
   Plug 'Lokaltog/vim-easymotion'
+  Plug 'altercation/vim-colors-solarized'
   Plug 'jamessan/vim-gnupg'
   Plug 'msanders/snipmate.vim',  { 'frozen': 1 }
   Plug 'tpope/vim-commentary'
@@ -44,7 +45,7 @@ let b:debug_highlight = 0
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['zenburn', 'pyte', 'solarized']
+  for scheme in ['solarized', 'zenburn', 'pyte']
     try
       execute 'colorscheme' scheme
       break
@@ -169,11 +170,11 @@ set breakindentopt=min:40
 
 if has('multi_byte') && &encoding ==# 'utf-8'
   let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
-  let &fillchars = 'vert:▚,diff:⣿,stlnc:!'
+  let &fillchars = 'diff:▚,stlnc:!'
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
-  autocmd InsertEnter * set listchars-=trail:·
-  autocmd InsertLeave * set listchars+=trail:·
+  autocmd InsertEnter * set listchars-=trail:⣿
+  autocmd InsertLeave * set listchars+=trail:⣿
 else
   let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
   let &fillchars = 'stlnc:#'
@@ -191,6 +192,8 @@ digraph ./ 8230
 
 let mapleader = ';'
 
+nnoremap <c-g>       :FileInfo<cr>
+nnoremap <f12>       :set spell!<cr>
 nnoremap K           :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <leader>ev  :tabnew ~/.vim/vimrc<cr>
@@ -200,19 +203,28 @@ nnoremap <leader>rv  :source $MYVIMRC<cr>
 nnoremap <expr> n    v:searchforward ? 'nzvzz' : 'Nzvzz'
 nnoremap <expr> N    v:searchforward ? 'Nzvzz' : 'nzvzz'
 
-nnoremap <leader>f   zazz
 nnoremap gg          ggzv
 nnoremap G           Gzv
 
-nnoremap ]q          :cnext<cr>
 nnoremap [q          :cprevious<cr>
-nnoremap ]l          :lnext<cr>
-nnoremap [l          :lprevious<cr>
+nnoremap ]q          :cnext<cr>
+nnoremap [Q          :cfirst<cr>
+nnoremap ]Q          :clast<cr>
 
-nnoremap ]b          :bnext<cr>
+nnoremap [l          :lprevious<cr>
+nnoremap ]l          :lnext<cr>
+nnoremap [L          :lfirst<cr>
+nnoremap ]L          :llast<cr>
+
 nnoremap [b          :bprevious<cr>
-nnoremap ]t          :tabnext<cr>
+nnoremap ]b          :bnext<cr>
+nnoremap [B          :bfirst<cr>
+nnoremap ]B          :blast<cr>
+
 nnoremap [t          :tabprevious<cr>
+nnoremap ]t          :tabnext<cr>
+nnoremap [T          :tabfirst<cr>
+nnoremap ]T          :tablast<cr>
 
 nnoremap <c-h>       <c-w>h
 nnoremap <c-j>       <c-w>j
@@ -233,8 +245,8 @@ nnoremap [[          [[zz
 nnoremap []          []zz
 nnoremap ][          ][zz
 
-nnoremap g;          g;zz
-nnoremap g,          g,zz
+nnoremap g;          g;zvzz
+nnoremap g,          g,zvzz
 
 nnoremap Q           gqap
 
@@ -256,6 +268,9 @@ nnoremap <bs>        <c-t>
 
 inoremap jf          <esc>
 
+cnoremap <c-n>       <down>
+cnoremap <c-p>       <up>
+
 cnoremap <leader>r   $VIMRUNTIME/
 
 xnoremap *           :<c-u>call <sid>search()<cr>//<cr>
@@ -263,7 +278,6 @@ xnoremap #           :<c-u>call <sid>search()<cr>??<cr>
 xnoremap <leader>*   :<c-u>silent! execute <sid>search_all()<cr>
 
 " autocmd {{{1
-" autocmd -> misc {{{2
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif | normal! zvzz
 
 au BufEnter           *                           Cd
@@ -281,7 +295,11 @@ au FileType           help                        silent wincmd T
 au FileType           mail                        setlocal textwidth=72 wrap linebreak
 au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
 
-" autocmd -> special {{{2
+au User fugitive
+      \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+      \   nnoremap <buffer> .. :edit %:h<cr> |
+      \ endif
+
 au BufEnter $VIMRUNTIME/doc/*
       \ if &buftype == "help" |
       \   setl scrolloff   =0 |
@@ -306,11 +324,20 @@ augroup binary
 augroup end
 
 " commands {{{1
-command! -nargs=* -bar -complete=help H        helpgrep <args>
-command! -nargs=+ -bar -complete=file Ag       silent! grep! <args> | cwindow | redraw!
-command! -nargs=0 -bar -bang          Cd       call s:cd(<bang>0)
-command! -nargs=0 -bar Scriptnames call <sid>scratch('scriptnames') | silent g/^$/d
-command! -nargs=1 -bar -complete=command Scratch call <sid>scratch(<f-args>)
+command! -bar -nargs=* -complete=help    H           helpgrep <args>
+command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
+command! -bar -bang                      Cd          call s:cd(<bang>0)
+command! -bar                            Scriptnames call <sid>scratch('scriptnames') | silent g/^$/d
+command! -bar -nargs=1 -complete=command Scratch     call <sid>scratch(<f-args>)
+command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
+command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d] --%d%%--",
+      \ expand('%:p'),
+      \ &modified ? '[+]' : '',
+      \ col('.'),
+      \ line('.'),
+      \ line('$'),
+      \ float2nr(line('.') / (line('$') / 100.0))
+      \ )
 
 " functions {{{1
 function! s:cd(bang) abort
@@ -358,7 +385,7 @@ function! Foldy()
   let marker  = strpart(&fmr, 0, stridx(&fmr, ',')) . '\d*'
   let range   = foldclosedend(v:foldstart) - foldclosed(v:foldstart) + 1
 
-  let left    = substitute(getline(v:foldstart), marker , '', '')
+  let left    = substitute(getline(v:foldstart), marker, '', '')
   let leftlen = len(left)
 
   let right    = range . ' [' . v:foldlevel . ']'
@@ -400,10 +427,11 @@ function! s:search_all() abort
 endfunction
 
 " statusline {{{1
-highlight User1 ctermfg=192 ctermbg=237 cterm=NONE
-highlight User2 ctermfg=167 ctermbg=237 cterm=NONE
-highlight User3 ctermfg=245 ctermbg=237 cterm=NONE
-highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
+autocmd VimEnter,ColorScheme *
+      \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
+      \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
+      \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
+      \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
 
 function! SetStatusline()
   let stl = ' %4*%<%F%*'
@@ -429,10 +457,10 @@ function! SetStatusline()
             \ . ']%* '
   endif
 
-  let stl .=
-        \   '%Y '
-        \ . '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
-        \ . '%p%3*%%%* '
+  " let stl .=
+  "       \   '%Y '
+  "       \ . '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
+  "       \ . '%p%3*%%%* '
 
   return stl
 endfunction
@@ -526,11 +554,11 @@ let g:signify_vcs_list           = [ 'git', 'hg' ]
 "let g:signify_update_on_bufenter = 1
 " let g:signify_update_on_focusgained = 0
 
-function! RunOnModifiedLines(lnums) abort
-  for lnum in a:lnums
-    execute 'silent! '. lnum .'substitute/\s\+$//'
-  endfor
-endfunction
+" function! RunOnModifiedLines(lnums) abort
+"   for lnum in a:lnums
+"     execute 'silent! '. lnum .'substitute/\s\+$//'
+"   endfor
+" endfunction
 
 "let g:signify_action_on_modified_lines = 'RunOnModifiedLines'
 

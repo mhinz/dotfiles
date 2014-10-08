@@ -2,6 +2,7 @@
 
 autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
+autoload -Uz run-help
 
 zmodload -i zsh/complist
 
@@ -148,7 +149,8 @@ p[r_nvcsformats]="${c[gray]}%~%f"
 p[l_formats]="${p[repo]}${p[branch]}%u%c"
 p[r_formats]="${c[gray]}%R/${c[yellow]}%S%f"
 
-p[l_actionformats]="${p[vcs]}${p[repo]}${p[action]}${p[branch]}%u%c"
+# p[l_actionformats]="${p[vcs]}${p[repo]}${p[action]}${p[branch]}%u%c"
+p[l_actionformats]="${p[repo]}${p[branch]}${p[action]}%u%c"
 
 zstyle ':vcs_info:*'  enable             git hg svn
 zstyle ':vcs_info:*'  disable-patterns   '/data/linux/stable(|/*)'
@@ -159,7 +161,7 @@ zstyle ':vcs_info:*'  unstagedstr        $p[unstaged]
 
 zstyle ':vcs_info:*'  nvcsformats        $p[l_nvcsformats]   $p[r_nvcsformats]
 zstyle ':vcs_info:*'  formats            $p[l_formats]       $p[r_formats]
-zstyle ':vcs_info:*'  actionformats      $p[l_actionformats]
+zstyle ':vcs_info:*'  actionformats      $p[l_actionformats] $p[r_formats]
 
 PROMPT='%B$p[deli_left]$p[jobcount]${vcs_info_msg_0_}$p[deli_right]%b '
 RPROMPT='%B$p[host]${vcs_info_msg_1_}%b'
@@ -187,6 +189,8 @@ hash -d torrents='/data/torrents/downloads'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
+alias help='run-help'
+
 alias ju='java -cp ".:test:../junit.jar" org.junit.runner.JUnitCore'
 alias jc='javac -cp ".:../junit.jar"'
 
@@ -254,8 +258,8 @@ alias 33='bg %3'
 
 if [[ -x ${commands[sudo]} ]]
 then
-    alias app='sudo aptitude'
-    alias apg='sudo apt-get'
+    alias ap='sudo aptitude'
+    alias ag='sudo apt-get'
 
     alias aps='sudo aptitude search'
     alias api='sudo aptitude install'
@@ -364,7 +368,7 @@ foo() {
 bar() { gtkwave wave.vcd }
 
 chmsee() { command chmsee $@ && rm -r ~/.chmsee }
-pcolors() { for i ({0..255}) ( tput setab $i && echo -n " $i "  )}
+pcolors() { for i ({0..255}) ( echoti setab $i && echo -n " $i "  )}
 #colors() { for i ({0..255}) ( tput setab $i && printf " %-6s" $i && [[ $[$i % 8] -eq 0 ]] && echo )}
 df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
 f()      { find -iname "*$@*" }
