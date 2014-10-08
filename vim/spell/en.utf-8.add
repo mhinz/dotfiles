@@ -1,0 +1,12 @@
+init
+autocmd
+cmdline
+statusline
+plugins
+gzip
+netrw
+vim
+foo
+quux
+bar
+VIMPIRES

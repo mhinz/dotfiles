@@ -140,21 +140,27 @@ set breakindentopt=min:40
 "set highlight    +=@:SpecialKey
 
 set cpoptions     =aABcefFqsZ
-set formatoptions =tcrqanj
+set formatoptions =tcrqnj
 
 if has('multi_byte') && &encoding ==# 'utf-8'
   let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
   let &fillchars = 'diff:▚,stlnc:!'
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
-  autocmd InsertEnter * set listchars-=trail:⣿
-  autocmd InsertLeave * set listchars+=trail:⣿
+  augroup chars
+    autocmd!
+    autocmd InsertEnter * set listchars-=trail:⣿
+    autocmd InsertLeave * set listchars+=trail:⣿
+  augroup END
 else
   let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
   let &fillchars = 'stlnc:#'
   let &showbreak = '-> '
-  autocmd InsertEnter * set listchars-=trail:.
-  autocmd InsertLeave * set listchars+=trail:.
+  augroup chars
+    autocmd!
+    autocmd InsertEnter * set listchars-=trail:.
+    autocmd InsertLeave * set listchars+=trail:.
+  augroup END
 endif
 
 if executable('ag')
@@ -253,32 +259,33 @@ xnoremap #           :<c-u>call <sid>search()<cr>??<cr>
 xnoremap <leader>*   :<c-u>silent! execute <sid>search_all()<cr>
 
 " autocmd {{{1
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif | normal! zvzz
+augroup vimrc
+  au!
 
-au BufEnter           *                           Cd
-au BufLeave           *.h                         normal! mH
-au BufLeave           *.{c,cpp}                   normal! mC
-au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
-au BufRead,BufNewFile *.adoc                      setfiletype asciidoc
-au BufRead,BufNewFile *.{md,mkd}                  setlocal ft=markdown tw=80
-au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
-au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
-au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make
-au BufReadPost        fugitive://                 setlocal bufhidden=delete
-au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
-au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif | normal! zvzz
 
-au User fugitive
-      \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-      \   nnoremap <buffer> .. :edit %:h<cr> |
-      \ endif
+  au BufEnter           *                           Cd
+  au BufLeave           *.h                         normal! mH
+  au BufLeave           *.{c,cpp}                   normal! mC
+  au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
+  au BufRead,BufNewFile *.adoc                      setfiletype asciidoc
+  au BufRead,BufNewFile *.{md,mkd}                  setlocal ft=markdown tw=80
+  au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
+  au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
+  au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make
+  au BufReadPost        fugitive://                 setlocal bufhidden=delete
+  au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
+  au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
 
-augroup binary
-  autocmd!
-  autocmd BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
-  autocmd BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
-  autocmd BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
-augroup end
+  au User fugitive
+        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+        \   nnoremap <buffer> .. :edit %:h<cr> |
+        \ endif
+
+  au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
+  au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
+  au BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
+augroup END
 
 " commands {{{1
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
@@ -408,11 +415,14 @@ else
   endfor
   if colors_name == 'janah'
     highlight Normal ctermbg=NONE
-    autocmd VimEnter,ColorScheme *
-      \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
-      \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
-      \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-      \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
+    augroup colors
+      autocmd!
+      autocmd VimEnter,ColorScheme *
+            \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
+            \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
+            \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
+            \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
+    augroup END
   endif
 endif
 
