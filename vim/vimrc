@@ -42,34 +42,6 @@ syntax   on
 "let b:asmsyntax = 'armasm'
 let b:debug_highlight = 0
 
-" colors {{{1
-if has('gui_running')
-  set background=light
-  for scheme in ['solarized', 'zenburn', 'pyte']
-    try
-      execute 'colorscheme' scheme
-      break
-    catch
-    endtry
-  endfor
-  set gcr        =a:blinkoff0
-  set mousehide
-  set guioptions =a
-  let &guifont   = 'DejaVu Sans Mono 9'
-else
-  set background=dark
-  for scheme in ['janah', 'zenburn', 'xoria256', 'tango2']
-    try
-      execute 'colorscheme' scheme
-      break
-    catch
-    endtry
-  endfor
-  if colors_name == 'janah'
-    highlight Normal ctermbg=NONE
-  endif
-endif
-
 " set {{{1
 " indent settings
 set autoindent
@@ -327,7 +299,7 @@ augroup end
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
 command! -bar -bang                      Cd          call s:cd(<bang>0)
-command! -bar                            Scriptnames call <sid>scratch('scriptnames') | silent g/^$/d
+command! -bar                            Scriptnames call <sid>scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call <sid>scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d] --%d%%--",
@@ -426,13 +398,39 @@ function! s:search_all() abort
   execute 'bufdo vimgrepadd! /'. @/ .'/ %'
 endfunction
 
-" statusline {{{1
-autocmd VimEnter,ColorScheme *
+" colors {{{1
+if has('gui_running')
+  set background=light
+  for scheme in ['solarized', 'zenburn', 'pyte']
+    try
+      execute 'colorscheme' scheme
+      break
+    catch
+    endtry
+  endfor
+  set gcr        =a:blinkoff0
+  set mousehide
+  set guioptions =a
+  let &guifont   = 'DejaVu Sans Mono 9'
+else
+  set background=dark
+  for scheme in ['janah', 'zenburn', 'xoria256', 'tango2']
+    try
+      execute 'colorscheme' scheme
+      break
+    catch
+    endtry
+  endfor
+  if colors_name == 'janah'
+    highlight Normal ctermbg=NONE
+    autocmd VimEnter,ColorScheme *
       \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
       \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
       \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
       \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
-
+  endif
+endif
+" statusline {{{1
 function! SetStatusline()
   let stl = ' %4*%<%F%*'
 
