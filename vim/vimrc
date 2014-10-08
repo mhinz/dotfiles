@@ -176,10 +176,17 @@ digraph ./ 8230
 
 let mapleader = ';'
 
-nnoremap <c-g>       :FileInfo<cr>
+nnoremap <f8>        :Make<cr>
+nnoremap <f9>        :Dispatch<cr>
+nnoremap <f10>       :Start<cr>
 nnoremap <f11>       :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
 nnoremap <f12>       :set spell!<cr>
+
 nnoremap K           :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
+
+nnoremap <c-g>       :FileInfo<cr>
+inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
+inoremap <silent> <c-g><c-m> <c-r>=repeat(complete(col('.'),['mh.codebro@gmail.com','mhinz@campus.tu-berlin.de','hinz@mailbox.tu-berlin.de']),0)<cr>
 
 nnoremap <leader>ev  :tabnew ~/.vim/vimrc<cr>
 nnoremap <leader>rr  :source %<cr>
@@ -257,6 +264,7 @@ cnoremap <c-n>       <down>
 cnoremap <c-p>       <up>
 
 cnoremap <leader>r   $VIMRUNTIME/
+cnoremap <leader>ft  ~/.vim/after/ftplugin/
 
 xnoremap *           :<c-u>call <sid>search()<cr>//<cr>
 xnoremap #           :<c-u>call <sid>search()<cr>??<cr>
@@ -407,7 +415,10 @@ if has('gui_running')
   set gcr        =a:blinkoff0
   set mousehide
   set guioptions =a
+  " let &guifont   = 'Bitstream Vera Sans Mono 9'
   let &guifont   = 'DejaVu Sans Mono 9'
+  command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+  command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
   set background=dark
   for scheme in ['janah', 'zenburn', 'xoria256', 'tango2']
