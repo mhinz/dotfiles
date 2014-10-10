@@ -315,7 +315,7 @@ compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbs
 compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 
 # paths {{{1
-fpath=(~/.zsh ~/local/zsh/share/zsh/5.0.6-dev-0/functions $fpath)
+fpath=(~/.zsh ~/local/zsh/share/zsh/*-dev-0/functions $fpath)
 
 for dir in \
     /sbin \
@@ -404,13 +404,14 @@ edit_configs() {
     configs=(
         b           ~/.bashrc
         dwm         ~/.dotfiles/dwm/config.h
+        g           ~/.gitconfig
+        m           ~/.muttrc
+        p           ~/.pentadactyl/pentadactylrc
+        t           ~/.tmux.conf
         v           ~/.vim/vimrc
         x           ~/.Xdefaults
         xi          ~/.xinitrc
         z           ~/.zshenv
-        g           ~/.gitconfig
-        t           ~/.tmux.conf
-        p           ~/.pentadactyl/pentadactylrc
     )
     #select i in ${(k)configs}; do $EDITOR ${configs[$i]}; break; done
 

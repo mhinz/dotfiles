@@ -15,10 +15,14 @@ call plug#begin('~/.vim/bundle')
   " Plug 'scrooloose/nerdtree',    { 'on': ['NERDTree', 'NERDTreeToggle'] }
   " Plug 'majutsushi/tagbar',      { 'on': 'TagbarToggle'                 }
 
+  Plug 'gregsexton/gitv',     { 'on':  'Gitv'    }
+  Plug 'mbbill/undotree',     { 'on': 'UndotreeToggle' }
+  Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
   Plug 'Lokaltog/vim-easymotion'
   Plug 'altercation/vim-colors-solarized'
   Plug 'jamessan/vim-gnupg'
-  Plug 'msanders/snipmate.vim',  { 'frozen': 1 }
+  Plug 'junegunn/vim-github-dashboard'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -46,8 +50,6 @@ syntax   on
 set autoindent
 set cinoptions    =>4,l1,p0,)50,*50,t0
 set expandtab
-set shiftwidth    =4
-set softtabstop   =4
 
 " backup/swap/info/undo settings
 set backup
@@ -75,10 +77,11 @@ set smartcase
 " misc settings
 set autoread
 set backspace     =indent,eol,start
+set complete     -=i
 set cpoptions    -=e
 set cscopetag
 set cscopetagorder=0
-set diffopt       =filler,foldcolumn:0
+set diffopt       =filler,vertical,foldcolumn:0
 set fileformats   =unix,dos,mac
 set hidden
 set history       =10000
@@ -151,7 +154,7 @@ if has('multi_byte') && &encoding ==# 'utf-8'
   let &fillchars = 'diff:▚,stlnc:!'
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
-  augroup chars
+  augroup mylist
     autocmd!
     autocmd InsertEnter * set listchars-=trail:⣿
     autocmd InsertLeave * set listchars+=trail:⣿
@@ -160,7 +163,7 @@ else
   let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
   let &fillchars = 'stlnc:#'
   let &showbreak = '-> '
-  augroup chars
+  augroup mylist
     autocmd!
     autocmd InsertEnter * set listchars-=trail:.
     autocmd InsertLeave * set listchars+=trail:.
@@ -176,102 +179,108 @@ digraph ./ 8230
 
 let mapleader = ';'
 
-nnoremap <f8>        :Make<cr>
-nnoremap <f9>        :Dispatch<cr>
-nnoremap <f10>       :Start<cr>
-nnoremap <f11>       :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
-nnoremap <f12>       :set spell!<cr>
+nnoremap \            ;
 
-nnoremap K           :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
+nnoremap <f8>         :Make<cr>
+nnoremap <f9>         :Dispatch<cr>
+nnoremap <f10>        :Start<cr>
+nnoremap <f11>        :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
+nnoremap <f12>        :set spell!<cr>
 
-nnoremap <c-g>       :FileInfo<cr>
-inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
-inoremap <silent> <c-g><c-m> <c-r>=repeat(complete(col('.'),['mh.codebro@gmail.com','mhinz@campus.tu-berlin.de','hinz@mailbox.tu-berlin.de']),0)<cr>
+nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
-nnoremap <leader>ev  :tabnew ~/.vim/vimrc<cr>
-nnoremap <leader>rr  :source %<cr>
-nnoremap <leader>rv  :source $MYVIMRC<cr>
+nnoremap <c-g>        :FileInfo<cr>
 
-nnoremap <expr> n    v:searchforward ? 'nzvzz' : 'Nzvzz'
-nnoremap <expr> N    v:searchforward ? 'Nzvzz' : 'nzvzz'
+inoremap jf           <esc>
+inoremap <expr> <tab> <sid>tab_yeah("\<c-n>", "\<tab>")
+inoremap <silent> <c- g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
+inoremap <silent> <c- g><c-m> <c-r>=repeat(complete(col('.'),['mh.codebro@gmail.com','mhinz@campus.tu-berlin.de','hinz@mailbox.tu-berlin.de']),0)<cr>
 
-nnoremap gg          ggzv
-nnoremap G           Gzv
+nnoremap <leader>ev   :tabnew $MYVIMRC<cr>
+nnoremap <leader>rv   :source $MYVIMRC<cr>
+nnoremap <leader>rr   :source %<cr>
 
-nnoremap [q          :cprevious<cr>
-nnoremap ]q          :cnext<cr>
-nnoremap [Q          :cfirst<cr>
-nnoremap ]Q          :clast<cr>
+nnoremap <expr> n     v:searchforward ? 'nzvzz' : 'Nzvzz'
+nnoremap <expr> N     v:searchforward ? 'Nzvzz' : 'nzvzz'
 
-nnoremap [l          :lprevious<cr>
-nnoremap ]l          :lnext<cr>
-nnoremap [L          :lfirst<cr>
-nnoremap ]L          :llast<cr>
+nnoremap gg           ggzv
+nnoremap G            Gzv
 
-nnoremap [b          :bprevious<cr>
-nnoremap ]b          :bnext<cr>
-nnoremap [B          :bfirst<cr>
-nnoremap ]B          :blast<cr>
+nnoremap [q           :cprevious<cr>
+nnoremap ]q           :cnext<cr>
+nnoremap [Q           :cfirst<cr>
+nnoremap ]Q           :clast<cr>
 
-nnoremap [t          :tabprevious<cr>
-nnoremap ]t          :tabnext<cr>
-nnoremap [T          :tabfirst<cr>
-nnoremap ]T          :tablast<cr>
+nnoremap [l           :lprevious<cr>
+nnoremap ]l           :lnext<cr>
+nnoremap [L           :lfirst<cr>
+nnoremap ]L           :llast<cr>
 
-nnoremap <c-h>       <c-w>h
-nnoremap <c-j>       <c-w>j
-nnoremap <c-k>       <c-w>k
-nnoremap <c-l>       <c-w>l
+nnoremap [b           :bprevious<cr>
+nnoremap ]b           :bnext<cr>
+nnoremap [B           :bfirst<cr>
+nnoremap ]B           :blast<cr>
 
-nnoremap <f9>        :silent! make<cr>:redraw!<cr>:cwindow<cr>
+nnoremap [t           :tabprevious<cr>
+nnoremap ]t           :tabnext<cr>
+nnoremap [T           :tabfirst<cr>
+nnoremap ]T           :tablast<cr>
 
-onoremap gv          :<c-u>normal! gv<cr>
+nnoremap <c-h>        <c-w>h
+nnoremap <c-j>        <c-w>j
+nnoremap <c-k>        <c-w>k
+nnoremap <c-l>        <c-w>l
 
-xnoremap <           <gv
-xnoremap >           >gv
+onoremap gv           :<c-u>normal! gv<cr>
 
-nnoremap }           }zz
-nnoremap {           {zz
-nnoremap ]]          ]]zz
-nnoremap [[          [[zz
-nnoremap []          []zz
-nnoremap ][          ][zz
+xnoremap <            <gv
+xnoremap >            >gv
 
-nnoremap g;          g;zvzz
-nnoremap g,          g,zvzz
+nnoremap }            }zz
+nnoremap {            {zz
+nnoremap ]]           ]]zz
+nnoremap [[           [[zz
+nnoremap []           []zz
+nnoremap ][           ][zz
 
-nnoremap Q           gqap
+nnoremap g;           g;zvzz
+nnoremap g,           g,zvzz
 
-nnoremap <leader>M   :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <leader>j   <C-^>
-nnoremap <leader>v   `[v`]
+nnoremap Q            gqap
 
-nnoremap <leader>q   :call <sid>exit()<cr>
-nnoremap <leader>w   :update<cr>
-nnoremap <leader>x   :xit<cr>
+nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <leader>j    <C-^>
+nnoremap <leader>v    `[v`]
 
-nnoremap <leader>l   :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+nnoremap <leader>q    :call Qlose()<cr>
+nnoremap <leader>w    :update<cr>
+nnoremap <leader>x    :xit<cr>
 
-nnoremap '           `
-nnoremap `           '
+nnoremap <leader>l    :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
-nnoremap <expr> <cr> &ft == 'vim' && &bt == 'nofile' ? '<cr>' : 'g<c-]>'
-nnoremap <bs>        <c-t>
+nnoremap '            `
+nnoremap `            '
 
-inoremap jf          <esc>
+nnoremap <expr> <cr>  &ft == 'vim' && &bt == 'nofile' ? '<cr>' : 'g<c-]>'
+nnoremap <bs>         <c-t>
 
-cnoremap <c-n>       <down>
-cnoremap <c-p>       <up>
+cnoremap <c-n>        <down>
+cnoremap <c-p>        <up>
 
-cnoremap <leader>r   $VIMRUNTIME/
-cnoremap <leader>ft  ~/.vim/after/ftplugin/
+cnoremap <leader>r    $VIMRUNTIME/
+cnoremap <leader>ft   ~/.vim/after/ftplugin/
 
-xnoremap *           :<c-u>call <sid>search()<cr>//<cr>
-xnoremap #           :<c-u>call <sid>search()<cr>??<cr>
-xnoremap <leader>*   :<c-u>silent! execute <sid>search_all()<cr>
+xnoremap *            :<c-u>call <sid>search()<cr>//<cr>
+xnoremap #            :<c-u>call <sid>search()<cr>??<cr>
+xnoremap <leader>*    :<c-u>silent! execute <sid>search_all()<cr>
+
+if !empty($TMUX)
+  nnoremap <c-a>      <nop>
+  nnoremap <leader>a  <c-a>
+endif
 
 " autocmd {{{1
-augroup vimrc
+augroup myvimrc
   au!
 
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif | normal! zvzz
@@ -321,7 +330,7 @@ function! s:cd(bang) abort
     return
   endif
   let s:cache = {}
-  let dirs    = [ '.git', '.hg' ]
+  let dirs    = [ '.git', '.hg', '.svn' ]
   let curdir  = resolve(expand('%:p:h'))
   if has_key(s:cache, curdir)
     execute (a:bang ? 'cd' : 'lcd') s:cache.curdir
@@ -356,6 +365,16 @@ function! s:scratch(cmd) abort
   nnoremap <buffer> q :q<cr>
 endfunction
 
+function! s:tab_yeah(new, default)
+  let line = getline('.')
+  let col = col('.') - 2
+  if !empty(line) && line[col] =~ '\k' && line[col + 1] !~ '\k'
+    return a:new
+  else
+    return a:default
+  endif
+endfunction
+
 function! Foldy()
   let linelen = &tw ? &tw : 80
   let marker  = strpart(&fmr, 0, stridx(&fmr, ',')) . '\d*'
@@ -380,12 +399,15 @@ function! Foldy()
   return left . fill . right . repeat(' ', 100)
 endfunction
 
-function! s:exit()
-  let nlisted = len(filter(range(0, bufnr('$')), 'buflisted(v:val)'))
-  if nlisted < 2 || (&filetype == 'vim' && &buftype == 'nofile') " cmdline window
+function! Qlose()
+  let nlisted = len(filter(tabpagebuflist(), 'buflisted(v:val)'))
+  if &bt == 'help'
+    setlocal bufhidden=delete
+    tabclose
+  elseif nlisted <= 1 || (&bt == 'nofile' && &ft == 'vim')  " cmdline window
     quit
   else
-    bd
+    bdelete
   endif
 endfunction
 
@@ -429,8 +451,7 @@ else
     endtry
   endfor
   if colors_name == 'janah'
-    highlight Normal ctermbg=NONE
-    augroup colors
+    augroup mycolors
       autocmd!
       autocmd VimEnter,ColorScheme *
             \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
@@ -554,7 +575,7 @@ map <space>   <plug>(easymotion-s2)
 " map <Leader>k <plug>(easymotion-k)
 
 " plugins: vim-signify {{{2
-let g:signify_vcs_list           = [ 'git', 'hg' ]
+" let g:signify_vcs_list           = [ 'git', 'hg' ]
 "let g:signify_skip_filetype      = { 'help': 1 }
 "let g:signify_cursorhold_insert  = 1
 "let g:signify_cursorhold_normal  = 1
