@@ -258,7 +258,7 @@ nnoremap '            `
 nnoremap `            '
 
 nnoremap <bs>         <c-t>
-nmap     <expr> <cr>  &ft == 'vim' && &bt == 'nofile' ? '<cr>' : (exists('b:cscoped') ? '<leader>cg' : 'g<c-]>')
+nmap     <expr> <cr>  &ft == 'vim' && &bt == 'nofile' ? '<cr>' : (exists('g:cscoped') ? '<leader>cg' : 'g<c-]>')
 
 cnoremap <c-n>        <down>
 cnoremap <c-p>        <up>
