@@ -191,6 +191,9 @@ hash -d z='/data/repo/zsh'
 # aliases {{{1
 alias help='run-help'
 
+alias pprof='/usr/bin/google-pprof'
+alias pp='LD_PRELOAD=/usr/lib/libprofiler.so.0 CPUPROFILE=out.prof'
+
 alias ju='java -cp ".:test:../junit.jar" org.junit.runner.JUnitCore'
 alias jc='javac -cp ".:../junit.jar"'
 

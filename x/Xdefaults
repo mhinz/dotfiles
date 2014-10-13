@@ -31,7 +31,7 @@ urxvt*matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-=]*[\\w/-]
 urxvt*matcher.pattern.2:  \\bhttps?:\/\/[\\w-.]*\/[\\w./?&@#-=]*.(jpg|jpeg|png)
 urxvt*matcher.launcher.2: feh $0
 urxvt*perl-lib:           .urxvt
-urxvt*perl-ext-common:    default,matcher
+urxvt*perl-ext-common:    default,matcher,font-size
 urxvt*urlLauncher:        firefox
 urxvt*pointerColor:       yellow
 urxvt*saveLines:          10000
@@ -39,6 +39,8 @@ urxvt*scrollBar:          false
 urxvt*termName:           rxvt-256color
 urxvt*tripleclickwords:   true
 urxvt*underlineColor:     #CC6666
+urxvt.keysym.C-Up:        perl:font-size:increase
+urxvt.keysym.C-Down:      perl:font-size:decrease
 !urxvt*fading:            20
 !urxvt*shading:           5
 !urxvt*transparent:       true

@@ -10,17 +10,14 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
-  " Plug 'terryma/vim-multiple-cursors'
+  " Plug 'gregsexton/gitv', { 'on':  'Gitv' }
+  " Plug 'jamessan/vim-gnupg'
+  " Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+  " Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+  " Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle'] }
   " Plug 'scrooloose/syntastic'
-  " Plug 'scrooloose/nerdtree',    { 'on': ['NERDTree', 'NERDTreeToggle'] }
-  " Plug 'majutsushi/tagbar',      { 'on': 'TagbarToggle'                 }
 
   Plug 'Lokaltog/vim-easymotion'
-  Plug 'altercation/vim-colors-solarized'
-  Plug 'gregsexton/gitv',               { 'on':  'Gitv'                         }
-  Plug 'jamessan/vim-gnupg'
-  Plug 'junegunn/vim-github-dashboard', { 'on': [ 'GHActivity', 'GHDashboard' ] }
-  Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle'                }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
