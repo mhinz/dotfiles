@@ -18,6 +18,7 @@ call plug#begin('~/.vim/bundle')
   " Plug 'scrooloose/syntastic'
 
   Plug 'Lokaltog/vim-easymotion'
+  Plug 'altercation/vim-colors-solarized'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -415,11 +416,8 @@ function! Foldy()
 endfunction
 
 function! Qlose()
-  let nlisted = len(filter(tabpagebuflist(), 'buflisted(v:val)'))
-  if &bt == 'help'
-    setlocal bufhidden=delete
-    tabclose
-  elseif nlisted <= 1 || (&bt == 'nofile' && &ft == 'vim')  " cmdline window
+  let nlisted = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+  if nlisted <= 1 || (&bt == 'nofile' && &ft == 'vim')  " cmdline window
     quit
   else
     bdelete
