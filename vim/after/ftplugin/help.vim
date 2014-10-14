@@ -4,6 +4,6 @@ augroup help
   autocmd BufLeave <buffer> let &scrolloff = b:so
 augroup END
 
-nnoremap <buffer> q :call Qlose()<cr>
+setlocal bufhidden=delete
 
-silent wincmd T
+nnoremap <buffer> q :call Qlose()<cr>

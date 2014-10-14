@@ -302,6 +302,7 @@ augroup myvimrc
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif | normal! zvzz
 
   au BufEnter           *                           Cd
+  au BufEnter           *.txt                       if &bt == 'help' | silent wincmd T | endif
   au BufLeave           *.h                         normal! mH
   au BufLeave           *.{c,cpp}                   normal! mC
   au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
@@ -417,10 +418,18 @@ endfunction
 
 function! Qlose()
   let nlisted = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-  if nlisted <= 1 || (&bt == 'nofile' && &ft == 'vim')  " cmdline window
+  if &bt == 'nofile' && &ft == 'vim'  " cmdline window
     quit
-  else
+  elseif &bt == 'help'
+    try
+      tabclose
+    catch /E784/  " cannot close last tab page
+      quit
+    endtry
+  elseif nlisted > 2
     bdelete
+  else
+    quit
   endif
 endfunction
 
