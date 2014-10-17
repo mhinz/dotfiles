@@ -32,6 +32,7 @@ call plug#begin('~/.vim/bundle')
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
   Plug '/data/github/vim-tmuxify'
+  Plug '/data/github/vim-haskellrocks'
 call plug#end()
 
 " init {{{1
@@ -187,8 +188,8 @@ nnoremap <c-g>        :FileInfo<cr>
 
 inoremap jf           <esc>
 inoremap <expr> <tab> <sid>tab_yeah("\<c-n>", "\<tab>")
-inoremap <silent> <c- g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
-inoremap <silent> <c- g><c-m> <c-r>=repeat(complete(col('.'),['mh.codebro@gmail.com','mhinz@campus.tu-berlin.de','hinz@mailbox.tu-berlin.de']),0)<cr>
+inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
+inoremap <silent> <c-g><c-m> <c-r>=repeat(complete(col('.'),['mh.codebro@gmail.com','hinz@campus.tu-berlin.de','mhinz@mailbox.tu-berlin.de']),0)<cr>
 
 nnoremap <leader>ev   :tabnew $MYVIMRC<cr>
 nnoremap <leader>rv   :source $MYVIMRC<cr>
@@ -309,6 +310,7 @@ augroup myvimrc
   au BufRead,BufNewFile *.adoc                      setfiletype asciidoc
   au BufRead,BufNewFile *.{md,mkd}                  setlocal ft=markdown tw=80
   au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
+  au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal noet sw=4 sts=4
   au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
   au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
@@ -426,7 +428,7 @@ function! Qlose()
     catch /E784/  " cannot close last tab page
       quit
     endtry
-  elseif nlisted > 2
+  elseif nlisted > 1
     bdelete
   else
     quit

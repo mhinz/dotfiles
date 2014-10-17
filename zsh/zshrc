@@ -1,5 +1,9 @@
 #!/usr/bin/zsh
 
+fpath=(~/.zsh ~/local/zsh/share/zsh/*-dev-0/functions $fpath)
+
+[[ $DISPLAY == screen* ]] && stty erase '^?'
+
 autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
 autoload -Uz run-help
@@ -8,8 +12,6 @@ zmodload -i zsh/complist
 
 bindkey -e
 umask 077
-
-[[ $DISPLAY == screen* ]] && stty erase '^?'
 
 # options {{{1
 setopt \
@@ -169,16 +171,6 @@ SPROMPT="${c[orange]}%R -> %r:%f "
 PROMPT2="${c[orange]}+%f "
 PROMPT3="${c[orange]}Select:%f "
 
-# variables {{{1
-export EDITOR=vim
-export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
-
-export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
-export GOARCH=amd64 GOOS=linux GOPATH=/data/go
-export NNTPSERVER=news.fu-berlin.de
-export PKG_CONFIG_PATH=/data/lib/lib/pkgconfig
-export PLAN9=/data/repo/plan9port
-
 # hashes {{{1
 hash -d asm='/data/programming/asm'
 hash -d b='/data/books'
@@ -318,28 +310,6 @@ compctl -fg '*.(avi|mp*g|mp4|wmv|ogm|mkv|xvid|divx)' mplayer gmplayer vlc
 compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbsetbg
 compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 
-# paths {{{1
-fpath=(~/.zsh ~/local/zsh/share/zsh/*-dev-0/functions $fpath)
-
-for dir in \
-    /sbin \
-    $HOME/local/dwm/bin \
-    $HOME/local/erlang/bin \
-    $HOME/local/git/bin \
-    $HOME/local/liferea/bin \
-    $HOME/local/tmux/bin \
-    $HOME/local/vim/bin \
-    $HOME/local/zsh/bin \
-    $HOME/bin \
-    $HOME/.cabal/bin \
-    $GOPATH/bin \
-    /data/languages/go/bin
-do
-    [[ -d $dir ]] && path=($dir $path)
-done
-
-unset dir
-
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
@@ -415,7 +385,8 @@ edit_configs() {
         v           ~/.vim/vimrc
         x           ~/.Xdefaults
         xi          ~/.xinitrc
-        z           ~/.zshenv
+        zp          ~/.zprofile
+        zr          ~/.zshrc
     )
     #select i in ${(k)configs}; do $EDITOR ${configs[$i]}; break; done
 
@@ -514,8 +485,3 @@ fancy-ctrl-z() {
 
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
-
-# environments {{{1
-
-# OPAM configuration
-. ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

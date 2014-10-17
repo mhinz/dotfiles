@@ -1,0 +1,19 @@
+#!/usr/bin/zsh
+
+export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
+export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
+export NNTPSERVER=news.fu-berlin.de
+export PLAN9=/data/repo/plan9port
+# export GOARCH=amd64 GOOS=linux GOPATH=/data/go
+# export PKG_CONFIG_PATH=/data/lib/lib/pkgconfig
+
+for dir in \
+    /sbin \
+    $HOME/local/*/bin \
+    $HOME/bin
+    # $HOME/.cabal/bin \
+    # $GOPATH/bin \
+    # /data/languages/go/bin
+do
+    [[ -d $dir ]] && path=($dir $path)
+done
