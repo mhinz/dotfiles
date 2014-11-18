@@ -21,10 +21,17 @@ export PLAN9=/data/repo/plan9port
 
 for dir in \
     /sbin \
+    /usr/local/opt/coreutils/libexec/gnubin \
     $HOME/.cabal/bin \
     /data/languages/go/bin \
     $HOME/local/*/bin \
     $HOME/bin
 do
     [[ -d $dir ]] && path=($dir $path)
+done
+
+for dir in \
+    /usr/local/opt/coreutils/libexec/gnuman
+do
+    [[ -d $dir ]] && manpath=($dir $path)
 done

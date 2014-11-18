@@ -35,6 +35,8 @@ syntax   on
 "autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
 
+let s:darwin = has('mac')
+
 " set {{{1
 " indent settings
 set autoindent
@@ -169,6 +171,7 @@ digraph ./ 8230
 let mapleader = ';'
 
 nnoremap \            ;
+nnoremap gl           <c-^>
 
 nnoremap <f8>         :Make<cr>
 nnoremap <f9>         :Dispatch<cr>
@@ -633,12 +636,10 @@ let g:startify_skiplist = [
       \ '\.vimgolf',
       \ ]
 
-let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
-" let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'."]
-
-" autocmd User Startified setlocal cursorline
-" autocmd User Startified set buftype=
-" autocmd User Startified call lightline#update()
+let g:startify_custom_header = s:darwin
+      \ ? map(split(system('tips'), '\n'), '"   ". v:val') + ['']
+      \ : map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
+"let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
 
 "function! s:foo()
     "redir => var

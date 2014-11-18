@@ -2,7 +2,7 @@
 
 dir='/data/repo/vim'
 prefix="${HOME}/local/vim"
-flags="--prefix=${prefix} --disable-darwin --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-pythoninterp=yes --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu --enable-rubyinterp=yes --with-ruby-command=/usr/bin/ruby --enable-cscope --disable-workshop --disable-netbeans --disable-sniff --disable-hangulinput --enable-fontset --enable-gui=gtk2 --enable-largefile --disable-acl --disable-gpm --disable-sysmouse --with-x --with-features=huge --with-compiledby=mhi"
+flags="--prefix=${prefix} --enable-gui --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-pythoninterp=yes --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu --enable-rubyinterp=yes --with-ruby-command=/usr/bin/ruby --enable-cscope --disable-workshop --disable-netbeans --disable-smack --disable-sniff --disable-hangulinput --enable-fontset --enable-largefile --disable-acl --disable-gpm --disable-sysmouse --with-x --with-features=huge --with-compiledby=mhi"
 
 version() {
     major=$(vim --version | head -1 | cut -d' ' -f5)

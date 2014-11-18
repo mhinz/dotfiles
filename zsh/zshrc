@@ -1,6 +1,6 @@
 #!/usr/bin/zsh
 
-fpath=(~/.zsh ~/local/zsh/share/zsh/*-dev-0/functions $fpath)
+fpath=(~/.zsh $fpath)
 
 eval $(dircolors ~/.zsh/dircolors)
 
@@ -148,8 +148,8 @@ c[white]='%F{255}'
 c[yellow]='%F{222}'
 
 # Prompt configuration.
-p[deli_left]="${c[gray]}⚡%f"
-p[deli_right]="${c[gray]}⚡%f"
+p[deli_left]="${c[gray]}%f"
+p[deli_right]="${c[gray]}%f"
 p[jobcount]="%(1j.${c[orange]}%j${c[gray]}:%f.)"
 
 p[colon]="${c[gray]}:%f"
@@ -234,11 +234,9 @@ alias grep='grep --color=always'
 alias here='command urxvtc -cd $PWD'
 alias i='$EDITOR /data/life/ideas'
 alias kdwm='killall dwm'
-alias ls='ls --color=always'
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
 alias mps='ps $@ f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
 alias n2t='sh /data/nand2tetris/nand2tetris/tools/HardwareSimulator.sh'
-alias n='ls -lhS *(DOL[1,5]^/)'
 alias ob='objdump -Mintel'
 alias p1='patch -p1 -g1 --dry-run'
 alias rt='cd ~torrents/../session && rtorrent'
@@ -257,11 +255,13 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
+alias ls='ls --color=always'
 alias j='ls -lhd *(D-/)'
 alias k='ls -lhX *(D-^/)'
 alias l='ls -lh --group-directories-first'
 alias ll='ls -lhX --group-directories-first'
 alias la='ls -lhXA --group-directories-first'
+alias n='ls -lhS *(DOL[1,5]^/)'
 
 alias 1='fg %1'
 alias 2='fg %2'
