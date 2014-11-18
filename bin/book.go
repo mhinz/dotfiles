@@ -94,7 +94,7 @@ func main() {
 	case ".pdf":
 		run("zathura", fnames[input])
 	case ".chm":
-		run("chmsee", fnames[input])
+		run("xchm", fnames[input])
 	case ".djvu":
 		run("djview", fnames[input])
 	default:

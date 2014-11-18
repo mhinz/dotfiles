@@ -7,24 +7,17 @@
 "                ║           ⎋ HERE BE VIMPIRES ⎋           ║
 "                ╚══════════════════════════════════════════╝
 "
-
 " plug {{{1
 call plug#begin('~/.vim/bundle')
-  " Plug 'gregsexton/gitv', { 'on':  'Gitv' }
-  " Plug 'jamessan/vim-gnupg'
-  " Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-  " Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-  " Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle'] }
-  " Plug 'scrooloose/syntastic'
-
   Plug 'Lokaltog/vim-easymotion'
   Plug 'altercation/vim-colors-solarized'
+  Plug 'junegunn/fzf',       { 'do': 'yes \| ./install' }
+  Plug 'junegunn/vader.vim', { 'on': 'Vader', 'for': 'vader' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
-  Plug 'wincent/command-t'
 
   Plug '/data/github/vim-janah'
   Plug '/data/github/vim-perf'
@@ -87,6 +80,7 @@ set noautoread
 set noautowrite
 set noautowriteall
 set noequalalways
+set relativenumber
 set noerrorbells
 set nofsync
 set nojoinspaces
@@ -247,6 +241,7 @@ nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:re
 nnoremap <leader>j    <C-^>
 nnoremap <leader>v    `[v`]
 
+nnoremap <leader>f    :FZF<cr>
 nnoremap <leader>q    :call Qlose()<cr>
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
@@ -310,7 +305,8 @@ augroup myvimrc
   au BufRead,BufNewFile *.adoc                      setfiletype asciidoc
   au BufRead,BufNewFile *.{md,mkd}                  setlocal ft=markdown tw=80
   au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
-  au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal noet sw=4 sts=4
+  au BufRead,BufNewFile /data/repo/vim/*            setlocal noet
+  au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal sw=4 sts=4
   au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
   au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
@@ -462,11 +458,21 @@ if has('gui_running')
   set mousehide
   set guioptions =a
   " let &guifont   = 'Bitstream Vera Sans Mono 9'
-  let &guifont   = 'DejaVu Sans Mono 9'
+  " let &guifont   = 'DejaVu Sans Mono 9'
+  " let &guifont   = 'Droid Sans Mono 9'
+  let &guifont   = 'Ubuntu Mono 11'
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
   set background=dark
+  augroup mycolors
+    autocmd!
+    autocmd ColorScheme janah
+          \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
+          \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
+          \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
+          \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
+  augroup END
   for scheme in ['janah', 'zenburn', 'xoria256', 'tango2']
     try
       execute 'colorscheme' scheme
@@ -474,16 +480,6 @@ else
     catch
     endtry
   endfor
-  if colors_name == 'janah'
-    augroup mycolors
-      autocmd!
-      autocmd VimEnter,ColorScheme *
-            \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
-            \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
-            \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-            \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
-    augroup END
-  endif
 endif
 
 " statusline {{{1
@@ -534,17 +530,6 @@ let g:loaded_spellfile_plugin = 1
 "let g:loaded_tarPlugin        = 1
 let g:loaded_vimballPlugin    = 1
 "let g:loaded_zipPlugin        = 1
-
-" plugins: command-t {{{2
-let g:CommandTAlwaysShowDotFiles = 0
-let g:CommandTScanDotDirectories = 1
-let g:CommandTMatchWindowReverse = 1
-
-nnoremap <leader>B :CommandTJump<cr>
-nnoremap <leader>b :CommandTBuffer<cr>
-nnoremap <leader>m :CommandTMRU<cr>
-nnoremap <leader>p :CommandT<cr>
-nnoremap <leader>t :CommandTTag<cr>
 
 " plugins: netrw {{{2
 " let g:loaded_netrwPlugin = 1
@@ -603,7 +588,7 @@ let g:signify_vcs_list           = [ 'git', 'hg' ]
 "let g:signify_skip_filetype      = { 'help': 1 }
 "let g:signify_cursorhold_insert  = 1
 "let g:signify_cursorhold_normal  = 1
-"let g:signify_disable_by_default = 1
+" let g:signify_disable_by_default = 1
 " let g:signify_line_highlight     = 0
 "let g:signify_update_on_bufenter = 1
 " let g:signify_update_on_focusgained = 0
@@ -616,10 +601,12 @@ let g:signify_vcs_list           = [ 'git', 'hg' ]
 
 "let g:signify_action_on_modified_lines = 'RunOnModifiedLines'
 
-" plugins: vim-startify {{{2
-"autocmd FileType startify setlocal cursorline
-"autocmd User Startified call lightline#update()
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+omap ac <plug>(signify-motion-outer-pending)
+xmap ac <plug>(signify-motion-outer-visual)
 
+" plugins: vim-startify {{{2
 let g:startify_list_order = [
       \ ['   LRU:'],
       \ 'files',
@@ -631,9 +618,6 @@ let g:startify_list_order = [
       \ 'bookmarks',
       \ ]
 
-"let g:startify_session_savevars = ['g:foo']
-"let g:startify_session_savecmds = [ 'colo molokai' ]
-
 let g:startify_relative_path          = 1
 let g:startify_files_number           = 10
 let g:startify_session_persistence    = 1
@@ -641,9 +625,6 @@ let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_change_to_dir          = 1
 let g:startify_enable_special         = 0
-"let g:startify_restore_position = 1
-"let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
-"let g:startify_list_order = ['files', 'bookmarks', 'sessions', 'dir']
 
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
@@ -652,14 +633,13 @@ let g:startify_skiplist = [
       \ '\.vimgolf',
       \ ]
 
-"let g:startify_bookmarks = [ expand('<sfile>:p:~') ]
-"let g:startify_bookmarks = [
-            "\ '~/.vim/vimrc',
-            "\ '/data/vim/golfing',
-            "\ ]
-
-"let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
 let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
+" let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'."]
+
+" autocmd User Startified setlocal cursorline
+" autocmd User Startified set buftype=
+" autocmd User Startified call lightline#update()
+
 "function! s:foo()
     "redir => var
       "silent! echomsg 'foo'
@@ -669,6 +649,22 @@ let g:startify_custom_header = map(split(system('tips | cowsay -f apt'), '\n'), 
     "return map(split(var, '\n'), '"   " . v:val') + ['']
 "endfunction
 "let g:startify_custom_header = s:foo()
+
+" let g:startify_session_savevars = ['g:foo']
+" let g:startify_session_savecmds = [ 'colo molokai' ]
+" let g:startify_restore_position = 1
+" let g:startify_custom_indices   = map(range(1,100), 'string(v:val)')
+" let g:startify_list_order       = ['files', 'bookmarks', 'sessions', 'dir']
+" let g:startify_bookmarks        = [ expand('<sfile>:p:~') ]
+" let g:startify_bookmarks        = [
+            "\ '~/.vim/vimrc',
+            "\ '/data/vim/golfing',
+            "\ ]
+
+" let g:startify_list_order = []
+" let g:startify_enable_special = 0
+" let g:startify_custom_header = ['hello']
+" let g:startify_custom_footer = ['world']
 
 " plugins: vim-tmuxify {{{2
 let g:tmuxify_custom_command = 'tmux split-window -d -l 10'

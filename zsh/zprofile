@@ -1,5 +1,7 @@
 #!/usr/bin/zsh
 
+export TERM=rxvt-256color
+export EDITOR=vim
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
 export NNTPSERVER=news.fu-berlin.de
@@ -7,13 +9,22 @@ export PLAN9=/data/repo/plan9port
 # export GOARCH=amd64 GOOS=linux GOPATH=/data/go
 # export PKG_CONFIG_PATH=/data/lib/lib/pkgconfig
 
+    # $HOME/local/dwm/bin \
+    # $HOME/local/erlang/bin \
+    # $HOME/local/git/bin \
+    # $HOME/local/liferea/bin \
+    # $HOME/local/tmux/bin \
+    # $HOME/local/vim/bin \
+    # $HOME/local/zsh/bin \
+    # $PLAN9/bin \
+    # $GOPATH/bin \
+
 for dir in \
     /sbin \
+    $HOME/.cabal/bin \
+    /data/languages/go/bin \
     $HOME/local/*/bin \
     $HOME/bin
-    # $HOME/.cabal/bin \
-    # $GOPATH/bin \
-    # /data/languages/go/bin
 do
     [[ -d $dir ]] && path=($dir $path)
 done

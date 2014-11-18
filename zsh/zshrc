@@ -2,7 +2,10 @@
 
 fpath=(~/.zsh ~/local/zsh/share/zsh/*-dev-0/functions $fpath)
 
+eval $(dircolors ~/.zsh/dircolors)
+
 [[ $DISPLAY == screen* ]] && stty erase '^?'
+[[ -f ~/.fzf.zsh       ]] && source ~/.fzf.zsh
 
 autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
@@ -13,29 +16,50 @@ zmodload -i zsh/complist
 bindkey -e
 umask 077
 
-# options {{{1
-setopt \
-    autocd \
-    autopushd \
-    cdablevars \
-    checkjobs \
-    completeinword \
-    correct \
-    globcomplete \
-    interactivecomments \
-    listpacked \
-    longlistjobs \
-    nohup \
-    nolog \
-    notify \
-    promptsubst
-    #extendedglob
+watch=all
+logcheck=60
+WATCHFMT="%n from %M has %a tty%l at %T %W"
 
-unsetopt \
-    listrowsfirst \
-    nobeep \
-    rmstarsilent \
-    nomatch
+# misc options {{{1
+
+# changing directories
+setopt auto_cd
+setopt cdable_vars
+
+setopt checkjobs
+setopt completeinword
+setopt correct
+setopt globcomplete
+setopt interactivecomments
+setopt print_exit_value
+setopt listpacked
+setopt longlistjobs
+setopt no_beep
+setopt no_listrowsfirst
+setopt no_nomatch
+setopt no_rm_star_silent
+setopt nohup
+setopt nolistambiguous
+setopt nolog
+setopt no_hist_beep
+setopt notify
+setopt promptsubst
+# setopt extendedglob
+
+# history {{{1
+
+HISTFILE=~/.zsh/history
+HISTSIZE=2048
+SAVEHIST=2048
+
+setopt append_history
+setopt bang_hist
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_verify
+setopt inc_append_history   # add commands as they're typed
+setopt share_history        # share history between sessions
 
 # zle {{{1
 
@@ -84,30 +108,24 @@ bindkey 'e'  edit-command-line
 bindkey 'n'  list-expand
 bindkey 'm'  expand-word
 
-# zstyle {{{1
+# completion {{{1
 
-# tolerante Fehlereingabe
-zstyle -e ':completion:*:approximate:*' max-errors '(( reply=($#PREFX+$#SUFFIX)/3 ))'
-# German umlauts
-zstyle ':completion:*' matcher-list \
-    'm:ss=Ã m:ue=Ã¼ m:ue=Ã m:oe=Ã¶ m:oe=Ã m:ae=Ã¤ m:ae=Ã m:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
-# farbige Completion
-zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}" 'ma=(01);(38;05;255);(48;05;24)'
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
-#zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+zstyle -e ':completion:*:approximate:*'   max-errors   '(( reply=($#PREFX+$#SUFFIX)/3 ))'
 
-# schoenere Completion
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:descriptions' format $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
+zstyle ':completion:*:kill:*'             command      'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
+zstyle ':completion:*:*:kill:*:processes' list-colors  '=(#b) #([0-9]#)*=0=01;31'
 
-# durch die Optionen tabben
-zstyle ':completion:*' menu select=2
-
-# cd ..<tab><tab>
-zstyle ':completion:*'           special-dirs true
-zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion:*'                    matcher-list 'm:ss=Ã m:ue=Ã¼ m:ue=Ã m:oe=Ã¶ m:oe=Ã m:ae=Ã¤ m:ae=Ã m:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
+zstyle ':completion:*:default'            list-colors  ${(s.:.)LS_COLORS} 'ma=01;38;05;255;48;05;161'
+# zstyle ':completion:*:default'            list-colors  ${(s.:.)LS_COLORS} 'ma=(01);(38;05;255);(48;05;24)'
+zstyle ':completion::complete:*'          use-cache    true
+zstyle ':completion:*'                    cache-path   ~/.zsh/cache
+zstyle ':completion:*'                    verbose      true
+zstyle ':completion:*'                    menu         select=2
+zstyle ':completion:*'                    special-dirs true
+zstyle ':completion:*'                    group-name   ''
+zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
+# zstyle ':completion:*:descriptions' format       $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
 
 # prompt {{{1
 
@@ -485,3 +503,5 @@ fancy-ctrl-z() {
 
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+# vim: et sts=4 sw=4

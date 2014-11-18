@@ -15,7 +15,7 @@ co   = checkout
 d    = diff
 g    = grep
 h    = help
-l    = !hg log | LESS=FRX less
+l    = !hg log -G | LESS=FRX less
 m    = merge
 p    = push
 pl   = pull
