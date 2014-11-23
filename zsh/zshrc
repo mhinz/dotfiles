@@ -245,6 +245,10 @@ alias t='$EDITOR /data/life/todo'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias z='zathura'
 
+alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print \$1'"
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias flush='dscacheutil -flushcache'
+
 alias v='vim'
 alias vu='vim -u NONE -U NONE -i NONE -N'
 alias nv=nvim

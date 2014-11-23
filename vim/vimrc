@@ -10,9 +10,14 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion'
-  Plug 'altercation/vim-colors-solarized'
-  Plug 'junegunn/fzf',       { 'do': 'yes \| ./install' }
-  Plug 'junegunn/vader.vim', { 'on': 'Vader', 'for': 'vader' }
+  Plug 'junegunn/fzf',             { 'on': 'FZF', 'do': 'yes \| ./install' }
+  Plug 'junegunn/goyo.vim',        { 'on': 'Goyo' }
+  Plug 'junegunn/seoul256.vim'
+  Plug 'junegunn/vader.vim',       { 'on': 'Vader', 'for': 'vader' }
+  Plug 'junegunn/vim-easy-align'
+  Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
+  Plug 'lervag/vim-latex',         { 'for': 'tex' }
+  Plug 'marijnh/tern_for_vim',     { 'for': 'javascript' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -42,6 +47,8 @@ let s:darwin = has('mac')
 set autoindent
 set cinoptions    =>4,l1,p0,)50,*50,t0
 set expandtab
+set shiftwidth    =4
+set softtabstop   =4
 
 " backup/swap/info/undo settings
 set backup
@@ -450,7 +457,7 @@ endfunction
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['solarized', 'zenburn', 'pyte']
+  for scheme in ['seoul256', 'zenburn', 'pyte']
     try
       execute 'colorscheme' scheme
       break
@@ -571,6 +578,10 @@ let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
+" plugins: vim-easy-align {{{2
+vmap <cr>      <plug>(LiveEasyAlign)
+nmap <leader>a <plug>(LiveEasyAlign)
+
 " plugins: vim-easymotion {{{2
 let g:EasyMotion_do_mapping        = 0
 let g:EasyMotion_do_shade          = 1
@@ -620,14 +631,16 @@ let g:startify_list_order = [
       \ ['   Bookmarks:'],
       \ 'bookmarks',
       \ ]
+autocmd User Startified nmap <buffer> o <plug>(startify-open-buffers)
 
-let g:startify_relative_path          = 1
+let g:startify_relative_path          = 0
 let g:startify_files_number           = 10
 let g:startify_session_persistence    = 1
 let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_change_to_dir          = 1
 let g:startify_enable_special         = 0
+" let g:startify_custom_indices         = ['f', 'g', 'h']
 
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
@@ -637,7 +650,7 @@ let g:startify_skiplist = [
       \ ]
 
 let g:startify_custom_header = s:darwin
-      \ ? map(split(system('tips'), '\n'), '"   ". v:val') + ['']
+      \ ? map(split(system('tips | cowthink'), '\n'), '"   ". v:val') + ['']
       \ : map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
 "let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
 

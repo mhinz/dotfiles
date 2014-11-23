@@ -1,1 +1,1 @@
-nnoremap <buffer><f8> :!nodejs %<cr>
+nnoremap <buffer><f8> :!node %<cr>

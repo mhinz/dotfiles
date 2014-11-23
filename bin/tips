@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 tips = [
+  "There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. -- C.A.R. Hoare",
   "Gott existiert, weil die Mathematik widerspruchsfrei ist, und der Teufel existiert, weil wir das nicht beweisen können. -- Andre Weil",
   "If you don't make mistakes, you're not working on hard enough problems. -- Frank Wilczek",
   "If you don't start with a spec, every piece of code you write is a patch. -- Leslie Lamport",
@@ -90,4 +91,4 @@ tips = [
   "Sign Your Work\n\nCraftsmen of an earlier age were proud to sign their work. You should be, too."
 ]
 
-puts tips.sample
+puts ARGV[0] ? tips[ARGV[0].to_i] : tips.sample

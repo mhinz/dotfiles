@@ -1,6 +1,11 @@
 #!/bin/sh
 
 cd /data/repo/git
-make distclean
-git pull | grep 'Already up-to-date.' && exit 1
-make prefix=$HOME/local/git install install-doc
+make distclean 1>/dev/null
+make configure 1>/dev/null
+
+if git pull | grep 'Already up-to-date.'; then
+    [[ $1 == '-f' ]] && ./configure --prefix=$HOME/local/git && make install install-doc
+else
+    ./configure --prefix=$HOME/local/git && make install install-doc
+fi
