@@ -305,7 +305,7 @@ endif
 augroup myvimrc
   au!
 
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif | normal! zvzz
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 
   au BufEnter           *                           Cd
   au BufEnter           *.txt                       if &bt == 'help' | silent wincmd T | endif
@@ -369,7 +369,7 @@ function! s:cd(bang) abort
   endfor
   let dir = empty(founddir) ? curdir : resolve(fnamemodify(founddir, ':p:h:h'))
   let s:cache[curdir] = dir
-  execute (a:bang ? 'cd' : 'lcd') dir
+  execute (a:bang ? 'cd' : 'lcd') fnameescape(dir)
 endfunction
 
 function! s:scratch(cmd) abort
@@ -622,16 +622,20 @@ xmap ac <plug>(signify-motion-outer-visual)
 
 " plugins: vim-startify {{{2
 let g:startify_list_order = [
-      \ ['   LRU:'],
-      \ 'files',
-      \ ['   LRU within this dir:'],
+      \ ['   MRU:'],
+      \ 'files' ,
+      \ ['   MRU (dir):'],
       \ 'dir',
       \ ['   Sessions:'],
       \ 'sessions',
       \ ['   Bookmarks:'],
       \ 'bookmarks',
       \ ]
-autocmd User Startified nmap <buffer> o <plug>(startify-open-buffers)
+" autocmd User Startified nmap <buffer> o <plug>(startify-open-buffers)
+" autocmd User Startified
+"       \ execute 'nunmap <buffer> i' |
+"       \ setlocal modifiable |
+"       \ autocmd InsertEnter <buffer> enew
 
 let g:startify_relative_path          = 0
 let g:startify_files_number           = 10
@@ -671,9 +675,9 @@ let g:startify_custom_header = s:darwin
 " let g:startify_list_order       = ['files', 'bookmarks', 'sessions', 'dir']
 " let g:startify_bookmarks        = [ expand('<sfile>:p:~') ]
 " let g:startify_bookmarks        = [
-            "\ '~/.vim/vimrc',
-            "\ '/data/vim/golfing',
-            "\ ]
+"       \ '~/.vim/vimrc',
+"       \ '/data/vim/golfing',
+"       \ ]
 
 " let g:startify_list_order = []
 " let g:startify_enable_special = 0
