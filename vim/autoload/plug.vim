@@ -73,7 +73,7 @@ let s:plug_tab = get(s:, 'plug_tab', -1)
 let s:plug_buf = get(s:, 'plug_buf', -1)
 let s:mac_gui = has('gui_macvim') && has('gui_running')
 let s:is_win = has('win32') || has('win64')
-let s:nvim = exists('##JobActivity') && !s:is_win
+let s:nvim = has('nvim') && !s:is_win
 let s:me = resolve(expand('<sfile>:p'))
 let s:base_spec = { 'branch': 'master', 'frozen': 0 }
 let s:TYPE = {
@@ -83,6 +83,7 @@ let s:TYPE = {
 \   'funcref': type(function('call'))
 \ }
 let s:loaded = get(s:, 'loaded', {})
+let s:triggers = get(s:, 'triggers', {})
 
 function! plug#begin(...)
   if a:0 > 0
@@ -99,6 +100,7 @@ function! plug#begin(...)
   let g:plug_home = home
   let g:plugs = {}
   let g:plugs_order = []
+  let s:triggers = {}
 
   call s:define_commands()
   return 1
@@ -134,6 +136,10 @@ function! s:source(from, ...)
   endfor
 endfunction
 
+function! s:assoc(dict, key, val)
+  let a:dict[a:key] = add(get(a:dict, a:key, []), a:val)
+endfunction
+
 function! plug#end()
   if !exists('g:plugs')
     return s:err('Call plug#begin() first')
@@ -145,7 +151,7 @@ function! plug#end()
     augroup END
     augroup! PlugLOD
   endif
-  let lod = {}
+  let lod = { 'ft': {}, 'map': {}, 'cmd': {} }
 
   filetype off
   for name in g:plugs_order
@@ -156,20 +162,18 @@ function! plug#end()
     endif
 
     if has_key(plug, 'on')
+      let s:triggers[name] = { 'map': [], 'cmd': [] }
       for cmd in s:to_a(plug.on)
         if cmd =~ '^<Plug>.\+'
           if empty(mapcheck(cmd)) && empty(mapcheck(cmd, 'i'))
-            for [mode, map_prefix, key_prefix] in
-                  \ [['i', '<C-O>', ''], ['n', '', ''], ['v', '', 'gv'], ['o', '', '']]
-              execute printf(
-              \ '%snoremap <silent> %s %s:<C-U>call <SID>lod_map(%s, %s, "%s")<CR>',
-              \ mode, cmd, map_prefix, string(cmd), string(name), key_prefix)
-            endfor
+            call s:assoc(lod.map, cmd, name)
           endif
-        elseif !exists(':'.cmd)
-          execute printf(
-          \ 'command! -nargs=* -range -bang %s call s:lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s)',
-          \ cmd, string(cmd), string(name))
+          call add(s:triggers[name].map, cmd)
+        elseif cmd =~ '^[A-Z]'
+          if exists(':'.cmd) != 2
+            call s:assoc(lod.cmd, cmd, name)
+          endif
+          call add(s:triggers[name].cmd, cmd)
         endif
       endfor
     endif
@@ -179,19 +183,31 @@ function! plug#end()
       if !empty(types)
         call s:source(s:rtp(plug), 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
       endif
-      for key in types
-        if !has_key(lod, key)
-          let lod[key] = []
-        endif
-        call add(lod[key], name)
+      for type in types
+        call s:assoc(lod.ft, type, name)
       endfor
     endif
   endfor
 
-  for [key, names] in items(lod)
+  for [cmd, names] in items(lod.cmd)
+    execute printf(
+    \ 'command! -nargs=* -range -bang %s call s:lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s)',
+    \ cmd, string(cmd), string(names))
+  endfor
+
+  for [map, names] in items(lod.map)
+    for [mode, map_prefix, key_prefix] in
+          \ [['i', '<C-O>', ''], ['n', '', ''], ['v', '', 'gv'], ['o', '', '']]
+      execute printf(
+      \ '%snoremap <silent> %s %s:<C-U>call <SID>lod_map(%s, %s, "%s")<CR>',
+      \ mode, map, map_prefix, string(map), string(names), key_prefix)
+    endfor
+  endfor
+
+  for [ft, names] in items(lod.ft)
     augroup PlugLOD
       execute printf('autocmd FileType %s call <SID>lod_ft(%s, %s)',
-            \ key, string(key), string(names))
+            \ ft, string(ft), string(names))
     augroup END
   endfor
 
@@ -324,8 +340,23 @@ function! plug#load(...)
   return 1
 endfunction
 
+function! s:remove_triggers(name)
+  if !has_key(s:triggers, a:name)
+    return
+  endif
+  for cmd in s:triggers[a:name].cmd
+    execute 'silent! delc' cmd
+  endfor
+  for map in s:triggers[a:name].map
+    execute 'silent! unmap' map
+    execute 'silent! iunmap' map
+  endfor
+  call remove(s:triggers, a:name)
+endfunction
+
 function! s:lod(names, types)
   for name in a:names
+    call s:remove_triggers(name)
     let s:loaded[name] = 1
   endfor
   call s:reorg_rtp()
@@ -345,16 +376,13 @@ function! s:lod_ft(pat, names)
   doautocmd filetypeindent FileType
 endfunction
 
-function! s:lod_cmd(cmd, bang, l1, l2, args, name)
-  execute 'delc' a:cmd
-  call s:lod([a:name], ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
+function! s:lod_cmd(cmd, bang, l1, l2, args, names)
+  call s:lod(a:names, ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
   execute printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
 endfunction
 
-function! s:lod_map(map, name, prefix)
-  execute 'unmap' a:map
-  execute 'iunmap' a:map
-  call s:lod([a:name], ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
+function! s:lod_map(map, names, prefix)
+  call s:lod(a:names, ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
   let extra = ''
   while 1
     let c = getchar(0)
@@ -676,7 +704,7 @@ function! s:update_impl(pull, force, args) abort
     try
       call mkdir(g:plug_home, 'p')
     catch
-      return s:err(printf('Invalid plug directory: %s.'
+      return s:err(printf('Invalid plug directory: %s. '.
               \ 'Try to call plug#begin with a valid directory', g:plug_home))
     endtry
   endif
@@ -752,20 +780,18 @@ function! s:job_abort()
       call system('rm -rf ' . s:shellesc(g:plugs[name].dir))
     endif
   endfor
-  let s:jobs     = {}
-  let s:jobs_idx = {}
+  let s:jobs = {}
 endfunction
 
-function! s:job_handler() abort
+function! s:job_handler(name) abort
   if !s:plug_window_exists() " plug window closed
     return s:job_abort()
   endif
 
-  let name = get(s:jobs_idx, v:job_data[0], '')
-  if empty(name) " stale task
+  if !has_key(s:jobs, a:name)
     return
   endif
-  let job = s:jobs[name]
+  let job = s:jobs[a:name]
 
   if v:job_data[1] == 'exit'
     let job.running = 0
@@ -773,14 +799,14 @@ function! s:job_handler() abort
       let job.error = 1
       let job.result = substitute(job.result, "Error[\r\n]$", '', '')
     endif
-    call s:reap(name)
+    call s:reap(a:name)
     call s:tick()
   else
     let job.result .= s:to_s(v:job_data[2])
     " To reduce the number of buffer updates
     let job.tick = get(job, 'tick', -1) + 1
     if job.tick % len(s:jobs) == 0
-      call s:log(job.new ? '+' : '*', name, job.result)
+      call s:log(job.new ? '+' : '*', a:name, job.result)
     endif
   endif
 endfunction
@@ -795,10 +821,9 @@ function! s:spawn(name, cmd, opts)
             \ (has_key(a:opts, 'dir') ? s:with_cd(a:cmd, a:opts.dir) : a:cmd)
             \ . ' || echo Error'])
     if x > 0
-      let s:jobs_idx[x] = a:name
       let job.jobid = x
       augroup PlugJobControl
-        execute 'autocmd JobActivity' a:name 'call s:job_handler()'
+        execute 'autocmd JobActivity' a:name printf('call s:job_handler(%s)', string(a:name))
       augroup END
     else
       let job.running = 0
@@ -869,8 +894,7 @@ function! s:log(bullet, name, lines)
 endfunction
 
 function! s:update_vim()
-  let s:jobs     = {}
-  let s:jobs_idx = {}
+  let s:jobs = {}
 
   call s:bar()
   call s:tick()
@@ -899,7 +923,7 @@ while 1 " Without TCO, Vim stack is bound to explode
     if valid
       if pull
         call s:spawn(name,
-          \ printf('git checkout -q %s 2>&1 && git pull --progress --no-rebase origin %s 2>&1 && git submodule update --init --recursive 2>&1',
+          \ printf('(git fetch --progress 2>&1 && git checkout -q %s 2>&1 && git merge --ff-only origin/%s 2>&1 && git submodule update --init --recursive 2>&1)',
           \ s:shellesc(spec.branch), s:shellesc(spec.branch)), { 'dir': spec.dir })
       else
         let s:jobs[name] = { 'running': 0, 'result': 'Already installed', 'error': 0 }
@@ -1110,7 +1134,7 @@ function! s:update_ruby()
               else
                 if pull
                   log.call name, 'Updating ...', :update
-                  bt.call "#{cd} #{dir} && git checkout -q #{branch} 2>&1 && (git pull --no-rebase origin #{branch} #{progress} 2>&1 && #{subm})", name, :update, nil
+                  bt.call "#{cd} #{dir} && (git fetch #{progress} 2>&1 && git checkout -q #{branch} 2>&1 && git merge --ff-only origin/#{branch} 2>&1 && #{subm})", name, :update, nil
                 else
                   [true, skip]
                 end
@@ -1251,7 +1275,7 @@ function! s:clean(force)
     call append(line('$'), 'Already clean.')
   else
     call inputsave()
-    let yes = a:force || (input('Proceed? (Y/N) ') =~? '^y')
+    let yes = a:force || (input('Proceed? (y/N) ') =~? '^y')
     call inputrestore()
     if yes
       for dir in todo
@@ -1468,7 +1492,7 @@ endfunction
 function! s:revert()
   let name = s:find_name(line('.'))
   if empty(name) || !has_key(g:plugs, name) ||
-    \ input(printf('Revert the update of %s? (Y/N) ', name)) !~? '^y'
+    \ input(printf('Revert the update of %s? (y/N) ', name)) !~? '^y'
     return
   endif
 

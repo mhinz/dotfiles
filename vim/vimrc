@@ -10,14 +10,9 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion'
-  Plug 'junegunn/fzf',             { 'on': 'FZF', 'do': 'yes \| ./install' }
-  Plug 'junegunn/goyo.vim',        { 'on': 'Goyo' }
-  Plug 'junegunn/seoul256.vim'
-  Plug 'junegunn/vader.vim',       { 'on': 'Vader', 'for': 'vader' }
+  Plug 'junegunn/fzf',               { 'on': 'FZF', 'do': 'yes \| ./install' }
   Plug 'junegunn/vim-easy-align'
-  Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-  Plug 'lervag/vim-latex',         { 'for': 'tex' }
-  Plug 'marijnh/tern_for_vim',     { 'for': 'javascript' }
+  Plug 'marijnh/tern_for_vim',       { 'for': 'javascript' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -25,12 +20,9 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-surround'
 
   Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-perf'
   Plug '/data/github/vim-randomtag', { 'on': 'Random' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
-  Plug '/data/github/vim-tmuxify'
-  Plug '/data/github/vim-haskellrocks'
 call plug#end()
 
 " init {{{1
@@ -40,7 +32,7 @@ syntax   on
 "autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
 
-let s:darwin = has('mac')
+let s:mac = has('mac')
 
 " set {{{1
 " indent settings
@@ -658,10 +650,14 @@ let g:startify_skiplist = [
       \ '\.vimgolf',
       \ ]
 
-let g:startify_custom_header = s:darwin
-      \ ? map(split(system('tips | cowthink'), '\n'), '"   ". v:val') + ['']
-      \ : map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
-" let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
+function s:center_header(lines) abort
+  let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
+  let centered_lines = map(copy(a:lines), 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+  return centered_lines
+endfunction
+
+let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
+let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
 
 "function! s:foo()
     "redir => var
@@ -680,6 +676,7 @@ let g:startify_custom_header = s:darwin
 " let g:startify_list_order       = ['files', 'bookmarks', 'sessions', 'dir']
 " let g:startify_bookmarks        = [ expand('<sfile>:p:~') ]
 " let g:startify_bookmarks        = [
+"       \ '/data/github/vim-startify',
 "       \ '~/.vim/vimrc',
 "       \ '/data/vim/golfing',
 "       \ ]
@@ -688,11 +685,3 @@ let g:startify_custom_header = s:darwin
 " let g:startify_enable_special = 0
 " let g:startify_custom_header = ['hello']
 " let g:startify_custom_footer = ['world']
-
-" plugins: vim-tmuxify {{{2
-let g:tmuxify_custom_command = 'tmux split-window -d -l 10'
-let g:tmuxify_run = {
-      \ 'sh':   'bash %',
-      \ 'go':   'go build %',
-      \ 'ruby': 'ruby %',
-      \ }

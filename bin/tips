@@ -2,6 +2,8 @@
 # encoding: utf-8
 
 tips = [
+  "Unix was not designed to stop its users from doing stupid things, as that would also stop them from doing clever things.",
+  "Contrary to popular belief, Unix is user friendly. It just happens to be very selective about who it decides to make friends with.",
   "Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away. -- Antoine de Saint-Exupéry",
   "There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. -- C.A.R. Hoare",
   "Gott existiert, weil die Mathematik widerspruchsfrei ist, und der Teufel existiert, weil wir das nicht beweisen können. -- Andre Weil",

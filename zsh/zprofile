@@ -6,6 +6,7 @@ export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
 export NNTPSERVER=news.fu-berlin.de
 export PLAN9=/data/repo/plan9port
+export STUDIO_JDK=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk
 
 if [[ `uname -s` == 'Darwin' ]]; then
     export GOPATH=/data/go GOARCH=amd64 GOOS=darwin
