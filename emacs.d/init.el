@@ -1,76 +1,76 @@
-(require 'cl)
-
 (defvar packages
-  '(color-theme
-    zenburn
-    rainbow-mode
-    haskell-mode
-    erlang))
+  '(("ace-jump-mode" ace-jump-mode)
+    ("async" async)
+    ("color-theme" color-theme)
+    ("erlang" erlang)
+    ("evil" evil)
+    ("evil-surround" evil-surround)
+    ("evil-visualstar" evil-visualstar)
+    ("folding-mode" folding)
+    ("haskell-mode" haskell-mode)
+    ("helm" helm)
+    ("structured-haskell-mode/elisp" shm)
+    ("linum-relative" linum-relative)
+    ("undo-tree" undo-tree)
+    ("zenburn" zenburn)))
 
 (defvar configs
-  '("global"
-    "haskell"
-    "erlang"
-    "evil"))
+  '("erlang"
+    "haskell"))
 
-(loop for name in packages
-      do (progn (unless (fboundp name)
-                  (add-to-list 'load-path
-                               (concat (file-name-directory (or load-file-name
-                                                                (buffer-file-name)))
-                                       "packages/"
-                                       (symbol-name name)))
-                  (require name))))
+(require 'cl)
 
-(add-to-list 'load-path
-             (concat (file-name-directory load-file-name)
-                     "packages/"))
+(loop for package in packages
+      do (progn
+	   (add-to-list 'load-path
+			(concat (file-name-directory load-file-name)
+				"packages/"
+				(car package)))
+	   (require (car (cdr package)))))
 
 (loop for name in configs
       do (load (concat (file-name-directory load-file-name)
-                       "configs/"
-                       name ".el")))
+		       "configs/"
+		       name ".el")))
 
-(show-paren-mode 1)
-(line-number-mode 1)
-(column-number-mode 1)
-(size-indication-mode 1)
-(transient-mark-mode 1)
-(delete-selection-mode 1)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+
+;; GLOBAL CONFIGURATION
+
+(setq inhibit-splash-screen t)
+(setq initial-scratch-message nil)
+(setq ring-bell-function 'ignore)
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
-;; page-break-mode
-(load "~/.emacs.d/modes/site-page-break-mode.el")
+(show-paren-mode t)
+(line-number-mode t)
+(column-number-mode t)
 
-;; opal mode
-;;(setq load-path (cons "/data/opal/lib/emacs" load-path))
-;;(defvar opal-novice t)
-;;(require 'opal-mode)
+(if window-system
+    (progn
+      (custom-set-faces
+       '(default ((t (:inherit nil :height 130 :width normal :family "Monaco")))))
+      (load-theme 'subatomic t))
+    (load-theme 'wombat t))
 
-;; gnus
-(setq-default
- gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B%s%)\n"
- gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
- gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
- gnus-thread-sort-functions '(gnus-thread-sort-by-date)
- gnus-sum-thread-tree-false-root ""
- gnus-sum-thread-tree-indent " "
- gnus-sum-thread-tree-leaf-with-other "├► "
- gnus-sum-thread-tree-root ""
- gnus-sum-thread-tree-single-leaf "╰► "
- gnus-sum-thread-tree-vertical "│")
-nil
+(require 'saveplace)
+(setq-default save-place t)
 
-;; ido-mode
-(require 'ido)
-(ido-mode t)
-(setq ido-enable-flex-matching t)
+(setq linum-relative-format "%3s ")
+(setq linum-relative-current-symbol "")
 
-;; sml-mode
-(defun my-sml-mode-hook ()
-  (electric-indent-mode 1))
-(add-hook 'sml-mode-hook 'my-sml-mode-hook)
+(global-undo-tree-mode)
+(setq undo-tree-auto-save-history t)
+
+(evil-mode t)
+(global-evil-surround-mode t)
+(global-evil-visualstar-mode t)
+(defalias 'redo 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
+
+(load "folding" 'noerror)
+(folding-mode-add-find-file-hook)
