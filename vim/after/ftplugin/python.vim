@@ -4,4 +4,4 @@ let python_highlight_all = 1
 
 setlocal keywordprg=pydoc
 
-nnoremap <buffer><f8> :!python %<cr>
+nnoremap <buffer><f8> :!./%<cr>

@@ -10,9 +10,11 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion'
-  Plug 'junegunn/fzf',               { 'on': 'FZF', 'do': 'yes \| ./install' }
+  Plug 'fatih/vim-go',                { 'for': 'go' }
   Plug 'junegunn/vim-easy-align'
-  Plug 'marijnh/tern_for_vim',       { 'for': 'javascript' }
+  Plug 'majutsushi/tagbar'
+  Plug 'marijnh/tern_for_vim',        { 'for': 'javascript' }
+  Plug 'morhetz/gruvbox'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -20,7 +22,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-surround'
 
   Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-randomtag', { 'on': 'Random' }
+  Plug '/data/github/vim-randomtag',  { 'on': 'Random' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
 call plug#end()
@@ -172,6 +174,7 @@ let mapleader = ';'
 nnoremap \            ;
 nnoremap gl           <c-^>
 
+nnoremap <f1>         :TagbarToggle<cr>
 nnoremap <f8>         :Make<cr>
 nnoremap <f9>         :Dispatch<cr>
 nnoremap <f10>        :Start<cr>
@@ -269,6 +272,11 @@ xnoremap <leader>*    :<c-u>silent! execute <sid>search_all()<cr>
 if !empty($TMUX)
   nnoremap <c-a>      <nop>
   nnoremap <leader>a  <c-a>
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 if has('cscope')
@@ -449,7 +457,7 @@ endfunction
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['seoul256', 'zenburn', 'pyte']
+  for scheme in ['gruvbox']
     try
       execute 'colorscheme' scheme
       break
@@ -475,7 +483,7 @@ else
           \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
           \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
   augroup END
-  for scheme in ['janah', 'zenburn', 'xoria256', 'tango2']
+  for scheme in ['janah', 'gruvbox', 'desert']
     try
       execute 'colorscheme' scheme
       break
@@ -635,16 +643,18 @@ let g:startify_list_order = [
 "       \ autocmd InsertEnter <buffer> enew
 
 let g:startify_relative_path          = 0
-let g:startify_files_number           = 10
+let g:startify_files_number           = 8
 let g:startify_session_persistence    = 1
 let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_change_to_dir          = 1
 let g:startify_enable_special         = 0
+let g:startify_enable_unsafe          = 1
 " let g:startify_custom_indices         = ['f', 'g', 'h']
 
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
+      \ '\.fugitiveblame',
       \ $VIMRUNTIME .'/doc',
       \ 'bundle/.*/doc',
       \ '\.vimgolf',
@@ -675,11 +685,10 @@ let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help u
 " let g:startify_custom_indices   = map(range(1,100), 'string(v:val)')
 " let g:startify_list_order       = ['files', 'bookmarks', 'sessions', 'dir']
 " let g:startify_bookmarks        = [ expand('<sfile>:p:~') ]
-" let g:startify_bookmarks        = [
-"       \ '/data/github/vim-startify',
-"       \ '~/.vim/vimrc',
-"       \ '/data/vim/golfing',
-"       \ ]
+let g:startify_bookmarks        = [
+      \ '/data/vim/golfing',
+      \ '/data/codegolf',
+      \ ]
 
 " let g:startify_list_order = []
 " let g:startify_enable_special = 0
