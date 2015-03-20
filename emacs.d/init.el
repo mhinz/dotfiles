@@ -1,3 +1,15 @@
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+
+(setq backup-directory-alist `(("." . "~/.emacs.d/saves"))
+     backup-by-copying t
+     kept-new-versions 6
+     kept-old-versions 2
+     version-control t)
+;;(autoload 'ghc-init "ghc" nil t)
+;;(autoload 'ghc-debug "ghc" nil t)
+;;(Add-hook 'haskell-mode-hook 'ghc-init)
+
 (defvar packages
   '(("ace-jump-mode" ace-jump-mode)
     ("async" async)
@@ -9,27 +21,35 @@
     ("folding-mode" folding)
     ("haskell-mode" haskell-mode)
     ("helm" helm)
-    ("structured-haskell-mode/elisp" shm)
     ("linum-relative" linum-relative)
+    ("moe-theme.el" moe-theme)
+    ("rainbow-delimiters" rainbow-delimiters)
+    ("slime" slime)
+    ("structured-haskell-mode/elisp" shm)
     ("undo-tree" undo-tree)
-    ("zenburn" zenburn)))
+    ("zenburn" zenburn))
+  "Packges to be loaded from ~/.emacs.d/packages/.")
 
 (defvar configs
   '("erlang"
-    "haskell"))
+    "haskell"
+    "lisp")
+  "Custom configurations for specific tasks.")
 
 (require 'cl)
 
 (loop for package in packages
       do (progn
 	   (add-to-list 'load-path
-			(concat (file-name-directory load-file-name)
+			(concat (file-name-directory (or load-file-name
+							 (buffer-file-name)))
 				"packages/"
 				(car package)))
 	   (require (car (cdr package)))))
 
 (loop for name in configs
-      do (load (concat (file-name-directory load-file-name)
+      do (load (concat (file-name-directory (or load-file-name
+						(buffer-file-name)))
 		       "configs/"
 		       name ".el")))
 
@@ -46,14 +66,16 @@
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
-(show-paren-mode t)
 (line-number-mode t)
 (column-number-mode t)
+
+(show-paren-mode t)
+(setq show-paren-delay 0)
 
 (if window-system
     (progn
       (custom-set-faces
-       '(default ((t (:inherit nil :height 130 :width normal :family "Monaco")))))
+       '(default ((t (:inherit nil :height 126 :width normal :family "Monaco")))))
       (load-theme 'subatomic t))
     (load-theme 'wombat t))
 
@@ -74,3 +96,8 @@
 
 (load "folding" 'noerror)
 (folding-mode-add-find-file-hook)
+
+(global-set-key (kbd "C-h") 'delete-backward-char)
+(global-set-key (kbd "M-h") 'help-command)
+(global-set-key (kbd "C-c C-m") 'execute-extended-command)
+(global-set-key (kbd "C-c C-;") 'eval-expression)

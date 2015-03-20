@@ -1,7 +1,14 @@
 #!/bin/sh
 
 cd /data/languages/go/src
-echo '>> Looking for changes..'
-hg pull -u | grep 'no changes found' && exit 1
-echo '>> Start compiling..'
+
+if [[ $1 == '-f' ]]; then
+    echo '[!] Force building..'
+else
+    echo '[*] Looking for changes..'
+    git pull | grep 'Already up-to-date.' && echo '[!] Nothing to do.' && exit 1
+fi
+
+echo '[*] Start compiling..'
 ./all.bash
+echo '[*] Finished.'
