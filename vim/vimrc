@@ -7,6 +7,7 @@
 "                ║           ⎋ HERE BE VIMPIRES ⎋           ║
 "                ╚══════════════════════════════════════════╝
 "
+
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion'
@@ -350,13 +351,17 @@ command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d
       \ )
 
 " functions {{{1
-function! s:cd(bang) abort
+function! s:cd(bang)
   if &buftype == 'nofile' || expand('%') =~# '^fugitive'
     return
   endif
   let s:cache = {}
   let dirs    = [ '.git', '.hg', '.svn' ]
   let curdir  = resolve(expand('%:p:h'))
+  if !isdirectory(curdir)
+    echohl WarningMsg | echo 'No such directory: '. curdir | echohl NONE
+    return
+  endif
   if has_key(s:cache, curdir)
     execute (a:bang ? 'cd' : 'lcd') s:cache.curdir
     return

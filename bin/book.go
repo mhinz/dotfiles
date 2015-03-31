@@ -90,14 +90,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	switch filepath.Ext(fnames[input]) {
-	case ".pdf":
-		run("zathura", fnames[input])
-	case ".chm":
-		run("xchm", fnames[input])
-	case ".djvu":
-		run("djview", fnames[input])
-	default:
-		fmt.Println("\033[31mI can't handle that file!")
-	}
+	run("open", fnames[input])
+	// switch filepath.Ext(fnames[input]) {
+	// case ".pdf":
+	// 	run("zathura", fnames[input])
+	// case ".chm":
+	// 	run("xchm", fnames[input])
+	// case ".djvu":
+	// 	run("djview", fnames[input])
+	// default:
+	// 	fmt.Println("\033[31mI can't handle that file!")
+	// }
 }

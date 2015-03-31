@@ -230,7 +230,6 @@ alias g='git'
 alias gdb='gdb -q'
 alias gitk='gitk --all'
 alias grep='grep --color=always'
-alias here='command urxvtc -cd $PWD'
 alias i='$EDITOR /data/life/ideas'
 alias kdwm='killall dwm'
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
@@ -250,7 +249,7 @@ alias flush='dscacheutil -flushcache'
 
 alias v='vim'
 alias vu='vim -u NONE -U NONE -i NONE -N'
-alias nv=nvim
+alias nvim='VIMRUNTIME=/data/repo/neovim/runtime nvim'
 
 alias h="cd ..; l"
 alias ..="cd .."
@@ -493,5 +492,13 @@ fancy-ctrl-z() {
 
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+here() {
+    if (($+TMUX)); then
+        tmux new-window -c "#{pane_current_path}"
+    else
+        command urxvtc -cd $PWD
+    fi
+}
 
 # vim: et sts=4 sw=4
