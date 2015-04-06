@@ -10,21 +10,17 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
-  Plug 'tmux-plugins/vim-tmux'
   Plug 'Lokaltog/vim-easymotion'
-  Plug 'fatih/vim-go',                { 'for': 'go' }
   Plug 'junegunn/vim-easy-align'
   Plug 'majutsushi/tagbar'
-  Plug 'marijnh/tern_for_vim',        { 'for': 'javascript' }
-  Plug 'morhetz/gruvbox'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
+  Plug '/data/github/nvim-erlang_rocks'
   Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-randomtag',  { 'on': 'Random' }
+  Plug '/data/github/vim-randomtag', { 'on': 'Random' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
 call plug#end()
@@ -271,15 +267,28 @@ xnoremap *            :<c-u>call <sid>search()<cr>//<cr>
 xnoremap #            :<c-u>call <sid>search()<cr>??<cr>
 xnoremap <leader>*    :<c-u>silent! execute <sid>search_all()<cr>
 
-if !empty($TMUX)
-  nnoremap <c-a>      <nop>
-  nnoremap <leader>a  <c-a>
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+if has('nvim')
+  tnoremap <esc> <c-\><c-n>
+  tnoremap <a-h> <c-\><c-n><c-w>h
+  tnoremap <a-j> <c-\><c-n><c-w>j
+  tnoremap <a-k> <c-\><c-n><c-w>k
+  tnoremap <a-l> <c-\><c-n><c-w>l
+  nnoremap <a-h> <c-w>h
+  nnoremap <a-j> <c-w>j
+  nnoremap <a-k> <c-w>k
+  nnoremap <a-l> <c-w>l
 endif
+
+  " let &t_SI = "\<Esc>[4 q"
+" if !empty($TMUX)
+"   nnoremap <c-a>      <nop>
+"   nnoremap <leader>a  <c-a>
+"   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+"   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+" else
+"   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" endif
 
 if has('cscope')
   set cscopetag
@@ -580,7 +589,7 @@ let g:syntastic_cpp_compiler_options = '-std=c++11 -pedantic -Wall -Wextra -Weff
 
 " plugins: tagbar {{{2
 let g:tagbar_width     = 40
-let g:tagbar_autoclose = 1
+let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
