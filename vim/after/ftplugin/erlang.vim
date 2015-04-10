@@ -1,3 +1,4 @@
 setlocal comments-=:%
 
-nnoremap <buffer><f8> :!erlc %<cr>
+nnoremap <buffer> <f7> :Repl<cr>
+nnoremap <buffer> <f8> :ReplCompile<cr>

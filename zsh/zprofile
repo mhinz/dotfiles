@@ -4,7 +4,7 @@ export TERM=rxvt-256color
 export EDITOR=vim
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
-export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+# export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 if [[ `uname -s` == 'Darwin' ]]; then
     export GOPATH=/data/go GOARCH=amd64 GOOS=darwin
@@ -28,7 +28,8 @@ do
 done
 
 for dir in \
-    /usr/local/opt/coreutils/libexec/gnuman
+    /usr/local/opt/coreutils/libexec/gnuman \
+    /Users/mhi/.fzf/man
 do
     [[ -d $dir ]] && manpath=($dir $path)
 done

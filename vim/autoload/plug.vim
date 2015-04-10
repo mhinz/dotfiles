@@ -74,7 +74,7 @@ let s:mac_gui = has('gui_macvim') && has('gui_running')
 let s:is_win = has('win32') || has('win64')
 let s:py2 = has('python') && !has('nvim') && !s:is_win && !has('win32unix')
 let s:ruby = has('ruby') && !has('nvim') && (v:version >= 703 || v:version == 702 && has('patch374'))
-let s:nvim = has('nvim') && !exists('##JobActivity') && !s:is_win
+let s:nvim = has('nvim') && exists('*jobwait') && !s:is_win
 let s:me = resolve(expand('<sfile>:p'))
 let s:base_spec = { 'branch': 'master', 'frozen': 0 }
 let s:TYPE = {
@@ -270,7 +270,7 @@ if s:is_win
   endfunction
 
   function! s:is_local_plug(repo)
-    return a:repo =~? '^[a-z]:'
+    return a:repo =~? '^[a-z]:\|^[%~]'
   endfunction
 else
   function! s:rtp(spec)
@@ -738,6 +738,12 @@ function! s:update_impl(pull, force, args) abort
       return s:err(printf('Invalid plug directory: %s. '.
               \ 'Try to call plug#begin with a valid directory', g:plug_home))
     endtry
+  endif
+
+  if has('nvim') && !exists('*jobwait') && threads > 1
+    echohl WarningMsg
+    echomsg 'vim-plug: update Neovim for parallel installer'
+    echohl None
   endif
 
   let s:update = {

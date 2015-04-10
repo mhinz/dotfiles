@@ -19,6 +19,8 @@ watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
+source '/Users/mhi/local/fzf/shell/key-bindings.zsh'
+
 # misc options {{{1
 
 # changing directories
