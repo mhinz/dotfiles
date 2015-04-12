@@ -10,12 +10,13 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
-  Plug 'Lokaltog/vim-easymotion'
+  Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'junegunn/fzf',                   { 'dir': '~/local/fzf' }
-  Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
+  Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'junegunn/vim-peekaboo'
+  Plug 'justinmk/vim-gtfo'
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
