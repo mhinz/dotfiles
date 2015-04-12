@@ -11,9 +11,12 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion'
-  Plug 'junegunn/fzf', { 'dir': '~/local/fzf', 'do': 'yes \| ./install' }
+  Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'junegunn/fzf',                   { 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align'
-  Plug 'majutsushi/tagbar'
+  Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
+  Plug 'junegunn/vim-peekaboo'
+  Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
@@ -21,7 +24,7 @@ call plug#begin('~/.vim/bundle')
 
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
   Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-randomtag', { 'on': 'Random' }
+  Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
 call plug#end()
@@ -171,9 +174,14 @@ digraph ./ 8230
 let mapleader = ';'
 
 nnoremap \            ;
+nmap     ga           <plug>(UnicodeGA)
 nnoremap gl           <c-^>
 
+imap     <c-x><c-z>   <plug>(UnicodeComplete)
+
 nnoremap <f1>         :TagbarToggle<cr>
+nnoremap <f2>         :GHDashboard! mhinz<cr>
+nnoremap <f3>         :GHActivity! mhinz<cr>
 nnoremap <f8>         :Make<cr>
 nnoremap <f9>         :Dispatch<cr>
 nnoremap <f10>        :Start<cr>
@@ -183,6 +191,7 @@ nnoremap <f12>        :set spell!<cr>
 nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <c-g>        :FileInfo<cr>
+nnoremap <c-p>        :FZF<cr>
 
 inoremap jf           <esc>
 inoremap <expr> <tab> <sid>tab_yeah("\<c-n>", "\<tab>")
