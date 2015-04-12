@@ -10,18 +10,23 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
+  Plug 'Keithbsmiley/investigate.vim'
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'fatih/vim-go',                   { 'for': 'go' }
   Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'junegunn/vim-peekaboo'
   Plug 'justinmk/vim-gtfo'
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
+  Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
+  Plug 'scrooloose/nerdtree',            { 'on': 'NERDTreeToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
+  Plug 'wting/rust.vim',                 { 'for': 'rust'  }
 
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
   Plug '/data/github/vim-janah'
@@ -180,9 +185,11 @@ nnoremap gl           <c-^>
 
 imap     <c-x><c-z>   <plug>(UnicodeComplete)
 
-nnoremap <f1>         :TagbarToggle<cr>
-nnoremap <f2>         :GHDashboard! mhinz<cr>
-nnoremap <f3>         :GHActivity! mhinz<cr>
+nnoremap <f1>         :NERDTreeToggle<cr>
+nnoremap <f2>         :TagbarToggle<cr>
+nnoremap <f3>         :UndotreeToggle<cr>
+nnoremap <f4>         :GHDashboard! mhinz<cr>
+nnoremap <f5>         :GHActivity! mhinz<cr>
 nnoremap <f8>         :Make<cr>
 nnoremap <f9>         :Dispatch<cr>
 nnoremap <f10>        :Start<cr>
