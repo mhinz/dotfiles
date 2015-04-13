@@ -14,6 +14,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'fatih/vim-go',                   { 'for': 'go' }
+  Plug 'godlygeek/csapprox',             { 'for': 'fugitiveblame' }
   Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
