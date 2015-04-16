@@ -34,6 +34,7 @@ call plug#begin('~/.vim/bundle')
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
+  Plug '/data/github/vim-trace'
 call plug#end()
 
 " init {{{1
