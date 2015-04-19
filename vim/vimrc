@@ -30,11 +30,12 @@ call plug#begin('~/.vim/bundle')
   Plug 'wting/rust.vim',                 { 'for': 'rust'  }
 
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
+  Plug '/data/github/nvim-shell'
   Plug '/data/github/vim-janah'
+  Plug '/data/github/vim-profiling'
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
-  Plug '/data/github/vim-trace'
 call plug#end()
 
 " init {{{1
@@ -93,6 +94,7 @@ set noautoread
 set noautowrite
 set noautowriteall
 set noequalalways
+set clipboard     =unnamedplus
 set relativenumber
 set noerrorbells
 set nofsync
@@ -327,7 +329,7 @@ augroup myvimrc
   au BufRead,BufNewFile /data/repo/vim/*            setlocal noet
   au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal sw=4 sts=4
   au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
-  au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make
+  au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
   au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
