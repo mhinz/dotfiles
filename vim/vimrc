@@ -29,8 +29,9 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-surround'
   Plug 'wting/rust.vim',                 { 'for': 'rust'  }
 
+  Plug '/data/github/nvim-builder'
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
-  Plug '/data/github/nvim-shell'
+  Plug '/data/github/nvim-grepper'
   Plug '/data/github/vim-janah'
   Plug '/data/github/vim-profiling'
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
@@ -94,7 +95,7 @@ set noautoread
 set noautowrite
 set noautowriteall
 set noequalalways
-set clipboard     =unnamedplus
+set clipboard     =unnamed
 set relativenumber
 set noerrorbells
 set nofsync
@@ -267,6 +268,7 @@ nnoremap <leader>j    <C-^>
 nnoremap <leader>v    `[v`]
 
 nnoremap <leader>f    :FZF<cr>
+nnoremap <leader>g    :Grep 
 nnoremap <leader>q    :call Qlose()<cr>
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
