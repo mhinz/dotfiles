@@ -394,8 +394,8 @@ edit_configs() {
         v           ~/.vim/vimrc
         x           ~/.Xdefaults
         xi          ~/.xinitrc
-        zp          ~/.zprofile
-        zr          ~/.zshrc
+        zp          ~/.zsh/.zprofile
+        zr          ~/.zsh/.zshrc
     )
     #select i in ${(k)configs}; do $EDITOR ${configs[$i]}; break; done
 
