@@ -19,6 +19,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'junegunn/vim-peekaboo'
+  Plug 'lervag/vimtex',                  { 'for': 'tex' }
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
   Plug 'scrooloose/nerdtree',            { 'on': 'NERDTreeToggle' }

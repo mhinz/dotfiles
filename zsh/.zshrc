@@ -199,6 +199,9 @@ hash -d torrents='/data/torrents/downloads'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
+alias -g L='| less -r'
+alias -g N='> /dev/null'
+
 alias ex='exercism'
 alias help='run-help'
 

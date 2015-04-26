@@ -24,11 +24,11 @@
     cl    = clone
     co    = checkout
     cp    = cherry-pick
-    d     = diff --no-ext-diff
+    d     = diff --color --no-ext-diff
     dc    = describe --contains
-    dc    = diff --no-ext-diff --cached
-    ds    = diff --no-ext-diff --stat
-    dsc   = diff --no-ext-diff --stat --cached
+    dc    = diff --color --no-ext-diff --cached
+    ds    = diff --color --no-ext-diff --stat
+    dcs   = diff --color --no-ext-diff --stat --cached
     dt    = difftool
     f     = fetch
     fp    = format-patch
