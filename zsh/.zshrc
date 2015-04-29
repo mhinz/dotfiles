@@ -1,7 +1,5 @@
 #!/usr/bin/zsh
 
-fpath=(~/.zsh $fpath)
-
 eval $(dircolors ~/.zsh/dircolors)
 
 [[ $DISPLAY == screen* ]] && stty erase '^?'
@@ -202,7 +200,6 @@ hash -d z='/data/repo/zsh'
 alias -g L='| less -r'
 alias -g N='> /dev/null'
 
-alias ex='exercism'
 alias help='run-help'
 
 alias pprof='/usr/bin/google-pprof'

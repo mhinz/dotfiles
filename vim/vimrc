@@ -22,6 +22,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'lervag/vimtex',                  { 'for': 'tex' }
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
+  Plug 'noahfrederick/vim-hemisu'
   Plug 'scrooloose/nerdtree',            { 'on': 'NERDTreeToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
@@ -268,7 +269,7 @@ nnoremap <leader>j    <C-^>
 nnoremap <leader>v    `[v`]
 
 nnoremap <leader>f    :FZF<cr>
-nnoremap <leader>g    :Grep 
+nnoremap <leader>g    :Grep<cr>
 nnoremap <leader>q    :call Qlose()<cr>
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
@@ -500,7 +501,7 @@ else
           \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
           \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
   augroup END
-  for scheme in ['janah', 'gruvbox', 'desert']
+  for scheme in ['janah', 'gruvbox', 'hemisu', 'desert']
     try
       execute 'colorscheme' scheme
       break

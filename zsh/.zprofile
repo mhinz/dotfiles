@@ -1,6 +1,8 @@
 #!/usr/bin/zsh
 
-export TERM=rxvt-256color
+# For login shells. Sourced before zshrc.
+
+export TERM=xterm-256color
 export EDITOR=vim
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
@@ -14,6 +16,7 @@ fi
 
 for dir in \
     /sbin \
+    /usr/local/sbin \
     /usr/local/opt/coreutils/libexec/gnubin \
     /usr/local/lib/node_modules/coffee-script/bin \
     /Library/PostgreSQL/9.4/bin \
@@ -28,8 +31,7 @@ do
 done
 
 for dir in \
-    /usr/local/opt/coreutils/libexec/gnuman \
-    /Users/mhi/.fzf/man
+    /usr/local/opt/coreutils/libexec/gnuman
 do
-    [[ -d $dir ]] && manpath=($dir $path)
+    [[ -d $dir ]] && manpath=($dir $manpath)
 done

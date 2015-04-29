@@ -27,8 +27,8 @@
     d     = diff --color --no-ext-diff
     dc    = describe --contains
     dc    = diff --color --no-ext-diff --cached
-    ds    = diff --color --no-ext-diff --stat
     dcs   = diff --color --no-ext-diff --stat --cached
+    ds    = diff --color --no-ext-diff --stat
     dt    = difftool
     f     = fetch
     fp    = format-patch
@@ -38,17 +38,19 @@
     la    = log --graph --all --oneline --decorate --date=relative -50
     lsr   = ls-remote
     m     = merge
+    ma    = merge --abort
     p     = push
     pl    = pull --ff-only
     r     = reset
-    rank  = shortlog -sn --no-merges
-    rem   = remote
-    re    = rebase
-    rc    = rebase --continue
-    rs    = rebase --skip
     ra    = rebase --abort
+    rank  = shortlog -sn --no-merges
+    rc    = rebase --continue
+    re    = rebase
+    rem   = remote
     ri    = rebase -i
     rl    = rev-list
+    rp    = rev-parse
+    rs    = rebase --skip
     s     = status -uno
     sb    = show-branch
     sh    = show
