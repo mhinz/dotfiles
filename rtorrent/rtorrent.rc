@@ -1,12 +1,13 @@
-directory  = /data/torrents/downloads
-session    = /data/torrents/session
+directory  = /data/torrent/download
+session    = /data/torrent/session
 
 schedule   = low_diskspace,5,60,close_low_diskspace=50M
+encryption = allow_incoming,try_outgoing,enable_retry,prefer_plaintext
 
 ip = 127.0.0.1
 
 port_range   = 32537-32537
-port_random  = no
+port_random  = yes
 
-dht           = off
+dht           = disable
 peer_exchange = false

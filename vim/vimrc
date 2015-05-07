@@ -36,6 +36,7 @@ call plug#begin('~/.vim/bundle')
   Plug '/data/github/vim-janah'
   Plug '/data/github/vim-profiling'
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
+  Plug '/data/github/vim-sayonara',      { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
 call plug#end()
@@ -83,6 +84,7 @@ set smartcase
 " misc settings
 set autoread
 set backspace     =indent,eol,start
+set clipboard     =unnamed
 set complete     -=i
 set cpoptions    -=e
 set diffopt       =filler,vertical,foldcolumn:0
@@ -92,18 +94,17 @@ set history       =10000
 set lazyredraw
 set more
 set mousemodel    =popup
-set noautoread
 set noautowrite
 set noautowriteall
 set noequalalways
-set clipboard     =unnamed
-set relativenumber
 set noerrorbells
 set nofsync
 set nojoinspaces
 set nrformats     =hex
 set pastetoggle   =<F5>
+set relativenumber
 set report        =0
+set sessionoptions-=options
 set shiftround
 set showfulltag
 set showtabline   =1
@@ -129,6 +130,7 @@ set wildmode      =list,full
 set wildoptions   =tagfile
 
 " display settings
+set display       =lastline
 set laststatus    =2
 set list
 set modeline
@@ -207,6 +209,7 @@ nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 nnoremap <c-g>        :FileInfo<cr>
 nnoremap <c-p>        :FZF<cr>
 
+inoremap <c-u>        <c-g>u<c-u>
 inoremap jf           <esc>
 inoremap <expr> <tab> <sid>tab_yeah("\<c-n>", "\<tab>")
 inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
@@ -270,7 +273,8 @@ nnoremap <leader>v    `[v`]
 
 nnoremap <leader>f    :FZF<cr>
 nnoremap <leader>g    :Grep<cr>
-nnoremap <leader>q    :call Qlose()<cr>
+nnoremap <silent><leader>q    :Sayonara<cr>
+nnoremap <silent><leader>Q    :Sayonara!<cr>
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
 
@@ -305,15 +309,15 @@ if has('nvim')
 endif
 
   " let &t_SI = "\<Esc>[4 q"
-" if !empty($TMUX)
-"   nnoremap <c-a>      <nop>
-"   nnoremap <leader>a  <c-a>
-"   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-"   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-" else
-"   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-"   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-" endif
+if !empty($TMUX)
+  nnoremap <c-a>      <nop>
+  nnoremap <leader>a  <c-a>
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
 
 " autocmd {{{1
 augroup myvimrc
@@ -322,9 +326,9 @@ augroup myvimrc
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 
   au BufEnter           *                           Cd
-  au BufEnter           *.txt                       if &bt == 'help' | silent wincmd T | endif
-  au BufLeave           *.h                         normal! mH
-  au BufLeave           *.{c,cpp}                   normal! mC
+  au BufEnter           *.txt                       if &bt == 'help' | call s:helpme() | endif
+  au BufLeave           *.h                         mark H
+  au BufLeave           *.{c,cpp}                   mark C
   au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
   au BufRead,BufNewFile *.adoc                      setfiletype asciidoc
   au BufRead,BufNewFile *.{md,mkd}                  setlocal ft=markdown tw=80
@@ -350,7 +354,7 @@ augroup END
 " commands {{{1
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
-command! -bar -bang                      Cd          call s:cd(<bang>0)
+command! -bar -bang    -complete=dir     Cd          call s:cd(<bang>0)
 command! -bar                            Scriptnames call <sid>scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call <sid>scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
@@ -364,19 +368,29 @@ command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d
       \ )
 
 " functions {{{1
-function! s:cd(bang)
-  if &buftype == 'nofile' || expand('%') =~# '^fugitive'
+function! s:helpme() abort
+  if winnr('$') == 2
+    wincmd L
+  else
+    wincmd T
+  endif
+endfunction
+
+function! s:cd(bang) abort
+  if &buftype =~# '\v(nofile|terminal)' || expand('%') =~# '^fugitive'
     return
   endif
-  let s:cache = {}
-  let dirs    = [ '.git', '.hg', '.svn' ]
-  let curdir  = resolve(expand('%:p:h'))
+  if !exists('s:cache')
+    let s:cache = {}
+  endif
+  let dirs   = [ '.git', '.hg', '.svn' ]
+  let curdir = resolve(expand('%:p:h'))
   if !isdirectory(curdir)
     echohl WarningMsg | echo 'No such directory: '. curdir | echohl NONE
     return
   endif
   if has_key(s:cache, curdir)
-    execute (a:bang ? 'cd' : 'lcd') s:cache.curdir
+    execute (a:bang ? 'cd' : 'lcd') s:cache[curdir]
     return
   endif
   for dir in dirs
@@ -440,23 +454,6 @@ function! Foldy()
   let fill = repeat(' ', linelen - (leftlen + rightlen))
 
   return left . fill . right . repeat(' ', 100)
-endfunction
-
-function! Qlose()
-  let nlisted = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-  if &bt == 'nofile' && &ft == 'vim'  " cmdline window
-    quit
-  elseif &bt == 'help'
-    try
-      tabclose
-    catch /E784/  " cannot close last tab page
-      quit
-    endtry
-  elseif nlisted > 1
-    bdelete
-  else
-    quit
-  endif
 endfunction
 
 function! s:search() abort
@@ -665,7 +662,7 @@ let g:startify_files_number           = 8
 let g:startify_session_persistence    = 1
 let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
-let g:startify_change_to_dir          = 1
+let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
 let g:startify_enable_unsafe          = 1
 " let g:startify_custom_indices         = ['f', 'g', 'h']
