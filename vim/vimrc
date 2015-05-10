@@ -30,11 +30,11 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-surround'
   Plug 'wting/rust.vim',                 { 'for': 'rust'  }
 
-  Plug '/data/github/nvim-builder'
+  " Plug '/data/github/nvim-builder'
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
-  Plug '/data/github/nvim-grepper'
+  " Plug '/data/github/nvim-grepper'
   Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-profiling'
+  " Plug '/data/github/vim-profiling'
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
   Plug '/data/github/vim-sayonara',      { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
@@ -104,7 +104,7 @@ set nrformats     =hex
 set pastetoggle   =<F5>
 set relativenumber
 set report        =0
-set sessionoptions-=options
+" set sessionoptions-=options
 set shiftround
 set showfulltag
 set showtabline   =1
@@ -636,11 +636,6 @@ omap ac <plug>(signify-motion-outer-pending)
 xmap ac <plug>(signify-motion-outer-visual)
 
 " plugins: vim-startify {{{2
-" let g:startify_list_order = [
-"       \ 'files',
-"       \ 'dir',
-"       \ 'sessions'
-"       \ ]
 let g:startify_list_order = [
       \ ['   MRU:'],
       \ 'files' ,
@@ -664,8 +659,10 @@ let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
-let g:startify_enable_unsafe          = 1
+let g:startify_enable_unsafe          = 0
+
 " let g:startify_custom_indices         = ['f', 'g', 'h']
+" let g:startify_custom_indices         = map(range(1,100), 'string(v:val)')
 
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
@@ -682,7 +679,7 @@ function! s:center_header(lines) abort
 endfunction
 
 let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
-let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
+" let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
 
 "function! s:foo()
     "redir => var
@@ -696,16 +693,3 @@ let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help u
 
 " let g:startify_session_savevars = ['g:foo']
 " let g:startify_session_savecmds = [ 'colo molokai' ]
-" let g:startify_restore_position = 1
-" let g:startify_custom_indices   = map(range(1,100), 'string(v:val)')
-" let g:startify_list_order       = ['files', 'bookmarks', 'sessions', 'dir']
-" let g:startify_bookmarks        = [ expand('<sfile>:p:~') ]
-let g:startify_bookmarks        = [
-      \ '/data/vim/golfing',
-      \ '/data/codegolf',
-      \ ]
-
-" let g:startify_list_order = []
-" let g:startify_enable_special = 0
-" let g:startify_custom_header = ['hello']
-" let g:startify_custom_footer = ['world']
