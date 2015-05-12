@@ -654,13 +654,14 @@ let g:startify_list_order = [
 
 let g:startify_relative_path          = 0
 let g:startify_files_number           = 8
-let g:startify_session_persistence    = 1
+let g:startify_session_persistence    = 0
 let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
 let g:startify_enable_unsafe          = 0
 
+" let g:startify_session_remove_lines   = ['winheight', 'winwidth']
 " let g:startify_custom_indices         = ['f', 'g', 'h']
 " let g:startify_custom_indices         = map(range(1,100), 'string(v:val)')
 
