@@ -19,6 +19,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'junegunn/vim-peekaboo'
+  Plug 'lambdatoast/elm.vim',
   Plug 'lervag/vimtex',                  { 'for': 'tex' }
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
@@ -32,7 +33,7 @@ call plug#begin('~/.vim/bundle')
 
   " Plug '/data/github/nvim-builder'
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
-  " Plug '/data/github/nvim-grepper'
+  Plug '/data/github/vim-grepper',       { 'on': 'Grepper' }
   Plug '/data/github/vim-janah'
   " Plug '/data/github/vim-profiling'
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
@@ -204,6 +205,7 @@ nnoremap <f10>        :Start<cr>
 nnoremap <f11>        :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
 
+nnoremap L            :put =''<cr>
 nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <c-g>        :FileInfo<cr>
@@ -284,7 +286,9 @@ nnoremap '            `
 nnoremap `            '
 
 nnoremap <bs>         <c-t>
-nmap     <expr> <cr>  &ft == 'vim' && &bt == 'nofile' ? '<cr>' : (exists('g:cscoped') ? '<leader>cg' : 'g<c-]>')
+nmap     <expr> <cr>  (&ft == 'vim' && &bt == 'nofile') \|\| &bt == 'quickfix'
+      \ ? '<cr>'
+      \ : exists('g:cscoped') ? '<leader>cg' : 'g<c-]>'
 
 cnoremap <c-n>        <down>
 cnoremap <c-p>        <up>
@@ -611,6 +615,15 @@ let g:EasyMotion_use_upper         = 0
 map <space>   <plug>(easymotion-s2)
 " map <Leader>j <plug>(easymotion-j)
 " map <Leader>k <plug>(easymotion-k)
+
+" plugins: vim-grepper {{{2
+let g:grepper = {
+      \ 'use_quickfix': 1,
+      \ 'do_open': 1,
+      \ 'order': ['grep', 'ack', 'ag'],
+      \ }
+ 
+" autocmd User Grepper execute g:grepper.use_quickfix ? 'copen' : 'lopen'
 
 " plugins: vim-signify {{{2
 let g:signify_vcs_list           = [ 'git', 'hg' ]

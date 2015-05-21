@@ -273,31 +273,35 @@ alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
 
-if [[ -x ${commands[sudo]} ]]
-then
-    alias ap='sudo aptitude'
-    alias ag='sudo apt-get'
-
-    alias aps='sudo aptitude search'
-    alias api='sudo aptitude install'
-    alias aga='sudo apt-get autoremove --purge'
-    alias upg='sudo apt-get update && sudo apt-get upgrade'
-    alias pur='sudo apt-get remove --purge'
-    alias cache='sudo apt-cache'
-
-    alias dpkg='sudo dpkg'
-    alias dpkg-reconfigure='sudo dpkg-reconfigure'
-
-    alias orp='sudo deborphan'
-    alias orph='sudo deborphan --libdevel --find-config'
-
-    alias arp='sudo arp'
-    alias pt='sudo powertop'
-
-    alias reboot='sudo shutdown -r now'
-    alias halt='sudo shutdown -h now'
+if [[ $(uname) == Darwin ]]; then
+    alias upg='brew update && brew upgrade --all && brew cleanup'
 else
-    echo "Please install 'sudo'"
+    if [[ -x ${commands[sudo]} ]]
+    then
+        alias ap='sudo aptitude'
+        alias ag='sudo apt-get'
+
+        alias aps='sudo aptitude search'
+        alias api='sudo aptitude install'
+        alias aga='sudo apt-get autoremove --purge'
+        alias upg='sudo apt-get update && sudo apt-get upgrade'
+        alias pur='sudo apt-get remove --purge'
+        alias cache='sudo apt-cache'
+
+        alias dpkg='sudo dpkg'
+        alias dpkg-reconfigure='sudo dpkg-reconfigure'
+
+        alias orp='sudo deborphan'
+        alias orph='sudo deborphan --libdevel --find-config'
+
+        alias arp='sudo arp'
+        alias pt='sudo powertop'
+
+        alias reboot='sudo shutdown -r now'
+        alias halt='sudo shutdown -h now'
+    else
+        echo "Please install 'sudo'"
+    fi
 fi
 
 # completion {{{1
