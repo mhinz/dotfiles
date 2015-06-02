@@ -12,6 +12,7 @@
 call plug#begin('~/.vim/bundle')
   Plug 'Keithbsmiley/investigate.vim'
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
+  Plug 'NLKNguyen/papercolor-theme'
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'fatih/vim-go',                   { 'for': 'go' }
   Plug 'godlygeek/csapprox',             { 'for': 'fugitiveblame' }
@@ -252,6 +253,7 @@ nnoremap <c-j>        <c-w>j
 nnoremap <c-k>        <c-w>k
 nnoremap <c-l>        <c-w>l
 
+nnoremap j gj
 onoremap gv           :<c-u>normal! gv<cr>
 
 xnoremap <            <gv
@@ -627,6 +629,7 @@ let g:grepper = {
 
 " plugins: vim-signify {{{2
 let g:signify_vcs_list           = [ 'git', 'hg' ]
+" let g:signify_fold_context       = [3, 8]
 "let g:signify_skip_filetype      = { 'help': 1 }
 "let g:signify_cursorhold_insert  = 1
 "let g:signify_cursorhold_normal  = 1
@@ -665,17 +668,19 @@ let g:startify_list_order = [
 "       \ setlocal modifiable |
 "       \ autocmd InsertEnter <buffer> enew
 
+let g:startify_bookmarks = ['~/.vim/vimrc']
+
 let g:startify_relative_path          = 0
 let g:startify_files_number           = 8
 let g:startify_session_persistence    = 0
-let g:startify_session_autoload       = 1
+let g:startify_session_autoload       = 0
 let g:startify_session_delete_buffers = 1
 let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
 let g:startify_enable_unsafe          = 0
 
 " let g:startify_session_remove_lines   = ['winheight', 'winwidth']
-" let g:startify_custom_indices         = ['f', 'g', 'h']
+" let g:startify_custom_indices         = ['f', 'g', 'h', 'x']
 " let g:startify_custom_indices         = map(range(1,100), 'string(v:val)')
 
 let g:startify_skiplist = [

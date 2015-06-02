@@ -14,6 +14,9 @@
 "   Plug 'junegunn/seoul256.vim'
 "   Plug 'junegunn/vim-easy-align'
 "
+"   " Group dependencies, vim-snippets depends on ultisnips
+"   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+"
 "   " On-demand loading
 "   Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 "   Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
@@ -437,7 +440,7 @@ function! s:add(repo, ...)
       call add(g:plugs_order, name)
     endif
     let g:plugs[name] = spec
-    let s:loaded[name] = 0
+    let s:loaded[name] = get(s:loaded, name, 0)
   catch
     return s:err(v:exception)
   endtry
