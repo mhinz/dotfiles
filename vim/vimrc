@@ -14,14 +14,13 @@ call plug#begin('~/.vim/bundle')
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'NLKNguyen/papercolor-theme'
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'fatih/vim-go',                   { 'for': 'go' }
   Plug 'godlygeek/csapprox',             { 'for': 'fugitiveblame' }
   Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'junegunn/vim-peekaboo'
-  Plug 'lambdatoast/elm.vim',
   Plug 'lervag/vimtex',                  { 'for': 'tex' }
+  Plug 'ludovicchabant/vim-lawrencium'
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
   Plug 'noahfrederick/vim-hemisu'
@@ -30,7 +29,6 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
-  Plug 'wting/rust.vim',                 { 'for': 'rust'  }
 
   " Plug '/data/github/nvim-builder'
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
@@ -668,7 +666,7 @@ let g:startify_list_order = [
 "       \ setlocal modifiable |
 "       \ autocmd InsertEnter <buffer> enew
 
-let g:startify_bookmarks = ['~/.vim/vimrc']
+let g:startify_bookmarks = ['/tmp']
 
 let g:startify_relative_path          = 0
 let g:startify_files_number           = 8
