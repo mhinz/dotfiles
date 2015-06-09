@@ -13,11 +13,13 @@ call plug#begin('~/.vim/bundle')
   Plug 'Keithbsmiley/investigate.vim'
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'NLKNguyen/papercolor-theme'
+  Plug 'Shougo/deoplete.nvim'
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'elixir-lang/vim-elixir',         { 'for': 'elixir' }
   Plug 'godlygeek/csapprox',             { 'for': 'fugitiveblame' }
   Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
-  Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHDashboard', 'GHActivity'] }
+  Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHActivity', 'GHDashboard'] }
   Plug 'junegunn/vim-peekaboo'
   Plug 'lervag/vimtex',                  { 'for': 'tex' }
   Plug 'ludovicchabant/vim-lawrencium'

@@ -18,11 +18,11 @@ for dir in \
     /sbin \
     /usr/local/sbin \
     /usr/local/opt/coreutils/libexec/gnubin \
-    /usr/local/lib/node_modules/coffee-script/bin \
     /Library/PostgreSQL/9.4/bin \
     /Library/Frameworks/Python.framework/Versions/3.4/bin \
     $HOME/.cabal/bin \
     /data/languages/go/bin \
+    /data/languages/elixir/bin \
     /data/go/bin \
     $HOME/local/*/bin \
     $HOME/bin

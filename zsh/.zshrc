@@ -18,7 +18,6 @@ logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
 . '/Users/mhi/local/fzf/shell/key-bindings.zsh' || true
-. /Users/mhi/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
 
 # misc options {{{1
 
