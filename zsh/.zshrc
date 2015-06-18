@@ -193,12 +193,13 @@ hash -d asm='/data/programming/asm'
 hash -d b='/data/books'
 hash -d c='/data/programming/c'
 hash -d g='/data/github'
-hash -d torrents='/data/torrents/downloads'
+hash -d torrent='/data/torrent/download'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
 alias -g L='| less -r'
 alias -g N='> /dev/null'
+alias -g P='| fpp'
 
 alias help='run-help'
 
@@ -239,7 +240,7 @@ alias mps='ps $@ f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
 alias n2t='sh /data/nand2tetris/nand2tetris/tools/HardwareSimulator.sh'
 alias ob='objdump -Mintel'
 alias p1='patch -p1 -g1 --dry-run'
-alias rt='cd ~torrents/../session && rtorrent'
+alias rt='cd ~torrent/../session && rtorrent'
 alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
 alias t='$EDITOR /data/life/todo'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'

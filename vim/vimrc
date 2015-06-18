@@ -102,11 +102,12 @@ set noequalalways
 set noerrorbells
 set nofsync
 set nojoinspaces
+set nowrapscan
 set nrformats     =hex
 set pastetoggle   =<F5>
 set relativenumber
 set report        =0
-" set sessionoptions-=options
+set sessionoptions-=options
 set shiftround
 set showfulltag
 set showtabline   =1
@@ -358,6 +359,7 @@ augroup myvimrc
 augroup END
 
 " commands {{{1
+command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
 command! -bar -bang    -complete=dir     Cd          call s:cd(<bang>0)
@@ -502,7 +504,8 @@ else
           \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
           \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
           \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-          \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE
+          \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
+          \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
   augroup END
   for scheme in ['janah', 'gruvbox', 'hemisu', 'desert']
     try
@@ -521,6 +524,7 @@ function! SetStatusline()
     let stl    .= '%3*:%*'
     let branch  = fugitive#head(8)
     let stl    .= (branch == 'master') ? '%1*master%*' : '%2*'. branch .'%*'
+    let stl    .= s:sy_stats_wrapper()
   endif
 
   let stl .=
@@ -668,7 +672,7 @@ let g:startify_list_order = [
 "       \ setlocal modifiable |
 "       \ autocmd InsertEnter <buffer> enew
 
-let g:startify_bookmarks = ['/tmp']
+" let g:startify_bookmarks = ['/tmp']
 
 let g:startify_relative_path          = 0
 let g:startify_files_number           = 8
