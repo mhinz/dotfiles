@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 tips = [
+  "I would rather die of passion than of boredom.  — Vincent Van Gogh",
   "If a system is to serve the creative spirit, it must be entirely comprehensible to a single individual.",
   "I think a lot of new programmers like to use advanced data structures and advanced language features as a way of demonstrating their ability.  I call it the lion-tamer syndrome.  Such demonstrations are impressive, but unless they actually translate into real wins for the project, avoid them.  — Glyn Williams",
   "The computing scientist’s main challenge is not to get confused by the complexities of his own making.  — E. W. Dijkstra",

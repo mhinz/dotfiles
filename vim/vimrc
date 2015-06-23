@@ -10,10 +10,7 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
-  Plug 'Keithbsmiley/investigate.vim'
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
-  Plug 'NLKNguyen/papercolor-theme'
-  Plug 'Shougo/deoplete.nvim'
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'elixir-lang/vim-elixir',         { 'for': 'elixir' }
   Plug 'godlygeek/csapprox',             { 'for': 'fugitiveblame' }
@@ -21,8 +18,6 @@ call plug#begin('~/.vim/bundle')
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHActivity', 'GHDashboard'] }
   Plug 'junegunn/vim-peekaboo'
-  Plug 'lervag/vimtex',                  { 'for': 'tex' }
-  Plug 'ludovicchabant/vim-lawrencium'
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
   Plug 'noahfrederick/vim-hemisu'
@@ -31,13 +26,21 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
+  Plug 'vim-scripts/rfc-syntax',         { 'for': 'rfc' }
+
+  " Plug 'Keithbsmiley/investigate.vim'
+  " Plug 'Shougo/deoplete.nvim'
+  " Plug 'lervag/vimtex',                  { 'for': 'tex' }
+  " Plug 'ludovicchabant/vim-lawrencium'
 
   " Plug '/data/github/nvim-builder'
-  Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
-  Plug '/data/github/vim-grepper',       { 'on': 'Grepper' }
-  Plug '/data/github/vim-janah'
   " Plug '/data/github/vim-profiling'
+  Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
+  " Plug '/data/github/vim-grepper',       { 'on': 'Grepper' }
+  Plug '/data/github/vim-janah'
+  Plug '/data/github/vim-panacea',       { 'for': 'elixir' }
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
+  Plug '/data/github/vim-rfc',           { 'on': 'RFC' }
   Plug '/data/github/vim-sayonara',      { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
@@ -716,3 +719,22 @@ let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 
 
 " let g:startify_session_savevars = ['g:foo']
 " let g:startify_session_savecmds = [ 'colo molokai' ]
+
+function! s:sy_stats_wrapper()
+  let symbols = ['+', '-', '~']
+  let [added, modified, removed] = sy#repo#get_stats()
+  let stats = [added, removed, modified]  " reorder
+  let hunkline = ''
+
+  for i in range(3)
+    if stats[i] > 0
+      let hunkline .= printf('%s%s ', symbols[i], stats[i])
+    endif
+  endfor
+
+  if !empty(hunkline)
+    let hunkline = '%3*[%5*'. hunkline[:-2] .'%3*]%*'
+  endif
+
+  return hunkline
+endfunction
