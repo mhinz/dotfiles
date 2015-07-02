@@ -105,7 +105,7 @@ set noequalalways
 set noerrorbells
 set nofsync
 set nojoinspaces
-set nowrapscan
+set wrapscan
 set nrformats     =hex
 set pastetoggle   =<F5>
 set relativenumber
@@ -196,6 +196,7 @@ let mapleader = ';'
 nnoremap \            ;
 nmap     ga           <plug>(UnicodeGA)
 nnoremap gl           <c-^>
+nnoremap <Tab>        gt
 
 imap     <c-x><c-z>   <plug>(UnicodeComplete)
 
@@ -279,6 +280,7 @@ nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:re
 nnoremap <leader>j    <C-^>
 nnoremap <leader>v    `[v`]
 
+nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
 nnoremap <leader>f    :FZF<cr>
 nnoremap <leader>g    :Grep<cr>
 nnoremap <silent><leader>q    :Sayonara<cr>
@@ -359,10 +361,17 @@ augroup myvimrc
   au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
   au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
   au BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
+
+  " autocmd VimEnter *
+  "       \   if !argc()
+  "       \ |   Startify
+  "       \ |   NERDTree
+  "       \ |   wincmd w
+  "       \ | endif
 augroup END
 
 " commands {{{1
-command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
 command! -bar -bang    -complete=dir     Cd          call s:cd(<bang>0)
@@ -633,6 +642,9 @@ let g:grepper = {
       \ }
  
 " autocmd User Grepper execute g:grepper.use_quickfix ? 'copen' : 'lopen'
+
+" plugins: vim-sayonara {{{2
+let g:sayonara_confirm_quit = 0
 
 " plugins: vim-signify {{{2
 let g:signify_vcs_list           = [ 'git', 'hg' ]

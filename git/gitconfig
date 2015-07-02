@@ -11,6 +11,13 @@
 [diff]
     tool = vimdiff
 
+[difftool "accu"]
+    cmd = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
+
+[mergetool "accu"]
+    cmd = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
+    trustExitCode = true
+
 [pager]
     diff =
 
@@ -59,6 +66,7 @@
     ss    = status
     st    = stash
     t     = tag
+    url   = !bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
     vd    = diff
     w     = whatchanged -50
     what  = show -s --pretty='tformat:%h (%s, %ad)' --date=short

@@ -17,8 +17,13 @@ main(Args) ->
                               0 -> list_files("");
                               _ -> list_files(hd(Args))
                           end),
-    [io:format("\e[32m~3w \e[33m~s\n",
-               [Index, File]) || {Index, {File, _}} <- Paths],
-    {ok, [Choice|_]} = io:fread("\e[32mOpen>\e[0m ", "~d"),
-    {_, {_, Path}} = lists:nth(Choice, Paths),
-    os:cmd("open '" ++ Path ++ "'").
+    case length(Paths) of
+        0 ->
+            io:format("Nothing found!~n");
+        _ ->
+            [io:format("\e[32m~3w \e[33m~s\n",
+                       [Index, File]) || {Index, {File, _}} <- Paths],
+            {ok, [Choice|_]} = io:fread("\e[32mOpen>\e[0m ", "~d"),
+            {_, {_, Path}} = lists:nth(Choice, Paths),
+            open_port({spawn_executable, "/usr/bin/open"}, [{args, [Path]}])
+    end.
