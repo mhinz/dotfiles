@@ -24,7 +24,9 @@ function! s:find_autocmd_definition(name)
     let aufile = audirs[0]
     let lnum = match(readfile(aufile),
           \ '\v^\s*fu%[nction]!?\s+\V'. path .'#'. function .'\>')
-    execute 'edit +'. lnum aufile
+    if lnum > -1
+      execute 'edit +'. (lnum+1) aufile
+    endif
   endif
 endfunction
 
