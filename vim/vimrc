@@ -1,15 +1,13 @@
-" vim: et sts=2 sw=2
-"
 "
 "   You are about to experience a potent dosage of Vim. Watch your steps.
 "
 "                ╔══════════════════════════════════════════╗
 "                ║           ⎋ HERE BE VIMPIRES ⎋           ║
 "                ╚══════════════════════════════════════════╝
-"
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
+  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'elixir-lang/vim-elixir',         { 'for': 'elixir' }
@@ -17,10 +15,8 @@ call plug#begin('~/.vim/bundle')
   Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHActivity', 'GHDashboard'] }
-  Plug 'junegunn/vim-peekaboo'
   Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
-  Plug 'noahfrederick/vim-hemisu'
   Plug 'scrooloose/nerdtree',            { 'on': 'NERDTreeToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
@@ -28,6 +24,19 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-surround'
   Plug 'vim-scripts/rfc-syntax',         { 'for': 'rfc' }
 
+  Plug 'dahu/LearnVim'
+  Plug 'fmoralesc/vim-tutor-mode'
+
+  Plug 'tpope/vim-projectionist'
+  Plug 'tpope/vim-scriptease'
+  Plug 'tpope/vim-dispatch'
+
+  Plug 'endel/vim-github-colorscheme'
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'morhetz/gruvbox'
+  Plug 'noahfrederick/vim-hemisu'
+
+  " Plug 'junegunn/vim-peekaboo'
   " Plug 'Keithbsmiley/investigate.vim'
   " Plug 'Shougo/deoplete.nvim'
   " Plug 'lervag/vimtex',                  { 'for': 'tex' }
@@ -36,8 +45,9 @@ call plug#begin('~/.vim/bundle')
   " Plug '/data/github/nvim-builder'
   " Plug '/data/github/vim-profiling'
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
-  " Plug '/data/github/vim-grepper',       { 'on': 'Grepper' }
+  Plug '/data/github/vim-grepper',       { 'on': 'Grepper' }
   Plug '/data/github/vim-janah'
+  Plug '/data/github/vim-focus'
   Plug '/data/github/vim-panacea',       { 'for': 'elixir' }
   Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
   Plug '/data/github/vim-rfc',           { 'on': 'RFC' }
@@ -77,7 +87,7 @@ set viminfo       ='100,n$HOME/.vim/files/info/viminfo
 " better navigation
 set cursorline
 set foldmethod    =marker
-set foldtext      =Foldy()
+set foldtext      =util#foldy()
 set hlsearch
 set ignorecase
 set incsearch
@@ -108,7 +118,7 @@ set nojoinspaces
 set wrapscan
 set nrformats     =hex
 set pastetoggle   =<F5>
-set relativenumber
+set norelativenumber
 set report        =0
 set sessionoptions-=options
 set shiftround
@@ -189,13 +199,16 @@ if executable('ag')
 endif
 
 " mapping {{{1
-digraph ./ 8230
-
 let mapleader = ';'
+
+inoremap <a-o>        <c-o>o
+inoremap <a-O>        <c-o>O
+inoremap jf           <esc>
+inoremap <expr> <tab> util#tab_yeah("\<c-n>", "\<tab>")
+inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
 
 nnoremap \            ;
 nmap     ga           <plug>(UnicodeGA)
-nnoremap gl           <c-^>
 nnoremap <Tab>        gt
 
 imap     <c-x><c-z>   <plug>(UnicodeComplete)
@@ -211,19 +224,13 @@ nnoremap <f10>        :Start<cr>
 nnoremap <f11>        :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
 
-nnoremap L            :put =''<cr>
+nnoremap L            :call util#lookup()<cr>zvzz
 nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <c-g>        :FileInfo<cr>
 nnoremap <c-p>        :FZF<cr>
 
-inoremap <c-u>        <c-g>u<c-u>
-inoremap jf           <esc>
-inoremap <expr> <tab> <sid>tab_yeah("\<c-n>", "\<tab>")
-inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'),map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
-inoremap <silent> <c-g><c-m> <c-r>=repeat(complete(col('.'),['mh.codebro@gmail.com','hinz@campus.tu-berlin.de','mhinz@mailbox.tu-berlin.de']),0)<cr>
-
-nnoremap <leader>ev   :tabnew $MYVIMRC<cr>
+nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv   :source $MYVIMRC<cr>
 nnoremap <leader>rr   :source %<cr>
 
@@ -253,16 +260,22 @@ nnoremap ]t           :tabnext<cr>
 nnoremap [T           :tabfirst<cr>
 nnoremap ]T           :tablast<cr>
 
-nnoremap <c-h>        <c-w>h
-nnoremap <c-j>        <c-w>j
-nnoremap <c-k>        <c-w>k
-nnoremap <c-l>        <c-w>l
+nnoremap [<space>     :put! =''<cr>
+nnoremap ]<space>     :put =''<cr>
 
-nnoremap j gj
-onoremap gv           :<c-u>normal! gv<cr>
+nnoremap <silent> [e  :<c-u>execute 'move -1-'. v:count1<cr>
+nnoremap <silent> ]e  :<c-u>execute 'move +'. v:count1<cr>
 
-xnoremap <            <gv
-xnoremap >            >gv
+" switch comma-separated arguments
+nnoremap <silent> [w  :normal F,h]w2w<cr>
+nnoremap <silent> ]w  :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP" \| let &isk=s<cr>
+
+if empty(maparg(']c', 'n'))
+  nmap ]c <plug>(signify-next-hunk)
+endif
+if empty(maparg('[c', 'n'))
+  nmap [c <plug>(signify-prev-hunk)
+endif
 
 nnoremap }            }zz
 nnoremap {            {zz
@@ -274,17 +287,32 @@ nnoremap ][           ][zz
 nnoremap g;           g;zvzz
 nnoremap g,           g,zvzz
 
+nnoremap <left>       <c-w>>
+nnoremap <right>      <c-w><
+nnoremap <up>         <c-w>-
+nnoremap <down>       <c-w>+
+
+nnoremap <a-h>        <c-w>h
+nnoremap <a-j>        <c-w>j
+nnoremap <a-k>        <c-w>k
+nnoremap <a-l>        <c-w>l
+
+xnoremap <            <gv
+xnoremap >            >gv
+
+onoremap gv           :<c-u>normal! gv<cr>
+
 nnoremap Q            gqap
 
 nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <leader>j    <C-^>
+nnoremap <leader>j    <c-^>
 nnoremap <leader>v    `[v`]
 
 nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
 nnoremap <leader>f    :FZF<cr>
 nnoremap <leader>g    :Grep<cr>
-nnoremap <silent><leader>q    :Sayonara<cr>
-nnoremap <silent><leader>Q    :Sayonara!<cr>
+nnoremap <leader>q    :Sayonara<cr>
+nnoremap <leader>Q    :Sayonara!<cr>
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
 
@@ -293,7 +321,7 @@ nnoremap <leader>l    :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 nnoremap '            `
 nnoremap `            '
 
-nnoremap <bs>         <c-t>
+nnoremap <bs>         <c-o>
 nmap     <expr> <cr>  (&ft == 'vim' && &bt == 'nofile') \|\| &bt == 'quickfix'
       \ ? '<cr>'
       \ : exists('g:cscoped') ? '<leader>cg' : 'g<c-]>'
@@ -304,9 +332,9 @@ cnoremap <c-p>        <up>
 cnoremap <leader>r    $VIMRUNTIME/
 cnoremap <leader>ft   ~/.vim/after/ftplugin/
 
-xnoremap *            :<c-u>call <sid>search()<cr>//<cr>
-xnoremap #            :<c-u>call <sid>search()<cr>??<cr>
-xnoremap <leader>*    :<c-u>silent! execute <sid>search_all()<cr>
+xnoremap *            :<c-u>call util#search()<cr>//<cr>
+xnoremap #            :<c-u>call util#search()<cr>??<cr>
+xnoremap <leader>*    :<c-u>silent! execute util#search_all()<cr>
 
 if has('nvim')
   tnoremap <esc> <c-\><c-n>
@@ -314,13 +342,9 @@ if has('nvim')
   tnoremap <a-j> <c-\><c-n><c-w>j
   tnoremap <a-k> <c-\><c-n><c-w>k
   tnoremap <a-l> <c-\><c-n><c-w>l
-  nnoremap <a-h> <c-w>h
-  nnoremap <a-j> <c-w>j
-  nnoremap <a-k> <c-w>k
-  nnoremap <a-l> <c-w>l
 endif
 
-  " let &t_SI = "\<Esc>[4 q"
+" let &t_SI = "\<Esc>[4 q"
 if !empty($TMUX)
   nnoremap <c-a>      <nop>
   nnoremap <leader>a  <c-a>
@@ -338,7 +362,7 @@ augroup myvimrc
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 
   au BufEnter           *                           Cd
-  au BufEnter           *.txt                       if &bt == 'help' | call s:helpme() | endif
+  au BufEnter           *.txt                       call util#helpme()
   au BufLeave           *.h                         mark H
   au BufLeave           *.{c,cpp}                   mark C
   au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
@@ -374,9 +398,9 @@ augroup END
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
-command! -bar -bang    -complete=dir     Cd          call s:cd(<bang>0)
-command! -bar                            Scriptnames call <sid>scratch('scriptnames') | sil keepp g/^$/d
-command! -bar -nargs=1 -complete=command Scratch     call <sid>scratch(<f-args>)
+command! -bar -bang    -complete=dir     Cd          call util#cd(<bang>0)
+command! -bar                            Scriptnames call util#scratch('scriptnames') | sil keepp g/^$/d
+command! -bar -nargs=1 -complete=command Scratch     call util#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d] --%d%%--",
       \ expand('%:p'),
@@ -387,112 +411,10 @@ command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d
       \ float2nr(line('.') / (line('$') / 100.0))
       \ )
 
-" functions {{{1
-function! s:helpme() abort
-  if winnr('$') == 2
-    wincmd L
-  else
-    wincmd T
-  endif
-endfunction
-
-function! s:cd(bang) abort
-  if &buftype =~# '\v(nofile|terminal)' || expand('%') =~# '^fugitive'
-    return
-  endif
-  if !exists('s:cache')
-    let s:cache = {}
-  endif
-  let dirs   = [ '.git', '.hg', '.svn' ]
-  let curdir = resolve(expand('%:p:h'))
-  if !isdirectory(curdir)
-    echohl WarningMsg | echo 'No such directory: '. curdir | echohl NONE
-    return
-  endif
-  if has_key(s:cache, curdir)
-    execute (a:bang ? 'cd' : 'lcd') s:cache[curdir]
-    return
-  endif
-  for dir in dirs
-    let founddir = finddir(dir, curdir .';')
-    if !empty(founddir)
-      break
-    endif
-  endfor
-  let dir = empty(founddir) ? curdir : resolve(fnamemodify(founddir, ':p:h:h'))
-  let s:cache[curdir] = dir
-  execute (a:bang ? 'cd' : 'lcd') fnameescape(dir)
-endfunction
-
-function! s:scratch(cmd) abort
-  let more = &more
-  set nomore
-  try
-    let lines = 1
-    redir => lines
-    silent execute a:cmd
-  finally
-    redir END
-    let &more = more
-  endtry
-  noautocmd new
-  setlocal buftype=nofile bufhidden=hide noswapfile
-  silent put =lines
-  1
-  nnoremap <buffer> q :q<cr>
-endfunction
-
-function! s:tab_yeah(new, default)
-  let line = getline('.')
-  let col = col('.') - 2
-  if !empty(line) && line[col] =~ '\k' && line[col + 1] !~ '\k'
-    return a:new
-  else
-    return a:default
-  endif
-endfunction
-
-function! Foldy()
-  let linelen = &tw ? &tw : 80
-  let marker  = strpart(&fmr, 0, stridx(&fmr, ',')) . '\d*'
-  let range   = foldclosedend(v:foldstart) - foldclosed(v:foldstart) + 1
-
-  let left    = substitute(getline(v:foldstart), marker, '', '')
-  let leftlen = len(left)
-
-  let right    = range . ' [' . v:foldlevel . ']'
-  let rightlen = len(right)
-
-  let tmp    = strpart(left, 0, linelen - rightlen)
-  let tmplen = len(tmp)
-
-  if leftlen > len(tmp)
-    let left    = strpart(tmp, 0, tmplen - 4) . '... '
-    let leftlen = tmplen
-  endif
-
-  let fill = repeat(' ', linelen - (leftlen + rightlen))
-
-  return left . fill . right . repeat(' ', 100)
-endfunction
-
-function! s:search() abort
-  let regsave = @@
-  normal! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = regsave
-endfunction
-
-function! s:search_all() abort
-  call <sid>search()
-  call setqflist([])
-  execute 'bufdo vimgrepadd! /'. @/ .'/ %'
-endfunction
-
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['gruvbox']
+  for scheme in ['gruvbox', 'PaperColor', 'hemisu']
     try
       execute 'colorscheme' scheme
       break
@@ -505,7 +427,7 @@ if has('gui_running')
   " let &guifont   = 'Bitstream Vera Sans Mono 9'
   " let &guifont   = 'DejaVu Sans Mono 9'
   " let &guifont   = 'Droid Sans Mono 9'
-  let &guifont   = 'Ubuntu Mono 11'
+  let &guifont   = 'Ubuntu Mono:h16'
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
@@ -518,8 +440,14 @@ else
           \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
           \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
           \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
+    autocmd ColorScheme focus
+          \ highlight User1 ctermfg=white ctermbg=black cterm=NONE |
+          \ highlight User2 ctermfg=white ctermbg=black cterm=NONE |
+          \ highlight User3 ctermfg=white ctermbg=black cterm=NONE |
+          \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
+          \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
   augroup END
-  for scheme in ['janah', 'gruvbox', 'hemisu', 'desert']
+  for scheme in ['janah', 'focus', 'gruvbox', 'hemisu', 'desert']
     try
       execute 'colorscheme' scheme
       break
@@ -562,7 +490,7 @@ function! SetStatusline()
   return stl
 endfunction
 
-set statusline=%!SetStatusline()
+" set statusline=%!SetStatusline()
 
 " plugins {{{1
 " plugins: misc {{{2
@@ -638,7 +566,7 @@ map <space>   <plug>(easymotion-s2)
 let g:grepper = {
       \ 'use_quickfix': 1,
       \ 'do_open': 1,
-      \ 'order': ['grep', 'ack', 'ag'],
+      \ 'order': ['ag', 'ack', 'grep']
       \ }
  
 " autocmd User Grepper execute g:grepper.use_quickfix ? 'copen' : 'lopen'
@@ -648,6 +576,9 @@ let g:sayonara_confirm_quit = 0
 
 " plugins: vim-signify {{{2
 let g:signify_vcs_list           = [ 'git', 'hg' ]
+" let g:signify_vcs_cmds = {
+"       \ 'git':      sy#util#escape('git') .' diff --no-color --no-ext-diff -U0 -- %f',
+"       \ }
 " let g:signify_fold_context       = [3, 8]
 "let g:signify_skip_filetype      = { 'help': 1 }
 "let g:signify_cursorhold_insert  = 1
@@ -672,13 +603,13 @@ xmap ac <plug>(signify-motion-outer-visual)
 
 " plugins: vim-startify {{{2
 let g:startify_list_order = [
-      \ ['   MRU:'],
+      \ ['   MRU '],
       \ 'files' ,
-      \ ['   MRU (dir):'],
+      \ ['   MRU DIR '],
       \ 'dir',
-      \ ['   Sessions:'],
+      \ ['   Sessions '],
       \ 'sessions',
-      \ ['   Bookmarks:'],
+      \ ['   Bookmarks '],
       \ 'bookmarks',
       \ ]
 " autocmd User Startified nmap <buffer> o <plug>(startify-open-buffers)
@@ -704,10 +635,9 @@ let g:startify_enable_unsafe          = 0
 
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
-      \ '\.fugitiveblame',
-      \ $VIMRUNTIME .'/doc',
       \ 'bundle/.*/doc',
-      \ '\.vimgolf',
+      \ '/data/repo/neovim/runtime/doc',
+      \ '/Users/mhi/local/vim/share/vim/vim74/doc',
       \ ]
 
 function! s:center_header(lines) abort
@@ -731,22 +661,8 @@ let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 
 
 " let g:startify_session_savevars = ['g:foo']
 " let g:startify_session_savecmds = [ 'colo molokai' ]
+" }}}1
 
-function! s:sy_stats_wrapper()
-  let symbols = ['+', '-', '~']
-  let [added, modified, removed] = sy#repo#get_stats()
-  let stats = [added, removed, modified]  " reorder
-  let hunkline = ''
-
-  for i in range(3)
-    if stats[i] > 0
-      let hunkline .= printf('%s%s ', symbols[i], stats[i])
-    endif
-  endfor
-
-  if !empty(hunkline)
-    let hunkline = '%3*[%5*'. hunkline[:-2] .'%3*]%*'
-  endif
-
-  return hunkline
-endfunction
+if filereadable(expand('~/.vimrc.local'))
+  source ~/.vimrc.local
+endif

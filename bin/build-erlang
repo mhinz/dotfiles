@@ -7,5 +7,7 @@ if [[ $1 != '-f' ]]; then
 fi
 
 make distclean
-./configure --prefix=$HOME/local/erlang --enable-kernel-poll --enable-threads --enable-smp-support --enable-hipe --enable-darwin-64bit --enable-m64-build --without-javac
+./otp_build autoconf
+./configure --prefix=$HOME/local/erlang --enable-darwin-64bit --enable-m64-build --with-termcap --without-javac
 make install
+make install-docs

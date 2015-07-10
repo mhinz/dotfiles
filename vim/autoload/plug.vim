@@ -1901,9 +1901,11 @@ function! s:preview_commit()
 
   execute 'pedit' sha
   wincmd P
-  setlocal filetype=git buftype=nofile nobuflisted
+  setlocal filetype=git buftype=nofile nobuflisted modifiable
   execute 'silent read !cd' s:shellesc(g:plugs[name].dir) '&& git show --pretty=medium' sha
   normal! gg"_dd
+  setlocal nomodifiable
+  nnoremap <silent> <buffer> q :q<cr>
   wincmd p
 endfunction
 
