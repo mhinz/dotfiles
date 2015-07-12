@@ -1,7 +1,7 @@
 "
 " Jump to definitions of s:foo(), <sid>bar, and foo#bar().
 "
-function! util#lookup()
+function! mhi#lookup()
   let name = matchstr(expand('<cWORD>'), '^[^(]*')
   if name =~# '^s:'
     call s:find_local_definition(name[2:])
@@ -31,9 +31,28 @@ function! s:find_autocmd_definition(name)
 endfunction
 
 "
+" Smarter tag-based jumping.
+"
+function! mhi#jump()
+  if (&filetype == 'vim' && &buftype == 'nofile') || &buftype == 'quickfix'
+    normal <cr>
+  else
+    if exists('g:cscoped')
+      " Todo: https://gist.github.com/mhinz/1a23d24f88b396b65aec
+      " nmap <expr> <cr> mhi#jump()
+      " execute "normal \<leader>cg"
+      execute 'cscope find g' expand('<cword>')
+    else
+      execute "normal! g\<c-]>"
+    endif
+    call mhi#pulse()
+  endif
+endfunction
+
+"
 " Showing [+1 -2 ~3] in statusline.
 "
-function! util#sy_stats_wrapper()
+function! mhi#sy_stats_wrapper()
   let symbols = ['+', '-', '~']
   let [added, modified, removed] = sy#repo#get_stats()
   let stats = [added, removed, modified]  " reorder
@@ -52,15 +71,15 @@ endfunction
 "
 " Verbatim matching for *.
 "
-function! util#search() abort
+function! mhi#search() abort
   let regsave = @@
   normal! gvy
   let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
   let @@ = regsave
 endfunction
 
-function! util#search_all() abort
-  call util#search()
+function! mhi#search_all() abort
+  call mhi#search()
   call setqflist([])
   execute 'bufdo vimgrepadd! /'. @/ .'/ %'
 endfunction
@@ -68,7 +87,7 @@ endfunction
 "
 " For 'foldtext'.
 "
-function! util#foldy()
+function! mhi#foldy()
   let linelen = &tw ? &tw : 80
   let marker  = strpart(&fmr, 0, stridx(&fmr, ',')) . '\d*'
   let range   = foldclosedend(v:foldstart) - foldclosed(v:foldstart) + 1
@@ -95,7 +114,7 @@ endfunction
 "
 " I prefer two vertically splitted windows per tabpage.
 "
-function! util#helpme() abort
+function! mhi#helpme() abort
   if &buftype == 'help'
     if winnr('$') == 2
       silent wincmd L
@@ -108,7 +127,7 @@ endfunction
 "
 " Switch to VCS root, if there is one.
 "
-function! util#cd(bang) abort
+function! mhi#cd(bang) abort
   if &buftype =~# '\v(nofile|terminal)' || expand('%') =~# '^fugitive'
     return
   endif
@@ -139,7 +158,7 @@ endfunction
 "
 " Capture output of any command in a new window.
 "
-function! util#scratch(cmd) abort
+function! mhi#scratch(cmd) abort
   let more = &more
   set nomore
   try
@@ -160,7 +179,7 @@ endfunction
 "
 " Make <tab> a little bit more useful.
 "
-function! util#tab_yeah(new, default)
+function! mhi#tab_yeah(new, default)
   let line = getline('.')
   let col = col('.') - 2
   if !empty(line) && line[col] =~ '\k' && line[col + 1] !~ '\k'
@@ -168,4 +187,69 @@ function! util#tab_yeah(new, default)
   else
     return a:default
   endif
+endfunction
+
+"
+" Guess what!
+"
+function! mhi#pulse()
+  redir => old_cul
+    silent execute 'highlight CursorLine'
+  redir END
+
+  let old_cul = split(old_cul, '\n')[0]
+  let old_cul = substitute(old_cul, 'xxx', '', '')
+  let steps   = 8
+  let width   = 1
+  let start   = width
+  let end     = steps * width
+  let color   = 233
+
+  for i in range(start, end, width)
+    execute 'highlight CursorLine ctermbg=' . (color+i)
+    redraw
+    sleep 6m
+  endfor
+  for i in range(end, start, -1 * width)
+    execute 'highlight CursorLine ctermbg=' . (color+i)
+    redraw
+    sleep 6m
+  endfor
+
+  execute 'highlight' old_cul
+endfunction
+
+"
+" Get syntax group information.
+"
+function! s:synnames()
+  let syn                 = {}
+  let [lnum, cnum]        = [line('.'), col('.')]
+  let [effective, visual] = [synID(lnum, cnum, 0), synID(lnum, cnum, 1)]
+  let syn.effective       = synIDattr(effective, 'name')
+  let syn.effective_link  = synIDattr(synIDtrans(effective), 'name')
+  let syn.visual          = synIDattr(visual, 'name')
+  let syn.visual_link     = synIDattr(synIDtrans(visual), 'name')
+  return syn
+endfunction
+
+function! mhi#syninfo()
+  let syn = s:synnames()
+  let info = ''
+  if syn.visual != ''
+    let info .= printf('visual: %s', syn.visual)
+    if syn.visual != syn.visual_link
+      let info .= printf(' (as %s)', syn.visual_link)
+    endif
+  endif
+  if syn.effective != syn.visual
+    if syn.visual != ''
+      let info .= ', '
+    endif
+    let info .= printf('effective: %s', syn.effective)
+    if syn.effective != syn.effective_link
+      let info .= printf(' (as %s)', syn.effective_link)
+    endif
+  endif
+  return info
 endfunction

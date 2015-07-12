@@ -59,6 +59,7 @@ call plug#end()
 " init {{{1
 filetype plugin indent on
 syntax   on
+let mapleader = ';'
 
 "autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
 "let b:asmsyntax = 'armasm'
@@ -87,7 +88,7 @@ set viminfo       ='100,n$HOME/.vim/files/info/viminfo
 " better navigation
 set cursorline
 set foldmethod    =marker
-set foldtext      =util#foldy()
+set foldtext      =mhi#foldy()
 set hlsearch
 set ignorecase
 set incsearch
@@ -120,7 +121,7 @@ set nrformats     =hex
 set pastetoggle   =<F5>
 set norelativenumber
 set report        =0
-set sessionoptions-=options
+" set sessionoptions-=options
 set shiftround
 set showfulltag
 set showtabline   =1
@@ -199,12 +200,10 @@ if executable('ag')
 endif
 
 " mapping {{{1
-let mapleader = ';'
-
 inoremap <a-o>        <c-o>o
 inoremap <a-O>        <c-o>O
 inoremap jf           <esc>
-inoremap <expr> <tab> util#tab_yeah("\<c-n>", "\<tab>")
+inoremap <expr> <tab> mhi#tab_yeah("\<c-n>", "\<tab>")
 inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
 
 nnoremap \            ;
@@ -224,15 +223,11 @@ nnoremap <f10>        :Start<cr>
 nnoremap <f11>        :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
 
-nnoremap L            :call util#lookup()<cr>zvzz
+nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
 nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <c-g>        :FileInfo<cr>
 nnoremap <c-p>        :FZF<cr>
-
-nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
-nnoremap <leader>rv   :source $MYVIMRC<cr>
-nnoremap <leader>rr   :source %<cr>
 
 nnoremap <expr> n     v:searchforward ? 'nzvzz' : 'Nzvzz'
 nnoremap <expr> N     v:searchforward ? 'Nzvzz' : 'nzvzz'
@@ -304,15 +299,22 @@ onoremap gv           :<c-u>normal! gv<cr>
 
 nnoremap Q            gqap
 
-nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <leader>j    <c-^>
-nnoremap <leader>v    `[v`]
+nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
+nnoremap <leader>rv   :source $MYVIMRC<cr>
+nnoremap <leader>rr   :source %<cr>
 
-nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
+nnoremap <leader>si   :echo mhi#syninfo()<cr>
+nnoremap <leader>ss   :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
+
+nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <leader>Q    :Sayonara!<cr>
 nnoremap <leader>f    :FZF<cr>
 nnoremap <leader>g    :Grep<cr>
+nnoremap <leader>j    <c-^>
+nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
+nnoremap <leader>p    :call mhi#pulse()<cr>
 nnoremap <leader>q    :Sayonara<cr>
-nnoremap <leader>Q    :Sayonara!<cr>
+nnoremap <leader>v    `[v`]
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
 
@@ -322,9 +324,7 @@ nnoremap '            `
 nnoremap `            '
 
 nnoremap <bs>         <c-o>
-nmap     <expr> <cr>  (&ft == 'vim' && &bt == 'nofile') \|\| &bt == 'quickfix'
-      \ ? '<cr>'
-      \ : exists('g:cscoped') ? '<leader>cg' : 'g<c-]>'
+nnoremap <cr>         :call mhi#jump()<cr>
 
 cnoremap <c-n>        <down>
 cnoremap <c-p>        <up>
@@ -332,9 +332,9 @@ cnoremap <c-p>        <up>
 cnoremap <leader>r    $VIMRUNTIME/
 cnoremap <leader>ft   ~/.vim/after/ftplugin/
 
-xnoremap *            :<c-u>call util#search()<cr>//<cr>
-xnoremap #            :<c-u>call util#search()<cr>??<cr>
-xnoremap <leader>*    :<c-u>silent! execute util#search_all()<cr>
+xnoremap *            :<c-u>call mhi#search()<cr>//<cr>
+xnoremap #            :<c-u>call mhi#search()<cr>??<cr>
+xnoremap <leader>*    :<c-u>silent! execute mhi#search_all()<cr>
 
 if has('nvim')
   tnoremap <esc> <c-\><c-n>
@@ -362,7 +362,7 @@ augroup myvimrc
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 
   au BufEnter           *                           Cd
-  au BufEnter           *.txt                       call util#helpme()
+  au BufEnter           *.txt                       call mhi#helpme()
   au BufLeave           *.h                         mark H
   au BufLeave           *.{c,cpp}                   mark C
   au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
@@ -398,9 +398,9 @@ augroup END
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
-command! -bar -bang    -complete=dir     Cd          call util#cd(<bang>0)
-command! -bar                            Scriptnames call util#scratch('scriptnames') | sil keepp g/^$/d
-command! -bar -nargs=1 -complete=command Scratch     call util#scratch(<f-args>)
+command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
+command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
+command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d] --%d%%--",
       \ expand('%:p'),
@@ -464,7 +464,7 @@ function! SetStatusline()
     let stl    .= '%3*:%*'
     let branch  = fugitive#head(8)
     let stl    .= (branch == 'master') ? '%1*master%*' : '%2*'. branch .'%*'
-    let stl    .= s:sy_stats_wrapper()
+    let stl    .= mhi#sy_stats_wrapper()
   endif
 
   let stl .=
@@ -475,10 +475,11 @@ function! SetStatusline()
         \ . '%#warningmsg#%{&fenc != "utf-8" && &fenc != "" ? " ".&fenc." " :""}%* '
 
   if get(g:, 'stl_group_info')
+      let id = synID(line("."),col("."),1)
       let stl .=
             \   '%#WarningMsg#['
-            \ . '%{synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")} '
-            \ . '%{synIDattr(synID(line("."),col("."),1),"name")}'
+            \ . '%{synIDattr('.id.',"name")} as '
+            \ . '%{synIDattr(synIDtrans('.id.'),"name")} '
             \ . ']%* '
   endif
 
@@ -490,7 +491,7 @@ function! SetStatusline()
   return stl
 endfunction
 
-" set statusline=%!SetStatusline()
+set statusline=%!SetStatusline()
 
 " plugins {{{1
 " plugins: misc {{{2
@@ -666,3 +667,5 @@ let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
+
+" vim: sw=2 sts=2
