@@ -2,7 +2,9 @@
 " Jump to definitions of s:foo(), <sid>bar, and foo#bar().
 "
 function! mhi#lookup()
-  let name = matchstr(expand('<cWORD>'), '^[^(]*')
+  let isk = &iskeyword
+  setlocal iskeyword+=:,<,>
+  let name = expand('<cword>')
   if name =~# '^s:'
     call s:find_local_definition(name[2:])
   elseif name =~ '<sid>'
@@ -10,6 +12,7 @@ function! mhi#lookup()
   elseif name =~ '#' && name[0] != '#'
     call s:find_autocmd_definition(name)
   endif
+  let &iskeyword = isk
 endfunction
 
 function! s:find_local_definition(name)
@@ -253,3 +256,5 @@ function! mhi#syninfo()
   endif
   return info
 endfunction
+
+" vim: fdm=syntax

@@ -7,6 +7,9 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'morhetz/gruvbox'
+
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
@@ -31,12 +34,6 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-dispatch'
 
-  Plug 'endel/vim-github-colorscheme'
-  Plug 'NLKNguyen/papercolor-theme'
-  Plug 'morhetz/gruvbox'
-  Plug 'noahfrederick/vim-hemisu'
-
-  " Plug 'junegunn/vim-peekaboo'
   " Plug 'Keithbsmiley/investigate.vim'
   " Plug 'Shougo/deoplete.nvim'
   " Plug 'lervag/vimtex',                  { 'for': 'tex' }
@@ -143,7 +140,7 @@ set whichwrap     =h,l
 set suffixes     +=.a,.1,.class
 set wildignore   +=*.o,*.so,*.zip,*.png
 set wildmenu
-set wildmode      =list,full
+set wildmode      =list:longest,full
 set wildoptions   =tagfile
 
 " display settings
@@ -229,8 +226,8 @@ nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 nnoremap <c-g>        :FileInfo<cr>
 nnoremap <c-p>        :FZF<cr>
 
-nnoremap <expr> n     v:searchforward ? 'nzvzz' : 'Nzvzz'
-nnoremap <expr> N     v:searchforward ? 'Nzvzz' : 'nzvzz'
+nnoremap <expr> n     'Nn'[v:searchforward].'zvzz'
+nnoremap <expr> N     'nN'[v:searchforward].'zvzz'
 
 nnoremap gg           ggzv
 nnoremap G            Gzv
@@ -344,15 +341,14 @@ if has('nvim')
   tnoremap <a-l> <c-\><c-n><c-w>l
 endif
 
-" let &t_SI = "\<Esc>[4 q"
-if !empty($TMUX)
+if empty($TMUX)
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+else
   nnoremap <c-a>      <nop>
   nnoremap <leader>a  <c-a>
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 " autocmd {{{1
@@ -385,13 +381,6 @@ augroup myvimrc
   au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
   au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
   au BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
-
-  " autocmd VimEnter *
-  "       \   if !argc()
-  "       \ |   Startify
-  "       \ |   NERDTree
-  "       \ |   wincmd w
-  "       \ | endif
 augroup END
 
 " commands {{{1
@@ -544,6 +533,9 @@ let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
+" plugins: vim {{{2
+let g:vimsyn_folding = 'f'
+
 " plugins: vim-easy-align {{{2
 vmap <cr>      <plug>(LiveEasyAlign)
 nmap <leader>a <plug>(LiveEasyAlign)
@@ -569,7 +561,7 @@ let g:grepper = {
       \ 'do_open': 1,
       \ 'order': ['ag', 'ack', 'grep']
       \ }
- 
+
 " autocmd User Grepper execute g:grepper.use_quickfix ? 'copen' : 'lopen'
 
 " plugins: vim-sayonara {{{2
