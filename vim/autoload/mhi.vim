@@ -180,20 +180,42 @@ function! mhi#scratch(cmd) abort
 endfunction
 
 "
-" Make <tab> a little bit more useful.
+" Make <tab> a little bit more useful. Stolen from @junegunn.
 "
-function! mhi#tab_yeah(new, default)
+function! s:can_complete(func, prefix)
+  if empty(a:func) || call(a:func, [1, '']) < 0
+    return 0
+  endif
+  let result = call(a:func, [0, matchstr(a:prefix, '\k\+$')])
+  return !empty(type(result) == type([]) ? result : result.words)
+endfunction
+
+function! mhi#tab_yeah(k, o)
+  if pumvisible()
+    return a:k
+  endif
+
   let line = getline('.')
   let col = col('.') - 2
-  if !empty(line) && line[col] =~ '\k' && line[col + 1] !~ '\k'
-    return a:new
-  else
-    return a:default
+  if empty(line) || line[col] !~ '\k\|[/~.]' || line[col + 1] =~ '\k'
+    return a:o
   endif
+
+  let prefix = expand(matchstr(line[0:col], '\S*$'))
+  if prefix =~ '^[~/.]'
+    return "\<c-x>\<c-f>"
+  endif
+  if s:can_complete(&omnifunc, prefix)
+    return "\<c-x>\<c-o>"
+  endif
+  if s:can_complete(&completefunc, prefix)
+    return "\<c-x>\<c-u>"
+  endif
+  return a:k
 endfunction
 
 "
-" Guess what!
+" Guess what! Stolen from @sjl.
 "
 function! mhi#pulse()
   redir => old_cul
@@ -223,7 +245,7 @@ function! mhi#pulse()
 endfunction
 
 "
-" Get syntax group information.
+" Get syntax group information. Stolen from @jamessan.
 "
 function! s:synnames()
   let syn                 = {}

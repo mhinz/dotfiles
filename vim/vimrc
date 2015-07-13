@@ -21,7 +21,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'                }
   Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle'              }
   Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle'              }
-  Plug 'tpope/vim-commentary',          { 'on': '<plug>Commentary'            }
+  Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
@@ -200,15 +200,20 @@ if executable('ag')
 endif
 
 " mapping {{{1
+inoremap jf           <esc>
 inoremap <a-o>        <c-o>o
 inoremap <a-O>        <c-o>O
-inoremap jf           <esc>
-inoremap <expr> <tab> mhi#tab_yeah("\<c-n>", "\<tab>")
+
+inoremap <expr> <tab>   mhi#tab_yeah("\<c-n>", "\<tab>")
+inoremap <expr> <s-tab> mhi#tab_yeah("\<c-p>", "\<s-tab>")
+
 inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
 
 nnoremap \            ;
 nmap     ga           <plug>(UnicodeGA)
-nnoremap <Tab>        gt
+
+nnoremap <tab>        <c-w>w
+nnoremap <s-tab>      <c-w>W
 
 imap     <c-x><c-z>   <plug>(UnicodeComplete)
 
@@ -220,9 +225,9 @@ nnoremap <f5>         :GHActivity! mhinz<cr>
 nnoremap <f8>         :Make<cr>
 nnoremap <f9>         :Dispatch<cr>
 nnoremap <f10>        :Start<cr>
-nnoremap <f11>        :let g:stl_group_info = !get(g:, 'stl_group_info')<cr>
+nnoremap <f11>        :let b:stl_group_info = !get(b:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
-
+5
 nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
 nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
@@ -258,12 +263,12 @@ nnoremap ]T           :tablast<cr>
 nnoremap [<space>     :put! =''<cr>
 nnoremap ]<space>     :put =''<cr>
 
-nnoremap <silent> [e  :<c-u>execute 'move -1-'. v:count1<cr>
-nnoremap <silent> ]e  :<c-u>execute 'move +'. v:count1<cr>
+nnoremap [e           :<c-u>execute 'move -1-'. v:count1<cr>
+nnoremap ]e           :<c-u>execute 'move +'. v:count1<cr>
 
 " switch comma-separated arguments
-nnoremap <silent> [w  :normal F,h]w2w<cr>
-nnoremap <silent> ]w  :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP" \| let &isk=s<cr>
+nnoremap [w           :normal F,h]w2w<cr>
+nnoremap ]w           :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP" \| let &isk=s<cr>
 
 if empty(maparg(']c', 'n'))
   nmap ]c <plug>(signify-next-hunk)
@@ -348,8 +353,6 @@ if empty($TMUX)
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 else
-  nnoremap <c-a>      <nop>
-  nnoremap <leader>a  <c-a>
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 endif
@@ -361,7 +364,6 @@ augroup myvimrc
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 
   au BufEnter           *                           Cd
-  au BufEnter           *.txt                       call mhi#helpme()
   au BufLeave           *.h                         mark H
   au BufLeave           *.{c,cpp}                   mark C
   au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
@@ -406,7 +408,7 @@ command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['gruvbox', 'PaperColor', 'hemisu']
+  for scheme in ['gruvbox', 'PaperColor', 'seoul256-light']
     try
       execute 'colorscheme' scheme
       break
@@ -416,10 +418,13 @@ if has('gui_running')
   set gcr        =a:blinkoff0
   set mousehide
   set guioptions =a
-  " let &guifont   = 'Bitstream Vera Sans Mono 9'
-  " let &guifont   = 'DejaVu Sans Mono 9'
-  " let &guifont   = 'Droid Sans Mono 9'
-  let &guifont   = 'Ubuntu Mono:h16'
+  if has('gui_mac')
+    set nomacmeta
+  endif
+  " let &guifont = 'Bitstream Vera Sans Mono 9'
+  " let &guifont = 'DejaVu Sans Mono 9'
+  " let &guifont = 'Droid Sans Mono 9'
+  let &guifont = 'Ubuntu Mono:h16'
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
@@ -439,7 +444,7 @@ else
           \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
           \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
   augroup END
-  for scheme in ['janah', 'focus', 'gruvbox', 'hemisu', 'desert']
+  for scheme in ['janah', 'focus', 'gruvbox', 'desert']
     try
       execute 'colorscheme' scheme
       break
@@ -466,12 +471,12 @@ function! SetStatusline()
         \ . '%#WarningMsg#%{&ff != "unix" ? " ".&ff." ":""}%* '
         \ . '%#warningmsg#%{&fenc != "utf-8" && &fenc != "" ? " ".&fenc." " :""}%* '
 
-  if get(g:, 'stl_group_info')
-      let id = synID(line("."),col("."),1)
+  if get(b:, 'stl_group_info')
+      let id = synID(line('.'), col('.'), 1)
       let stl .=
             \   '%#WarningMsg#['
             \ . '%{synIDattr('.id.',"name")} as '
-            \ . '%{synIDattr(synIDtrans('.id.'),"name")} '
+            \ . '%{synIDattr(synIDtrans('.id.'),"name")}'
             \ . ']%* '
   endif
 
