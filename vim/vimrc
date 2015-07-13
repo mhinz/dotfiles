@@ -8,24 +8,24 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'NLKNguyen/papercolor-theme'
+  Plug 'junegunn/seoul256.vim'
   Plug 'morhetz/gruvbox'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'Lokaltog/vim-easymotion',        { 'on': '<plug>(easymotion-s2)' }
-  Plug 'chrisbra/unicode.vim',           { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'elixir-lang/vim-elixir',         { 'for': 'elixir' }
-  Plug 'godlygeek/csapprox',             { 'for': 'fugitiveblame' }
-  Plug 'junegunn/fzf',                   { 'on': 'FZF', 'dir': '~/local/fzf' }
-  Plug 'junegunn/vim-easy-align',        { 'on': '<plug>(LiveEasyAlign)' }
-  Plug 'junegunn/vim-github-dashboard',  { 'on': ['GHActivity', 'GHDashboard'] }
-  Plug 'majutsushi/tagbar',              { 'on': 'TagbarToggle' }
-  Plug 'mbbill/undotree',                { 'on': 'UndotreeToggle' }
-  Plug 'scrooloose/nerdtree',            { 'on': 'NERDTreeToggle' }
-  Plug 'tpope/vim-commentary'
+  Plug 'Lokaltog/vim-easymotion',       { 'on': '<plug>(easymotion-s2)'       }
+  Plug 'chrisbra/unicode.vim',          { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'junegunn/fzf',                  { 'on': 'FZF', 'dir': '~/local/fzf'   }
+  Plug 'junegunn/vim-easy-align',       { 'on': '<plug>(LiveEasyAlign)'       }
+  Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
+  Plug 'keith/investigate.vim'
+  Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'                }
+  Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle'              }
+  Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle'              }
+  Plug 'tpope/vim-commentary',          { 'on': '<plug>Commentary'            }
+  Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
-  Plug 'vim-scripts/rfc-syntax',         { 'for': 'rfc' }
 
   Plug 'dahu/LearnVim'
   Plug 'fmoralesc/vim-tutor-mode'
@@ -34,20 +34,23 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-dispatch'
 
-  " Plug 'Keithbsmiley/investigate.vim'
-  " Plug 'Shougo/deoplete.nvim'
-  " Plug 'lervag/vimtex',                  { 'for': 'tex' }
-  " Plug 'ludovicchabant/vim-lawrencium'
+  Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
+  Plug 'elixir-lang/vim-elixir', { 'for': 'elixir'        }
+  Plug 'fatih/vim-go',           { 'for': 'go'            }
+  Plug 'godlygeek/csapprox',     { 'for': 'fugitiveblame' }
+  Plug 'lervag/vimtex',          { 'for': 'tex'           }
+  Plug 'vim-scripts/rfc-syntax', { 'for': 'rfc'           }
+  Plug 'wting/rust.vim',         { 'for': 'rust'          }
 
   " Plug '/data/github/nvim-builder'
   " Plug '/data/github/vim-profiling'
-  Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang' }
-  Plug '/data/github/vim-grepper',       { 'on': 'Grepper' }
-  Plug '/data/github/vim-janah'
+  Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang'  }
   Plug '/data/github/vim-focus'
-  Plug '/data/github/vim-panacea',       { 'for': 'elixir' }
-  Plug '/data/github/vim-randomtag',     { 'on': 'Random' }
-  Plug '/data/github/vim-rfc',           { 'on': 'RFC' }
+  Plug '/data/github/vim-grepper',       { 'on': 'Grepper'  }
+  Plug '/data/github/vim-janah'
+  Plug '/data/github/vim-panacea',       { 'for': 'elixir'  }
+  Plug '/data/github/vim-randomtag',     { 'on': 'Random'   }
+  Plug '/data/github/vim-rfc',           { 'on': 'RFC'      }
   Plug '/data/github/vim-sayonara',      { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
