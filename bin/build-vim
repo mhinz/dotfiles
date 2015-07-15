@@ -5,9 +5,9 @@ prefix="${HOME}/local/vim"
 flags="--prefix=${prefix} --without-x --enable-darwin --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-pythoninterp=yes --enable-rubyinterp=yes --enable-cscope --disable-workshop --disable-netbeans --disable-smack --disable-sniff --disable-hangulinput --enable-fontset --enable-largefile --disable-acl --disable-gpm --disable-sysmouse --with-features=huge --with-compiledby=mhi"
 
 version() {
-    major=$(vim --version | head -1 | cut -d' ' -f5)
-    minor=$(vim --version | head -2 | tail -1 | cut -d'-' -f2)
-    full="${major}.${minor}"
+    version=$(vim --version | head -1 | cut -d' ' -f5)
+    patchlevel=$(vim --version | head -3 | tail -1 | cut -d'-' -f2)
+    full="${version}.${patchlevel}"
 }
 
 cd "$dir"

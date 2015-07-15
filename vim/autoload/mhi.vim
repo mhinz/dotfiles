@@ -3,7 +3,7 @@
 "
 function! mhi#lookup()
   let isk = &iskeyword
-  setlocal iskeyword+=:,<,>
+  setlocal iskeyword+=:,.,<,>
   let name = expand('<cword>')
   if name =~# '^s:'
     call s:find_local_definition(name[2:])

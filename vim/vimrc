@@ -8,7 +8,7 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'NLKNguyen/papercolor-theme'
-  Plug 'junegunn/seoul256.vim'
+  Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
 
   Plug 'AndrewRadev/splitjoin.vim'
@@ -22,7 +22,6 @@ call plug#begin('~/.vim/bundle')
   Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle'              }
   Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle'              }
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
@@ -33,6 +32,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-dispatch'
+  Plug 'reedes/vim-wordy'
 
   Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
   Plug 'elixir-lang/vim-elixir', { 'for': 'elixir'        }
@@ -227,7 +227,7 @@ nnoremap <f9>         :Dispatch<cr>
 nnoremap <f10>        :Start<cr>
 nnoremap <f11>        :let b:stl_group_info = !get(b:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
-5
+
 nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
 nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
@@ -310,6 +310,7 @@ nnoremap <leader>rr   :source %<cr>
 
 nnoremap <leader>si   :echo mhi#syninfo()<cr>
 nnoremap <leader>ss   :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
+nnoremap <leader>st   :Startify<cr>
 
 nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>Q    :Sayonara!<cr>
@@ -408,7 +409,7 @@ command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['gruvbox', 'PaperColor', 'seoul256-light']
+  for scheme in ['gruvbox', 'PaperColor', 'railscasts']
     try
       execute 'colorscheme' scheme
       break
@@ -495,7 +496,7 @@ set statusline=%!SetStatusline()
 let g:is_bash      = 1
 let g:lisp_rainbow = 1
 
-let g:loaded_2html_plugin     = 1
+" let g:loaded_2html_plugin     = 1
 let g:loaded_getscriptPlugin  = 1
 "let g:loaded_gzip             = 1
 let g:loaded_rrhelper         = 1
@@ -668,4 +669,5 @@ if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 
-" vim: sw=2 sts=2
+" echomsg 'DEBUG: '. has('gui_running')
+" vim: sw=2 sts=2 tw=0
