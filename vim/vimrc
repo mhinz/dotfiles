@@ -12,38 +12,40 @@ call plug#begin('~/.vim/bundle')
   Plug 'morhetz/gruvbox'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'Lokaltog/vim-easymotion',       { 'on': '<plug>(easymotion-s2)'       }
+  Plug 'Lokaltog/vim-easymotion',       { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',          { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'chrisbra/vim-diff-enhanced'
   Plug 'junegunn/fzf',                  { 'on': 'FZF', 'dir': '~/local/fzf'   }
   Plug 'junegunn/vim-easy-align',       { 'on': '<plug>(LiveEasyAlign)'       }
   Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
   Plug 'keith/investigate.vim'
-  Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'                }
-  Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle'              }
-  Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle'              }
+  Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'   }
+  Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle' }
+  Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle' }
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
-
-  Plug 'dahu/LearnVim'
-  Plug 'fmoralesc/vim-tutor-mode'
-
-  Plug 'tpope/vim-projectionist'
-  Plug 'tpope/vim-scriptease'
-  Plug 'tpope/vim-dispatch'
-  Plug 'reedes/vim-wordy'
 
   Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
   Plug 'elixir-lang/vim-elixir', { 'for': 'elixir'        }
   Plug 'fatih/vim-go',           { 'for': 'go'            }
   Plug 'godlygeek/csapprox',     { 'for': 'fugitiveblame' }
   Plug 'lervag/vimtex',          { 'for': 'tex'           }
+  Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
   Plug 'vim-scripts/rfc-syntax', { 'for': 'rfc'           }
   Plug 'wting/rust.vim',         { 'for': 'rust'          }
 
-  " Plug '/data/github/nvim-builder'
-  " Plug '/data/github/vim-profiling'
+  Plug 'junegunn/goyo.vim'
+  Plug 'junegunn/limelight.vim'
+  Plug 'reedes/vim-lexical'
+  Plug 'reedes/vim-pencil'
+  Plug 'reedes/vim-wordy'
+
+  Plug 'chrisbra/BufTimer'
+
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang'  }
   Plug '/data/github/vim-focus'
   Plug '/data/github/vim-grepper',       { 'on': 'Grepper'  }
@@ -54,6 +56,8 @@ call plug#begin('~/.vim/bundle')
   Plug '/data/github/vim-sayonara',      { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
+  " Plug '/data/github/nvim-builder'
+  " Plug '/data/github/vim-profiling'
 call plug#end()
 
 " init {{{1

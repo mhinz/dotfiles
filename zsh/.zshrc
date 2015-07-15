@@ -193,7 +193,9 @@ hash -d asm='/data/programming/asm'
 hash -d b='/data/books'
 hash -d c='/data/programming/c'
 hash -d g='/data/github'
+hash -d nv='/data/repo/neovim'
 hash -d torrent='/data/torrent/download'
+hash -d v='/data/repo/vim'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
