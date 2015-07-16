@@ -7,8 +7,10 @@ function! mhi#lookup()
   let name = expand('<cword>')
   if name =~# '^s:'
     call s:find_local_definition(name[2:])
-  elseif name =~ '<sid>'
+  elseif name =~ '^<sid>'
     call s:find_local_definition(name[5:])
+  elseif name =~ '^self.'
+    call search('\v^\s*fu%[nction]!?\s+.{-}\.'. name[5:], 'cesw')
   elseif name =~ '#' && name[0] != '#'
     call s:find_autocmd_definition(name)
   endif
