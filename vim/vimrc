@@ -12,7 +12,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'morhetz/gruvbox'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'Lokaltog/vim-easymotion',       { 'on': '<plug>(easymotion-s2)' }
+  Plug 'easymotion/vim-easymotion',     { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',          { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'chrisbra/vim-diff-enhanced'
   Plug 'junegunn/fzf',                  { 'on': 'FZF', 'dir': '~/local/fzf'   }
