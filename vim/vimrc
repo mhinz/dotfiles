@@ -12,13 +12,14 @@ call plug#begin('~/.vim/bundle')
   Plug 'morhetz/gruvbox'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'easymotion/vim-easymotion',     { 'on': '<plug>(easymotion-s2)' }
   Plug 'chrisbra/unicode.vim',          { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'chrisbra/vim-diff-enhanced'
+  Plug 'easymotion/vim-easymotion',     { 'on': '<plug>(easymotion-s2)' }
   Plug 'junegunn/fzf',                  { 'on': 'FZF', 'dir': '~/local/fzf'   }
   Plug 'junegunn/vim-easy-align',       { 'on': '<plug>(LiveEasyAlign)'       }
   Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
   Plug 'keith/investigate.vim'
+  Plug 'ludovicchabant/vim-lawrencium'
   Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'   }
   Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle' }
   Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle' }
@@ -28,6 +29,9 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
+
+  Plug 'xolox/vim-misc',         { 'for': 'lua' }
+  Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
 
   Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
   Plug 'elixir-lang/vim-elixir', { 'for': 'elixir'        }
@@ -226,9 +230,6 @@ nnoremap <f2>         :TagbarToggle<cr>
 nnoremap <f3>         :UndotreeToggle<cr>
 nnoremap <f4>         :GHDashboard! mhinz<cr>
 nnoremap <f5>         :GHActivity! mhinz<cr>
-nnoremap <f8>         :Make<cr>
-nnoremap <f9>         :Dispatch<cr>
-nnoremap <f10>        :Start<cr>
 nnoremap <f11>        :let b:stl_group_info = !get(b:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
 
@@ -308,6 +309,10 @@ onoremap gv           :<c-u>normal! gv<cr>
 
 nnoremap Q            gqap
 
+nnoremap <leader>dm   :Make<cr>
+nnoremap <leader>dd   :Dispatch<cr>
+nnoremap <leader>ds   :Start<cr>
+
 nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv   :source $MYVIMRC<cr>
 nnoremap <leader>rr   :source %<cr>
@@ -333,7 +338,7 @@ nnoremap <leader>l    :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 nnoremap '            `
 nnoremap `            '
 
-nnoremap <bs>         <c-o>
+nnoremap <bs>         <c-t>
 nnoremap <cr>         :call mhi#jump()<cr>
 
 cnoremap <c-n>        <down>
@@ -503,8 +508,8 @@ let g:lisp_rainbow = 1
 " let g:loaded_2html_plugin     = 1
 let g:loaded_getscriptPlugin  = 1
 "let g:loaded_gzip             = 1
-let g:loaded_rrhelper         = 1
-let g:loaded_spellfile_plugin = 1
+" let g:loaded_rrhelper         = 1
+" let g:loaded_spellfile_plugin = 1
 "let g:loaded_tarPlugin        = 1
 let g:loaded_vimballPlugin    = 1
 "let g:loaded_zipPlugin        = 1

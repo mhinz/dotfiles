@@ -10,7 +10,7 @@ function! mhi#lookup()
   elseif name =~ '^<sid>'
     call s:find_local_definition(name[5:])
   elseif name =~ '^self.'
-    call search('\v^\s*fu%[nction]!?\s+.{-}\.'. name[5:], 'cesw')
+    call search('\c\v^\s*fu%[nction]!?\s+.{-}\.'. name[5:], 'cesw')
   elseif name =~ '#' && name[0] != '#'
     call s:find_autocmd_definition(name)
   endif
@@ -18,7 +18,7 @@ function! mhi#lookup()
 endfunction
 
 function! s:find_local_definition(name)
-  call search('\v^\s*fu%[nction]!?\s+%(s:|\<sid\>)\V'. a:name, 'cesw')
+  call search('\c\v^\s*fu%[nction]!?\s+%(s:|\<sid\>)\V'. a:name, 'cesw')
 endfunction
 
 function! s:find_autocmd_definition(name)
@@ -28,7 +28,7 @@ function! s:find_autocmd_definition(name)
   if !empty(audirs)
     let aufile = audirs[0]
     let lnum = match(readfile(aufile),
-          \ '\v^\s*fu%[nction]!?\s+\V'. path .'#'. function .'\>')
+          \ '\c\v^\s*fu%[nction]!?\s+\V'. path .'#'. function .'\>')
     if lnum > -1
       execute 'edit +'. (lnum+1) aufile
     endif
