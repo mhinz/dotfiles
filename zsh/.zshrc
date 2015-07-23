@@ -254,7 +254,8 @@ alias flush='dscacheutil -flushcache'
 
 # alias v='vim'
 alias vu='vim -u NONE -U NONE -i NONE -N'
-alias v='VIMRUNTIME=/data/repo/neovim/runtime nvim'
+alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
 alias h="cd ..; l"
 alias ..="cd .."

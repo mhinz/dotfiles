@@ -146,7 +146,7 @@ function! mhi#cd(bang) abort
     return
   endif
   if has_key(s:cache, curdir)
-    execute (a:bang ? 'cd' : 'lcd') s:cache[curdir]
+    execute (a:bang ? 'cd' : 'lcd') fnameescape(s:cache[curdir])
     return
   endif
   for dir in dirs
