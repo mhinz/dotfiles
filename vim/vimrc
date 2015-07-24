@@ -30,6 +30,9 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
+  " Plug 'fmoralesc/nvimfs'
+  " Plug 'saep/nvim-hs'
+
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
 
