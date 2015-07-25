@@ -389,6 +389,7 @@ augroup myvimrc
   au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
+  au CompleteDone       *                           pclose
   au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
 
   au User fugitive
