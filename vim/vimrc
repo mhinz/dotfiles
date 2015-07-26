@@ -312,8 +312,9 @@ onoremap gv           :<c-u>normal! gv<cr>
 
 nnoremap Q            gqap
 
-nnoremap <leader>dm   :Make<cr>
 nnoremap <leader>dd   :Dispatch<cr>
+nnoremap <leader>dm   :Make<cr>
+nnoremap <leader>ds   :Copen<cr>
 nnoremap <leader>ds   :Start<cr>
 
 nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
