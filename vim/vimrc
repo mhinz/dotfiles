@@ -30,28 +30,26 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
-  " Plug 'fmoralesc/nvimfs'
-  " Plug 'saep/nvim-hs'
-
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
 
-  Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
   Plug 'elixir-lang/vim-elixir', { 'for': 'elixir'        }
-  Plug 'fatih/vim-go',           { 'for': 'go'            }
   Plug 'godlygeek/csapprox',     { 'for': 'fugitiveblame' }
-  Plug 'lervag/vimtex',          { 'for': 'tex'           }
-  Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
   Plug 'vim-scripts/rfc-syntax', { 'for': 'rfc'           }
-  Plug 'wting/rust.vim',         { 'for': 'rust'          }
 
-  Plug 'junegunn/goyo.vim'
-  Plug 'junegunn/limelight.vim'
-  Plug 'reedes/vim-lexical'
-  Plug 'reedes/vim-pencil'
-  Plug 'reedes/vim-wordy'
+  " Plug 'fmoralesc/nvimfs'
+  " Plug 'saep/nvim-hs'
+  " Plug 'lervag/vimtex',          { 'for': 'tex'           }
+  " Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
+  " Plug 'wting/rust.vim',         { 'for': 'rust'          }
+  " Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
+  " Plug 'fatih/vim-go',           { 'for': 'go'            }
 
-  Plug 'chrisbra/BufTimer'
+  " Plug 'junegunn/goyo.vim'
+  " Plug 'junegunn/limelight.vim'
+  " Plug 'reedes/vim-lexical'
+  " Plug 'reedes/vim-pencil'
+  " Plug 'reedes/vim-wordy'
 
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang'  }
   Plug '/data/github/vim-focus'
