@@ -33,12 +33,17 @@ call plug#begin('~/.vim/bundle')
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
 
-  Plug 'elixir-lang/vim-elixir', { 'for': 'elixir'        }
-  Plug 'godlygeek/csapprox',     { 'for': 'fugitiveblame' }
-  Plug 'vim-scripts/rfc-syntax', { 'for': 'rfc'           }
+  Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir'        }
+  Plug 'godlygeek/csapprox',       { 'for': 'fugitiveblame' }
+  Plug 'kchmck/vim-coffee-script', { 'for': 'coffee'        }
+  Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
+
+  if has('nvim')
+    Plug 'neovimhaskell/nvim-hs',     { 'for': 'haskell' }
+    Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+  endif
 
   " Plug 'fmoralesc/nvimfs'
-  " Plug 'saep/nvim-hs'
   " Plug 'lervag/vimtex',          { 'for': 'tex'           }
   " Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
   " Plug 'wting/rust.vim',         { 'for': 'rust'          }
