@@ -1,4 +1,24 @@
 "
+"                         ███████████████████████████
+"                         ███████▀▀▀░░░░░░░▀▀▀███████
+"                         ████▀░░░░░░░░░░░░░░░░░▀████
+"                         ███│░░░░░░░░░░░░░░░░░░░│███
+"                         ██▌│░░░░░░░░░░░░░░░░░░░│▐██
+"                         ██░└┐░░░░░░░░░░░░░░░░░┌┘░██
+"                         ██░░└┐░░░░░░░░░░░░░░░┌┘░░██
+"                         ██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██
+"                         ██▌░│██████▌░░░▐██████│░▐██
+"                         ███░│▐███▀▀░░▄░░▀▀███▌│░███
+"                         ██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██
+"                         ██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██
+"                         ████▄─┘██▌░░░░░░░▐██└─▄████
+"                         █████░░▐█─┬┬┬┬┬┬┬─█▌░░█████
+"                         ████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████
+"                         █████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████
+"                         ███████▄░░░░░░░░░░░▄███████
+"                         ██████████▄▄▄▄▄▄▄██████████
+"                         ███████████████████████████
+"
 "   You are about to experience a potent dosage of Vim. Watch your steps.
 "
 "                ╔══════════════════════════════════════════╗
@@ -39,8 +59,9 @@ call plug#begin('~/.vim/bundle')
   Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
 
   if has('nvim')
-    Plug 'neovimhaskell/nvim-hs',     { 'for': 'haskell' }
-    Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+    Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
+    Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
+    Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
   endif
 
   " Plug 'fmoralesc/nvimfs'
@@ -58,7 +79,7 @@ call plug#begin('~/.vim/bundle')
 
   Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang'  }
   Plug '/data/github/vim-focus'
-  Plug '/data/github/vim-grepper',       { 'on': 'Grepper'  }
+  Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'
   Plug '/data/github/vim-panacea',       { 'for': 'elixir'  }
   Plug '/data/github/vim-randomtag',     { 'on': 'Random'   }
@@ -331,11 +352,10 @@ nnoremap <leader>st   :Startify<cr>
 nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>Q    :Sayonara!<cr>
 nnoremap <leader>f    :FZF<cr>
-nnoremap <leader>g    :Grep<cr>
 nnoremap <leader>j    <c-^>
 nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
 nnoremap <leader>p    :call mhi#pulse()<cr>
-nnoremap <leader>q    :Sayonara<cr>
+nnoremap <silent> <leader>q    :Sayonara<cr>
 nnoremap <leader>v    `[v`]
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
@@ -582,13 +602,20 @@ map <space> <plug>(easymotion-s2)
 " map <Leader>k <plug>(easymotion-k)
 
 " plugins: vim-grepper {{{2
-let g:grepper = {
-      \ 'use_quickfix': 1,
-      \ 'do_open': 1,
-      \ 'order': ['ag', 'ack', 'grep']
-      \ }
+nmap <leader>g <plug>(Grepper)
+xmap <leader>g <plug>(Grepper)
+cmap <leader>g <plug>(GrepperNext)
+nmap gs        <plug>(GrepperMotion)
+xmap gs        <plug>(GrepperMotion)
 
-" autocmd User Grepper execute g:grepper.use_quickfix ? 'copen' : 'lopen'
+let g:grepper              = {}
+" let g:grepper.programs     = ['git', 'ag', 'grep']
+let g:grepper.use_quickfix = 1
+let g:grepper.do_open      = 1
+let g:grepper.do_switch    = 1
+let g:grepper.do_jump      = 0
+
+" autocmd User Grepper unsilent echomsg 'Grep program finished!'
 
 " plugins: vim-sayonara {{{2
 let g:sayonara_confirm_quit = 0
@@ -686,5 +713,4 @@ if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 
-" echomsg 'DEBUG: '. has('gui_running')
 " vim: sw=2 sts=2 tw=0
