@@ -28,6 +28,7 @@
 " plug {{{1
 call plug#begin('~/.vim/bundle')
   Plug 'NLKNguyen/papercolor-theme'
+  Plug 'jonathanfilip/vim-lucius'
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
 
@@ -602,18 +603,19 @@ map <space> <plug>(easymotion-s2)
 " map <Leader>k <plug>(easymotion-k)
 
 " plugins: vim-grepper {{{2
-nmap <leader>g <plug>(Grepper)
-xmap <leader>g <plug>(Grepper)
-cmap <leader>g <plug>(GrepperNext)
-nmap gs        <plug>(GrepperMotion)
-xmap gs        <plug>(GrepperMotion)
+nmap     gs        <plug>(GrepperOperator)
+xmap     gs        <plug>(GrepperOperator)
 
-let g:grepper              = {}
-" let g:grepper.programs     = ['git', 'ag', 'grep']
-let g:grepper.use_quickfix = 1
-let g:grepper.do_open      = 1
-let g:grepper.do_switch    = 1
-let g:grepper.do_jump      = 0
+nnoremap <leader>g :Grepper! -tool git<cr>
+nnoremap <leader>G :Grepper! -tool ag<cr>
+
+let g:grepper          = {}
+let g:grepper.programs = ['git', 'ag', 'grep']
+let g:grepper.quickfix = 1
+let g:grepper.open     = 1
+let g:grepper.switch   = 0
+let g:grepper.jump     = 0
+" let g:grepper.next_tool    = '<leader>g'
 
 " autocmd User Grepper unsilent echomsg 'Grep program finished!'
 

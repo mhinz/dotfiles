@@ -9,8 +9,8 @@ function! mhi#lookup()
     call s:find_local_definition(name[2:])
   elseif name =~ '^<sid>'
     call s:find_local_definition(name[5:])
-  elseif name =~ '^self.'
-    call search('\c\v^\s*fu%[nction]!?\s+.{-}\.'. name[5:], 'cesw')
+  elseif stridx(name, '.') > 0
+    call search('\c\v^\s*fu%[nction]!?\s+.{-}\.'. name[stridx(name,'.')+1:], 'cesw')
   elseif name =~ '#' && name[0] != '#'
     call s:find_autocmd_definition(name)
   endif
@@ -40,7 +40,7 @@ endfunction
 "
 function! mhi#jump()
   if (&filetype == 'vim' && &buftype == 'nofile') || &buftype == 'quickfix'
-    normal <cr>
+    execute "normal! \<cr>"
   else
     if exists('g:cscoped')
       " Todo: https://gist.github.com/mhinz/1a23d24f88b396b65aec
