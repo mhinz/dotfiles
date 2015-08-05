@@ -48,6 +48,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-projectionist'
+  Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
@@ -157,7 +158,7 @@ set nrformats     =hex
 set pastetoggle   =<F5>
 set norelativenumber
 set report        =0
-" set sessionoptions-=options
+set sessionoptions-=options
 set shiftround
 set showfulltag
 set showtabline   =1
@@ -603,19 +604,19 @@ map <space> <plug>(easymotion-s2)
 " map <Leader>k <plug>(easymotion-k)
 
 " plugins: vim-grepper {{{2
-nmap     gs        <plug>(GrepperOperator)
-xmap     gs        <plug>(GrepperOperator)
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 
 nnoremap <leader>g :Grepper! -tool git<cr>
 nnoremap <leader>G :Grepper! -tool ag<cr>
 
-let g:grepper          = {}
-let g:grepper.programs = ['git', 'ag', 'grep']
-let g:grepper.quickfix = 1
-let g:grepper.open     = 1
-let g:grepper.switch   = 0
-let g:grepper.jump     = 0
-" let g:grepper.next_tool    = '<leader>g'
+let g:grepper           = {}
+let g:grepper.programs  = ['git', 'ag', 'grep']
+let g:grepper.quickfix  = 1
+let g:grepper.open      = 1
+let g:grepper.switch    = 1
+let g:grepper.jump      = 0
+" let g:grepper.next_tool = '<leader>g'
 
 " autocmd User Grepper unsilent echomsg 'Grep program finished!'
 
