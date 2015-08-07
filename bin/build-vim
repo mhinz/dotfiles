@@ -18,7 +18,7 @@ if [[ $1 == '-f' ]]; then
     echo '[!] Force building..'
 else
     echo '[*] Pulling changes..'
-    if hg pull -u | grep 'no changes found' &>/dev/null; then
+    if git pull | grep 'Already up-to-date.' &>/dev/null; then
         echo '[!] No changes found.'
         version
         echo "[*] Current version: $full"

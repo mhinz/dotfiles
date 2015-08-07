@@ -66,6 +66,9 @@ call plug#begin('~/.vim/bundle')
     Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
   endif
 
+  " Plug 'bling/vim-airline'
+  " Plug 'itchyny/lightline.vim'
+
   " Plug 'fmoralesc/nvimfs'
   " Plug 'lervag/vimtex',          { 'for': 'tex'           }
   " Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
@@ -616,7 +619,7 @@ let g:grepper.quickfix  = 1
 let g:grepper.open      = 1
 let g:grepper.switch    = 1
 let g:grepper.jump      = 0
-" let g:grepper.next_tool = '<leader>g'
+let g:grepper.next_tool = '<leader>g'
 
 " autocmd User Grepper unsilent echomsg 'Grep program finished!'
 

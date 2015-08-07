@@ -200,7 +200,8 @@ hash -d z='/data/repo/zsh'
 
 # aliases {{{1
 alias -g L='| less -r'
-alias -g N='> /dev/null'
+alias -g N='>/dev/null'
+alias -g E='2>/dev/null'
 alias -g P='| fpp'
 
 alias help='run-help'
@@ -402,6 +403,7 @@ edit_configs() {
         v           ~/.vim/vimrc
         x           ~/.Xdefaults
         xi          ~/.xinitrc
+        ze          ~/.zsh/.zshenv
         zp          ~/.zsh/.zprofile
         zr          ~/.zsh/.zshrc
     )
