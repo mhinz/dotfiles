@@ -27,7 +27,6 @@
 
 " plug {{{1
 call plug#begin('~/.vim/bundle')
-  Plug 'NLKNguyen/papercolor-theme'
   Plug 'jonathanfilip/vim-lucius'
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
@@ -39,8 +38,6 @@ call plug#begin('~/.vim/bundle')
   Plug 'junegunn/fzf',                  { 'on': 'FZF', 'dir': '~/local/fzf'   }
   Plug 'junegunn/vim-easy-align',       { 'on': '<plug>(LiveEasyAlign)'       }
   Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
-  Plug 'keith/investigate.vim'
-  Plug 'ludovicchabant/vim-lawrencium'
   Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'   }
   Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle' }
   Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle' }
@@ -52,29 +49,33 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
-  Plug 'xolox/vim-misc',         { 'for': 'lua' }
-  Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
-
   Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir'        }
+  Plug 'fatih/vim-go',             { 'for': 'go'            }
   Plug 'godlygeek/csapprox',       { 'for': 'fugitiveblame' }
   Plug 'kchmck/vim-coffee-script', { 'for': 'coffee'        }
+  Plug 'rgrinberg/vim-ocaml',      { 'for': 'ocaml'         }
   Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
+  Plug 'wting/rust.vim',           { 'for': 'rust'          }
+  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua'           }
+  Plug 'xolox/vim-misc',           { 'for': 'lua'           }
 
   if has('nvim')
     Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
     Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
     Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
+  else
+    Plug 'ConradIrwin/vim-bracketed-paste'
   endif
 
   " Plug 'bling/vim-airline'
   " Plug 'itchyny/lightline.vim'
 
-  " Plug 'fmoralesc/nvimfs'
-  " Plug 'lervag/vimtex',          { 'for': 'tex'           }
-  " Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
-  " Plug 'wting/rust.vim',         { 'for': 'rust'          }
   " Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
-  " Plug 'fatih/vim-go',           { 'for': 'go'            }
+  " Plug 'fmoralesc/nvimfs'
+  " Plug 'keith/investigate.vim'
+  " Plug 'lervag/vimtex',          { 'for': 'tex'           }
+  " Plug 'ludovicchabant/vim-lawrencium'
+  " Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
 
   " Plug 'junegunn/goyo.vim'
   " Plug 'junegunn/limelight.vim'
@@ -498,7 +499,7 @@ endif
 
 " statusline {{{1
 function! SetStatusline()
-  let stl = ' %4*%<%F%*'
+  let stl = ' %4*%<%f%*'
 
   if exists('b:git_dir')
     let stl    .= '%3*:%*'
