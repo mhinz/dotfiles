@@ -398,6 +398,7 @@ edit_configs() {
         dwm         ~/.dotfiles/dwm/config.h
         g           ~/.gitconfig
         m           ~/.muttrc
+        n           ~/.config/nvim/init.vim
         p           ~/.pentadactyl/pentadactylrc
         t           ~/.tmux.conf
         v           ~/.vim/vimrc

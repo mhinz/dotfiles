@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd /data/languages/go/src
+export GOROOT_BOOTSTRAP=/data/languages/go-bootstrap
+
+cd $GOROOT/src
 
 if [[ $1 == '-f' ]]; then
     echo '[!] Force building..'

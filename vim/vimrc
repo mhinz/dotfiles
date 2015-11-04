@@ -31,16 +31,13 @@ call plug#begin('~/.vim/bundle')
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
 
-  Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'chrisbra/unicode.vim',          { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'chrisbra/vim-diff-enhanced'
-  Plug 'easymotion/vim-easymotion',     { 'on': '<plug>(easymotion-s2)' }
-  Plug 'junegunn/fzf',                  { 'on': 'FZF', 'dir': '~/local/fzf'   }
-  Plug 'junegunn/vim-easy-align',       { 'on': '<plug>(LiveEasyAlign)'       }
-  Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
-  Plug 'majutsushi/tagbar',             { 'on': 'TagbarToggle'   }
-  Plug 'mbbill/undotree',               { 'on': 'UndotreeToggle' }
-  Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle' }
+  Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
+  Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf' }
+  Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
+  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'   }
+  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+  Plug 'scrooloose/nerdtree',       { 'on': 'NERDTreeToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -49,52 +46,45 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
-  Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir'        }
-  Plug 'fatih/vim-go',             { 'for': 'go'            }
-  Plug 'godlygeek/csapprox',       { 'for': 'fugitiveblame' }
-  Plug 'kchmck/vim-coffee-script', { 'for': 'coffee'        }
-  Plug 'rgrinberg/vim-ocaml',      { 'for': 'ocaml'         }
-  Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
-  Plug 'wting/rust.vim',           { 'for': 'rust'          }
-  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua'           }
-  Plug 'xolox/vim-misc',           { 'for': 'lua'           }
-
   if has('nvim')
-    Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
-    Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
-    Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
+    " Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
+    " Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
+    " Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
   else
     Plug 'ConradIrwin/vim-bracketed-paste'
   endif
 
+  " Plug 'AndrewRadev/splitjoin.vim'
   " Plug 'bling/vim-airline'
-  " Plug 'itchyny/lightline.vim'
-
-  " Plug 'derekwyatt/vim-scala',   { 'for': 'scala'         }
+  " Plug 'chrisbra/vim-diff-enhanced'
+  " Plug 'derekwyatt/vim-scala',     { 'for': 'scala'         }
+  " Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir'        }
+  " Plug 'fatih/vim-go',             { 'for': 'go'            }
   " Plug 'fmoralesc/nvimfs'
-  " Plug 'keith/investigate.vim'
-  " Plug 'lervag/vimtex',          { 'for': 'tex'           }
-  " Plug 'ludovicchabant/vim-lawrencium'
-  " Plug 'tpope/vim-scriptease',   { 'for': 'vim'           }
-
+  " Plug 'godlygeek/csapprox',       { 'for': 'fugitiveblame' }
+  " Plug 'itchyny/lightline.vim'
   " Plug 'junegunn/goyo.vim'
   " Plug 'junegunn/limelight.vim'
-  " Plug 'reedes/vim-lexical'
-  " Plug 'reedes/vim-pencil'
-  " Plug 'reedes/vim-wordy'
+  " Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
+  " Plug 'kchmck/vim-coffee-script', { 'for': 'coffee'        }
+  " Plug 'keith/investigate.vim'
+  " Plug 'keith/swift.vim'
+  " Plug 'lervag/vimtex',            { 'for': 'tex'           }
+  " Plug 'ludovicchabant/vim-lawrencium'
+  " Plug 'rgrinberg/vim-ocaml',      { 'for': 'ocaml'         }
+  " Plug 'tpope/vim-scriptease',     { 'for': 'vim'           }
+  " Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
+  " Plug 'wting/rust.vim',           { 'for': 'rust'          }
+  " Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua'           }
+  " Plug 'xolox/vim-misc',           { 'for': 'lua'           }
 
-  Plug '/data/github/nvim-erlang_rocks', { 'for': 'erlang'  }
-  Plug '/data/github/vim-focus'
   Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-panacea',       { 'for': 'elixir'  }
-  Plug '/data/github/vim-randomtag',     { 'on': 'Random'   }
-  Plug '/data/github/vim-rfc',           { 'on': 'RFC'      }
-  Plug '/data/github/vim-sayonara',      { 'on': 'Sayonara' }
+  Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
+  Plug '/data/github/vim-rfc',       { 'on': 'RFC'      }
+  Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
-  " Plug '/data/github/nvim-builder'
-  " Plug '/data/github/vim-profiling'
 call plug#end()
 
 " init {{{1
@@ -124,7 +114,11 @@ set directory     =$HOME/.vim/files/swap//
 set undodir       =$HOME/.vim/files/undo/
 set undofile
 set updatecount   =100
-set viminfo       ='100,n$HOME/.vim/files/info/viminfo
+if has('nvim')
+  set shada       ='100
+else
+  set viminfo     ='100,n$HOME/.vim/files/info/viminfo
+endif
 
 " better navigation
 set cursorline
@@ -310,9 +304,11 @@ nnoremap ]w           :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP"
 
 if empty(maparg(']c', 'n'))
   nmap ]c <plug>(signify-next-hunk)
+  nmap ]C 999]c
 endif
 if empty(maparg('[c', 'n'))
   nmap [c <plug>(signify-prev-hunk)
+  nmap [C 999[c
 endif
 
 nnoremap }            }zz
@@ -683,7 +679,7 @@ let g:startify_enable_special         = 0
 let g:startify_enable_unsafe          = 0
 
 " let g:startify_session_remove_lines   = ['winheight', 'winwidth']
-" let g:startify_custom_indices         = ['f', 'g', 'h', 'x']
+" let g:startify_custom_indices         = ['f', 'g', 'gg', 'x']
 " let g:startify_custom_indices         = map(range(1,100), 'string(v:val)')
 
 let g:startify_skiplist = [

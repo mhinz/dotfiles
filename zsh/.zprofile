@@ -8,7 +8,7 @@ export TERM=xterm-256color
 export EDITOR=vim
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
 export AWT_TOOLKIT=MToolkit  # bugfix for dwm and AWT/Swing
-export GOPATH=/data/go GOARCH=amd64 GOOS=${$(uname -s):l}
+export GOPATH=/data/go GOROOT=/data/languages/go GOARCH=amd64 GOOS=${$(uname -s):l}
 
 # export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
@@ -17,10 +17,10 @@ path=(
     $HOME/bin
     $HOME/local/*/bin
 
-    $HOME/.cabal/bin
-    /data/languages/go/bin
-    /data/go/bin
     /data/languages/elixir/bin
+    $HOME/.cabal/bin
+    $GOPATH/bin
+    /data/languages/go/bin
 
     /usr/local/opt/coreutils/libexec/gnubin
 
