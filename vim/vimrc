@@ -38,6 +38,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'   }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
   Plug 'scrooloose/nerdtree',       { 'on': 'NERDTreeToggle' }
+  Plug 'tmux-plugins/vim-tmux'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -75,8 +76,8 @@ call plug#begin('~/.vim/bundle')
   " Plug 'tpope/vim-scriptease',     { 'for': 'vim'           }
   " Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
   " Plug 'wting/rust.vim',           { 'for': 'rust'          }
-  " Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua'           }
-  " Plug 'xolox/vim-misc',           { 'for': 'lua'           }
+  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua'           }
+  Plug 'xolox/vim-misc',           { 'for': 'lua'           }
 
   Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'
@@ -261,7 +262,7 @@ nnoremap <f11>        :let b:stl_group_info = !get(b:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
 
 nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
-nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
+" nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <c-g>        :FileInfo<cr>
 nnoremap <c-p>        :FZF<cr>
@@ -620,6 +621,9 @@ let g:grepper.next_tool = '<leader>g'
 
 " autocmd User Grepper unsilent echomsg 'Grep program finished!'
 
+" plugins: vim-lua-ftplugin {{{2
+let g:lua_complete_omni = 1
+
 " plugins: vim-sayonara {{{2
 let g:sayonara_confirm_quit = 0
 
@@ -667,7 +671,8 @@ let g:startify_list_order = [
 "       \ setlocal modifiable |
 "       \ autocmd InsertEnter <buffer> enew
 
-" let g:startify_bookmarks = ['/tmp']
+" let g:startify_bookmarks = [ {'v': '~/.vim/vimrc'} ]
+" autocmd User Startified nnoremap <buffer><nowait><silent> v :edit ~/.vim/vimrc<cr>
 
 let g:startify_relative_path          = 0
 let g:startify_files_number           = 8

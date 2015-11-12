@@ -1,28 +1,55 @@
-#!/usr/bin/python
+#!/usr/bin/env ruby
 
-import sys
-import requests
+require 'net/http'
+require 'json'
+require 'lisbn'
 
-args = ' '.join(sys.argv[1:])
-req  = requests.get('http://it-ebooks-api.info/v1/search/' + args).json()
+if ARGV.empty?
+  $stderr.puts "usage: #{File.basename($0)} <query>"
+  exit 0
+end
 
-for i, book in list(enumerate(req['Books'])):
-    print "\033[32m%-5d \033[33m%s" % (i, book['Title'])
+page  = 1
+books = []
+args  = ARGV.join(' ')
 
-try:
-    choice = raw_input("\033[31mSelect>\033[0m ")
-except KeyboardInterrupt:
-    sys.exit(1)
+# Get all books.
 
-bookid = req['Books'][int(choice)]['ID']
-req    = requests.get('http://it-ebooks-api.info/v1/book/' + str(bookid)).json()
+loop do
+  req = JSON.parse(Net::HTTP.get(URI(
+    "http://it-ebooks-api.info/v1/search/#{ARGV.join(' ')}/page/#{page}")))
+  break if req['Total'].to_i == 0
+  books += req['Books']
+  page  += 1
+end
 
-print "\033[32m%-14s\033[0m%s" % ('Title',       req['Title'])
-print "\033[32m%-14s\033[0m%s" % ('Subtitle',    req['SubTitle'])
-print "\033[32m%-14s\033[0m%s" % ('Author',      req['Author'])
-print "\033[32m%-14s\033[0m%s" % ('Year',        req['Year'])
-print "\033[32m%-14s\033[0m%s" % ('Publisher',   req['Publisher'])
-print "\033[32m%-14s\033[0m%s" % ('ISBN',        req['ISBN'])
-print "\033[32m%-14s\033[0m%s" % ('Image',       req['Image'])
-print "\033[32m%-14s\033[0m%s" % ('Download',    req['Download'])
-print "\033[32m%-14s\033[0m%s" % ('Description', req['Description'])
+books.sort! { |a,b| a['Title'] <=> b['Title'] }
+
+# Select a book.
+
+loop do
+  books.each_with_index do |book, i|
+    puts "\e[32m %-4d \e[33m%s" % [ i, book['Title'] ]
+  end
+
+  print "\e[31m Select:\e[0m "
+  choice = STDIN.gets.chomp.to_i
+
+  book_id = books[choice]['ID']
+  book = JSON.parse(Net::HTTP.get(URI(
+    "http://it-ebooks-api.info/v1/book/#{book_id}")))
+  isbn = Lisbn.new(book['ISBN']).isbn10
+
+  puts "\e[32m %-14s\e[0m%s" % [ 'Title',       book['Title' ]       ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Subtitle',    book['SubTitle' ]    ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Author',      book['Author' ]      ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Year',        book['Year' ]        ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Publisher',   book['Publisher' ]   ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'ISBN',        book['ISBN' ]        ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Amazon',      "http://www.amazon.de/gp/product/#{isbn}" ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Download',    book['Download' ]    ]
+  puts "\e[32m %-14s\e[0m%s" % [ 'Description', book['Description' ] ]
+
+  print "\e[31m Select another? [y/n]\e[0m "
+  break unless STDIN.gets.chomp == 'y'
+end

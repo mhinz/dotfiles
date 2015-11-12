@@ -71,6 +71,7 @@
     s     = status -uno
     sb    = show-branch
     sh    = show
+    shs   = show --stat
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     ss    = status
     st    = stash
@@ -79,8 +80,8 @@
     vd    = diff
     w     = whatchanged -50
     what  = show -s --pretty='tformat:%h (%s, %ad)' --date=short
-    wt    = worktree
     whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+    wt    = worktree
 
     root = rev-parse --show-toplevel
 
