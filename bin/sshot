@@ -1,7 +1,0 @@
-#!/usr/bin/perl -w
-
-print "Enter file name: ";
-chomp($file = <STDIN>);
-
-readpipe "import -window root $file.png";
-print "$file.png saved.\n"
