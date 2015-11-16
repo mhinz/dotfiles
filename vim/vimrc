@@ -31,13 +31,14 @@ call plug#begin('~/.vim/bundle')
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
 
+  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
+  Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
   Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
-  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'   }
-  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
-  Plug 'scrooloose/nerdtree',       { 'on': 'NERDTreeToggle' }
+  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
+  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
   Plug 'tmux-plugins/vim-tmux'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
@@ -47,37 +48,19 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
+  Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
+  Plug 'tpope/vim-rails'
+  Plug 'vim-ruby/vim-ruby',      { 'for': 'ruby'   }
+  Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua'    }
+  Plug 'xolox/vim-misc',         { 'for': 'lua'    }
+
   if has('nvim')
-    " Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
-    " Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
-    " Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
+    Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
+    Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
+    Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
   else
     Plug 'ConradIrwin/vim-bracketed-paste'
   endif
-
-  " Plug 'AndrewRadev/splitjoin.vim'
-  " Plug 'bling/vim-airline'
-  " Plug 'chrisbra/vim-diff-enhanced'
-  " Plug 'derekwyatt/vim-scala',     { 'for': 'scala'         }
-  " Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir'        }
-  " Plug 'fatih/vim-go',             { 'for': 'go'            }
-  " Plug 'fmoralesc/nvimfs'
-  " Plug 'godlygeek/csapprox',       { 'for': 'fugitiveblame' }
-  " Plug 'itchyny/lightline.vim'
-  " Plug 'junegunn/goyo.vim'
-  " Plug 'junegunn/limelight.vim'
-  " Plug 'junegunn/vim-github-dashboard', { 'on': ['GHActivity', 'GHDashboard'] }
-  " Plug 'kchmck/vim-coffee-script', { 'for': 'coffee'        }
-  " Plug 'keith/investigate.vim'
-  " Plug 'keith/swift.vim'
-  " Plug 'lervag/vimtex',            { 'for': 'tex'           }
-  " Plug 'ludovicchabant/vim-lawrencium'
-  " Plug 'rgrinberg/vim-ocaml',      { 'for': 'ocaml'         }
-  " Plug 'tpope/vim-scriptease',     { 'for': 'vim'           }
-  " Plug 'vim-scripts/rfc-syntax',   { 'for': 'rfc'           }
-  " Plug 'wting/rust.vim',           { 'for': 'rust'          }
-  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua'           }
-  Plug 'xolox/vim-misc',           { 'for': 'lua'           }
 
   Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'

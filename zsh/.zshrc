@@ -400,6 +400,7 @@ edit_configs() {
         m           ~/.muttrc
         n           ~/.config/nvim/init.vim
         p           ~/.pentadactyl/pentadactylrc
+        r           ~/.tmux/resurrect/last
         t           ~/.tmux.conf
         v           ~/.vim/vimrc
         x           ~/.Xdefaults
