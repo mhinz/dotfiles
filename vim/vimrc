@@ -395,7 +395,6 @@ augroup myvimrc
   au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
   au BufRead,BufNewFile /data/repo/vim/*            setlocal noet
   au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal sw=4 sts=4
-  au BufRead,BufNewFile /data/uni/techgi2/*.{s,asm} setlocal ft=mips
   au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
@@ -415,7 +414,6 @@ augroup END
 " commands {{{1
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
-command! -bar -nargs=+ -complete=file    Ag          silent! grep! <args> | cwindow | redraw!
 command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
 command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
@@ -432,7 +430,7 @@ command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d
 " colors {{{1
 if has('gui_running')
   set background=light
-  for scheme in ['gruvbox', 'PaperColor', 'railscasts']
+  for scheme in ['gruvbox', 'railscasts']
     try
       execute 'colorscheme' scheme
       break
@@ -504,10 +502,9 @@ function! SetStatusline()
             \ . ']%* '
   endif
 
-  " let stl .=
-  "       \   '%Y '
-  "       \ . '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
-  "       \ . '%p%3*%%%* '
+  let stl .=
+        \   '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
+        \ . '%p%3*%%%* '
 
   return stl
 endfunction
@@ -544,20 +541,6 @@ let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
 let g:surround_{char2nr('=')} = "== \r =="
 
-" plugins: syntastic {{{2
-let g:syntastic_enable_signs        = 1
-let g:syntastic_check_on_open       = 0
-let g:syntastic_enable_highlighting = 1
-let g:syntastic_auto_jump           = 0
-let g:syntastic_quiet_messages      = { 'level': 'warnings' }
-let g:syntastic_mode_map            = {
-      \ 'mode'             : 'passive',
-      \ 'active_filetypes' : [ 'c' ],
-      \ 'passive_filetypes': []
-      \ }
-
-let g:syntastic_c_compiler_options   = '-std=c11 -pedantic -Wall -Wextra -Wfloat-equal -ftrapv'
-let g:syntastic_cpp_compiler_options = '-std=c++11 -pedantic -Wall -Wextra -Weffc++'
 
 " plugins: tagbar {{{2
 let g:tagbar_width     = 40
@@ -584,8 +567,6 @@ let g:EasyMotion_use_smartsign_us  = 1
 let g:EasyMotion_use_upper         = 0
 
 map <space> <plug>(easymotion-s2)
-" map <Leader>j <plug>(easymotion-j)
-" map <Leader>k <plug>(easymotion-k)
 
 " plugins: vim-grepper {{{2
 nmap gs <plug>(GrepperOperator)
@@ -611,26 +592,7 @@ let g:lua_complete_omni = 1
 let g:sayonara_confirm_quit = 0
 
 " plugins: vim-signify {{{2
-let g:signify_vcs_list           = [ 'git', 'hg' ]
-" let g:signify_vcs_cmds = {
-"       \ 'git':      sy#util#escape('git') .' diff --no-color --no-ext-diff -U0 -- %f',
-"       \ }
-" let g:signify_fold_context       = [3, 8]
-"let g:signify_skip_filetype      = { 'help': 1 }
-"let g:signify_cursorhold_insert  = 1
-"let g:signify_cursorhold_normal  = 1
-" let g:signify_disable_by_default = 1
-" let g:signify_line_highlight     = 0
-"let g:signify_update_on_bufenter = 1
-" let g:signify_update_on_focusgained = 0
-
-" function! RunOnModifiedLines(lnums) abort
-"   for lnum in a:lnums
-"     execute 'silent! '. lnum .'substitute/\s\+$//'
-"   endfor
-" endfunction
-
-"let g:signify_action_on_modified_lines = 'RunOnModifiedLines'
+let g:signify_vcs_list = [ 'git', 'hg' ]
 
 omap ic <plug>(signify-motion-inner-pending)
 xmap ic <plug>(signify-motion-inner-visual)
@@ -639,36 +601,11 @@ xmap ac <plug>(signify-motion-outer-visual)
 
 " plugins: vim-startify {{{2
 let g:startify_list_order = [
-      \ ['   MRU '],
-      \ 'files' ,
-      \ ['   MRU DIR '],
-      \ 'dir',
-      \ ['   Sessions '],
-      \ 'sessions',
-      \ ['   Bookmarks '],
-      \ 'bookmarks',
+      \ ['   MRU '],       'files' ,
+      \ ['   MRU DIR '],   'dir',
+      \ ['   Sessions '],  'sessions',
+      \ ['   Bookmarks '], 'bookmarks',
       \ ]
-" autocmd User Startified nmap <buffer> o <plug>(startify-open-buffers)
-" autocmd User Startified
-"       \ execute 'nunmap <buffer> i' |
-"       \ setlocal modifiable |
-"       \ autocmd InsertEnter <buffer> enew
-
-" let g:startify_bookmarks = [ {'v': '~/.vim/vimrc'} ]
-" autocmd User Startified nnoremap <buffer><nowait><silent> v :edit ~/.vim/vimrc<cr>
-
-let g:startify_relative_path          = 0
-let g:startify_files_number           = 8
-let g:startify_session_persistence    = 0
-let g:startify_session_autoload       = 0
-let g:startify_session_delete_buffers = 1
-let g:startify_change_to_dir          = 0
-let g:startify_enable_special         = 0
-let g:startify_enable_unsafe          = 0
-
-" let g:startify_session_remove_lines   = ['winheight', 'winwidth']
-" let g:startify_custom_indices         = ['f', 'g', 'gg', 'x']
-" let g:startify_custom_indices         = map(range(1,100), 'string(v:val)')
 
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
@@ -677,6 +614,15 @@ let g:startify_skiplist = [
       \ '/Users/mhi/local/vim/share/vim/vim74/doc',
       \ ]
 
+let g:startify_bookmarks              = [ {'c': '~/.vim/vimrc'} ]
+let g:startify_change_to_dir          = 0
+let g:startify_enable_special         = 0
+let g:startify_files_number           = 8
+let g:startify_relative_path          = 1
+let g:startify_session_autoload       = 1
+let g:startify_session_delete_buffers = 1
+let g:startify_session_persistence    = 1
+
 function! s:center_header(lines) abort
   let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
   let centered_lines = map(copy(a:lines), 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
@@ -684,24 +630,6 @@ function! s:center_header(lines) abort
 endfunction
 
 let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
-" let g:startify_custom_footer = ['', "   Vim is charityware. Please read ':help uganda'.", '']
-
-"function! s:foo()
-    "redir => var
-      "silent! echomsg 'foo'
-      "silent! echomsg 'bar'
-      "silent! echomsg 'quux'
-    "redir END
-    "return map(split(var, '\n'), '"   " . v:val') + ['']
-"endfunction
-"let g:startify_custom_header = s:foo()
-
-" let g:startify_session_savevars = ['g:foo']
-" let g:startify_session_savecmds = [ 'colo molokai' ]
 " }}}1
-
-if filereadable(expand('~/.vimrc.local'))
-  source ~/.vimrc.local
-endif
 
 " vim: sw=2 sts=2 tw=0
