@@ -6,4 +6,4 @@ let ruby_space_errors = 1
 setlocal comments-=:#
 setlocal shiftwidth=2 softtabstop=2
 
-nnoremap <buffer><f8> :!./%<cr>
+nnoremap <buffer><f8> :!ruby %<cr>

@@ -42,17 +42,19 @@ call plug#begin('~/.vim/bundle')
   Plug 'tmux-plugins/vim-tmux'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
 
-  Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
+  Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
+  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+  Plug 'skalnik/vim-vroom'
   Plug 'tpope/vim-rails'
-  Plug 'vim-ruby/vim-ruby',      { 'for': 'ruby'   }
-  Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua'    }
-  Plug 'xolox/vim-misc',         { 'for': 'lua'    }
+  Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
+  Plug 'xolox/vim-misc',          { 'for': 'lua'        }
 
   if has('nvim')
     Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
@@ -119,7 +121,7 @@ set smartcase
 " misc settings
 set autoread
 set backspace     =indent,eol,start
-set clipboard     =unnamed
+" set clipboard     =unnamed
 set complete     -=i
 set cpoptions    -=e
 set diffopt       =filler,vertical,foldcolumn:0
@@ -241,7 +243,6 @@ nnoremap <f2>         :TagbarToggle<cr>
 nnoremap <f3>         :UndotreeToggle<cr>
 nnoremap <f4>         :GHDashboard! mhinz<cr>
 nnoremap <f5>         :GHActivity! mhinz<cr>
-nnoremap <f11>        :let b:stl_group_info = !get(b:, 'stl_group_info')<cr>
 nnoremap <f12>        :set spell!<cr>
 
 nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
@@ -399,7 +400,7 @@ augroup myvimrc
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
   au CompleteDone       *                           pclose
-  au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
+  " au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
 
   au User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
@@ -476,6 +477,9 @@ else
 endif
 
 " statusline {{{1
+command! -bar ToggleStatusLine let b:stl_location  = !get(b:, 'stl_location')
+command! -bar ToggleHighlight  let b:stl_highlight = !get(b:, 'stl_highlight')
+
 function! SetStatusline()
   let stl = ' %4*%<%f%*'
 
@@ -493,18 +497,20 @@ function! SetStatusline()
         \ . '%#WarningMsg#%{&ff != "unix" ? " ".&ff." ":""}%* '
         \ . '%#warningmsg#%{&fenc != "utf-8" && &fenc != "" ? " ".&fenc." " :""}%* '
 
-  if get(b:, 'stl_group_info')
-      let id = synID(line('.'), col('.'), 1)
-      let stl .=
-            \   '%#WarningMsg#['
-            \ . '%{synIDattr('.id.',"name")} as '
-            \ . '%{synIDattr(synIDtrans('.id.'),"name")}'
-            \ . ']%* '
+  if get(b:, 'stl_highlight')
+    let id = synID(line('.'), col('.'), 1)
+    let stl .=
+          \   '%#WarningMsg#['
+          \ . '%{synIDattr('.id.',"name")} as '
+          \ . '%{synIDattr(synIDtrans('.id.'),"name")}'
+          \ . ']%* '
   endif
 
-  let stl .=
-        \   '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
-        \ . '%p%3*%%%* '
+  if get(b:, 'stl_location')
+    let stl .=
+          \   '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
+          \ . '%p%3*%%%* '
+  endif
 
   return stl
 endfunction
@@ -618,7 +624,6 @@ let g:startify_bookmarks              = [ {'c': '~/.vim/vimrc'} ]
 let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
 let g:startify_files_number           = 8
-let g:startify_relative_path          = 1
 let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence    = 1
