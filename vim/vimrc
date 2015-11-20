@@ -121,7 +121,7 @@ set smartcase
 " misc settings
 set autoread
 set backspace     =indent,eol,start
-" set clipboard     =unnamed
+set clipboard     =unnamed
 set complete     -=i
 set cpoptions    -=e
 set diffopt       =filler,vertical,foldcolumn:0

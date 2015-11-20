@@ -8,6 +8,9 @@
     name  = Marco Hinz
     email = mh.codebro@gmail.com
 
+[rebase]
+    autosquash = true
+
 [diff]
     tool = vimdiff
 
