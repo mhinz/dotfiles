@@ -30,17 +30,17 @@ setopt completeinword
 setopt correct
 setopt globcomplete
 setopt interactivecomments
-setopt print_exit_value
 setopt listpacked
 setopt longlistjobs
 setopt no_beep
+setopt no_hist_beep
 setopt no_listrowsfirst
 setopt no_nomatch
+setopt no_print_exit_value
 setopt no_rm_star_silent
 setopt nohup
 setopt nolistambiguous
 setopt nolog
-setopt no_hist_beep
 setopt notify
 setopt promptsubst
 # setopt extendedglob

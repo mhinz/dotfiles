@@ -371,6 +371,7 @@ if has('nvim')
   tnoremap <a-j> <c-\><c-n><c-w>j
   tnoremap <a-k> <c-\><c-n><c-w>k
   tnoremap <a-l> <c-\><c-n><c-w>l
+  autocmd TermClose * call feedkeys('<cr>')
 endif
 
 if empty($TMUX)
@@ -587,7 +588,7 @@ let g:grepper.quickfix  = 1
 let g:grepper.open      = 1
 let g:grepper.switch    = 1
 let g:grepper.jump      = 0
-let g:grepper.next_tool = '<leader>g'
+" let g:grepper.next_tool = '<leader>g'
 
 " autocmd User Grepper unsilent echomsg 'Grep program finished!'
 

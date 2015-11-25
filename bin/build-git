@@ -14,3 +14,4 @@ fi
 make distclean 1>/dev/null
 make configure 1>/dev/null
 ./configure --prefix=$HOME/local/git && make install install-man
+cd contrib/subtree && make install

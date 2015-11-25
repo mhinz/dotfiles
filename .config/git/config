@@ -1,15 +1,19 @@
+[user]
+    name  = Marco Hinz
+    email = mh.codebro@gmail.com
+
 [core]
     editor       = vim
     excludesfile = ~/.git/gitignore
     autocrlf     = false
     filemode     = false
 
-[user]
-    name  = Marco Hinz
-    email = mh.codebro@gmail.com
+[init]
+    templatedir = ~/.git/template
 
 [rebase]
     autosquash = true
+    autostash  = true
 
 [diff]
     tool = vimdiff
@@ -56,6 +60,7 @@
     h     = help
     l     = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative
     la    = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative --all
+    lfp   = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative --first-parent
     lsr   = ls-remote
     m     = merge
     ma    = merge --abort
@@ -73,18 +78,23 @@
     rs    = rebase --skip
     s     = status -uno
     sb    = show-branch
+    sbt   = show-branch --topics HEAD
     sh    = show
     shs   = show --stat
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     ss    = status
     st    = stash
     t     = tag
+    unmerged = branch --no-merged master
     url   = !bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
     vd    = diff
     w     = whatchanged -50
     what  = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
     wt    = worktree
+
+    authors = "!f() { git log --no-merges --pretty='format:%<(26)%an <%ae>' --author \"$*\" | sort | uniq; }; f"
+    by      = "!f() { IFS=$'\n'; select a in `git authors \"$*\"`; do git shortlog --author \"${a%%  *<*}\"; break; done; }; f"
 
     root = rev-parse --show-toplevel
 
@@ -122,15 +132,5 @@
     header = 240
     branch = yellow
 
-[init]
-    templatedir = ~/.git/template
-
 [push]
     default = simple
-
-[url "git://github.com/ghc/packages-"]
-    insteadOf = git://github.com/ghc/packages/
-[filter "media"]
-	required = true
-	clean = git media clean %f
-	smudge = git media smudge %f
