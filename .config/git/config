@@ -4,12 +4,12 @@
 
 [core]
     editor       = vim
-    excludesfile = ~/.git/gitignore
+    excludesfile = ~/.config/git/ignore
     autocrlf     = false
     filemode     = false
 
 [init]
-    templatedir = ~/.git/template
+    templatedir = ~/.config/git/template
 
 [rebase]
     autosquash = true
@@ -88,7 +88,6 @@
     unmerged = branch --no-merged master
     url   = !bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
     vd    = diff
-    w     = whatchanged -50
     what  = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
     wt    = worktree
