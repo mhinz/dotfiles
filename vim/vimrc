@@ -241,15 +241,12 @@ imap     <c-x><c-z>   <plug>(UnicodeComplete)
 nnoremap <f1>         :NERDTreeToggle<cr>
 nnoremap <f2>         :TagbarToggle<cr>
 nnoremap <f3>         :UndotreeToggle<cr>
-nnoremap <f4>         :GHDashboard! mhinz<cr>
-nnoremap <f5>         :GHActivity! mhinz<cr>
 nnoremap <f12>        :set spell!<cr>
 
 nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
 " nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
 
 nnoremap <c-g>        :FileInfo<cr>
-nnoremap <c-p>        :FZF<cr>
 
 nnoremap <expr> n     'Nn'[v:searchforward].'zvzz'
 nnoremap <expr> N     'nN'[v:searchforward].'zvzz'
@@ -334,15 +331,11 @@ nnoremap <leader>rr   :source %<cr>
 
 nnoremap <leader>si   :echo mhi#syninfo()<cr>
 nnoremap <leader>ss   :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
-nnoremap <leader>st   :Startify<cr>
 
 nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <leader>Q    :Sayonara!<cr>
-nnoremap <leader>f    :FZF<cr>
 nnoremap <leader>j    <c-^>
 nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
 nnoremap <leader>p    :call mhi#pulse()<cr>
-nnoremap <silent> <leader>q    :Sayonara<cr>
 nnoremap <leader>v    `[v`]
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
@@ -532,6 +525,36 @@ let g:loaded_getscriptPlugin  = 1
 let g:loaded_vimballPlugin    = 1
 "let g:loaded_zipPlugin        = 1
 
+" plugins: fzf {{{2
+set runtimepath+=~/local/fzf
+
+nnoremap <leader>f :FZF<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>C :Colorschemes<cr>
+
+function! s:buflist()
+  return map(filter(range(1, bufnr('$')),
+        \ 'buflisted(v:val)'), 'printf("%s: %s", v:val, bufname(v:val))')
+endfunction
+
+function! s:bufopen(entry)
+  execute 'buffer' matchstr(a:entry, '^\d\+')
+endfunction
+
+command! -nargs=0 Buffers let bl = reverse(s:buflist()) | call fzf#run({
+      \ 'source':  bl,
+      \ 'sink':    function('<sid>bufopen'),
+      \ 'options': '+m',
+      \ 'down':    len(bl) + 2,
+      \ })
+
+command! Colorschemes call fzf#run({
+      \ 'source':  reverse(sort(map(globpath(&rtp, "colors/*.vim", 0, 1), 'fnamemodify(v:val, ":t:r")'))),
+      \ 'sink':    'colo',
+      \ 'options': '+m',
+      \ 'left':    30
+      \ })
+
 " plugins: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
@@ -599,6 +622,9 @@ let g:lua_complete_omni = 1
 let g:plug_shallow = 0
 
 " plugins: vim-sayonara {{{2
+nnoremap <silent><leader>q  :Sayonara<cr>
+nnoremap <silent><leader>Q  :Sayonara!<cr>
+
 let g:sayonara_confirm_quit = 0
 
 " plugins: vim-signify {{{2
@@ -610,6 +636,8 @@ omap ac <plug>(signify-motion-outer-pending)
 xmap ac <plug>(signify-motion-outer-visual)
 
 " plugins: vim-startify {{{2
+nnoremap <leader>st  :Startify<cr>
+
 let g:startify_list_order = [
       \ ['   MRU '],       'files' ,
       \ ['   MRU DIR '],   'dir',
