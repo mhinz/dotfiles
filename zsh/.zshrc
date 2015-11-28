@@ -396,7 +396,7 @@ edit_configs() {
     configs=(
         b           ~/.bashrc
         dwm         ~/.dotfiles/dwm/config.h
-        g           ~/.gitconfig
+        g           ~/.config/git/config
         m           ~/.muttrc
         n           ~/.config/nvim/init.vim
         p           ~/.pentadactyl/pentadactylrc

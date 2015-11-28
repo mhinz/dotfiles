@@ -41,6 +41,7 @@
     a     = add
     au    = add -u
     b     = branch
+    bc    = branch --contains
     bi    = bisect
     bl    = blame
     c     = commit
@@ -49,6 +50,7 @@
     co    = checkout
     cp    = cherry-pick
     d     = diff --color --no-ext-diff
+    dw    = diff --color --no-ext-diff --word-diff=color
     dc    = describe --contains
     dc    = diff --color --no-ext-diff --cached
     dcs   = diff --color --no-ext-diff --stat --cached
@@ -64,6 +66,7 @@
     lsr   = ls-remote
     m     = merge
     ma    = merge --abort
+    n     = name-rev --name-only
     p     = push
     pl    = pull --ff-only
     r     = reset
@@ -76,19 +79,15 @@
     rl    = rev-list
     rp    = rev-parse
     rs    = rebase --skip
-    s     = status -uno
+    s     = status -sb -uno
     sb    = show-branch
     sbt   = show-branch --topics HEAD
     sh    = show
     shs   = show --stat
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-    ss    = status
     st    = stash
     t     = tag
     unmerged = branch --no-merged master
-    url   = !bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
-    vd    = diff
-    what  = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
     wt    = worktree
 

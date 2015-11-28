@@ -12,7 +12,7 @@ function! mhi#lookup()
   elseif stridx(name, '.') > 0
     call search('\c\v^\s*fu%[nction]!?\s+.{-}\.'. name[stridx(name,'.')+1:], 'cesw')
   elseif name =~ '#' && name[0] != '#'
-    call s:find_autocmd_definition(name)
+    call s:find_autoload_definition(name)
   endif
   let &iskeyword = isk
 endfunction
@@ -21,17 +21,19 @@ function! s:find_local_definition(name)
   call search('\c\v^\s*fu%[nction]!?\s+%(s:|\<sid\>)\V'. a:name, 'cesw')
 endfunction
 
-function! s:find_autocmd_definition(name)
+function! s:find_autoload_definition(name)
   let [path, function] = split(a:name, '.*\zs#')
+  let pattern = '\c\v^\s*fu%[nction]!?\s+\V'. path .'#'. function .'\>'
   let name = printf('autoload/%s.vim', substitute(path, '#', '/', 'g'))
   let audirs = globpath(&runtimepath, name, '', 1)
   if !empty(audirs)
     let aufile = audirs[0]
-    let lnum = match(readfile(aufile),
-          \ '\c\v^\s*fu%[nction]!?\s+\V'. path .'#'. function .'\>')
+    let lnum = match(readfile(aufile), pattern)
     if lnum > -1
       execute 'edit +'. (lnum+1) aufile
     endif
+  else
+    call search(pattern)
   endif
 endfunction
 

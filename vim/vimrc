@@ -26,7 +26,9 @@
 "                ╚══════════════════════════════════════════╝
 
 " plug {{{1
-call plug#begin('~/.vim/bundle')
+let bundle = '~/.vim/bundle'
+
+call plug#begin(bundle)
   Plug 'jonathanfilip/vim-lucius'
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
@@ -48,6 +50,7 @@ call plug#begin('~/.vim/bundle')
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-vinegar'
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
   Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -228,25 +231,16 @@ inoremap <a-O>        <c-o>O
 inoremap <expr> <tab>   mhi#tab_yeah("\<c-n>", "\<tab>")
 inoremap <expr> <s-tab> mhi#tab_yeah("\<c-p>", "\<s-tab>")
 
+nnoremap <silent> L     :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
+
 inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
 
 nnoremap \            ;
-nmap     ga           <plug>(UnicodeGA)
 
 nnoremap <tab>        <c-w>w
 nnoremap <s-tab>      <c-w>W
 
-imap     <c-x><c-z>   <plug>(UnicodeComplete)
-
-nnoremap <f1>         :NERDTreeToggle<cr>
-nnoremap <f2>         :TagbarToggle<cr>
-nnoremap <f3>         :UndotreeToggle<cr>
 nnoremap <f12>        :set spell!<cr>
-
-nnoremap <silent> L   :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
-" nnoremap K            :grep! "\b<c-r><c-w>\b"<cr>:cwindow<cr>
-
-nnoremap <c-g>        :FileInfo<cr>
 
 nnoremap <expr> n     'Nn'[v:searchforward].'zvzz'
 nnoremap <expr> N     'nN'[v:searchforward].'zvzz'
@@ -320,11 +314,6 @@ onoremap gv           :<c-u>normal! gv<cr>
 
 nnoremap Q            gqap
 
-nnoremap <leader>dd   :Dispatch<cr>
-nnoremap <leader>dm   :Make<cr>
-nnoremap <leader>ds   :Copen<cr>
-nnoremap <leader>ds   :Start<cr>
-
 nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv   :source $MYVIMRC<cr>
 nnoremap <leader>rr   :source %<cr>
@@ -335,7 +324,6 @@ nnoremap <leader>ss   :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val,
 nnoremap <leader>M    :<c-u><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>j    <c-^>
 nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
-nnoremap <leader>p    :call mhi#pulse()<cr>
 nnoremap <leader>v    `[v`]
 nnoremap <leader>w    :update<cr>
 nnoremap <leader>x    :xit<cr>
@@ -394,7 +382,6 @@ augroup myvimrc
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
   au CompleteDone       *                           pclose
-  " au VimEnter           *                           if isdirectory(expand('<afile>')) | Ex | endif
 
   au User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
@@ -413,14 +400,6 @@ command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
 command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
-command! -bar                            FileInfo    echo printf("%s%s [%d,%d/%d] --%d%%--",
-      \ expand('%:p'),
-      \ &modified ? '[+]' : '',
-      \ col('.'),
-      \ line('.'),
-      \ line('$'),
-      \ float2nr(line('.') / (line('$') / 100.0))
-      \ )
 
 " colors {{{1
 if has('gui_running')
@@ -471,8 +450,13 @@ else
 endif
 
 " statusline {{{1
-command! -bar ToggleStatusLine let b:stl_location  = !get(b:, 'stl_location')
+command! -bar ToggleStatusline let b:stl_location  = !get(b:, 'stl_location')
 command! -bar ToggleHighlight  let b:stl_highlight = !get(b:, 'stl_highlight')
+
+nnoremap <silent><f10> :ToggleStatusline<cr>
+nnoremap <silent><f11> :ToggleHighlight<cr>
+
+set statusline=%!SetStatusline()
 
 function! SetStatusline()
   let stl = ' %4*%<%f%*'
@@ -509,8 +493,6 @@ function! SetStatusline()
   return stl
 endfunction
 
-set statusline=%!SetStatusline()
-
 " plugins {{{1
 " plugins: misc {{{2
 let g:is_bash      = 1
@@ -528,29 +510,48 @@ let g:loaded_vimballPlugin    = 1
 " plugins: fzf {{{2
 set runtimepath+=~/local/fzf
 
-nnoremap <leader>f :FZF<cr>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>C :Colorschemes<cr>
+nnoremap <leader><leader> :Buffers<cr>
+nnoremap <leader>C        :Colorschemes<cr>
+nnoremap <leader>P        :Plugins<cr>
+nnoremap <leader>S        :Scriptnames<cr>
+nnoremap <leader>f        :FZF<cr>
 
 function! s:buflist()
   return map(filter(range(1, bufnr('$')),
-        \ 'buflisted(v:val)'), 'printf("%s: %s", v:val, bufname(v:val))')
+        \ 'bufloaded(v:val)'), 'printf("%s: %s", v:val, bufname(v:val))')
 endfunction
 
-function! s:bufopen(entry)
-  execute 'buffer' matchstr(a:entry, '^\d\+')
+function! s:bufopen(lines)
+  if len(a:lines) < 2 | return | endif
+  let cmd = get({
+        \ 'ctrl-s': 'split',
+        \ 'ctrl-v': 'vsplit',
+        \ 'ctrl-t': 'tabedit'
+        \ }, a:lines[0], 'edit')
+  execute cmd '+b'.matchstr(a:lines[1], '^\d\+')
 endfunction
 
-command! -nargs=0 Buffers let bl = reverse(s:buflist()) | call fzf#run({
+function! s:plugopen(entry)
+  execute 'Explore' expand(g:bundle) .'/'. a:entry
+endfunction
+
+command! Buffers let bl = reverse(s:buflist()) | call fzf#run({
       \ 'source':  bl,
-      \ 'sink':    function('<sid>bufopen'),
-      \ 'options': '+m',
+      \ 'sink*':   function('<sid>bufopen'),
+      \ 'options': '+m --expect=ctrl-s,ctrl-v,ctrl-t',
       \ 'down':    len(bl) + 2,
+      \ }) | unlet bl
+
+command! Plugins call fzf#run({
+      \ 'source':  reverse(sort(map(globpath(bundle, '*', 0, 1), 'fnamemodify(v:val, ":t")'))),
+      \ 'sink':    function('<sid>plugopen'),
+      \ 'options': '+m',
+      \ 'left':    30
       \ })
 
 command! Colorschemes call fzf#run({
-      \ 'source':  reverse(sort(map(globpath(&rtp, "colors/*.vim", 0, 1), 'fnamemodify(v:val, ":t:r")'))),
-      \ 'sink':    'colo',
+      \ 'source':  reverse(sort(map(globpath(&rtp, 'colors/*.vim', 0, 1), 'fnamemodify(v:val, ":t:r")'))),
+      \ 'sink':    'colorscheme',
       \ 'options': '+m',
       \ 'left':    30
       \ })
@@ -558,6 +559,7 @@ command! Colorschemes call fzf#run({
 " plugins: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
+let g:netrw_bufsettings  = 'relativenumber'
 let g:netrw_keepdir      = 0
 let g:netrw_liststyle    = 1
 let g:netrw_sort_options = 'i'
@@ -573,13 +575,24 @@ let g:surround_{char2nr('=')} = "== \r =="
 
 
 " plugins: tagbar {{{2
+nnoremap <f2> :TagbarToggle<cr>
+
 let g:tagbar_width     = 40
 let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
+" plugins: undotree {{{2
+nnoremap <f3>  :UndotreeToggle<cr>
+
 " plugins: vim {{{2
 let g:vimsyn_folding = 'f'
+
+" plugins: vim-dispatch {{{2
+nnoremap <leader>dd  :Dispatch<cr>
+nnoremap <leader>dm  :Make<cr>
+nnoremap <leader>ds  :Copen<cr>
+nnoremap <leader>ds  :Start<cr>
 
 " plugins: vim-easy-align {{{2
 vmap <cr>      <plug>(LiveEasyAlign)
