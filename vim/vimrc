@@ -67,6 +67,8 @@ call plug#begin(bundle)
     Plug 'ConradIrwin/vim-bracketed-paste'
   endif
 
+  " Plug 'fatih/vim-go'
+  Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'
   Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
@@ -352,7 +354,7 @@ if has('nvim')
   tnoremap <a-j> <c-\><c-n><c-w>j
   tnoremap <a-k> <c-\><c-n><c-w>k
   tnoremap <a-l> <c-\><c-n><c-w>l
-  autocmd TermClose * call feedkeys('<cr>')
+  " autocmd TermClose * call feedkeys('<cr>')
 endif
 
 if empty($TMUX)
@@ -619,7 +621,7 @@ nnoremap <leader>g :Grepper! -tool git<cr>
 nnoremap <leader>G :Grepper! -tool ag<cr>
 
 let g:grepper           = {}
-let g:grepper.programs  = ['git', 'ag', 'grep']
+let g:grepper.tools     = ['git', 'ag', 'grep']
 let g:grepper.quickfix  = 1
 let g:grepper.open      = 1
 let g:grepper.switch    = 1

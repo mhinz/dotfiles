@@ -2,7 +2,7 @@
 
 eval $(dircolors ~/.zsh/dircolors)
 
-[[ $DISPLAY == screen* ]] && stty erase '^?'
+# [[ $DISPLAY == screen* ]] && stty erase '^?'
 
 autoload -Uz compinit && compinit
 autoload -Uz edit-command-line

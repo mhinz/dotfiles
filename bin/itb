@@ -2,7 +2,7 @@
 
 require 'net/http'
 require 'json'
-require 'lisbn'
+# require 'lisbn'
 
 if ARGV.empty?
   $stderr.puts "usage: #{File.basename($0)} <query>"
@@ -38,7 +38,7 @@ loop do
   book_id = books[choice]['ID']
   book = JSON.parse(Net::HTTP.get(URI(
     "http://it-ebooks-api.info/v1/book/#{book_id}")))
-  isbn = Lisbn.new(book['ISBN']).isbn10
+  # isbn = Lisbn.new(book['ISBN']).isbn10
 
   puts "\e[32m %-14s\e[0m%s" % [ 'Title',       book['Title' ]       ]
   puts "\e[32m %-14s\e[0m%s" % [ 'Subtitle',    book['SubTitle' ]    ]
@@ -46,7 +46,7 @@ loop do
   puts "\e[32m %-14s\e[0m%s" % [ 'Year',        book['Year' ]        ]
   puts "\e[32m %-14s\e[0m%s" % [ 'Publisher',   book['Publisher' ]   ]
   puts "\e[32m %-14s\e[0m%s" % [ 'ISBN',        book['ISBN' ]        ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Amazon',      "http://www.amazon.de/gp/product/#{isbn}" ]
+  # puts "\e[32m %-14s\e[0m%s" % [ 'Amazon',      "http://www.amazon.de/gp/product/#{isbn}" ]
   puts "\e[32m %-14s\e[0m%s" % [ 'Download',    book['Download' ]    ]
   puts "\e[32m %-14s\e[0m%s" % [ 'Description', book['Description' ] ]
 

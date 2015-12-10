@@ -11,27 +11,29 @@
 [init]
     templatedir = ~/.config/git/template
 
+[push]
+    default = simple
+
 [rebase]
     autosquash = true
     autostash  = true
 
+[rerere]
+    enabled = true
+
 [diff]
-    tool = vimdiff
-
-[merge]
-    tool = vimdiff
-
-[mergetool]
-    prompt = true
-
-[mergetool "vimdiff"]
-    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+    tool           = vimdiff
+    mnemonicPrefix = true
 
 [difftool "accu"]
     cmd = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
 
+[merge]
+    tool          = vimdiff
+    conflictstyle = diff3
+
 [mergetool "accu"]
-    cmd = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
+    cmd           = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
     trustExitCode = true
 
 [pager]
@@ -107,9 +109,6 @@
 [advice]
     statusHints = no
 
-[rerere]
-    enabled = false
-
 [color]
     branch      = auto
     diff        = auto
@@ -129,6 +128,3 @@
 [color "status"]
     header = 240
     branch = yellow
-
-[push]
-    default = simple
