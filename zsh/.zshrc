@@ -245,7 +245,7 @@ alias ob='objdump -Mintel'
 alias p1='patch -p1 -g1 --dry-run'
 alias rt='cd ~torrent/../session && rtorrent'
 alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
-alias t='$EDITOR /data/life/todo'
+alias t='$EDITOR ~/todo'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias z='zathura'
 

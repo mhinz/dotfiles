@@ -67,6 +67,8 @@ call plug#begin(bundle)
     Plug 'ConradIrwin/vim-bracketed-paste'
   endif
 
+  Plug 'jreybert/vimagit'
+
   " Plug 'fatih/vim-go'
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
@@ -118,7 +120,7 @@ set foldtext      =mhi#foldy()
 set hlsearch
 set ignorecase
 set incsearch
-set mouse         =a
+set mouse         =
 set scrolloff     =4
 set sidescroll    =5
 set smartcase
@@ -620,15 +622,22 @@ xmap gs <plug>(GrepperOperator)
 nnoremap <leader>g :Grepper! -tool git<cr>
 nnoremap <leader>G :Grepper! -tool ag<cr>
 
-let g:grepper           = {}
-let g:grepper.tools     = ['git', 'ag', 'grep']
-let g:grepper.quickfix  = 1
-let g:grepper.open      = 1
-let g:grepper.switch    = 1
-let g:grepper.jump      = 0
+let g:grepper          = {}
+let g:grepper.tools    = ['git', 'ag', 'sift', 'grep', 'gitty']
+let g:grepper.quickfix = 1
+let g:grepper.open     = 1
+let g:grepper.switch   = 1
+let g:grepper.jump     = 0
 " let g:grepper.next_tool = '<leader>g'
 
+let g:grepper.gitty = { 'grepprg': 'gitty' }
 " autocmd User Grepper unsilent echomsg 'Grep program finished!'
+
+" nnoremap <leader>git :Grepper! -tool git  -open -noswitch<cr>
+" nnoremap <leader>*   :Grepper! -tool ack  -cword<cr>
+" nnoremap <leader>ag :Grepper -tool ag -query<space>
+" command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
+" command! -nargs=* -complete=file Ag Grepper! -tool ag -query <args>
 
 " plugins: vim-lua-ftplugin {{{2
 let g:lua_complete_omni = 1
