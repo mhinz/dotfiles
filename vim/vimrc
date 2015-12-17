@@ -67,8 +67,6 @@ call plug#begin(bundle)
     Plug 'ConradIrwin/vim-bracketed-paste'
   endif
 
-  Plug 'jreybert/vimagit'
-
   " Plug 'fatih/vim-go'
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
@@ -356,6 +354,7 @@ if has('nvim')
   tnoremap <a-j> <c-\><c-n><c-w>j
   tnoremap <a-k> <c-\><c-n><c-w>k
   tnoremap <a-l> <c-\><c-n><c-w>l
+  autocmd BufEnter term://* startinsert
   " autocmd TermClose * call feedkeys('<cr>')
 endif
 
