@@ -41,6 +41,7 @@
 
 [alias]
     a     = add
+    app   = appraise
     au    = add -u
     b     = branch
     bc    = branch --contains
