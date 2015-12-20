@@ -41,7 +41,6 @@ call plug#begin(bundle)
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
-  Plug 'tmux-plugins/vim-tmux'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-endwise'
@@ -349,11 +348,12 @@ xnoremap #            :<c-u>call mhi#search()<cr>??<cr>
 xnoremap <leader>*    :<c-u>silent! execute mhi#search_all()<cr>
 
 if has('nvim')
-  tnoremap <esc> <c-\><c-n>
-  tnoremap <a-h> <c-\><c-n><c-w>h
-  tnoremap <a-j> <c-\><c-n><c-w>j
-  tnoremap <a-k> <c-\><c-n><c-w>k
-  tnoremap <a-l> <c-\><c-n><c-w>l
+  nnoremap <leader>t  :vsplit +terminal<cr>
+  tnoremap <esc>      <c-\><c-n>
+  tnoremap <a-h>      <c-\><c-n><c-w>h
+  tnoremap <a-j>      <c-\><c-n><c-w>j
+  tnoremap <a-k>      <c-\><c-n><c-w>k
+  tnoremap <a-l>      <c-\><c-n><c-w>l
   autocmd BufEnter term://* startinsert
   " autocmd TermClose * call feedkeys('<cr>')
 endif
