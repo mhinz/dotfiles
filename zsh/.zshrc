@@ -258,7 +258,6 @@ alias vu='vim -u NONE -U NONE -i NONE -N'
 alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
-alias h="cd ..; l"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -513,6 +512,24 @@ here() {
     else
         command urxvtc -cd $PWD
     fi
+}
+
+h() {
+  export CONF_COLS=$[ COLUMNS/2 ]
+  export CONF_SEP='{::}'
+
+  cp -f ~/Library/Application\ Support/Google/Chrome/Default/History /tmp/h
+
+  sqlite3 -separator $CONF_SEP /tmp/h 'select title, url from urls order by last_visit_time desc' \
+      | ruby -ne '
+  cols = ENV["CONF_COLS"].to_i
+  title, url = $_.split(ENV["CONF_SEP"])
+  puts "\x1b[33m#{title.ljust(cols)}\x1b[0m #{url}"' \
+      | fzf --ansi --multi --no-hscroll --tiebreak=index \
+      | grep --color=never -o 'https\?://.*' \
+      | xargs open
+
+  unset CONF_COLS CONF_SEP
 }
 
 # vim: et sts=4 sw=4
