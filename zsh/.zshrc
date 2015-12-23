@@ -531,5 +531,21 @@ h() {
 
   unset CONF_COLS CONF_SEP
 }
+# }}}
+
+# Docker {{{1
+alias d='docker'
+alias dm='docker-machine'
+
+if [[ $(uname -s) = 'Darwin' ]]; then
+    dockerinit() {
+        [[ $(docker-machine status default) = 'Running' ]] || docker-machine start default
+        eval "$(docker-machine env default)"
+    }
+
+    dockerstop() {
+        docker-machine stop default
+    }
+fi
 
 # vim: et sts=4 sw=4
