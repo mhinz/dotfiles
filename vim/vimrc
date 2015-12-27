@@ -662,10 +662,10 @@ xmap ac <plug>(signify-motion-outer-visual)
 nnoremap <leader>st  :Startify<cr>
 
 let g:startify_list_order = [
-      \ ['   MRU '],       'files' ,
-      \ ['   MRU DIR '],   'dir',
-      \ ['   Sessions '],  'sessions',
-      \ ['   Bookmarks '], 'bookmarks',
+      \ ['   MRU'],           'files' ,
+      \ ['   MRU '.getcwd()], 'dir',
+      \ ['   Sessions'],      'sessions',
+      \ ['   Bookmarks'],     'bookmarks',
       \ ]
 
 let g:startify_skiplist = [
