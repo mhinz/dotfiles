@@ -241,7 +241,7 @@ nnoremap \            ;
 nnoremap <tab>        <c-w>w
 nnoremap <s-tab>      <c-w>W
 
-nnoremap <f12>        :set spell!<cr>
+nnoremap <f12>        :setlocal spell!<cr>
 
 nnoremap <expr> n     'Nn'[v:searchforward].'zvzz'
 nnoremap <expr> N     'nN'[v:searchforward].'zvzz'
