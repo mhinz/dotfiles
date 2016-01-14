@@ -33,7 +33,6 @@ call plug#begin(bundle)
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
 
-  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
@@ -47,22 +46,21 @@ call plug#begin(bundle)
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-scriptease', { 'for': 'vim' }
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-vinegar'
+
+  Plug 'justinmk/vim-dirvish', { 'on': 'Dirvish' }
+  Plug 'junegunn/fzf.vim'
+  Plug 'beloglazov/vim-online-thesaurus'
+  Plug 'ryanss/vim-hackernews'
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
   Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-  Plug 'skalnik/vim-vroom'
-  Plug 'tpope/vim-rails'
   Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
   Plug 'xolox/vim-misc',          { 'for': 'lua'        }
 
-  if has('nvim')
-    Plug 'neovimhaskell/haskell-vim',   { 'for': 'haskell' }
-    Plug 'neovimhaskell/neovim-ghcmod', { 'for': 'haskell' }
-    Plug 'neovimhaskell/nvim-hs',       { 'for': 'haskell' }
-  else
+  if !has('nvim')
     Plug 'ConradIrwin/vim-bracketed-paste'
   endif
 
@@ -80,6 +78,8 @@ call plug#end()
 " init {{{1
 filetype plugin indent on
 syntax   on
+runtime macros/matchit.vim
+
 let mapleader = ';'
 
 "autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
@@ -131,7 +131,7 @@ set cpoptions    -=e
 set diffopt       =filler,vertical,foldcolumn:0
 set fileformats   =unix,dos,mac
 set hidden
-set history       =10000
+set history       =1000
 set lazyredraw
 set more
 set mousemodel    =popup
@@ -220,10 +220,6 @@ else
   augroup END
 endif
 
-if executable('ag')
-  let &grepprg = 'command ag --nogroup --nocolor'
-endif
-
 " mapping {{{1
 inoremap jf           <esc>
 inoremap <a-o>        <c-o>o
@@ -278,15 +274,6 @@ nnoremap ]e           :<c-u>execute 'move +'. v:count1<cr>
 " switch comma-separated arguments
 nnoremap [w           :normal F,h]w2w<cr>
 nnoremap ]w           :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP" \| let &isk=s<cr>
-
-if empty(maparg(']c', 'n'))
-  nmap ]c <plug>(signify-next-hunk)
-  nmap ]C 999]c
-endif
-if empty(maparg('[c', 'n'))
-  nmap [c <plug>(signify-prev-hunk)
-  nmap [C 999[c
-endif
 
 nnoremap }            }zz
 nnoremap {            {zz
@@ -361,9 +348,11 @@ endif
 if empty($TMUX)
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 else
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
 endif
 
 " autocmd {{{1
@@ -428,21 +417,21 @@ if has('gui_running')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
   set background=dark
-  augroup mycolors
-    autocmd!
-    autocmd ColorScheme janah
-          \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
-          \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
-          \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-          \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
-          \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
-    autocmd ColorScheme focus
-          \ highlight User1 ctermfg=white ctermbg=black cterm=NONE |
-          \ highlight User2 ctermfg=white ctermbg=black cterm=NONE |
-          \ highlight User3 ctermfg=white ctermbg=black cterm=NONE |
-          \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
-          \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
-  augroup END
+  " augroup mycolors
+    " autocmd!
+    " autocmd ColorScheme janah
+          " \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
+          " \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
+          " \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
+          " \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
+          " \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
+    " autocmd ColorScheme focus
+    "       \ highlight User1 ctermfg=white ctermbg=black cterm=NONE |
+    "       \ highlight User2 ctermfg=white ctermbg=black cterm=NONE |
+    "       \ highlight User3 ctermfg=white ctermbg=black cterm=NONE |
+    "       \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
+    "       \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
+  " augroup END
   for scheme in ['janah', 'focus', 'gruvbox', 'desert']
     try
       execute 'colorscheme' scheme
@@ -459,7 +448,8 @@ command! -bar ToggleHighlight  let b:stl_highlight = !get(b:, 'stl_highlight')
 nnoremap <silent><f10> :ToggleStatusline<cr>
 nnoremap <silent><f11> :ToggleHighlight<cr>
 
-set statusline=%!SetStatusline()
+" set statusline=%!SetStatusline()
+set statusline=\ 
 
 function! SetStatusline()
   let stl = ' %4*%<%f%*'
@@ -535,7 +525,7 @@ function! s:bufopen(lines)
 endfunction
 
 function! s:plugopen(entry)
-  execute 'Explore' expand(g:bundle) .'/'. a:entry
+  execute 'Dirvish' expand(g:bundle) .'/'. a:entry
 endfunction
 
 command! Buffers let bl = reverse(s:buflist()) | call fzf#run({
@@ -560,7 +550,7 @@ command! Colorschemes call fzf#run({
       \ })
 
 " plugins: netrw {{{2
-" let g:loaded_netrwPlugin = 1
+let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
 let g:netrw_bufsettings  = 'relativenumber'
 let g:netrw_keepdir      = 0
@@ -575,7 +565,7 @@ let g:surround_{char2nr('8')} = "/* \r */"
 let g:surround_{char2nr('s')} = " \r"
 let g:surround_{char2nr('^')} = "/^\r$/"
 let g:surround_{char2nr('=')} = "== \r =="
-
+let g:surround_{char2nr('k')} = "<kbd>\r</kbd>"
 
 " plugins: tagbar {{{2
 nnoremap <f2> :TagbarToggle<cr>
@@ -591,11 +581,22 @@ nnoremap <f3>  :UndotreeToggle<cr>
 " plugins: vim {{{2
 let g:vimsyn_folding = 'f'
 
+" plugins: vim-dirvish {{{2
+autocmd FileType dirvish nmap <c-o> -
+
 " plugins: vim-dispatch {{{2
 nnoremap <leader>dd  :Dispatch<cr>
 nnoremap <leader>dm  :Make<cr>
 nnoremap <leader>ds  :Copen<cr>
 nnoremap <leader>ds  :Start<cr>
+
+au BufReadPost * if getline(1) =~# '^#!' | let b:dispatch = getline(1)[2:-1] . ' %' | let b:start = b:dispatch | endif
+au FileType markdown let b:dispatch = 'mdl % | sort -t: -k2 -n'
+au FileType vim      let b:dispatch = ':Runtime' | let b:start = ':Runtime|PP'
+
+let g:dispatch_compilers = {
+      \ 'mdl': 'gcc',
+      \ }
 
 " plugins: vim-easy-align {{{2
 vmap <cr>      <plug>(LiveEasyAlign)
@@ -612,25 +613,15 @@ let g:EasyMotion_startofline       = 0
 let g:EasyMotion_use_smartsign_us  = 1
 let g:EasyMotion_use_upper         = 0
 
-map <space> <plug>(easymotion-s2)
+map <silent><space> <plug>(easymotion-s2)
 
 " plugins: vim-grepper {{{2
+nnoremap <leader>g :Grepper -tool git<cr>
+nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
-nnoremap <leader>g :Grepper! -tool git<cr>
-nnoremap <leader>G :Grepper! -tool ag<cr>
-
-let g:grepper          = {}
-let g:grepper.tools    = ['git', 'ag', 'sift', 'grep', 'gitty']
-let g:grepper.quickfix = 1
-let g:grepper.open     = 1
-let g:grepper.switch   = 1
-let g:grepper.jump     = 0
-" let g:grepper.next_tool = '<leader>g'
-
-let g:grepper.gitty = { 'grepprg': 'gitty' }
-" autocmd User Grepper unsilent echomsg 'Grep program finished!'
+let g:grepper = { 'tools': ['git', 'ag', 'sift', 'grep'] }
 
 " nnoremap <leader>git :Grepper! -tool git  -open -noswitch<cr>
 " nnoremap <leader>*   :Grepper! -tool ack  -cword<cr>
@@ -640,6 +631,10 @@ let g:grepper.gitty = { 'grepprg': 'gitty' }
 
 " plugins: vim-lua-ftplugin {{{2
 let g:lua_complete_omni = 1
+
+" plugins: vim-online-thesaurus {{{2
+nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
+nnoremap <leader>K :Thesaurus<space>
 
 " plugins: vim-plug {{{2
 let g:plug_shallow = 0
@@ -691,5 +686,9 @@ endfunction
 
 let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
 " }}}1
-
+" hi VertSplit ctermbg=137 ctermfg=232
+" hi StatusLineNC ctermbg=137 ctermfg=232
+" hi StatusLine ctermbg=101 ctermfg=232
+" hi Search ctermfg=NONE ctermbg=NONE
+" set nocursorline
 " vim: sw=2 sts=2 tw=0
