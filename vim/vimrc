@@ -623,12 +623,6 @@ xmap gs <plug>(GrepperOperator)
 
 let g:grepper = { 'tools': ['git', 'ag', 'sift', 'grep'] }
 
-" nnoremap <leader>git :Grepper! -tool git  -open -noswitch<cr>
-" nnoremap <leader>*   :Grepper! -tool ack  -cword<cr>
-" nnoremap <leader>ag :Grepper -tool ag -query<space>
-" command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
-" command! -nargs=* -complete=file Ag Grepper! -tool ag -query <args>
-
 " plugins: vim-lua-ftplugin {{{2
 let g:lua_complete_omni = 1
 
