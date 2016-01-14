@@ -37,6 +37,7 @@ call plug#begin(bundle)
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
   Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf' }
+  Plug 'junegunn/gv.vim',           { 'on': 'GV'                        }
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
