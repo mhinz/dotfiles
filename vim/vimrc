@@ -47,8 +47,8 @@ call plug#begin(bundle)
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-scriptease', { 'for': 'vim' }
   Plug 'tpope/vim-rsi'
+  Plug 'tpope/vim-scriptease', { 'for': 'vim' }
   Plug 'tpope/vim-surround'
 
   Plug 'justinmk/vim-dirvish', { 'on': 'Dirvish' }
@@ -390,7 +390,7 @@ augroup END
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
-command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
+" command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 
