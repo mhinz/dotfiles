@@ -550,6 +550,9 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
+" plugins: gv {{{2
+autocmd FileType GV set foldlevel=1
+
 " plugins: netrw {{{2
 let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
