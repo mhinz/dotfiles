@@ -374,16 +374,17 @@ augroup myvimrc
   au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
   au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
-  au CompleteDone       *                           pclose
-
-  au User fugitive
-        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-        \   nnoremap <buffer> .. :edit %:h<cr> |
-        \ endif
 
   au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
   au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
   au BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
+
+  au CompleteDone * pclose
+
+  au WinEnter    * set cursorline
+  au WinLeave    * set nocursorline
+  au InsertEnter * set nocursorline
+  au InsertLeave * set cursorline
 augroup END
 
 " commands {{{1
