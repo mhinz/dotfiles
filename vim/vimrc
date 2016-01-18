@@ -39,6 +39,7 @@ call plug#begin(bundle)
   Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV'                        }
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
+  Plug 'justinmk/vim-dirvish',      { 'on': 'Dirvish'                   }
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
   Plug 'tpope/vim-commentary'
@@ -587,7 +588,7 @@ nnoremap <f3>  :UndotreeToggle<cr>
 let g:vimsyn_folding = 'f'
 
 " plugins: vim-dirvish {{{2
-autocmd FileType dirvish nmap <c-o> -
+autocmd FileType dirvish nmap <buffer> <c-o> -
 
 " plugins: vim-dispatch {{{2
 nnoremap <leader>dd  :Dispatch<cr>
