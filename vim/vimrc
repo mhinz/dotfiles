@@ -49,24 +49,21 @@ call plug#begin(bundle)
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rsi'
-  Plug 'tpope/vim-scriptease', { 'for': 'vim' }
+  Plug 'tpope/vim-scriptease',      { 'for': 'vim' }
   Plug 'tpope/vim-surround'
-
-  Plug 'justinmk/vim-dirvish', { 'on': 'Dirvish' }
-  Plug 'junegunn/fzf.vim'
-  Plug 'beloglazov/vim-online-thesaurus'
-  Plug 'ryanss/vim-hackernews'
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
   Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
   Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
   Plug 'xolox/vim-misc',          { 'for': 'lua'        }
 
-  if !has('nvim')
-    Plug 'ConradIrwin/vim-bracketed-paste'
-  endif
-
+  " Testing phase.
+  Plug 'beloglazov/vim-online-thesaurus'
   " Plug 'fatih/vim-go'
+  Plug 'junegunn/fzf.vim'
+  Plug 'ryanss/vim-hackernews'
+  Plug 'vim-airline/vim-airline'
+
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'
@@ -585,6 +582,11 @@ nnoremap <f3>  :UndotreeToggle<cr>
 
 " plugins: vim {{{2
 let g:vimsyn_folding = 'f'
+
+" plugins: vim-airline {{{2
+let g:airline#extensions#tagbar#enabled = 0
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 
 " plugins: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
