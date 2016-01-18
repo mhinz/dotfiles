@@ -373,7 +373,6 @@ augroup myvimrc
   au BufRead,BufNewFile /data/repo/vim/*            setlocal noet
   au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal sw=4 sts=4
   au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
-  au BufReadPost        fugitive://                 setlocal bufhidden=delete
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
 
   au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
@@ -620,6 +619,16 @@ let g:EasyMotion_use_smartsign_us  = 1
 let g:EasyMotion_use_upper         = 0
 
 map <silent><space> <plug>(easymotion-s2)
+
+" plugins: vim-fugitive {{{2
+function! s:fug()
+  if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
+    nnoremap <buffer> .. :edit %:h<cr>
+  endif
+endfunction
+
+autocmd User fugitive call <sid>fug()
+autocmd BufReadPost fugitive:// setlocal bufhidden=delete
 
 " plugins: vim-grepper {{{2
 nnoremap <leader>g :Grepper -tool git<cr>
