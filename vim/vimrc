@@ -607,8 +607,7 @@ let g:dispatch_compilers = {
       \ }
 
 " plugins: vim-easy-align {{{2
-vmap <cr>      <plug>(LiveEasyAlign)
-nmap <leader>a <plug>(LiveEasyAlign)
+xmap <cr> <plug>(LiveEasyAlign)
 
 " plugins: vim-easymotion {{{2
 let g:EasyMotion_do_mapping        = 0
