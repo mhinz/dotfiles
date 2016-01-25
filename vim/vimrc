@@ -62,7 +62,6 @@ call plug#begin(bundle)
   " Plug 'fatih/vim-go'
   Plug 'junegunn/fzf.vim'
   Plug 'ryanss/vim-hackernews'
-  Plug 'vim-airline/vim-airline'
 
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
@@ -583,11 +582,6 @@ nnoremap <f3>  :UndotreeToggle<cr>
 
 " plugins: vim {{{2
 let g:vimsyn_folding = 'f'
-
-" plugins: vim-airline {{{2
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
 
 " plugins: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
