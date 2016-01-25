@@ -12,5 +12,5 @@ else
 fi
 
 echo '[*] Start compiling..'
-./all.bash
+./make.bash
 echo '[*] Finished.'
