@@ -490,6 +490,7 @@ endfunction
 " plugins: misc {{{2
 let g:is_bash      = 1
 let g:lisp_rainbow = 1
+let g:markdown_fenced_languages = ['vim']
 
 " let g:loaded_2html_plugin     = 1
 let g:loaded_getscriptPlugin  = 1
