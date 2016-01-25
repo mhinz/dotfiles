@@ -71,6 +71,7 @@ call plug#begin(bundle)
   Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
+  Plug '/data/github/vim-syntaxful'
 call plug#end()
 
 " init {{{1
@@ -431,7 +432,7 @@ else
     "       \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
   " augroup END
-  for scheme in ['janah', 'focus', 'gruvbox', 'desert']
+  for scheme in ['syntaxful', 'janah', 'focus', 'gruvbox', 'desert']
     try
       execute 'colorscheme' scheme
       break
