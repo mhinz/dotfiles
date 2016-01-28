@@ -115,7 +115,7 @@ endfunction
 function! s:define_commands()
   command! -nargs=+ -bar Plug call s:add(<args>)
   if !executable('git')
-    return s:err('`git` executable not found. vim-plug requires git.')
+    return s:err('`git` executable not found. Most commands will not be available. To suppress this message, prepend `silent!` to `call plug#begin(...)`.')
   endif
   command! -nargs=* -bar -bang -complete=customlist,s:names PlugInstall call s:install(<bang>0, [<f-args>])
   command! -nargs=* -bar -bang -complete=customlist,s:names PlugUpdate  call s:update(<bang>0, [<f-args>])
@@ -450,9 +450,9 @@ function! s:add(repo, ...)
 
   try
     let repo = s:trim(a:repo)
-    let name = fnamemodify(repo, ':t:s?\.git$??')
-    let spec = extend(s:infer_properties(name, repo),
-                    \ a:0 == 1 ? s:parse_options(a:1) : s:base_spec)
+    let opts = a:0 == 1 ? s:parse_options(a:1) : s:base_spec
+    let name = get(opts, 'as', fnamemodify(repo, ':t:s?\.git$??'))
+    let spec = extend(s:infer_properties(name, repo), opts)
     if !has_key(g:plugs, name)
       call add(g:plugs_order, name)
     endif
@@ -645,7 +645,9 @@ function! s:prepare()
   silent! unmap <buffer> X
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap cursorline modifiable
   setf vim-plug
-  call s:syntax()
+  if exists('g:syntax_on')
+    call s:syntax()
+  endif
 endfunction
 
 function! s:assign_name()

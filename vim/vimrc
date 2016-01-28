@@ -38,6 +38,7 @@ call plug#begin(bundle)
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
   Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV'                        }
+  Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
   Plug 'justinmk/vim-dirvish',      { 'on': 'Dirvish'                   }
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
@@ -49,11 +50,10 @@ call plug#begin(bundle)
   Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rsi'
-  Plug 'tpope/vim-scriptease',      { 'for': 'vim' }
+  Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
-  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
   Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
   Plug 'xolox/vim-misc',          { 'for': 'lua'        }
 
@@ -91,8 +91,10 @@ let s:mac = has('mac')
 set autoindent
 set cinoptions    =>4,l1,p0,)50,*50,t0
 set expandtab
-set shiftwidth    =4
+set smarttab
 set softtabstop   =4
+set shiftwidth    =4
+set shiftround
 
 " backup/swap/info/undo settings
 set backup
@@ -147,10 +149,8 @@ set pastetoggle   =<F5>
 set norelativenumber
 set report        =0
 set sessionoptions-=options
-set shiftround
 set showfulltag
 set showtabline   =1
-set smarttab
 set splitbelow
 set splitright
 set switchbuf     =
@@ -448,11 +448,11 @@ command! -bar ToggleHighlight  let b:stl_highlight = !get(b:, 'stl_highlight')
 nnoremap <silent><f10> :ToggleStatusline<cr>
 nnoremap <silent><f11> :ToggleHighlight<cr>
 
-" set statusline=%!SetStatusline()
-set statusline=\ 
+set statusline=%!SetStatusline()
 
 function! SetStatusline()
-  let stl = ' %4*%<%f%*'
+  " let stl = ' %4*%<%f%*'
+  let stl = ' %<%f'
 
   if exists('b:git_dir')
     let stl    .= '%3*:%*'
@@ -492,14 +492,16 @@ let g:is_bash      = 1
 let g:lisp_rainbow = 1
 let g:markdown_fenced_languages = ['vim']
 
-" let g:loaded_2html_plugin     = 1
+let g:loaded_2html_plugin     = 1
 let g:loaded_getscriptPlugin  = 1
-"let g:loaded_gzip             = 1
-" let g:loaded_rrhelper         = 1
-" let g:loaded_spellfile_plugin = 1
-"let g:loaded_tarPlugin        = 1
+let g:loaded_gzip             = 1
+let g:loaded_logipat          = 1
+" let g:loaded_matchparen       = 1
+let g:loaded_rrhelper         = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin        = 1
 let g:loaded_vimballPlugin    = 1
-"let g:loaded_zipPlugin        = 1
+let g:loaded_zipPlugin        = 1
 
 " plugins: fzf {{{2
 set runtimepath+=~/local/fzf
@@ -554,7 +556,7 @@ command! Colorschemes call fzf#run({
 autocmd FileType GV set foldlevel=1
 
 " plugins: netrw {{{2
-let g:loaded_netrwPlugin = 1
+" let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
 let g:netrw_bufsettings  = 'relativenumber'
 let g:netrw_keepdir      = 0
@@ -591,8 +593,8 @@ autocmd FileType dirvish nmap <buffer> <c-o> -
 " plugins: vim-dispatch {{{2
 nnoremap <leader>dd  :Dispatch<cr>
 nnoremap <leader>dm  :Make<cr>
-nnoremap <leader>ds  :Copen<cr>
 nnoremap <leader>ds  :Start<cr>
+nnoremap <leader>dc  :Copen<cr>
 
 au BufReadPost * if getline(1) =~# '^#!' | let b:dispatch = getline(1)[2:-1] . ' %' | let b:start = b:dispatch | endif
 au FileType markdown let b:dispatch = 'mdl % | sort -t: -k2 -n'
@@ -693,9 +695,5 @@ endfunction
 
 let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
 " }}}1
-" hi VertSplit ctermbg=137 ctermfg=232
-" hi StatusLineNC ctermbg=137 ctermfg=232
-" hi StatusLine ctermbg=101 ctermfg=232
-" hi Search ctermfg=NONE ctermbg=NONE
-" set nocursorline
+
 " vim: sw=2 sts=2 tw=0
