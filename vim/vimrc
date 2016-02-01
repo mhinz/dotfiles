@@ -32,6 +32,7 @@ call plug#begin(bundle)
   Plug 'jonathanfilip/vim-lucius'
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
+  Plug 'AlessandroYorba/Alduin'
 
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
