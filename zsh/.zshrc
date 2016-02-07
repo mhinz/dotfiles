@@ -258,6 +258,8 @@ alias vu='vim -u NONE -U NONE -i NONE -N'
 alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
+alias va=vagrant
+
 alias h='cd ..; l'
 alias ..="cd .."
 alias ...="cd ../.."
@@ -540,11 +542,13 @@ alias dm='docker-machine'
 
 if [[ $(uname -s) = 'Darwin' ]]; then
     dockerinit() {
+        set -x
         [[ $(docker-machine status default) = 'Running' ]] || docker-machine start default
         eval "$(docker-machine env default)"
     }
 
     dockerstop() {
+        set -x
         docker-machine stop default
     }
 fi
