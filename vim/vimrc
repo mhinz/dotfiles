@@ -41,7 +41,7 @@ call plug#begin(bundle)
   Plug 'junegunn/gv.vim',           { 'on': 'GV'                        }
   Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
-  Plug 'justinmk/vim-dirvish',      { 'on': 'Dirvish'                   }
+  Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
   Plug 'tpope/vim-commentary'
@@ -559,7 +559,7 @@ command! Colorschemes call fzf#run({
 autocmd FileType GV set foldlevel=1
 
 " plugins: netrw {{{2
-" let g:loaded_netrwPlugin = 1
+let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
 let g:netrw_bufsettings  = 'relativenumber'
 let g:netrw_keepdir      = 0
