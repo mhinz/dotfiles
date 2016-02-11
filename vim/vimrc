@@ -32,7 +32,6 @@ call plug#begin(bundle)
   Plug 'jonathanfilip/vim-lucius'
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
-  Plug 'AlessandroYorba/Alduin'
 
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
@@ -46,10 +45,8 @@ call plug#begin(bundle)
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-projectionist'
-  Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
@@ -62,7 +59,6 @@ call plug#begin(bundle)
   Plug 'beloglazov/vim-online-thesaurus'
   " Plug 'fatih/vim-go'
   Plug 'junegunn/fzf.vim'
-  Plug 'ryanss/vim-hackernews'
 
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
