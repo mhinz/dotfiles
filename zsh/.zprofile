@@ -14,6 +14,7 @@ typeset -aU path
 path=(
     $HOME/bin
     $HOME/local/*/bin
+    $HOME/.npm-packages/bin
 
     /data/languages/elixir/bin
     $HOME/.cabal/bin
