@@ -36,3 +36,5 @@ manpath=(
     /usr/local/opt/coreutils/libexec/gnuman
     $manpath
 )
+
+# vim: fdm=marker

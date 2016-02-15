@@ -553,4 +553,4 @@ if [[ $(uname -s) = 'Darwin' ]]; then
     }
 fi
 
-# vim: et sts=4 sw=4
+# vim: et sts=4 sw=4 fdm=marker
