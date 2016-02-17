@@ -37,7 +37,8 @@
     trustExitCode = true
 
 [pager]
-    diff =
+    diff = diff-so-fancy | less -RFXx1,5
+    show = diff-so-fancy | less -RFXx1,5
 
 [alias]
     a     = add
