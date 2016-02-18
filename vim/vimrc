@@ -52,6 +52,7 @@ call plug#begin(bundle)
   Plug 'tpope/vim-surround'
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
+  Plug 'tpope/vim-rails'
   Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
   Plug 'xolox/vim-misc',          { 'for': 'lua'        }
 
@@ -678,7 +679,6 @@ let g:startify_skiplist = [
       \ '/Users/mhi/local/vim/share/vim/vim74/doc',
       \ ]
 
-let g:startify_bookmarks              = [ {'c': '~/.vim/vimrc'} ]
 let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
 let g:startify_files_number           = 8
