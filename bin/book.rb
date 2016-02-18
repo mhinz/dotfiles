@@ -12,29 +12,45 @@ module Find
     end
     matched
   end
-
   module_function :populate
 end
 
-def select(path, term = '')
-  books = Find.populate(path) do |p|
-    p =~ /#{term}/i
-  end.sort
-
-  books.each_with_index do |book, i|
-    puts "\e[32m %-4d \e[33m%s" % [ i, book.flatten.first ]
+class Books
+  def initialize(path, term = '')
+    @books = find(path, term)
+    if @books.empty?
+      puts "No matches."
+      return
+    end
+    select
   end
 
-  print "\e[31m Select:\e[0m "
-  choice = STDIN.gets
-  return if choice.nil?
-  choice = choice.chomp.to_i
+  def find(path, term)
+    Find.populate(path) do |p|
+      p =~ /#{term}/i
+    end.sort
+  end
 
-  exec 'open', books[choice].flatten.last
+  def select
+    @books.each_with_index do |book, i|
+      puts "\e[32m %-4d \e[33m%s" % [ i, book.flatten.first ]
+    end
+
+    print "\e[31m Select:\e[0m "
+    begin
+      choice = STDIN.gets
+    rescue Interrupt
+      # Catch CTRL-C.
+    end
+    return if choice.nil?
+    choice = choice.chomp.to_i
+
+    open @books[choice].flatten.last
+  end
+
+  def open(path)
+    exec 'open', path
+  end
 end
 
-begin
-  select '/data/books', ARGV.join(' ')
-rescue Interrupt
-  # Catch CTRL-C.
-end
+Books.new('/data/books', ARGV.join(' '))
