@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd /data/repo/htop
+
+if git pull | grep 'Already up-to-date.' && [[ $1 != '-f' ]]; then
+    exit 0
+fi
+
+sh autogen.sh
+./configure --prefix=$HOME/local/htop --enable-unicode
+make install
