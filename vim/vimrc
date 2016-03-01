@@ -647,6 +647,7 @@ nnoremap <leader>K :Thesaurus<space>
 
 " plugins: vim-plug {{{2
 let g:plug_shallow = 0
+let g:plug_window  = 'enew'
 
 " plugins: vim-sayonara {{{2
 nnoremap <silent><leader>q  :Sayonara<cr>
