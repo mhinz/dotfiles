@@ -204,7 +204,7 @@ alias -g N='>/dev/null'
 alias -g E='2>/dev/null'
 alias -g P='| fpp'
 
-alias pipup="pip list | cut -d' ' -f1 | xargs pip --no-cache-dir install -U"
+alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
 
 alias help='run-help'
