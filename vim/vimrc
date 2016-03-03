@@ -33,6 +33,7 @@ call plug#begin(bundle)
   Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
 
+  Plug 'beloglazov/vim-online-thesaurus'
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
@@ -56,9 +57,10 @@ call plug#begin(bundle)
   Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
   Plug 'xolox/vim-misc',          { 'for': 'lua'        }
 
-  " Testing phase.
-  Plug 'beloglazov/vim-online-thesaurus'
+  " Plug 'SirVer/ultisnips'
   " Plug 'fatih/vim-go'
+
+  " Testing phase.
   Plug 'junegunn/fzf.vim'
 
   Plug '/data/github/vim-easy-going'
@@ -432,7 +434,7 @@ else
     "       \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
   " augroup END
-  for scheme in ['syntaxful', 'janah', 'focus', 'gruvbox', 'desert']
+  for scheme in ['janah', 'focus', 'gruvbox', 'desert']
     try
       execute 'colorscheme' scheme
       break
@@ -486,8 +488,11 @@ function! SetStatusline()
   return stl
 endfunction
 
-" plugins {{{1
-" plugins: misc {{{2
+" options {{{1
+" options: neovim {{{2
+let g:python3_host_skip_check = 1
+
+" options: misc {{{2
 let g:is_bash      = 1
 let g:lisp_rainbow = 1
 let g:markdown_fenced_languages = ['vim']
@@ -503,7 +508,7 @@ let g:loaded_tarPlugin        = 1
 let g:loaded_vimballPlugin    = 1
 let g:loaded_zipPlugin        = 1
 
-" plugins: fzf {{{2
+" options: fzf {{{2
 set runtimepath+=~/local/fzf
 
 nnoremap <leader><leader> :Buffers<cr>
@@ -552,10 +557,10 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
-" plugins: gv {{{2
+" options: gv {{{2
 autocmd FileType GV set foldlevel=1
 
-" plugins: netrw {{{2
+" options: netrw {{{2
 let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
 let g:netrw_bufsettings  = 'relativenumber'
@@ -563,7 +568,7 @@ let g:netrw_keepdir      = 0
 let g:netrw_liststyle    = 1
 let g:netrw_sort_options = 'i'
 
-" plugins: surround {{{2
+" options: surround {{{2
 let g:surround_indent = 1
 let g:surround_{char2nr('e')} = "\\emph{\r}"
 let g:surround_{char2nr('-')} = "<% \r %>"
@@ -573,7 +578,7 @@ let g:surround_{char2nr('^')} = "/^\r$/"
 let g:surround_{char2nr('=')} = "== \r =="
 let g:surround_{char2nr('k')} = "<kbd>\r</kbd>"
 
-" plugins: tagbar {{{2
+" options: tagbar {{{2
 nnoremap <f2> :TagbarToggle<cr>
 
 let g:tagbar_width     = 40
@@ -581,16 +586,16 @@ let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
-" plugins: undotree {{{2
+" options: undotree {{{2
 nnoremap <f3>  :UndotreeToggle<cr>
 
-" plugins: vim {{{2
+" options: vim {{{2
 let g:vimsyn_folding = 'f'
 
-" plugins: vim-dirvish {{{2
+" options: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
 
-" plugins: vim-dispatch {{{2
+" options: vim-dispatch {{{2
 nnoremap <leader>dd  :Dispatch<cr>
 nnoremap <leader>dm  :Make<cr>
 nnoremap <leader>ds  :Start<cr>
@@ -604,10 +609,10 @@ let g:dispatch_compilers = {
       \ 'mdl': 'gcc',
       \ }
 
-" plugins: vim-easy-align {{{2
+" options: vim-easy-align {{{2
 xmap <cr> <plug>(LiveEasyAlign)
 
-" plugins: vim-easymotion {{{2
+" options: vim-easymotion {{{2
 let g:EasyMotion_do_mapping        = 0
 let g:EasyMotion_do_shade          = 1
 let g:EasyMotion_inc_highlight     = 0
@@ -620,7 +625,7 @@ let g:EasyMotion_use_upper         = 0
 
 map <silent><space> <plug>(easymotion-s2)
 
-" plugins: vim-fugitive {{{2
+" options: vim-fugitive {{{2
 function! s:fug()
   if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
     nnoremap <buffer> .. :edit %:h<cr>
@@ -630,7 +635,7 @@ endfunction
 autocmd User fugitive call <sid>fug()
 autocmd BufReadPost fugitive:// setlocal bufhidden=delete
 
-" plugins: vim-grepper {{{2
+" options: vim-grepper {{{2
 nnoremap <leader>g :Grepper -tool git<cr>
 nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
@@ -638,24 +643,24 @@ xmap gs <plug>(GrepperOperator)
 
 let g:grepper = { 'tools': ['git', 'ag', 'sift', 'grep'] }
 
-" plugins: vim-lua-ftplugin {{{2
+" options: vim-lua-ftplugin {{{2
 let g:lua_complete_omni = 1
 
-" plugins: vim-online-thesaurus {{{2
+" options: vim-online-thesaurus {{{2
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 nnoremap <leader>K :Thesaurus<space>
 
-" plugins: vim-plug {{{2
+" options: vim-plug {{{2
 let g:plug_shallow = 0
 let g:plug_window  = 'enew'
 
-" plugins: vim-sayonara {{{2
+" options: vim-sayonara {{{2
 nnoremap <silent><leader>q  :Sayonara<cr>
 nnoremap <silent><leader>Q  :Sayonara!<cr>
 
 let g:sayonara_confirm_quit = 0
 
-" plugins: vim-signify {{{2
+" options: vim-signify {{{2
 let g:signify_vcs_list = [ 'git', 'hg' ]
 
 omap ic <plug>(signify-motion-inner-pending)
@@ -663,7 +668,7 @@ xmap ic <plug>(signify-motion-inner-visual)
 omap ac <plug>(signify-motion-outer-pending)
 xmap ac <plug>(signify-motion-outer-visual)
 
-" plugins: vim-startify {{{2
+" options: vim-startify {{{2
 nnoremap <leader>st  :Startify<cr>
 
 let g:startify_list_order = [
