@@ -21,10 +21,7 @@ WATCHFMT="%n from %M has %a tty%l at %T %W"
 
 # misc options {{{1
 
-# changing directories
-setopt auto_cd
 setopt cdable_vars
-
 setopt checkjobs
 setopt completeinword
 setopt correct
@@ -32,6 +29,7 @@ setopt globcomplete
 setopt interactivecomments
 setopt listpacked
 setopt longlistjobs
+setopt no_auto_cd
 setopt no_beep
 setopt no_hist_beep
 setopt no_listrowsfirst
@@ -231,7 +229,6 @@ alias c11='( zathura /data/c/standards/n1516.pdf & ) && exit'
 alias j8='( zathura /data/programming/java/standards/jls8.pdf & ) && exit'
 alias j8v='( zathura /data/programming/java/standards/jvms8.pdf & ) && exit'
 
-alias conf='edit_configs'
 alias cr='cmus-remote'
 alias dis='gcc -S -masm=intel'
 alias e='emacs'
@@ -394,37 +391,6 @@ rd() {
 urxvtc() {
     command urxvtc $@
     [[ $? -eq 2 ]] && urxvtd -q -f && command urxvtc $@
-}
-
-edit_configs() {
-    local -A configs
-    configs=(
-        b           ~/.bashrc
-        dwm         ~/.dotfiles/dwm/config.h
-        g           ~/.config/git/config
-        m           ~/.muttrc
-        n           ~/.config/nvim/init.vim
-        p           ~/.pentadactyl/pentadactylrc
-        r           ~/.tmux/resurrect/last
-        t           ~/.tmux.conf
-        v           ~/.vim/vimrc
-        x           ~/.Xdefaults
-        xi          ~/.xinitrc
-        ze          ~/.zsh/.zshenv
-        zp          ~/.zsh/.zprofile
-        zr          ~/.zsh/.zshrc
-    )
-    #select i in ${(k)configs}; do $EDITOR ${configs[$i]}; break; done
-
-    tput setaf 204
-    [[ -z $1 ]] && echo "${(k)configs}\n" && return 0
-
-    for i in ${(k)configs}
-    do
-        [[ $1 == $i ]] && $EDITOR ${configs[$i]} && return 0
-    done
-
-    echo "ERROR: Config not found." && return 1
 }
 
 asm() {
