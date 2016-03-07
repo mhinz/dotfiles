@@ -368,7 +368,6 @@ df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
 f()      { find . -iname "*$@*" }
 hx()     { printf "%d\n" "$1" }
 md()     { command mkdir $1 && builtin cd $1 }
-mount()  { command mount $@ | awk '{ print $1, $3, $5, $6 }' | sort -V | column -t }
 o()      { objdump -Mintel -wrzD $2 | awk "/^.*<$1>:$/,/^$/" }
 om()     { objdump -Mintel -wrzD -j .text $1 | awk '/^.*<main>:$/,/^$/'; }
 secs()   { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
