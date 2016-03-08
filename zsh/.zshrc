@@ -404,10 +404,10 @@ asm() {
 }
 
 tm() {
-    if [[ $# -ge 1 ]]; then
-        tmux has-session -t $1 && tmux attach -t $1 || tmux new-session -s $1
+    if [[ $# -eq 0 ]]; then
+        tmux attach || tmux new-session -s default
     else
-        tmux attach
+        tmux has-session -t "$*" && tmux attach -t "$*" || tmux new-session -s "$*"
     fi
 }
 
