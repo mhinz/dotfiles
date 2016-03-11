@@ -419,21 +419,21 @@ if has('gui_running')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
   set background=dark
-  " augroup mycolors
-    " autocmd!
-    " autocmd ColorScheme janah
-          " \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
-          " \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
-          " \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-          " \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
-          " \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
+  augroup mycolors
+    autocmd!
+    autocmd ColorScheme janah
+          \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
+          \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
+          \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
+          \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
+          \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
     " autocmd ColorScheme focus
     "       \ highlight User1 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User2 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User3 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
-  " augroup END
+  augroup END
   for scheme in ['janah', 'focus', 'gruvbox', 'desert']
     try
       execute 'colorscheme' scheme
