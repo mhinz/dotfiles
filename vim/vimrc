@@ -59,6 +59,7 @@ call plug#begin(bundle)
 
   " Plug 'SirVer/ultisnips'
   " Plug 'fatih/vim-go'
+  " Plug 'vim-airline/vim-airline'
 
   " Testing phase.
   Plug 'junegunn/fzf.vim'
@@ -358,10 +359,12 @@ else
 endif
 
 " autocmd {{{1
+function! s:shellout(cmd)
+  execute (has('nvim') ? 'te ' : '!'). a:cmd
+endfunction
+
 augroup myvimrc
   au!
-
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 
   au BufEnter           *                           Cd
   au BufLeave           *.h                         mark H
@@ -371,20 +374,32 @@ augroup myvimrc
   au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
   au BufRead,BufNewFile /data/repo/vim/*            setlocal noet
   au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal sw=4 sts=4
-  au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
+  " au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
   au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
-  au FileType           markdown                    setlocal tw=80 makeprg=gomali\ %
+  au CompleteDone       *                           pclose
 
   au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
   au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
   au BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
 
-  au CompleteDone * pclose
-
   au WinEnter    * set cursorline
   au WinLeave    * set nocursorline
   au InsertEnter * set nocursorline
   au InsertLeave * set cursorline
+
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
+  au BufReadPost * if getline(1) =~# '^#!' | let b:dispatch = getline(1)[2:-1] . ' %' | let b:start = b:dispatch | endif
+
+  au FileType go
+        \ setl noet sts& sw& com-=:// mp=go\ install
+        \ | let [b:dispatch, b:start] = ['go build', '-wait=always go run %']
+        \ | nnoremap <leader>dr :call <sid>shellout('go run %')<cr>
+
+  au FileType markdown
+        \ setl tw=80 mp=gomali\ %
+
+  au FileType vim
+        \ let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
 augroup END
 
 " commands {{{1
@@ -600,14 +615,6 @@ nnoremap <leader>dd  :Dispatch<cr>
 nnoremap <leader>dm  :Make<cr>
 nnoremap <leader>ds  :Start<cr>
 nnoremap <leader>dc  :Copen<cr>
-
-au BufReadPost * if getline(1) =~# '^#!' | let b:dispatch = getline(1)[2:-1] . ' %' | let b:start = b:dispatch | endif
-au FileType markdown let b:dispatch = 'mdl % | sort -t: -k2 -n'
-au FileType vim      let b:dispatch = ':Runtime' | let b:start = ':Runtime|PP'
-
-let g:dispatch_compilers = {
-      \ 'mdl': 'gcc',
-      \ }
 
 " options: vim-easy-align {{{2
 xmap <cr> <plug>(LiveEasyAlign)
