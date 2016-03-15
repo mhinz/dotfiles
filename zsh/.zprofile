@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 
 # For login shells. Sourced before zshrc.
 
@@ -9,6 +9,7 @@ export EDITOR=vim
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
 export GOPATH=/data/go GOROOT=/data/languages/go GOARCH=amd64 GOOS=${$(uname -s):l}
 export FZF_DEFAULT_OPTS='--color bg+:235,hl+:137,hl:167,info:245,pointer:245,prompt:235' 
+export GH=/data/github
 
 typeset -aU path
 path=(
