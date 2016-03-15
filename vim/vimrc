@@ -359,10 +359,6 @@ else
 endif
 
 " autocmd {{{1
-function! s:shellout(cmd)
-  execute (has('nvim') ? 'te ' : '!'). a:cmd
-endfunction
-
 augroup myvimrc
   au!
 
@@ -388,18 +384,58 @@ augroup myvimrc
   au InsertLeave * set cursorline
 
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
-  au BufReadPost * if getline(1) =~# '^#!' | let b:dispatch = getline(1)[2:-1] . ' %' | let b:start = b:dispatch | endif
+  au BufReadPost * if getline(1) =~ '^#!' | let b:start = '-wait=always '.getline(1)[2:].' %' | endif
+
+  au FileType erlang
+        \ setl com-=:%
+
+  au FileType git,text
+        \ setl tw=80 fo+=t
 
   au FileType go
-        \ setl noet sts& sw& com-=:// mp=go\ install
+        \ setl noet sts& sw& com-=:// isk-=. mp=go\ install
         \ | let [b:dispatch, b:start] = ['go build', '-wait=always go run %']
-        \ | nnoremap <leader>dr :call <sid>shellout('go run %')<cr>
+
+  au FileType help
+        \ execute 'silent wincmd' winnr('$') == 2 ? 'L' : 'T'
+
+  au FileType html
+        \ setl et sts=2 sw=2
+
+  au FileType lua
+        \ setl com-=:# sts=2 sw=2
+        \ | let [b:dispatch, b:start] = ['luac -p %', '-wait=always luajit %']
+
+  au FileType mail
+        \ setl tw=72 wrap lbr
+
+  au FileType man
+        \ setl nocul nomod nolist nonu nornu
+        \ | nnoremap <buffer> q :q<cr>
 
   au FileType markdown
         \ setl tw=80 mp=gomali\ %
 
+  au FileType perl
+        \ setl com-=:# kp=perldoc\ -f
+        \ | let perl_include_pod = 1
+        \ | compiler perl
+
+  au FileType python
+        \ setl kp=pydoc
+        \ | let python_highlight_all = 1
+        \ | compiler pyunit
+
+  au FileType ruby
+        \ setl com-=:# sts=2 sw=2
+        \ | let [ruby_operators, ruby_space_errors] = [1, 1]
+
   au FileType vim
-        \ let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
+        \ setl sts=2 sw=2
+        \ | let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
+
+  au FileType zsh,sh
+        \ setl com-=:#
 augroup END
 
 " commands {{{1
