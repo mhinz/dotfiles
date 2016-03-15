@@ -645,6 +645,7 @@ let g:vimsyn_folding = 'f'
 
 " options: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
+nnoremap <f1> :vsplit +Dirvish<cr><c-w>H<c-w>40<bar>
 
 " options: vim-dispatch {{{2
 nnoremap <leader>dd  :Dispatch<cr>
