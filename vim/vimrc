@@ -738,13 +738,13 @@ let g:startify_session_persistence    = 1
 let g:startify_update_oldfiles        = 1
 let g:startify_use_env                = 1
 
-function! s:center_header(lines) abort
-  let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
-  let centered_lines = map(copy(a:lines), 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-  return centered_lines
-endfunction
+" function! s:center_header(lines) abort
+"   let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
+"   let centered_lines = map(copy(a:lines), 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+"   return centered_lines
+" endfunction
 
-let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
+" let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
 " }}}1
 
 " vim: sw=2 sts=2 tw=0
