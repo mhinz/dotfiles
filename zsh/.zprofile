@@ -13,23 +13,18 @@ export GH=/data/github
 
 typeset -aU path
 path=(
-    $HOME/bin
-    $HOME/local/*/bin
-    $HOME/.npm-packages/bin
+    ~/bin
+    ~/local/*/bin
+    ~/.npm-packages/bin
 
     /data/languages/elixir/bin
-    $HOME/.cabal/bin
     $GOPATH/bin
-    /data/languages/go/bin
+    $GOROOT/bin
 
     /usr/local/opt/coreutils/libexec/gnubin
+    /usr/local/sbin
 
     $path
-
-    /Library/PostgreSQL/9.4/bin
-    /Library/Frameworks/Python.framework/Versions/3.4/bin
-
-    /usr/local/sbin
 )
 
 typeset -aU manpath
