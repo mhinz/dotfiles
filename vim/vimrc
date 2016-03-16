@@ -397,7 +397,7 @@ augroup myvimrc
         \ | let [b:dispatch, b:start] = ['go build', '-wait=always go run %']
 
   au FileType help
-        \ execute 'silent wincmd' winnr('$') == 2 ? 'L' : 'T'
+        \ execute 'silent wincmd' 'TL'[winnr('$') == 2]
 
   au FileType html
         \ setl et sts=2 sw=2
