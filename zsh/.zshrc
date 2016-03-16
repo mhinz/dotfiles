@@ -265,7 +265,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
-alias ls='ls --color=always'
+alias ls='ls --color=always -N'
 alias j='ls -lhd *(D-/)'
 alias k='ls -lhX *(D-^/)'
 alias l='ls -lh --group-directories-first'
