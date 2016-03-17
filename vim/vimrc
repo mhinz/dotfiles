@@ -37,7 +37,7 @@ call plug#begin(bundle)
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
-  Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf' }
+  Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV'                        }
   Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
