@@ -547,22 +547,6 @@ endfunction
 " options: neovim {{{2
 let g:python3_host_skip_check = 1
 
-" options: misc {{{2
-let g:is_bash      = 1
-let g:lisp_rainbow = 1
-let g:markdown_fenced_languages = ['vim']
-
-let g:loaded_2html_plugin     = 1
-let g:loaded_getscriptPlugin  = 1
-let g:loaded_gzip             = 1
-let g:loaded_logipat          = 1
-" let g:loaded_matchparen       = 1
-let g:loaded_rrhelper         = 1
-let g:loaded_spellfile_plugin = 1
-let g:loaded_tarPlugin        = 1
-let g:loaded_vimballPlugin    = 1
-let g:loaded_zipPlugin        = 1
-
 " options: fzf {{{2
 set runtimepath+=~/local/fzf
 
@@ -625,12 +609,6 @@ let g:netrw_sort_options = 'i'
 
 " options: surround {{{2
 let g:surround_indent = 1
-let g:surround_{char2nr('e')} = "\\emph{\r}"
-let g:surround_{char2nr('-')} = "<% \r %>"
-let g:surround_{char2nr('8')} = "/* \r */"
-let g:surround_{char2nr('s')} = " \r"
-let g:surround_{char2nr('^')} = "/^\r$/"
-let g:surround_{char2nr('=')} = "== \r =="
 let g:surround_{char2nr('k')} = "<kbd>\r</kbd>"
 
 " options: tagbar {{{2
@@ -646,6 +624,21 @@ nnoremap <f3>  :UndotreeToggle<cr>
 
 " options: vim {{{2
 let g:vimsyn_folding = 'f'
+
+let g:is_bash      = 1
+let g:lisp_rainbow = 1
+let g:markdown_fenced_languages = ['vim']
+
+let g:loaded_2html_plugin     = 1
+let g:loaded_getscriptPlugin  = 1
+let g:loaded_gzip             = 1
+let g:loaded_logipat          = 1
+" let g:loaded_matchparen       = 1
+let g:loaded_rrhelper         = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin        = 1
+let g:loaded_vimballPlugin    = 1
+let g:loaded_zipPlugin        = 1
 
 " options: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
@@ -719,13 +712,6 @@ xmap ac <plug>(signify-motion-outer-visual)
 " options: vim-startify {{{2
 nnoremap <leader>st  :Startify<cr>
 
-let g:startify_list_order = [
-      \ ['   MRU'],           'files' ,
-      \ ['   MRU '.getcwd()], 'dir',
-      \ ['   Sessions'],      'sessions',
-      \ ['   Bookmarks'],     'bookmarks',
-      \ ]
-
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
       \ 'bundle/.*/doc',
@@ -741,14 +727,6 @@ let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence    = 1
 let g:startify_update_oldfiles        = 1
 let g:startify_use_env                = 1
-
-" function! s:center_header(lines) abort
-"   let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
-"   let centered_lines = map(copy(a:lines), 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-"   return centered_lines
-" endfunction
-
-" let g:startify_custom_header = s:center_header(split(system('tips | '. (s:mac ? 'cowthink' : 'cowsay -f apt')), '\n'))
 " }}}1
 
 " vim: sw=2 sts=2 tw=0
