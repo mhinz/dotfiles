@@ -1,14 +1,12 @@
 #!/usr/bin/env zsh
 
-eval $(dircolors ~/.zsh/dircolors)
+fpath=($ZDOTDIR/compsys $fpath)
 
-# [[ $DISPLAY == screen* ]] && stty erase '^?'
+zmodload -i zsh/complist
 
 autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
 autoload -Uz run-help
-
-zmodload -i zsh/complist
 
 bindkey -e
 umask 077
@@ -17,7 +15,8 @@ watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
-. '/Users/mhi/local/fzf/shell/key-bindings.zsh' || true
+. ~/local/fzf/shell/key-bindings.zsh 2>/dev/null
+eval $(dircolors ~/.zsh/dircolors)
 
 # misc options {{{1
 
@@ -345,34 +344,14 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
-c() { cd *$1* }
-
 vt() {
     nv -u unix.vim -U NONE --noplugin -s dotest.in $1
     test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | colordiff
 }
 
-foo() {
-    base="${1%.*}"
-    [[ $# -eq 2 ]] && time="${2}ns" || time="100ns"
-    ghdl -a "$1"
-    ghdl -e "$base"
-    ghdl -r "$base" --vcd=wave.vcd --stop-time="${time}"
-}
-bar() { gtkwave wave.vcd }
-
-chmsee() { command chmsee $@ && rm -r ~/.chmsee }
-pcolors() { for i ({0..255}) ( echoti setab $i && echo -n " $i "  )}
-#colors() { for i ({0..255}) ( tput setab $i && printf " %-6s" $i && [[ $[$i % 8] -eq 0 ]] && echo )}
-df()     { [[ -x ${commands[pydf]} ]] && pydf $@ || command df -h $@ }
-f()      { find . -iname "*$@*" }
-hx()     { printf "%d\n" "$1" }
-md()     { command mkdir $1 && builtin cd $1 }
-o()      { objdump -Mintel -wrzD $2 | awk "/^.*<$1>:$/,/^$/" }
-om()     { objdump -Mintel -wrzD -j .text $1 | awk '/^.*<main>:$/,/^$/'; }
-secs()   { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
-slrn()   { awk '/hinz/ { print $4 }' ~/.slrnrc && command slrn }
-top()    { [[ -x ${commands[htop]} ]] && htop $@ || command top $@ }
+f()    { find . -iname "*$@*" }
+secs() { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
+md() { command mkdir $1 && builtin cd $1 }
 
 rd() {
     dir=$PWD
@@ -385,22 +364,6 @@ rd() {
         ls -A
     fi
     unset dir
-}
-
-urxvtc() {
-    command urxvtc $@
-    [[ $? -eq 2 ]] && urxvtd -q -f && command urxvtc $@
-}
-
-asm() {
-    green=$(echoti setaf 119)
-    reset=$(echoti sgr0)
-    tmp=${1%.*}
-
-    nasm -g -felf -Fdwarf -o $tmp.o $1 && printf "%-11s %s\n" Assembling: ${green}OK${reset}
-    #as -gstabs -o $tmp.o $1 && printf "%-11s %s\n" Assembling: ${green}OK${reset}
-    #[[ $? == 0 ]] && ld -o $tmp $tmp.o && printf "%-11s %s\n" Linking: ${green}OK${reset}
-    [[ $? == 0 ]] && gcc -g -nostdlib -o $tmp $tmp.o && printf "%-11s %s\n" Linking: ${green}OK${reset}
 }
 
 tm() {
