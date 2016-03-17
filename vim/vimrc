@@ -439,7 +439,7 @@ augroup myvimrc
         \ | let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
 
   au FileType zsh,sh
-        \ setl com-=:#
+        \ setl com-=:# mp=shellcheck\ -f\ gcc\ %
 augroup END
 
 " commands {{{1
