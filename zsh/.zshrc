@@ -196,68 +196,7 @@ hash -d v='/data/repo/vim'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
-alias -g L='| less -r'
-alias -g N='>/dev/null'
-alias -g E='2>/dev/null'
-alias -g P='| fpp'
-
-alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
-alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
-
 alias help='run-help'
-
-alias pprof='/usr/bin/google-pprof'
-alias pp='LD_PRELOAD=/usr/lib/libprofiler.so.0 CPUPROFILE=out.prof'
-
-alias ju='java -cp ".:test:../junit.jar" org.junit.runner.JUnitCore'
-alias jc='javac -cp ".:../junit.jar"'
-
-alias sc='systemctl'
-alias sda='systemd-analyze'
-
-alias mars='java -jar /data/uni/techgi2/code/Mars4_4.jar'
-
-alias xssh='ssh -XCc arcfour,blowfish-cbc'
-
-alias scan='make clean && make cmake CMAKE_EXTRA_FLAGS="-DCMAKE_C_COMPILER=/usr/share/clang/scan-build/ccc-analyzer" && scan-build --use-analyzer=/usr/bin/clang make'
-
-alias add='cmus-remote -l'
-alias big='dpkg-query -W --showformat="\${Installed-Size}\t\${Package}\n" | sort -n'
-
-alias c11='( zathura /data/c/standards/n1516.pdf & ) && exit'
-alias j8='( zathura /data/programming/java/standards/jls8.pdf & ) && exit'
-alias j8v='( zathura /data/programming/java/standards/jvms8.pdf & ) && exit'
-
-alias cr='cmus-remote'
-alias dis='gcc -S -masm=intel'
-alias e='emacs'
-alias g='git'
-alias gdb='gdb -q'
-alias gitk='gitk --all'
-alias grep='grep --color=always'
-alias i='$EDITOR /data/life/ideas'
-alias kdwm='killall dwm'
-alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
-alias mps='ps $@ f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
-alias n2t='sh /data/nand2tetris/nand2tetris/tools/HardwareSimulator.sh'
-alias ob='objdump -Mintel'
-alias p1='patch -p1 -g1 --dry-run'
-alias rt='cd ~torrent/../session && rtorrent'
-alias sx="startx -- -dpi 100 -nolisten tcp >> ~/logs/startx-$(date +%F).log"
-alias t='$EDITOR ~/todo'
-alias val='valgrind -v --leak-check=full --show-reachable=yes'
-alias z='zathura'
-
-alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print \$1'"
-alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias flush='dscacheutil -flushcache'
-
-# alias v='vim'
-alias vu='vim -u NONE -U NONE -i NONE -N'
-alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
-alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
-
-alias va=vagrant
 
 alias h='cd ..; l'
 alias ..="cd .."
@@ -272,6 +211,10 @@ alias ll='ls -lhX --group-directories-first'
 alias la='ls -lhXA --group-directories-first'
 alias n='ls -lhS *(DOL[1,5]^/)'
 
+alias -g L='| less -r'
+alias -g N='>/dev/null'
+alias -g E='2>/dev/null'
+
 alias 1='fg %1'
 alias 2='fg %2'
 alias 3='fg %3'
@@ -279,11 +222,33 @@ alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
 
+alias vu='vim -u NONE -U NONE -i NONE -N'
+alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+
+alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
+alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
+
+alias g='git'
+alias grep='grep --color=always'
+alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
+alias p1='patch -p1 -g1 --dry-run'
+alias rt='cd ~torrent/../session && rtorrent'
+alias t='$EDITOR ~/todo'
+alias va='vagrant'
+alias val='valgrind -v --leak-check=full --show-reachable=yes'
+
+alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print \$1'"
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias flush='dscacheutil -flushcache'
+
 if [[ $(uname) == Darwin ]]; then
     alias upg='brew update && brew upgrade --all && brew cleanup'
 else
     if [[ -x ${commands[sudo]} ]]
     then
+        alias big='dpkg-query -W --showformat="\${Installed-Size}\t\${Package}\n" | sort -n'
+
         alias ap='sudo aptitude'
         alias ag='sudo apt-get'
 
