@@ -362,17 +362,21 @@ endif
 augroup myvimrc
   au!
 
-  au BufEnter           *                           Cd
-  au BufLeave           *.h                         mark H
-  au BufLeave           *.{c,cpp}                   mark C
-  au BufRead,BufNewFile *.[sS]                      let b:asmsyntax = 'gas'
-  au BufRead,BufNewFile *.adoc                      setfiletype asciidoc
-  au BufRead,BufNewFile /data/repo/neovim/*         setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
-  au BufRead,BufNewFile /data/repo/vim/*            setlocal noet
-  au BufRead,BufNewFile /data/repo/vim/src/*.[ch]   setlocal sw=4 sts=4
-  " au BufRead,BufNewFile Makefile.*,local.mk         setfiletype make | setl noet
-  au BufWritePost       ~/.Xdefaults                redraw | echo system('xrdb ' . expand('<amatch>'))
-  au CompleteDone       *                           pclose
+  au BufEnter * Cd
+  au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
+
+  au BufLeave           *.h                       mark H
+  au BufLeave           *.{c,cpp}                 mark C
+
+  au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
+  au BufRead,BufNewFile *.adoc                    setfiletype asciidoc
+  au BufRead,BufNewFile /data/repo/neovim/*       setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
+  au BufRead,BufNewFile /data/repo/vim/*          setlocal noet
+  au BufRead,BufNewFile /data/repo/vim/src/*.[ch] setlocal sw=4 sts=4
+  " au BufRead,BufNewFile Makefile.*,local.mk       setfiletype make | setl noet
+
+  au BufWritePost       ~/.Xdefaults              redraw | echo system('xrdb ' . expand('<amatch>'))
+  au CompleteDone       *                         pclose
 
   au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
   au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
