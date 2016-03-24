@@ -62,7 +62,7 @@ call plug#begin(bundle)
   " Plug 'vim-airline/vim-airline'
 
   " Testing phase.
-  Plug 'junegunn/fzf.vim'
+  " Plug 'junegunn/fzf.vim'
 
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
@@ -682,7 +682,9 @@ nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
-let g:grepper = { 'tools': ['git', 'ag', 'sift', 'grep'] }
+let g:grepper = {
+      \ 'highlight': 1,
+      \ }
 
 " options: vim-lua-ftplugin {{{2
 let g:lua_complete_omni = 1
@@ -719,10 +721,22 @@ let g:startify_skiplist = [
       \ '/Users/mhi/local/vim/share/vim/vim74/doc',
       \ ]
 
+function! s:foo(filename)
+  return fnamemodify(a:filename, ':t')
+endfunction
+
+let g:startify_bookmarks = [
+      \ { 'c': '~/.vim/vimrc' },
+      \ '~/.zsh/.zshrc',
+      \ ]
+let g:startify_transformations = [
+      \ ['.*vimrc$', 'vimrc'],
+      \ ]
+
 let g:startify_change_to_dir          = 0
 let g:startify_enable_special         = 0
 let g:startify_files_number           = 8
-let g:startify_session_autoload       = 1
+let g:startify_session_autoload       = 0
 let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence    = 1
 let g:startify_update_oldfiles        = 1

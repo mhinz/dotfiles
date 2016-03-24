@@ -122,19 +122,6 @@ function! mhi#foldy()
 endfunction
 
 "
-" I prefer two vertically splitted windows per tabpage.
-"
-function! mhi#helpme() abort
-  if &buftype == 'help'
-    if winnr('$') == 2
-      silent wincmd L
-    else
-      silent wincmd T
-    endif
-  endif
-endfunction
-
-"
 " Switch to VCS root, if there is one.
 "
 function! mhi#cd(bang) abort

@@ -90,6 +90,8 @@
     shs   = show --stat
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     st    = stash
+    stl   = stash list
+    sts   = stash show -p
     t     = tag
     unmerged = branch --no-merged master
     whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
