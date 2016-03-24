@@ -309,6 +309,13 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
+pr() {
+    local origin pr
+    [[ $# > 1 ]] && { origin=$1; pr=$2 } || { origin=origin; pr=$1 }
+    git fetch ${origin} refs/pull/${pr}/head
+    git checkout -q FETCH_HEAD
+}
+
 vt() {
     nv -u unix.vim -U NONE --noplugin -s dotest.in $1
     test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | colordiff
