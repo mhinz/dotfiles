@@ -59,10 +59,9 @@ call plug#begin(bundle)
 
   " Plug 'SirVer/ultisnips'
   " Plug 'fatih/vim-go'
-  " Plug 'vim-airline/vim-airline'
-
-  " Testing phase.
   " Plug 'junegunn/fzf.vim'
+  " Plug 'junegunn/goyo.vim'
+  " Plug 'vim-airline/vim-airline'
 
   Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
@@ -78,7 +77,9 @@ call plug#end()
 " init {{{1
 filetype plugin indent on
 syntax   on
-runtime macros/matchit.vim
+if !has('nvim')
+  packadd! matchit
+endif
 
 let mapleader = ';'
 
@@ -720,11 +721,6 @@ let g:startify_skiplist = [
       \ '/data/repo/neovim/runtime/doc',
       \ '/Users/mhi/local/vim/share/vim/vim74/doc',
       \ ]
-
-function! s:foo(filename)
-  return fnamemodify(a:filename, ':t')
-endfunction
-
 let g:startify_bookmarks = [
       \ { 'c': '~/.vim/vimrc' },
       \ '~/.zsh/.zshrc',
