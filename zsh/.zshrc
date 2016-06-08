@@ -196,6 +196,7 @@ hash -d v='/data/repo/vim'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
+alias vlc=/Applications/VLC.app/Contents/MacOS/VLC
 alias help='run-help'
 
 alias h='cd ..; l'
@@ -224,7 +225,6 @@ alias 33='bg %3'
 
 alias vu='vim -u NONE -U NONE -i NONE -N'
 alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
-alias nvim='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
