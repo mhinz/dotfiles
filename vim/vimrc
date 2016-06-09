@@ -600,6 +600,13 @@ command! Colorschemes call fzf#run({
 " options: gv {{{2
 autocmd FileType GV set foldlevel=1
 
+highlight link diffAdded     DiffAdd
+highlight link diffRemoved   DiffDelete
+highlight link diffFile      Directory
+highlight link diffLine      Comment
+highlight link diffIndexLine Comment
+highlight link diffSubname   Comment
+
 " options: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
