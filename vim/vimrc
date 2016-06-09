@@ -427,7 +427,7 @@ augroup myvimrc
         \ | compiler perl
 
   au FileType python
-        \ setl kp=pydoc
+        \ setl kp=pydoc mp=./%
         \ | let python_highlight_all = 1
         \ | compiler pyunit
 
