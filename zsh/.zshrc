@@ -309,13 +309,6 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
-pr() {
-    local origin pr
-    [[ $# > 1 ]] && { origin=$1; pr=$2 } || { origin=origin; pr=$1 }
-    git fetch ${origin} refs/pull/${pr}/head
-    git checkout -q FETCH_HEAD
-}
-
 vt() {
     nv -u unix.vim -U NONE --noplugin -s dotest.in $1
     test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | colordiff
@@ -455,5 +448,22 @@ if [[ $(uname -s) = 'Darwin' ]]; then
         docker-machine stop default
     }
 fi
+
+# Git {{{1
+pr() {
+    local origin pr
+    if [[ $# == 0 ]]; then
+        echo "usage: pr [remote] <ref>"
+        return 1
+    elif [[ $# == 1 ]]; then
+        origin=origin
+        pr=$1
+    else
+        origin=$1
+        pr=$2
+    fi
+    git fetch $origin refs/pull/${pr}/head || return
+    git checkout -q FETCH_HEAD
+}
 
 # vim: et sts=4 sw=4 fdm=marker
