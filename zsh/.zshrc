@@ -190,9 +190,7 @@ hash -d asm='/data/programming/asm'
 hash -d b='/data/books'
 hash -d c='/data/programming/c'
 hash -d g='/data/github'
-hash -d nv='/data/repo/neovim'
 hash -d torrent='/data/torrent/download'
-hash -d v='/data/repo/vim'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
@@ -222,9 +220,6 @@ alias 3='fg %3'
 alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
-
-alias vu='vim -u NONE -U NONE -i NONE -N'
-alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
@@ -308,11 +303,6 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
-
-vt() {
-    nv -u unix.vim -U NONE --noplugin -s dotest.in $1
-    test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | colordiff
-}
 
 f()    { find . -iname "*$@*" }
 secs() { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
@@ -464,6 +454,20 @@ pr() {
     fi
     git fetch $origin refs/pull/${pr}/head || return
     git checkout -q FETCH_HEAD
+}
+
+# Vim {{{1
+alias gv='vim +GV +"sil tabc 2"'
+alias vu='vim -u NONE -U NONE -i NONE -N'
+alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+
+hash -d v='/data/repo/vim'
+hash -d nv='/data/repo/neovim'
+
+# Run a legacy test in ~v/src/testdir
+vt() {
+    vim -u unix.vim -U NONE --noplugin -s dotest.in $1
+    test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | diff-so-fancy
 }
 
 # vim: et sts=4 sw=4 fdm=marker
