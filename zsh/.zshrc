@@ -446,7 +446,7 @@ pr() {
         echo "usage: pr [remote] <ref>"
         return 1
     elif [[ $# == 1 ]]; then
-        origin=origin
+        origin=$(git config branch.master.remote || echo origin)
         pr=$1
     else
         origin=$1
