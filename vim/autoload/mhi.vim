@@ -52,8 +52,9 @@ function! mhi#jump()
       " nmap <expr> <cr> mhi#jump()
       " execute "normal \<leader>cg"
       execute 'cscope find g' expand('<cword>')
+      normal! zt
     else
-      execute "normal! g\<c-]>"
+      execute "normal! g\<c-]>zt"
     endif
     call mhi#pulse()
   endif
