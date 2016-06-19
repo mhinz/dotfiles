@@ -39,7 +39,11 @@
 
 [pager]
     diff = diff-so-fancy | less -RFXx1,5
+    log  = diff-so-fancy | less -RFXx1,5
     show = diff-so-fancy | less -RFXx1,5
+
+[interactive]
+    diffFilter = diff-so-fancy
 
 [alias]
     a     = add
