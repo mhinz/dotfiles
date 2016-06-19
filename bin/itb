@@ -23,6 +23,11 @@ loop do
   page  += 1
 end
 
+if books.empty?
+  puts 'No matches.'
+  exit 1
+end
+
 books.sort! { |a,b| a['Title'] <=> b['Title'] }
 
 # Select a book.
