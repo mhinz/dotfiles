@@ -22,8 +22,9 @@
     enabled = true
 
 [diff]
-    tool           = vimdiff
-    mnemonicPrefix = true
+    tool                = vimdiff
+    mnemonicPrefix      = true
+    compactionHeuristic = true
 
 [difftool "accu"]
     cmd = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
