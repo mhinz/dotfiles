@@ -221,6 +221,8 @@ alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
 
+alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg'
+
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
 
