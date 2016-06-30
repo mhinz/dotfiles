@@ -224,8 +224,6 @@ endif
 
 " mapping {{{1
 inoremap jf           <esc>
-inoremap <a-o>        <c-o>o
-inoremap <a-O>        <c-o>O
 
 inoremap <expr> <tab>   mhi#tab_yeah("\<c-n>", "\<tab>")
 inoremap <expr> <s-tab> mhi#tab_yeah("\<c-p>", "\<s-tab>")
