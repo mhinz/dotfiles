@@ -72,6 +72,7 @@
     l     = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative
     la    = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative --all
     lfp   = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative --first-parent
+    lso   = ls-files --others --exclude-standard
     lsr   = ls-remote
     m     = merge
     ma    = merge --abort
