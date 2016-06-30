@@ -679,7 +679,7 @@ function! s:fug()
   endif
 endfunction
 
-autocmd User fugitive call <sid>fug()
+autocmd User        fugitive    call <sid>fug()
 autocmd BufReadPost fugitive:// setlocal bufhidden=delete
 
 " options: vim-grepper {{{2
@@ -687,10 +687,6 @@ nnoremap <leader>g :Grepper -tool git<cr>
 nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
-
-let g:grepper = {
-      \ 'highlight': 1,
-      \ }
 
 " options: vim-lua-ftplugin {{{2
 let g:lua_complete_omni = 1
