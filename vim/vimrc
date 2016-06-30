@@ -228,6 +228,9 @@ inoremap jf           <esc>
 inoremap <expr> <tab>   mhi#tab_yeah("\<c-n>", "\<tab>")
 inoremap <expr> <s-tab> mhi#tab_yeah("\<c-p>", "\<s-tab>")
 
+nnoremap <c-i>          <c-i>zvzz
+nnoremap <c-o>          <c-o>zvzz
+
 nnoremap <silent> L     :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
 
 inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
