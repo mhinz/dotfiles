@@ -237,9 +237,6 @@ inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%
 
 nnoremap \            ;
 
-nnoremap <tab>        <c-w>w
-nnoremap <s-tab>      <c-w>W
-
 nnoremap <f12>        :setlocal spell!<cr>
 
 nnoremap <expr> n     'Nn'[v:searchforward].'zvzz'
