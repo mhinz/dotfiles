@@ -274,4 +274,31 @@ function! mhi#syninfo()
   return info
 endfunction
 
+"
+" Dump Neovim API
+"
+function! mhi#dump_api()
+  let api = msgpackparse(systemlist('nvim --api-info'))[0]
+
+  for v in api.functions
+    echohl Function
+    echomsg v.name._VAL[0]
+    echohl NONE
+
+    echohl Title
+    echon '('. join(map(v.parameters, 'v:val[1]._VAL[0] .":". v:val[0]._VAL[0]'), ', ') .')'
+    echohl NONE
+
+    echon ' -> '
+
+    echohl Constant
+    echon v.return_type._VAL[0]
+    echohl NONE
+
+    echohl Comment
+    echon ' async: '. (v.async ? '✓' : '☓') .', can fail: '. (has_key(v, 'can_fail') && v.can_fail ? '✓' : '☓')
+    echohl NONE
+  endfor
+endfunction
+
 " vim: fdm=syntax
