@@ -35,15 +35,15 @@ call plug#begin(bundle)
 
   Plug 'beloglazov/vim-online-thesaurus'
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)'     }
-  Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame'            }
+  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
+  Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
   Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
-  Plug 'junegunn/gv.vim',           { 'on': 'GV'                        }
+  Plug 'junegunn/gv.vim',           { 'on': 'GV' }
   Plug 'junegunn/vader.vim',
-  Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)'     }
+  Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'justinmk/vim-dirvish'
-  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle'              }
-  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle'            }
+  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
+  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -51,11 +51,12 @@ call plug#begin(bundle)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
+  Plug 'rhysd/vim-grammarous',      { 'on': 'GrammarousCheck' }
 
-  Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir'     }
+  Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
   Plug 'tpope/vim-rails'
-  Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua'        }
-  Plug 'xolox/vim-misc',          { 'for': 'lua'        }
+  Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua' }
+  Plug 'xolox/vim-misc',          { 'for': 'lua' }
 
   " Plug 'SirVer/ultisnips'
   " Plug 'fatih/vim-go'
@@ -681,6 +682,15 @@ endfunction
 
 autocmd User        fugitive    call <sid>fug()
 autocmd BufReadPost fugitive:// setlocal bufhidden=delete
+
+" options: vim-grammarous {{{2
+nnoremap <leader>ii :GrammarousCheck<cr>
+nmap     <leader>ir <plug>(grammarous-reset)
+nmap     <leader>im <plug>(grammarous-move-to-info-window)
+nmap     <leader>ic <plug>(grammarous-close-info-window)
+nmap     <leader>in <plug>(grammarous-move-to-next-error)
+nmap     <leader>ip <plug>(grammarous-move-to-previous-error)
+nmap     <leader>if <plug>(grammarous-fixit)
 
 " options: vim-grepper {{{2
 nnoremap <leader>g :Grepper -tool git<cr>
