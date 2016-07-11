@@ -6,7 +6,7 @@
 
 export TERM=xterm-256color
 export EDITOR=vim
-export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\""
+export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=neoman' -\""
 export GOPATH=/data/go GOROOT=/data/languages/go GOARCH=amd64 GOOS=${$(uname -s):l}
 export FZF_DEFAULT_OPTS='--inline-info --color bg+:235,hl+:137,hl:167,info:245,pointer:245,prompt:235'
 export GH=/data/github
