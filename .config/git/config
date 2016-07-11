@@ -91,6 +91,7 @@
     ri    = rebase -i
     rl    = rev-list
     rp    = rev-parse
+    ru    = remote update
     rs    = rebase --skip
     s     = status -sb -uno
     sb    = show-branch
