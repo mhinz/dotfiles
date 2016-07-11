@@ -11,6 +11,9 @@
 [init]
     templatedir = ~/.config/git/template
 
+[fetch]
+    prune = true
+
 [push]
     default = simple
 
