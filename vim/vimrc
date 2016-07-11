@@ -54,6 +54,7 @@ call plug#begin(bundle)
   Plug 'rhysd/vim-grammarous',      { 'on': 'GrammarousCheck' }
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
+  Plug 'nhooyr/neoman.vim'
   Plug 'tpope/vim-rails'
   Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua' }
   Plug 'xolox/vim-misc',          { 'for': 'lua' }
