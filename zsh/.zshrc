@@ -20,7 +20,7 @@ eval $(dircolors ~/.zsh/dircolors)
 
 # misc options {{{1
 
-setopt cdable_vars
+setopt cdablevars
 setopt checkjobs
 setopt completeinword
 setopt correct
@@ -28,7 +28,8 @@ setopt globcomplete
 setopt interactivecomments
 setopt listpacked
 setopt longlistjobs
-setopt no_auto_cd
+setopt menucomplete
+setopt no_autocd
 setopt no_beep
 setopt no_hist_beep
 setopt no_listrowsfirst
