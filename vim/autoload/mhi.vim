@@ -46,6 +46,8 @@ endfunction
 function! mhi#jump()
   if (&filetype == 'vim' && &buftype == 'nofile') || &buftype == 'quickfix'
     execute "normal! \<cr>"
+  elseif &filetype == 'neoman'
+    execute "normal \<c-]>"
   else
     if exists('g:cscoped')
       " Todo: https://gist.github.com/mhinz/1a23d24f88b396b65aec
