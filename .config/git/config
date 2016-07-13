@@ -15,7 +15,7 @@
     prune = true
 
 [push]
-    default = simple
+    default = current
 
 [rebase]
     autosquash = true
