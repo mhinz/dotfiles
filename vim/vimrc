@@ -408,6 +408,7 @@ augroup myvimrc
 
   au FileType help
         \ execute 'silent wincmd' 'TL'[winnr('$') == 2]
+        \ | setl noet
 
   au FileType html
         \ setl et sts=2 sw=2
