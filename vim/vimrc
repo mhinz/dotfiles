@@ -53,6 +53,8 @@ call plug#begin(bundle)
   Plug 'tpope/vim-surround'
   Plug 'rhysd/vim-grammarous',      { 'on': 'GrammarousCheck' }
 
+  Plug 'tweekmonster/helpful.vim'
+
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
   Plug 'nhooyr/neoman.vim'
   Plug 'tpope/vim-rails'
