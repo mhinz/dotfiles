@@ -605,6 +605,7 @@ command! Colorschemes call fzf#run({
 
 " options: gv {{{2
 autocmd FileType GV set foldlevel=1
+autocmd FileType GV nnoremap <buffer> q :qa<cr>
 
 highlight link diffAdded     DiffAdd
 highlight link diffRemoved   DiffDelete
