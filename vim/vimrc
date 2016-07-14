@@ -396,6 +396,9 @@ augroup myvimrc
   au FileType erlang
         \ setl com-=:%
 
+  au FileType git
+        \ nnoremap <buffer> gh :call mhi#github_open_issue()<cr>
+
   au FileType git,text
         \ setl tw=80 fo+=t
 

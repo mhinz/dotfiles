@@ -1,4 +1,21 @@
 "
+" Github
+"
+function! mhi#github_open_issue() abort
+  if !exists('b:git_dir')
+    return
+  endif
+  let issue = matchstr(expand('<cWORD>'), '\d\+')
+  if empty(issue)
+    return
+  endif
+  let remote = systemlist('git config branch.master.remote || echo origin')[0]
+  let url = systemlist(printf('git config remote.%s.url', remote))[0]
+  let url = 'https://github.com/'. matchstr(url, '\v[/:]\zs.*') .'/issues/'. issue
+  silent execute '!open -a Google\ Chrome '. url
+endfunction
+
+"
 " Jump to definitions of s:foo(), <sid>bar, and foo#bar().
 "
 function! mhi#lookup()
