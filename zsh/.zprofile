@@ -5,7 +5,7 @@
 [[ -n $TMUX || $SHLVL -gt 1 ]] && return
 
 export TERM=xterm-256color
-export EDITOR=vim
+export EDITOR=nvim
 export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=neoman' -\""
 export GOPATH=/data/go GOROOT=/data/languages/go GOARCH=amd64 GOOS=${$(uname -s):l}
 export FZF_DEFAULT_COMMAND='ag -g ""'
