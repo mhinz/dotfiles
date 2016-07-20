@@ -25,15 +25,15 @@
 "                ║           ⎋ HERE BE VIMPIRES ⎋           ║
 "                ╚══════════════════════════════════════════╝
 
-" plug {{{1
+" Plug {{{1
 let bundle = '~/.vim/bundle'
 
 call plug#begin(bundle)
   Plug 'jonathanfilip/vim-lucius'
-  Plug 'jpo/vim-railscasts-theme'
   Plug 'morhetz/gruvbox'
+  Plug 'robertmeta/nofrils'
 
-  Plug 'beloglazov/vim-online-thesaurus'
+  Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
@@ -44,6 +44,8 @@ call plug#begin(bundle)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+  Plug 'nhooyr/neoman.vim'
+  Plug 'rhysd/vim-grammarous',      { 'on': 'GrammarousCheck' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -51,23 +53,13 @@ call plug#begin(bundle)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'rhysd/vim-grammarous',      { 'on': 'GrammarousCheck' }
 
-  Plug 'tweekmonster/helpful.vim'
+  Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
+  Plug 'fatih/vim-go',             { 'for': 'go' }
+  Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
+  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
+  Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
-  Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
-  Plug 'nhooyr/neoman.vim'
-  Plug 'tpope/vim-rails'
-  Plug 'xolox/vim-lua-ftplugin',  { 'for': 'lua' }
-  Plug 'xolox/vim-misc',          { 'for': 'lua' }
-
-  " Plug 'SirVer/ultisnips'
-  " Plug 'fatih/vim-go'
-  " Plug 'junegunn/fzf.vim'
-  " Plug 'junegunn/goyo.vim'
-  " Plug 'vim-airline/vim-airline'
-
-  Plug '/data/github/vim-easy-going'
   Plug '/data/github/vim-grepper'
   Plug '/data/github/vim-janah'
   Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
@@ -75,24 +67,45 @@ call plug#begin(bundle)
   Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
   Plug '/data/github/vim-signify'
   Plug '/data/github/vim-startify'
-  Plug '/data/github/vim-syntaxful'
-call plug#end()
 
-" init {{{1
-filetype plugin indent on
-syntax   on
-if !has('nvim')
+  " Testing phase.
+  " Plug 'mattn/emmet-vim',         { 'for': 'html' }
+call plug#end()
+" }}}1
+
+" Init {{{1
+if has('nvim')
+  let g:python3_host_skip_check = 1
+else
+  filetype plugin indent on
+  syntax   on
   packadd! matchit
 endif
 
 let mapleader = ';'
 
-"autocmd BufReadPre *.asm let b:asmsyntax = 'nasm'
-"let b:asmsyntax = 'armasm'
+let g:vimsyn_folding = 'f'
+let g:is_bash        = 1
+let g:lisp_rainbow   = 1
 
-let s:mac = has('mac')
+let g:markdown_fenced_languages = ['vim']
 
-" set {{{1
+let g:loaded_2html_plugin     = 1
+let g:loaded_getscriptPlugin  = 1
+let g:loaded_gzip             = 1
+let g:loaded_logipat          = 1
+" let g:loaded_matchparen       = 1
+let g:loaded_rrhelper         = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin        = 1
+let g:loaded_vimballPlugin    = 1
+let g:loaded_zipPlugin        = 1
+
+augroup vimrc
+  autocmd!
+augroup END
+
+" Option {{{1
 " indent settings
 set autoindent
 set cinoptions    =>4,l1,p0,)50,*50,t0
@@ -226,7 +239,7 @@ else
   augroup END
 endif
 
-" mapping {{{1
+" Mapping {{{1
 inoremap jf           <esc>
 
 inoremap <expr> <tab>   mhi#tab_yeah("\<c-n>", "\<tab>")
@@ -361,15 +374,10 @@ else
   let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
 endif
 
-" autocmd {{{1
+" Autocmd {{{1
 augroup myvimrc
-  au!
-
   au BufEnter * Cd
   au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
-
-  au BufLeave           *.h                       mark H
-  au BufLeave           *.{c,cpp}                 mark C
 
   au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
   au BufRead,BufNewFile *.adoc                    setfiletype asciidoc
@@ -392,64 +400,9 @@ augroup myvimrc
 
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
   au BufReadPost * if getline(1) =~ '^#!' | let b:start = '-wait=always '.getline(1)[2:].' %' | endif
-
-  au FileType erlang
-        \ setl com-=:%
-
-  au FileType git
-        \ nnoremap <buffer> gh :call mhi#github_open_issue()<cr>
-
-  au FileType git,text
-        \ setl tw=80 fo+=t
-
-  au FileType go
-        \ setl noet sts& sw& com-=:// isk-=. mp=go\ install
-        \ | let [b:dispatch, b:start] = ['go build', '-wait=always go run %']
-
-  au FileType help
-        \ execute 'silent wincmd' 'TL'[winnr('$') == 2]
-        \ | setl noet
-
-  au FileType html
-        \ setl et sts=2 sw=2
-
-  au FileType lua
-        \ setl com-=:# sts=2 sw=2
-        \ | let [b:dispatch, b:start] = ['luac -p %', '-wait=always luajit %']
-
-  au FileType mail
-        \ setl tw=72 wrap lbr
-
-  au FileType man
-        \ setl nocul nomod nolist nonu nornu
-        \ | nnoremap <buffer> q :q<cr>
-
-  au FileType markdown
-        \ setl tw=80 mp=gomali\ %
-
-  au FileType perl
-        \ setl com-=:# kp=perldoc\ -f
-        \ | let perl_include_pod = 1
-        \ | compiler perl
-
-  au FileType python
-        \ setl kp=pydoc mp=./%
-        \ | let python_highlight_all = 1
-        \ | compiler pyunit
-
-  au FileType ruby
-        \ setl com-=:# sts=2 sw=2
-        \ | let [ruby_operators, ruby_space_errors] = [1, 1]
-
-  au FileType vim
-        \ setl sts=2 sw=2
-        \ | let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
-
-  au FileType zsh,sh
-        \ setl com-=:# mp=shellcheck\ -f\ gcc\ %
 augroup END
 
-" commands {{{1
+" Command {{{1
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
 command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
@@ -457,7 +410,7 @@ command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
 command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 
-" colors {{{1
+" Color {{{1
 if has('gui_running')
   set background=light
   for scheme in ['gruvbox', 'railscasts']
@@ -505,7 +458,7 @@ else
   endfor
 endif
 
-" statusline {{{1
+" Statusline {{{1
 command! -bar ToggleStatusline let b:stl_location  = !get(b:, 'stl_location', 1)
 command! -bar ToggleHighlight  let b:stl_highlight = !get(b:, 'stl_highlight')
 
@@ -549,12 +502,10 @@ function! SetStatusline()
 
   return stl
 endfunction
+" }}}1
 
-" options {{{1
-" options: neovim {{{2
-let g:python3_host_skip_check = 1
-
-" options: fzf {{{2
+" Plugin {{{1
+" Plugin: fzf {{{2
 set runtimepath+=~/local/fzf
 
 nnoremap <leader><leader> :Buffers<cr>
@@ -580,6 +531,7 @@ endfunction
 
 function! s:plugopen(entry)
   execute 'Dirvish' expand(g:bundle) .'/'. a:entry
+  execute 'lcd' expand('%')
 endfunction
 
 command! Buffers let bl = reverse(s:buflist()) | call fzf#run({
@@ -603,18 +555,7 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
-" options: gv {{{2
-autocmd FileType GV set foldlevel=1
-autocmd FileType GV nnoremap <buffer> q :qa<cr>
-
-highlight link diffAdded     DiffAdd
-highlight link diffRemoved   DiffDelete
-highlight link diffFile      Directory
-highlight link diffLine      Comment
-highlight link diffIndexLine Comment
-highlight link diffSubname   Comment
-
-" options: netrw {{{2
+" Plugin: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
 let g:netrw_bufsettings  = 'relativenumber'
@@ -622,11 +563,11 @@ let g:netrw_keepdir      = 0
 let g:netrw_liststyle    = 1
 let g:netrw_sort_options = 'i'
 
-" options: surround {{{2
+" Plugin: surround {{{2
 let g:surround_indent = 1
 let g:surround_{char2nr('k')} = "<kbd>\r</kbd>"
 
-" options: tagbar {{{2
+" Plugin: tagbar {{{2
 nnoremap <f2> :TagbarToggle<cr>
 
 let g:tagbar_width     = 40
@@ -634,41 +575,25 @@ let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
-" options: undotree {{{2
+" Plugin: undotree {{{2
 nnoremap <f3>  :UndotreeToggle<cr>
 
-" options: vim {{{2
-let g:vimsyn_folding = 'f'
+" Plugin: vim {{{2
 
-let g:is_bash      = 1
-let g:lisp_rainbow = 1
-let g:markdown_fenced_languages = ['vim']
-
-let g:loaded_2html_plugin     = 1
-let g:loaded_getscriptPlugin  = 1
-let g:loaded_gzip             = 1
-let g:loaded_logipat          = 1
-" let g:loaded_matchparen       = 1
-let g:loaded_rrhelper         = 1
-let g:loaded_spellfile_plugin = 1
-let g:loaded_tarPlugin        = 1
-let g:loaded_vimballPlugin    = 1
-let g:loaded_zipPlugin        = 1
-
-" options: vim-dirvish {{{2
+" Plugin: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
 nnoremap <f1> :vsplit +Dirvish<cr><c-w>H<c-w>40<bar>
 
-" options: vim-dispatch {{{2
+" Plugin: vim-dispatch {{{2
 nnoremap <leader>dd  :Dispatch<cr>
 nnoremap <leader>dm  :Make<cr>
 nnoremap <leader>ds  :Start<cr>
 nnoremap <leader>dc  :Copen<cr>
 
-" options: vim-easy-align {{{2
+" Plugin: vim-easy-align {{{2
 xmap <cr> <plug>(LiveEasyAlign)
 
-" options: vim-easymotion {{{2
+" Plugin: vim-easymotion {{{2
 let g:EasyMotion_do_mapping        = 0
 let g:EasyMotion_do_shade          = 1
 let g:EasyMotion_inc_highlight     = 0
@@ -679,59 +604,31 @@ let g:EasyMotion_startofline       = 0
 let g:EasyMotion_use_smartsign_us  = 1
 let g:EasyMotion_use_upper         = 0
 
+let g:EasyMotion_skipfoldedline = 0
+
 map <silent><space> <plug>(easymotion-s2)
 
-" options: vim-fugitive {{{2
-function! s:fug()
-  if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
-    nnoremap <buffer> .. :edit %:h<cr>
-  endif
-endfunction
-
-autocmd User        fugitive    call <sid>fug()
-autocmd BufReadPost fugitive:// setlocal bufhidden=delete
-
-" options: vim-grammarous {{{2
-nnoremap <leader>ii :GrammarousCheck<cr>
-nmap     <leader>ir <plug>(grammarous-reset)
-nmap     <leader>im <plug>(grammarous-move-to-info-window)
-nmap     <leader>ic <plug>(grammarous-close-info-window)
-nmap     <leader>in <plug>(grammarous-move-to-next-error)
-nmap     <leader>ip <plug>(grammarous-move-to-previous-error)
-nmap     <leader>if <plug>(grammarous-fixit)
-
-" options: vim-grepper {{{2
+" Plugin: vim-grepper {{{2
 nnoremap <leader>g :Grepper -tool git<cr>
 nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
-" options: vim-lua-ftplugin {{{2
-let g:lua_complete_omni = 1
-
-" options: vim-online-thesaurus {{{2
+" Plugin: vim-online-thesaurus {{{2
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 nnoremap <leader>K :Thesaurus<space>
 
-" options: vim-plug {{{2
+" Plugin: vim-plug {{{2
 let g:plug_shallow = 0
 let g:plug_window  = 'enew'
 
-" options: vim-sayonara {{{2
+" Plugin: vim-sayonara {{{2
 nnoremap <silent><leader>q  :Sayonara<cr>
 nnoremap <silent><leader>Q  :Sayonara!<cr>
 
 let g:sayonara_confirm_quit = 0
 
-" options: vim-signify {{{2
-let g:signify_vcs_list = [ 'git', 'hg' ]
-
-omap ic <plug>(signify-motion-inner-pending)
-xmap ic <plug>(signify-motion-inner-visual)
-omap ac <plug>(signify-motion-outer-pending)
-xmap ac <plug>(signify-motion-outer-visual)
-
-" options: vim-startify {{{2
+" Plugin: vim-startify {{{2
 nnoremap <leader>st  :Startify<cr>
 
 let g:startify_skiplist = [
@@ -756,6 +653,182 @@ let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence    = 0
 let g:startify_update_oldfiles        = 1
 let g:startify_use_env                = 1
+
+" Filetype {{{1
+" Filetype: C {{{2
+augroup vimrc
+  autocmd BufLeave *.{c,cpp} mark C
+  autocmd BufLeave *.h       mark H
+augroup END
+
+" Filetype: Erlang {{{2
+augroup vimrc
+  autocmd FileType erlang setl com-=:%
+augroup END
+
+" Filetype: Go {{{2
+augroup vimrc
+  autocmd FileType go call s:set_go_settings()
+augroup END
+
+let g:go_def_mode    = 'godef'
+let g:go_fmt_command = 'goimports'
+
+function s:set_go_settings() abort
+  setlocal noet sts& sw& com-=:// isk-=. mp=go\ install
+
+  let [b:dispatch, b:start] = [':GoBuild', ':GoRun']
+
+  command! -buffer -bang A  call go#alternate#Switch(<bang>0, 'edit')
+  command! -buffer -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  command! -buffer -bang AS call go#alternate#Switch(<bang>0, 'split')
+  command! -buffer -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+  nnoremap <buffer> <cr>      :GoDef<cr>
+  nnoremap <buffer> <leader>i :GoInfo<cr>
+endfunction
+
+" Filetype: Help {{{2
+augroup vimrc
+  autocmd FileType help call s:set_help_settings()
+augroup END
+
+function! s:set_help_settings()
+  setl noet
+  let b:helpful = 1
+  execute 'silent wincmd' 'TL'[winnr('$') == 2]
+endfunction
+
+" Filetype: HTML {{{2
+augroup vimrc
+  autocmd FileType html setl et sts=2 sw=2
+augroup END
+
+" Filetype: Lua {{{2
+augroup vimrc
+  autocmd FileType lua call s:set_lua_settings()
+augroup END
+
+" vim-lua-ftplugin
+let g:lua_complete_omni = 1
+
+function! s:set_lua_settings()
+  setl com-=:# sts=2 sw=2
+  let [b:dispatch, b:start] = ['luac -p %', '-wait=always luajit %']
+endfunction
+
+" Filetype: Man {{{2
+augroup vimrc
+  autocmd FileType man call s:set_man_settings()
+augroup END
+
+function! s:set_man_settings()
+  setl nocul nomod nolist nonu nornu
+  nnoremap <buffer> q :q<cr>
+endfunction
+
+" Filetype: Perl {{{2
+augroup vimrc
+  autocmd FileType perl call s:set_perl_settings()
+augroup END
+
+let perl_include_pod = 1
+
+function! s:set_perl_settings()
+  setlocal com-=:# kp=perldoc\ -f
+  compiler perl
+endfunction
+
+" Filetype: Python {{{2
+augroup vimrc
+  autocmd FileType python call s:set_python_settings()
+augroup END
+
+let python_highlight_all = 1
+
+function! s:set_python_settings()
+  setlocal kp=pydoc mp=./%
+  compiler pyunit
+endfunction
+
+" Filetype: Ruby {{{2
+augroup vimrc
+  autocmd FileType ruby setl com-=:# sts=2 sw=2
+augroup END
+
+let [g:ruby_operators, g:ruby_space_errors] = [1, 1]
+
+" Filetype: Sh, Zsh {{{2
+augroup vimrc
+  autocmd FileType zsh,sh setl com-=:# mp=shellcheck\ -f\ gcc\ %
+augroup END
+
+" Filetype: Text, Mail, Markdown {{{2
+augroup vimrc
+  autocmd FileType mail     setl tw=72 wrap lbr
+  autocmd FileType markdown setl tw=80 mp=gomali\ %
+  autocmd FileType text     setl tw=80 fo+=t
+  autocmd FileType mail,markdown,text call s:set_text_settings()
+augroup END
+
+function! s:set_text_settings()
+  nnoremap <buffer> <leader>ii :GrammarousCheck<cr>
+  nmap     <buffer> <leader>ir <plug>(grammarous-reset)
+  nmap     <buffer> <leader>im <plug>(grammarous-move-to-info-window)
+  nmap     <buffer> <leader>ic <plug>(grammarous-close-info-window)
+  nmap     <buffer> <leader>in <plug>(grammarous-move-to-next-error)
+  nmap     <buffer> <leader>ip <plug>(grammarous-move-to-previous-error)
+  nmap     <buffer> <leader>if <plug>(grammarous-fixit)
+endfunction
+
+" Filetype: VCS {{{2
+augroup vimrc
+  autocmd FileType    git         call s:set_git_settings()
+  autocmd User        fugitive    call s:fug()
+  autocmd BufReadPost fugitive:// setlocal bufhidden=delete
+augroup END
+
+" git
+function! s:set_git_settings()
+  setl tw=80 fo+=t
+  nnoremap <buffer> gh :call mhi#github_open_issue()<cr>
+endfunction
+
+" gv
+autocmd FileType GV set foldlevel=1
+autocmd FileType GV nnoremap <buffer> q :qa<cr>
+
+highlight link diffAdded     DiffAdd
+highlight link diffRemoved   DiffDelete
+highlight link diffFile      Directory
+highlight link diffLine      Comment
+highlight link diffIndexLine Comment
+highlight link diffSubname   Comment
+
+" signify
+let g:signify_vcs_list = [ 'git', 'hg' ]
+
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+omap ac <plug>(signify-motion-outer-pending)
+xmap ac <plug>(signify-motion-outer-visual)
+
+" fugitive
+function! s:fug()
+  if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
+    nnoremap <buffer> .. :edit %:h<cr>
+  endif
+endfunction
+
+" Filetype: Vim {{{2
+augroup vimrc
+  autocmd FileType vim call s:set_vim_settings()
+augroup END
+
+function! s:set_vim_settings()
+  setl sts=2 sw=2
+  let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
+endfunction
 " }}}1
 
 " vim: sw=2 sts=2 tw=0
