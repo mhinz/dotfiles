@@ -248,8 +248,6 @@ inoremap <expr> <s-tab> mhi#tab_yeah("\<c-p>", "\<s-tab>")
 nnoremap <c-i>          <c-i>zvzz
 nnoremap <c-o>          <c-o>zvzz
 
-nnoremap <silent> L     :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
-
 inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
 
 nnoremap \            ;
@@ -320,8 +318,6 @@ onoremap gv           :<c-u>normal! gv<cr>
 nnoremap Q            gqap
 
 nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
-nnoremap <leader>rv   :source $MYVIMRC<cr>
-nnoremap <leader>rr   :source %<cr>
 
 nnoremap <leader>si   :echo mhi#syninfo()<cr>
 nnoremap <leader>ss   :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
@@ -358,8 +354,6 @@ if has('nvim')
   tnoremap <a-j>      <c-\><c-n><c-w>j
   tnoremap <a-k>      <c-\><c-n><c-w>k
   tnoremap <a-l>      <c-\><c-n><c-w>l
-  autocmd BufEnter term://* startinsert
-  " autocmd TermClose * call feedkeys('<cr>')
 endif
 
 if has('nvim')
@@ -375,7 +369,11 @@ else
 endif
 
 " Autocmd {{{1
-augroup myvimrc
+augroup vimrc
+  if has('nvim')
+    autocmd BufEnter term://* startinsert
+  endif
+
   au BufEnter * Cd
   au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
 
@@ -674,7 +672,7 @@ augroup END
 let g:go_def_mode    = 'godef'
 let g:go_fmt_command = 'goimports'
 
-function s:set_go_settings() abort
+function! s:set_go_settings() abort
   setlocal noet sts& sw& com-=:// isk-=. mp=go\ install
 
   let [b:dispatch, b:start] = [':GoBuild', ':GoRun']
@@ -685,7 +683,10 @@ function s:set_go_settings() abort
   command! -buffer -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
   nnoremap <buffer> <cr>      :GoDef<cr>
+  nnoremap <buffer> <leader>c :GoCoverageToggle<cr>
   nnoremap <buffer> <leader>i :GoInfo<cr>
+  nnoremap <buffer> <leader>r :GoRun<cr>
+  nnoremap <buffer> <leader>t :GoTest<cr>
 endfunction
 
 " Filetype: Help {{{2
@@ -828,6 +829,8 @@ augroup END
 function! s:set_vim_settings()
   setl sts=2 sw=2
   let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
+
+  nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
 endfunction
 " }}}1
 
