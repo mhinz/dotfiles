@@ -275,6 +275,10 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
+= () {
+    bc -l <<< $@
+}
+
 secs() {
     echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s')))
 }
