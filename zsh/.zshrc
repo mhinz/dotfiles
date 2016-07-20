@@ -15,7 +15,6 @@ watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
-. ~/local/fzf/shell/key-bindings.zsh 2>/dev/null
 eval $(dircolors ~/.zsh/dircolors)
 
 # misc options {{{1
@@ -195,21 +194,41 @@ hash -d torrent='/data/torrent/download'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
-alias vlc=/Applications/VLC.app/Contents/MacOS/VLC
+alias g='git'
+alias upg='brew update && brew upgrade --all && brew cleanup'
+
+alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
+alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
+
+alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias val='valgrind -v --leak-check=full --show-reachable=yes'
+alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg'
+
+alias rt='cd ~torrent/../session && rtorrent'
+
+alias -s html='open'
+alias -s pdf='open'
+alias chrome='open -a Google\ Chrome'
+alias preview='open -a Preview'
+alias vlc='open -a VLC'
+
 alias help='run-help'
 
-alias h='cd ..; l'
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-
 alias ls='ls --color=always -N'
+alias grep='grep --color=always'
+
 alias j='ls -lhd *(D-/)'
 alias k='ls -lhX *(D-^/)'
 alias l='ls -lh --group-directories-first'
 alias ll='ls -lhX --group-directories-first'
 alias la='ls -lhXA --group-directories-first'
 alias n='ls -lhS *(DOL[1,5]^/)'
+
+alias h='cd ..; l'
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 
 alias -g L='| less -r'
 alias -g N='>/dev/null'
@@ -221,57 +240,6 @@ alias 3='fg %3'
 alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
-
-alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg'
-
-alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
-alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
-
-alias g='git'
-alias grep='grep --color=always'
-alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
-alias p1='patch -p1 -g1 --dry-run'
-alias rt='cd ~torrent/../session && rtorrent'
-alias t='$EDITOR ~/todo'
-alias va='vagrant'
-alias val='valgrind -v --leak-check=full --show-reachable=yes'
-
-alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print \$1'"
-alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias flush='dscacheutil -flushcache'
-
-if [[ $(uname) == Darwin ]]; then
-    alias upg='brew update && brew upgrade --all && brew cleanup'
-else
-    if [[ -x ${commands[sudo]} ]]
-    then
-        alias big='dpkg-query -W --showformat="\${Installed-Size}\t\${Package}\n" | sort -n'
-
-        alias ap='sudo aptitude'
-        alias ag='sudo apt-get'
-
-        alias aps='sudo aptitude search'
-        alias api='sudo aptitude install'
-        alias aga='sudo apt-get autoremove --purge'
-        alias upg='sudo apt-get update && sudo apt-get upgrade'
-        alias pur='sudo apt-get remove --purge'
-        alias cache='sudo apt-cache'
-
-        alias dpkg='sudo dpkg'
-        alias dpkg-reconfigure='sudo dpkg-reconfigure'
-
-        alias orp='sudo deborphan'
-        alias orph='sudo deborphan --libdevel --find-config'
-
-        alias arp='sudo arp'
-        alias pt='sudo powertop'
-
-        alias reboot='sudo shutdown -r now'
-        alias halt='sudo shutdown -h now'
-    else
-        echo "Please install 'sudo'"
-    fi
-fi
 
 # completion {{{1
 
@@ -307,9 +275,13 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
-f()    { find . -iname "*$@*" }
-secs() { echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s'))) }
-md() { command mkdir $1 && builtin cd $1 }
+secs() {
+    echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s')))
+}
+
+md() {
+    command mkdir $1 && builtin cd $1
+}
 
 rd() {
     dir=$PWD
@@ -323,42 +295,6 @@ rd() {
     fi
     unset dir
 }
-
-tm() {
-    if [[ $# -eq 0 ]]; then
-        tmux attach || tmux new-session -s default
-    else
-        tmux has-session -t "$*" && tmux attach -t "$*" || tmux new-session -s "$*"
-    fi
-}
-
-_tmux-sessions() {
-    local expl
-    local -a sessions
-    sessions=( ${${(f)"$(command tmux list-sessions)"}/:[ $'\t']##/:} )
-    _describe -t sessions 'sessions' sessions "$@"
-}
-compdef _tmux-sessions tm
-
-_tmux_pane_words() {
-    local expl
-    local -a w
-    if [[ -z $TMUX_PANE ]]
-    then
-        _message "not running inside tmux!"
-        return 1
-    fi
-    w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
-    _wanted values expl 'words from current tmux pane' compadd -a w
-}
-
-zle -C tmux-pane-words-prefix   complete-word _generic
-zle -C tmux-pane-words-anywhere complete-word _generic
-bindkey '^Xt' tmux-pane-words-prefix
-bindkey '^X^X' tmux-pane-words-anywhere
-zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
-zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
-zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 
 rationalise-dot() {
     local MATCH dir split
@@ -397,15 +333,9 @@ fancy-ctrl-z() {
 
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+# }}}
 
-here() {
-    if (($+TMUX)); then
-        tmux new-window -c "#{pane_current_path}"
-    else
-        command urxvtc -cd $PWD
-    fi
-}
-
+# Chrome {{{1
 ch() {
   export CONF_COLS=$[ COLUMNS/2 ]
   export CONF_SEP='{::}'
@@ -423,24 +353,27 @@ ch() {
 
   unset CONF_COLS CONF_SEP
 }
-# }}}
 
-# Docker {{{1
-alias d='docker'
-alias dm='docker-machine'
+# FZF {{{1
+. ~/local/fzf/shell/key-bindings.zsh 2>/dev/null
 
-if [[ $(uname -s) = 'Darwin' ]]; then
-    dockerinit() {
-        set -x
-        [[ $(docker-machine status default) = 'Running' ]] || docker-machine start default
-        eval "$(docker-machine env default)"
-    }
+f() {
+    files=$(fzf-tmux -m --tac --tiebreak=index)
+    (( !$? )) && nvim $(echo $files | xargs)
+}
 
-    dockerstop() {
-        set -x
-        docker-machine stop default
-    }
-fi
+p() {
+    dir=$(find /data/{github,repo} -type d -mindepth 1 -maxdepth 1 | fzf-tmux --tac)
+    (( !$? )) && cd $dir && clear
+}
+
+pf() {
+    p && f
+}
+
+c() {
+    cd ~/.dotfiles && { f; cd -; }
+}
 
 # Git {{{1
 pr() {
@@ -459,8 +392,29 @@ pr() {
     git checkout -q FETCH_HEAD
 }
 
+b() {
+    git checkout $(git branch -a | fzf -1 | cut -c3-)
+}
+
+alias gv='nvim +GV +"sil tabc 2"'
+
+# Tmux {{{1
+tm() {
+    if (( $# )); then
+        tmux has-session -t "$*" && tmux attach -t "$*" || tmux new-session -s "$*"
+    else
+        tmux attach || tmux new-session -s default
+    fi
+}
+
+_tmux-sessions() {
+    local -a sessions
+    sessions=( ${(f)"$(command tmux list-sessions)"} )
+    _describe -t sessions '' sessions "$@"
+}
+compdef _tmux-sessions tm
+
 # Vim {{{1
-alias gv='vim +GV +"sil tabc 2"'
 alias vu='vim -u NONE -U NONE -i NONE -N'
 alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
