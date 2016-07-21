@@ -1,6 +1,13 @@
 [user]
-    name  = Marco Hinz
-    email = mh.codebro@gmail.com
+    name       = Marco Hinz
+    email      = mh.codebro@gmail.com
+    signingKey = AC9D48E91BCF448C
+
+[gpg]
+    program = gpg2
+
+[commit]
+    gpgsign = true
 
 [core]
     editor       = vim
