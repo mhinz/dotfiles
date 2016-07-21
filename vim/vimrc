@@ -784,9 +784,9 @@ endfunction
 
 " Filetype: VCS {{{2
 augroup vimrc
-  autocmd FileType    git         call s:set_git_settings()
-  autocmd User        fugitive    call s:fug()
-  autocmd BufReadPost fugitive:// setlocal bufhidden=delete
+  autocmd FileType    git,gitcommit call s:set_git_settings()
+  autocmd User        fugitive      call s:fug()
+  autocmd BufReadPost fugitive://   setlocal bufhidden=delete
 augroup END
 
 " git
