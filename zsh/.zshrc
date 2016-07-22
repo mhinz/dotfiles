@@ -195,6 +195,7 @@ hash -d z='/data/repo/zsh'
 
 # aliases {{{1
 alias g='git'
+alias gpg='gpg2'
 alias upg='brew update && brew upgrade --all && brew cleanup'
 
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
@@ -277,6 +278,10 @@ command_not_found_handler() { ~/bin/shell_function_missing $* }
 
 = () {
     bc -l <<< $@
+}
+
+lookup() {
+    open "https://pgp.mit.edu/pks/lookup?search=${*}"
 }
 
 secs() {
@@ -363,7 +368,7 @@ ch() {
 
 f() {
     local files
-    files=$(fzf-tmux -m --tac --tiebreak=index)
+    files=$(fzf-tmux -m -1 --tac --tiebreak=index)
     (( !$? )) && nvim $(echo $files | xargs)
 }
 
