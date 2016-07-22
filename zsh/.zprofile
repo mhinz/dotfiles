@@ -6,7 +6,7 @@
 
 export TERM=xterm-256color
 export EDITOR=nvim
-export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=neoman' -\""
+export MANPAGER="nvim +'set ft=neoman' -"
 export GOPATH=/data/go GOROOT=/data/languages/go GOARCH=amd64 GOOS=${$(uname -s):l}
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--inline-info --color bg+:235,hl+:137,hl:167,info:245,pointer:245,prompt:235'
