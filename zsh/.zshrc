@@ -400,6 +400,17 @@ b() {
     git checkout $(git branch -a | fzf -1 | cut -c3-)
 }
 
+gho() {
+    local prefix=$(git rev-parse --show-prefix)
+    (( $? )) && exit 1
+    local branch=$(git symbolic-ref -q --short HEAD)
+    local remote=$(git config branch.master.remote || echo origin)
+    local url=$(git config remote.${remote}.url)
+    url=${url/git\@github\.com:/https:\/\/github.com/}
+    url=${url%\.git}
+    open ${url}/tree/${branch}/${prefix}${1:-}
+}
+
 alias gv='nvim +GV +"sil tabc 2"'
 
 # Tmux {{{1
