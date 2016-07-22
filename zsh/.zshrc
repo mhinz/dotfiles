@@ -106,7 +106,7 @@ bindkey 'm'  expand-word
 
 # completion {{{1
 
-zstyle -e ':completion:*:approximate:*'   max-errors   '(( reply=($#PREFX+$#SUFFIX)/3 ))'
+zstyle -e ':completion:*:approximate:*'   max-errors   '(( reply=($#PREFIX+$#SUFFIX)/3 ))'
 
 zstyle ':completion:*:kill:*'             command      'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
 zstyle ':completion:*:*:kill:*:processes' list-colors  '=(#b) #([0-9]#)*=0=01;31'
@@ -362,11 +362,13 @@ ch() {
 . ~/local/fzf/shell/key-bindings.zsh 2>/dev/null
 
 f() {
+    local files
     files=$(fzf-tmux -m --tac --tiebreak=index)
     (( !$? )) && nvim $(echo $files | xargs)
 }
 
 p() {
+    local dir
     dir=$(find /data/{github,repo} -type d -mindepth 1 -maxdepth 1 | fzf-tmux --tac)
     (( !$? )) && cd $dir && clear
 }
@@ -401,8 +403,9 @@ b() {
 }
 
 gho() {
-    local prefix=$(git rev-parse --show-prefix)
-    (( $? )) && exit 1
+    local prefix
+    prefix=$(git rev-parse --show-prefix)
+    (( $? )) && return 1
     local branch=$(git symbolic-ref -q --short HEAD)
     local remote=$(git config branch.master.remote || echo origin)
     local url=$(git config remote.${remote}.url)
