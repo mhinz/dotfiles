@@ -26,51 +26,74 @@
 "                ╚══════════════════════════════════════════╝
 
 " Plug {{{1
-let bundle = '~/.vim/bundle'
+let g:plug_home    = '~/.vim/bundle'
+let g:plug_shallow = 0
+let g:plug_window  = 'enew'
+let g:plug_pwindow = 'vertical rightbelow new'
 
-call plug#begin(bundle)
-  Plug 'jonathanfilip/vim-lucius'
-  Plug 'morhetz/gruvbox'
-  Plug 'robertmeta/nofrils'
+try
+  call plug#begin()
+catch /E117/
+  if !filereadable(expand('~/.vim/autoload/plug.vim'))
+    echomsg '[*] Curling plug.vim'
+    call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+  endif
+  if exists('*mkdir') && !isdirectory(expand(g:plug_home))
+    echomsg '[*] Creating '. g:plug_home
+    call mkdir(expand(g:plug_home), 'p', 0700)
+    let s:delayed_bundle_install = 1
+  endif
+  call plug#begin()
+endtry
 
-  Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
-  Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
-  Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
-  Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
-  Plug 'junegunn/gv.vim',           { 'on': 'GV' }
-  Plug 'junegunn/vader.vim',
-  Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
-  Plug 'justinmk/vim-dirvish'
-  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
-  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
-  Plug 'nhooyr/neoman.vim'
-  Plug 'rhysd/vim-grammarous',      { 'on': 'GrammarousCheck' }
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-projectionist'
-  Plug 'tpope/vim-rsi'
-  Plug 'tpope/vim-scriptease'
-  Plug 'tpope/vim-surround'
+Plug 'jonathanfilip/vim-lucius'
+Plug 'morhetz/gruvbox'
+Plug 'robertmeta/nofrils'
 
-  Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
-  Plug 'fatih/vim-go',             { 'for': 'go' }
-  Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
-  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
-  Plug 'xolox/vim-misc',           { 'for': 'lua' }
+Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
+Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
+Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
+Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
+Plug 'junegunn/gv.vim',           { 'on': 'GV' }
+Plug 'junegunn/vader.vim',
+Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
+Plug 'justinmk/vim-dirvish'
+Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
+Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-surround'
 
-  Plug '/data/github/vim-grepper'
-  Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
-  Plug '/data/github/vim-rfc',       { 'on': 'RFC'      }
-  Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
-  Plug '/data/github/vim-signify'
-  Plug '/data/github/vim-startify'
+Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
+Plug 'fatih/vim-go',             { 'for': 'go' }
+Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
+Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
+Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
-  " Testing phase.
-  " Plug 'mattn/emmet-vim',         { 'for': 'html' }
+Plug '/data/github/vim-grepper'
+Plug '/data/github/vim-janah'
+Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
+Plug '/data/github/vim-rfc',       { 'on': 'RFC'      }
+Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
+Plug '/data/github/vim-signify'
+Plug '/data/github/vim-startify'
+
+" Testing phase.
+" Plug 'mattn/emmet-vim',         { 'for': 'html' }
+
 call plug#end()
+
+if exists('s:delayed_bundle_install')
+  echomsg '[*] Installing plugins to '. g:plug_home
+  silent PlugInstall
+  quit
+endif
+
 " }}}1
 
 " Init {{{1
@@ -133,6 +156,7 @@ endif
 " better navigation
 set cursorline
 set foldmethod    =marker
+set foldopen     +=jump
 set foldtext      =mhi#foldy()
 set hlsearch
 set ignorecase
@@ -528,7 +552,7 @@ function! s:bufopen(lines)
 endfunction
 
 function! s:plugopen(entry)
-  execute 'Dirvish' expand(g:bundle) .'/'. a:entry
+  execute 'Dirvish' expand(g:plug_home) .'/'. a:entry
   execute 'lcd' expand('%')
 endfunction
 
@@ -540,7 +564,7 @@ command! Buffers let bl = reverse(s:buflist()) | call fzf#run({
       \ }) | unlet bl
 
 command! Plugins call fzf#run({
-      \ 'source':  reverse(sort(map(globpath(bundle, '*', 0, 1), 'fnamemodify(v:val, ":t")'))),
+      \ 'source':  reverse(sort(map(globpath(g:plug_home, '*', 0, 1), 'fnamemodify(v:val, ":t")'))),
       \ 'sink':    function('<sid>plugopen'),
       \ 'options': '+m',
       \ 'left':    30
@@ -616,10 +640,6 @@ xmap gs <plug>(GrepperOperator)
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 nnoremap <leader>K :Thesaurus<space>
 
-" Plugin: vim-plug {{{2
-let g:plug_shallow = 0
-let g:plug_window  = 'enew'
-
 " Plugin: vim-sayonara {{{2
 nnoremap <silent><leader>q  :Sayonara<cr>
 nnoremap <silent><leader>Q  :Sayonara!<cr>
@@ -683,9 +703,10 @@ function! s:set_go_settings() abort
   command! -buffer -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
   nnoremap <buffer> <cr>      :GoDef<cr>
+  nnoremap <buffer> <leader>b :GoBuild<cr>
   nnoremap <buffer> <leader>c :GoCoverageToggle<cr>
   nnoremap <buffer> <leader>i :GoInfo<cr>
-  nnoremap <buffer> <leader>r :GoRun<cr>
+  nnoremap <buffer> <leader>r :GoReferrers<cr>
   nnoremap <buffer> <leader>t :GoTest<cr>
 endfunction
 
@@ -834,4 +855,4 @@ function! s:set_vim_settings()
 endfunction
 " }}}1
 
-" vim: sw=2 sts=2 tw=0
+" vim: sw=2 sts=2 tw=0 fdm=marker
