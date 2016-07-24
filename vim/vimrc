@@ -827,7 +827,7 @@ augroup vimrc
 augroup END
 
 function! s:set_vim_settings()
-  setl sts=2 sw=2
+  setl sts=2 sw=2 isk-=#
   let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
 
   nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
