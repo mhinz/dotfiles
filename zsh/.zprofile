@@ -22,6 +22,7 @@ path=(
     $GOPATH/bin
     $GOROOT/bin
 
+    /data/repo/camlistore/bin
     /usr/local/opt/coreutils/libexec/gnubin
     /usr/local/sbin
 
