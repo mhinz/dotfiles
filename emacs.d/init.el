@@ -1,103 +1,60 @@
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "http://melpa.milkbox.net/packages/")))
-
-(setq backup-directory-alist `(("." . "~/.emacs.d/saves"))
-     backup-by-copying t
-     kept-new-versions 6
-     kept-old-versions 2
-     version-control t)
-;;(autoload 'ghc-init "ghc" nil t)
-;;(autoload 'ghc-debug "ghc" nil t)
-;;(Add-hook 'haskell-mode-hook 'ghc-init)
-
-(defvar packages
-  '(("ace-jump-mode" ace-jump-mode)
-    ("async" async)
-    ("color-theme" color-theme)
-    ("erlang" erlang)
-    ("evil" evil)
-    ("evil-surround" evil-surround)
-    ("evil-visualstar" evil-visualstar)
-    ("folding-mode" folding)
-    ("haskell-mode" haskell-mode)
-    ("helm" helm)
-    ("linum-relative" linum-relative)
-    ("moe-theme.el" moe-theme)
-    ("rainbow-delimiters" rainbow-delimiters)
-    ("slime" slime)
-    ("structured-haskell-mode/elisp" shm)
-    ("undo-tree" undo-tree)
-    ("zenburn" zenburn))
-  "Packges to be loaded from ~/.emacs.d/packages/.")
-
-(defvar configs
-  '("erlang"
-    "haskell"
-    "lisp")
-  "Custom configurations for specific tasks.")
-
-(require 'cl)
-
-(loop for package in packages
-      do (progn
-	   (add-to-list 'load-path
-			(concat (file-name-directory (or load-file-name
-							 (buffer-file-name)))
-				"packages/"
-				(car package)))
-	   (require (car (cdr package)))))
-
-(loop for name in configs
-      do (load (concat (file-name-directory (or load-file-name
-						(buffer-file-name)))
-		       "configs/"
-		       name ".el")))
-
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-
-;; GLOBAL CONFIGURATION
-
-(setq inhibit-splash-screen t)
-(setq initial-scratch-message nil)
-(setq ring-bell-function 'ignore)
-
+(tooltip-mode -1)
 (menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(blink-cursor-mode -1)
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
 
-(line-number-mode t)
-(column-number-mode t)
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (package-initialize))
 
-(show-paren-mode t)
-(setq show-paren-delay 0)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(if window-system
-    (progn
-      (custom-set-faces
-       '(default ((t (:inherit nil :height 126 :width normal :family "Monaco")))))
-      (load-theme 'subatomic t))
-    (load-theme 'wombat t))
+(eval-and-compile
+  (defvar use-package-verbose t)
+  (require 'cl)
+  (require 'use-package)
+  (require 'bind-key)
+  (require 'diminish)
+  (setq use-package-always-ensure t))
 
-(require 'saveplace)
-(setq-default save-place t)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
-(setq linum-relative-format "%3s ")
-(setq linum-relative-current-symbol "")
+; (setq custom-file "~/.emacs.d/custom.el")
+; (load custom-file)
 
-(global-undo-tree-mode)
-(setq undo-tree-auto-save-history t)
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
-(evil-mode t)
-(global-evil-surround-mode t)
-(global-evil-visualstar-mode t)
-(defalias 'redo 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
+(let ((week (* 60 60 24 7))
+      (current (float-time (current-time))))
+  (dolist (file (directory-files temporary-file-directory t))
+    (when (and (backup-file-name-p file)
+               (> (- current (float-time (fifth (file-attributes file))))
+                  week))
+      (message "%s" file)
+      (delete-file file))))
 
-(load "folding" 'noerror)
-(folding-mode-add-find-file-hook)
+(delete-selection-mode +1)
 
-(global-set-key (kbd "C-h") 'delete-backward-char)
-(global-set-key (kbd "M-h") 'help-command)
-(global-set-key (kbd "C-c C-m") 'execute-extended-command)
-(global-set-key (kbd "C-c C-;") 'eval-expression)
+(setq-default tab-width 2)
+(setq-default indent-tabs-mode nil)
+
+(use-package tao-theme
+             :init
+             (load-theme 'tao-yin t))
+; (use-package leuven-theme
+; 	     :init
+;              (load-theme 'leuven t))
+
+(use-package ace-window
+             :bind (("M-q" . ace-window)))
+
+(use-package avy
+  :bind* (("C-'" . avy-goto-char)
+          ("C-," . avy-goto-char-2)))
