@@ -93,7 +93,6 @@ if exists('s:delayed_bundle_install')
   silent PlugInstall
   quit
 endif
-
 " }}}1
 
 " Init {{{1
@@ -247,8 +246,7 @@ if has('multi_byte') && &encoding ==# 'utf-8'
   let &fillchars = 'diff:▚'
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
-  augroup mylist
-    autocmd!
+  augroup vimrc
     autocmd InsertEnter * set listchars-=trail:⣿
     autocmd InsertLeave * set listchars+=trail:⣿
   augroup END
@@ -256,8 +254,7 @@ else
   let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
   let &fillchars = 'stlnc:#'
   let &showbreak = '-> '
-  augroup mylist
-    autocmd!
+  augroup vimrc
     autocmd InsertEnter * set listchars-=trail:.
     autocmd InsertLeave * set listchars+=trail:.
   augroup END
@@ -456,8 +453,7 @@ if has('gui_running')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
   set background=dark
-  augroup mycolors
-    autocmd!
+  augroup vimrc
     autocmd ColorScheme janah
           \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
           \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
@@ -600,8 +596,6 @@ let g:tagbar_compact   = 1
 " Plugin: undotree {{{2
 nnoremap <f3>  :UndotreeToggle<cr>
 
-" Plugin: vim {{{2
-
 " Plugin: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
 nnoremap <f1> :vsplit +Dirvish<cr><c-w>H<c-w>40<bar>
@@ -673,186 +667,113 @@ let g:startify_update_oldfiles        = 1
 let g:startify_use_env                = 1
 
 " Filetype {{{1
-" Filetype: C {{{2
 augroup vimrc
+  " Filetype: C {{{2
   autocmd BufLeave *.{c,cpp} mark C
   autocmd BufLeave *.h       mark H
-augroup END
 
-" Filetype: Erlang {{{2
-augroup vimrc
+  " Filetype: Erlang {{{2
   autocmd FileType erlang setl com-=:%
-augroup END
 
-" Filetype: Go {{{2
-augroup vimrc
-  autocmd FileType go call s:set_go_settings()
-augroup END
+  " Filetype: Go {{{2
+  let g:go_def_mode    = 'godef'
+  let g:go_fmt_command = 'goimports'
 
-let g:go_def_mode    = 'godef'
-let g:go_fmt_command = 'goimports'
+  autocmd FileType go 
+        \  setlocal noet sts& sw& com-=:// isk-=. mp=go\ install
+        \| let [b:dispatch, b:start] = [':GoBuild', ':GoRun']
+        \| nnoremap <buffer> <cr>      :GoDef<cr>
+        \| nnoremap <buffer> <leader>b :GoBuild<cr>
+        \| nnoremap <buffer> <leader>c :GoCoverageToggle<cr>
+        \| nnoremap <buffer> <leader>i :GoInfo<cr>
+        \| nnoremap <buffer> <leader>r :GoReferrers<cr>
+        \| nnoremap <buffer> <leader>t :GoTest<cr>
+        \| command! -buffer -bang A  call go#alternate#Switch(<bang>0, 'edit')
+        \| command! -buffer -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+        \| command! -buffer -bang AS call go#alternate#Switch(<bang>0, 'split')
+        \| command! -buffer -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
-function! s:set_go_settings() abort
-  setlocal noet sts& sw& com-=:// isk-=. mp=go\ install
+  " Filetype: Help {{{2
+  autocmd FileType help
+        \  setl noet
+        \| let b:helpful = 1
+        \| execute 'silent wincmd' 'TL'[winnr('$') == 2]
 
-  let [b:dispatch, b:start] = [':GoBuild', ':GoRun']
-
-  command! -buffer -bang A  call go#alternate#Switch(<bang>0, 'edit')
-  command! -buffer -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  command! -buffer -bang AS call go#alternate#Switch(<bang>0, 'split')
-  command! -buffer -bang AT call go#alternate#Switch(<bang>0, 'tabe')
-
-  nnoremap <buffer> <cr>      :GoDef<cr>
-  nnoremap <buffer> <leader>b :GoBuild<cr>
-  nnoremap <buffer> <leader>c :GoCoverageToggle<cr>
-  nnoremap <buffer> <leader>i :GoInfo<cr>
-  nnoremap <buffer> <leader>r :GoReferrers<cr>
-  nnoremap <buffer> <leader>t :GoTest<cr>
-endfunction
-
-" Filetype: Help {{{2
-augroup vimrc
-  autocmd FileType help call s:set_help_settings()
-augroup END
-
-function! s:set_help_settings()
-  setl noet
-  let b:helpful = 1
-  execute 'silent wincmd' 'TL'[winnr('$') == 2]
-endfunction
-
-" Filetype: HTML {{{2
-augroup vimrc
+  " Filetype: HTML {{{2
   autocmd FileType html setl et sts=2 sw=2
-augroup END
 
-" Filetype: Lua {{{2
-augroup vimrc
-  autocmd FileType lua call s:set_lua_settings()
-augroup END
+  " Filetype: Lua {{{2
+  let g:lua_complete_omni = 1  " vim-lua-ftplugin
 
-" vim-lua-ftplugin
-let g:lua_complete_omni = 1
+  autocmd FileType lua
+        \  setl com-=:# sts=2 sw=2
+        \| let [b:dispatch, b:start] = ['luac -p %', '-wait=always luajit %']
 
-function! s:set_lua_settings()
-  setl com-=:# sts=2 sw=2
-  let [b:dispatch, b:start] = ['luac -p %', '-wait=always luajit %']
-endfunction
+  " Filetype: Perl {{{2
+  let perl_include_pod = 1
 
-" Filetype: Man {{{2
-augroup vimrc
-  autocmd FileType man call s:set_man_settings()
-augroup END
+  autocmd FileType perl
+        \  setlocal com-=:# kp=perldoc\ -f
+        \| compiler perl
 
-function! s:set_man_settings()
-  setl nocul nomod nolist nonu nornu
-  nnoremap <buffer> q :q<cr>
-endfunction
+  " Filetype: Python {{{2
+  let python_highlight_all = 1
 
-" Filetype: Perl {{{2
-augroup vimrc
-  autocmd FileType perl call s:set_perl_settings()
-augroup END
+  autocmd FileType python
+        \  setlocal kp=pydoc mp=./%
+        \| compiler pyunit
 
-let perl_include_pod = 1
+  " Filetype: Ruby {{{2
+  let [g:ruby_operators, g:ruby_space_errors] = [1, 1]
 
-function! s:set_perl_settings()
-  setlocal com-=:# kp=perldoc\ -f
-  compiler perl
-endfunction
-
-" Filetype: Python {{{2
-augroup vimrc
-  autocmd FileType python call s:set_python_settings()
-augroup END
-
-let python_highlight_all = 1
-
-function! s:set_python_settings()
-  setlocal kp=pydoc mp=./%
-  compiler pyunit
-endfunction
-
-" Filetype: Ruby {{{2
-augroup vimrc
   autocmd FileType ruby setl com-=:# sts=2 sw=2
-augroup END
 
-let [g:ruby_operators, g:ruby_space_errors] = [1, 1]
-
-" Filetype: Sh, Zsh {{{2
-augroup vimrc
+  " Filetype: Sh, Zsh {{{2
   autocmd FileType zsh,sh setl com-=:# mp=shellcheck\ -f\ gcc\ %
-augroup END
 
-" Filetype: Text, Mail, Markdown {{{2
-augroup vimrc
+  " Filetype: Text, Mail, Markdown {{{2
   autocmd FileType mail     setl tw=72 wrap lbr
   autocmd FileType markdown setl tw=80 mp=gomali\ %
   autocmd FileType text     setl tw=80 fo+=t
-  autocmd FileType mail,markdown,text call s:set_text_settings()
+
+  " Filetype: VCS {{{2
+  autocmd FileType git,gitcommit
+        \  setl tw=80 fo+=t
+        \| nnoremap <buffer> gh :call mhi#github_open_issue()<cr>
+
+  " fugitive
+  autocmd BufReadPost fugitive:// setlocal bufhidden=delete
+  autocmd User        fugitive
+        \  if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
+        \|   nnoremap <buffer> .. :edit %:h<cr>
+        \| endif
+
+  " gv
+  autocmd FileType GV
+        \  set foldlevel=1
+        \| nnoremap <buffer> q :qa<cr>
+
+  highlight link diffAdded     DiffAdd
+  highlight link diffRemoved   DiffDelete
+  highlight link diffFile      Directory
+  highlight link diffLine      Comment
+  highlight link diffIndexLine Comment
+  highlight link diffSubname   Comment
+
+  " signify
+  let g:signify_vcs_list = ['git', 'hg']
+  omap ic <plug>(signify-motion-inner-pending)
+  xmap ic <plug>(signify-motion-inner-visual)
+  omap ac <plug>(signify-motion-outer-pending)
+  xmap ac <plug>(signify-motion-outer-visual)
+
+  " Filetype: Vim {{{2
+  autocmd FileType vim
+        \  setl sts=2 sw=2 isk-=#
+        \| let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
+        \| nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
+" }}}2
 augroup END
-
-function! s:set_text_settings()
-  nnoremap <buffer> <leader>ii :GrammarousCheck<cr>
-  nmap     <buffer> <leader>ir <plug>(grammarous-reset)
-  nmap     <buffer> <leader>im <plug>(grammarous-move-to-info-window)
-  nmap     <buffer> <leader>ic <plug>(grammarous-close-info-window)
-  nmap     <buffer> <leader>in <plug>(grammarous-move-to-next-error)
-  nmap     <buffer> <leader>ip <plug>(grammarous-move-to-previous-error)
-  nmap     <buffer> <leader>if <plug>(grammarous-fixit)
-endfunction
-
-" Filetype: VCS {{{2
-augroup vimrc
-  autocmd FileType    git,gitcommit call s:set_git_settings()
-  autocmd User        fugitive      call s:fug()
-  autocmd BufReadPost fugitive://   setlocal bufhidden=delete
-augroup END
-
-" git
-function! s:set_git_settings()
-  setl tw=80 fo+=t
-  nnoremap <buffer> gh :call mhi#github_open_issue()<cr>
-endfunction
-
-" gv
-autocmd FileType GV set foldlevel=1
-autocmd FileType GV nnoremap <buffer> q :qa<cr>
-
-highlight link diffAdded     DiffAdd
-highlight link diffRemoved   DiffDelete
-highlight link diffFile      Directory
-highlight link diffLine      Comment
-highlight link diffIndexLine Comment
-highlight link diffSubname   Comment
-
-" signify
-let g:signify_vcs_list = [ 'git', 'hg' ]
-
-omap ic <plug>(signify-motion-inner-pending)
-xmap ic <plug>(signify-motion-inner-visual)
-omap ac <plug>(signify-motion-outer-pending)
-xmap ac <plug>(signify-motion-outer-visual)
-
-" fugitive
-function! s:fug()
-  if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
-    nnoremap <buffer> .. :edit %:h<cr>
-  endif
-endfunction
-
-" Filetype: Vim {{{2
-augroup vimrc
-  autocmd FileType vim call s:set_vim_settings()
-augroup END
-
-function! s:set_vim_settings()
-  setl sts=2 sw=2 isk-=#
-  let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
-
-  nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
-endfunction
 " }}}1
 
 " vim: sw=2 sts=2 tw=0 fdm=marker
