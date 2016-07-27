@@ -752,6 +752,8 @@ augroup vimrc
   autocmd FileType GV
         \  set foldlevel=1
         \| nnoremap <buffer> q :qa<cr>
+        \| nmap     <buffer> j j<cr>
+        \| nmap     <buffer> k k<cr>
 
   highlight link diffAdded     DiffAdd
   highlight link diffRemoved   DiffDelete

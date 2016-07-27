@@ -419,7 +419,7 @@ gho() {
     open ${url}/tree/${branch}/${prefix}${1:-}
 }
 
-alias gv='nvim +GV +"sil tabc 2"'
+alias gv="nvim +GV +'sil tabc 2' +'exe \"normal \<cr>\"'"
 
 # Tmux {{{1
 tm() {
