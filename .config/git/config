@@ -1,3 +1,4 @@
+; Config {{{1
 [user]
     name       = Marco Hinz
     email      = mh.codebro@gmail.com
@@ -55,12 +56,13 @@
 [interactive]
     diffFilter = diff-so-fancy
 
+[advice]
+    statusHints = no
+
+; Alias {{{1
 [alias]
     a     = add
-    app   = appraise
-    au    = add -u
     b     = branch
-    bc    = branch --contains
     bi    = bisect
     bl    = blame
     c     = commit
@@ -69,21 +71,19 @@
     co    = checkout
     cp    = cherry-pick
     d     = diff --color --no-ext-diff
-    dw    = diff --color --no-ext-diff --word-diff=color
-    dc    = describe --contains
-    dc    = diff --color --no-ext-diff --cached
-    dcs   = diff --color --no-ext-diff --stat --cached
-    ds    = diff --color --no-ext-diff --stat
+    dc    = !git d --cached
+    dcs   = !git d --cached --stat
+    ds    = !git d --stat
+    dw    = !git d --word-diff=color
+    des   = describe --contains
     dt    = difftool
     f     = fetch
-    fp    = format-patch
     g     = grep
     h     = help
     ; l     = log --graph --pretty='%C(245)%h %C(bold black)%s %C(reset)%C(ul 245)%an%C(reset), %C(248)%ar%C(160)%d' --decorate --date=relative
-    l     = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative
-    la    = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative --all
-    lfp   = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative --first-parent
-    ln    = log --graph --pretty='%C(242)%h  %C(156)%s  %C(242)[%C(248)%an%C(242), %C(248)%ar%C(242)]%C(222)%d' --decorate --date=relative @{1}..
+    l     = log --graph --pretty='%C(242)%h %C(156)%s %C(248)%an%C(242), %C(248)%ar%C(222)%d' --decorate --date=relative
+    lfp   = !git l --first-parent
+    ln    = !git l @{1}..
     lso   = ls-files --others --exclude-standard
     lsr   = ls-remote
     m     = merge
@@ -93,18 +93,13 @@
     pl    = pull --ff-only
     r     = reset
     ra    = rebase --abort
-    rank  = shortlog -sn --no-merges
     rc    = rebase --continue
     re    = rebase
     rem   = remote
     ri    = rebase -i
-    rl    = rev-list
-    rp    = rev-parse
     ru    = remote update
     rs    = rebase --skip
     s     = status -sb -uno
-    sb    = show-branch
-    sbt   = show-branch --topics HEAD
     sh    = show
     shs   = show --stat
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
@@ -113,25 +108,19 @@
     sts   = stash show -p
     t     = tag
     unmerged = branch --no-merged master
-    whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
     wt    = worktree
 
-    authors = "!f() { git log --no-merges --pretty='format:%<(26)%an <%ae>' --author \"$*\" | sort | uniq; }; f"
-    by      = "!f() { IFS=$'\n'; select a in `git authors \"$*\"`; do git shortlog --author \"${a%%  *<*}\"; break; done; }; f"
+    ours   = !git checkout --ours $@ && git add $@
+    theirs = !git checkout --theirs $@ && git add $@
 
-    root = rev-parse --show-toplevel
+    rank    = shortlog -sn --no-merges
+    authors = "!f() { git log --no-merges --pretty='format:%<(26)%an <%ae>' --author \"$*\" | sort | uniq; }; f"
+    by      = "!f() { IFS=$'\n'; select a in `git authors \"$*\"`; do git l --no-merges --author \"${a%%  *<*}\"; break; done; }; f"
 
     upstream = !git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
     upstream-remote = !git upstream | sed -e 's/\\/.*$//g'
 
-    ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
-    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
-
-    plog = "log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
-
-[advice]
-    statusHints = no
-
+; Color {{{1
 [color]
     branch      = auto
     diff        = auto
