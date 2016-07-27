@@ -367,9 +367,9 @@ ch() {
 . ~/local/fzf/shell/key-bindings.zsh 2>/dev/null
 
 f() {
-    local files
-    files=$(fzf-tmux -m -1 --tac --tiebreak=index)
-    (( !$? )) && nvim $(echo $files | xargs)
+    local -a files
+    files=( $(fzf-tmux -m -1 --tac --tiebreak=index) )
+    (( !$? )) && nvim $files[*]
 }
 
 p() {
