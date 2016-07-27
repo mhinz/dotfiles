@@ -68,6 +68,7 @@ Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-surround'
+Plug 'wellle/tmux-complete.vim'
 
 Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
 Plug 'fatih/vim-go',             { 'for': 'go' }

@@ -430,12 +430,27 @@ tm() {
     fi
 }
 
-_tmux-sessions() {
-    local -a sessions
-    sessions=( ${(f)"$(command tmux list-sessions)"} )
+_tmux_sessions() {
+    local -a sessions=( ${(f)"$(command tmux list-sessions)"} )
     _describe -t sessions '' sessions "$@"
 }
-compdef _tmux-sessions tm
+compdef _tmux_sessions tm
+
+_tmux_complete() {
+    [ -z $TMUX ] && { _message 'I double dare you!'; return 1 }
+    local pane words=()
+    for pane ($(tmux list-panes -F '#P')) {
+        words+=( ${(u)=$(tmux capture-pane -Jpt $pane)} )
+    }
+    _wanted values expl '' compadd -a words
+}
+zle -C tmux-comp-prefix   complete-word _generic
+zle -C tmux-comp-anywhere complete-word _generic
+bindkey '^X^U' tmux-comp-prefix
+bindkey '^X^X' tmux-comp-anywhere
+zstyle ':completion:tmux-comp-(prefix|anywhere):*' completer _tmux_complete
+zstyle ':completion:tmux-comp-(prefix|anywhere):*' ignore-line current-shown
+zstyle ':completion:tmux-comp-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 
 # Vim {{{1
 alias vu='vim -u NONE -U NONE -i NONE -N'
