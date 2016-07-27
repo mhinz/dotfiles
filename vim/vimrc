@@ -326,10 +326,10 @@ nnoremap <right>      <c-w><
 nnoremap <up>         <c-w>-
 nnoremap <down>       <c-w>+
 
-nnoremap <a-h>        <c-w>h
-nnoremap <a-j>        <c-w>j
-nnoremap <a-k>        <c-w>k
-nnoremap <a-l>        <c-w>l
+nnoremap <silent><a-h> :<c-u>call mhi#tmux_navigate('h')<cr>
+nnoremap <silent><a-j> :<c-u>call mhi#tmux_navigate('j')<cr>
+nnoremap <silent><a-k> :<c-u>call mhi#tmux_navigate('k')<cr>
+nnoremap <silent><a-l> :<c-u>call mhi#tmux_navigate('l')<cr>
 
 xnoremap <            <gv
 xnoremap >            >gv
