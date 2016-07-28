@@ -305,30 +305,25 @@ rd() {
     unset dir
 }
 
-rationalise-dot() {
-    local MATCH dir split
-    split=(${(z)LBUFFER})
-    if (( $#split > 1 )); then
-        dir=$split[-1]
-    else
-        dir=$split
-    fi
-    if [[ $LBUFFER =~ '(^|/| | |'$'\n''|\||;|&)\.\./$' ]]; then
+fancy-dot() {
+    local -a split=( ${=LBUFFER} )
+    local dir=$split[-1]
+    if [[ $LBUFFER =~ '(^| )(\.\./)+$' ]]; then
         zle self-insert
         zle self-insert
         LBUFFER+=/
-        [[ -e $dir ]] && zle -M $dir(:a:h)
-    elif [[ $LBUFFER[-1] == '.' ]]; then
+        [ -e $dir ] && zle -M $dir(:a:h)
+    elif [[ $LBUFFER =~ '(^| )\.$' ]]; then
         zle self-insert
         LBUFFER+=/
-        [[ -e $dir ]] && zle -M $dir(:a:h)
+        [ -e $dir ] && zle -M $dir(:a:h)
     else
         zle self-insert
     fi
 }
 
-zle -N rationalise-dot
-bindkey '.' rationalise-dot
+zle -N fancy-dot
+bindkey '.' fancy-dot
 
 fancy-ctrl-z() {
     if [[ $#BUFFER -eq 0 ]]; then
