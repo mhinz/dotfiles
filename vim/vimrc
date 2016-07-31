@@ -26,12 +26,13 @@
 "                ╚══════════════════════════════════════════╝
 
 " Plug {{{1
-let g:plug_home    = expand('~/.vim/bundle')
+let s:bundle_dir   = '~/.vim/bundle'
+
 let g:plug_shallow = 0
 let g:plug_window  = 'enew'
 let g:plug_pwindow = 'vertical rightbelow new'
 
-call plug#begin()
+call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
   Plug 'morhetz/gruvbox'
   Plug 'robertmeta/nofrils'
@@ -528,7 +529,7 @@ function! s:bufopen(lines)
 endfunction
 
 function! s:plugopen(entry)
-  execute 'Dirvish' expand(g:plug_home) .'/'. a:entry
+  execute 'Dirvish' expand(s:bundle_dir) .'/'. a:entry
   execute 'lcd' expand('%')
 endfunction
 
@@ -540,7 +541,7 @@ command! Buffers let bl = reverse(s:buflist()) | call fzf#run({
       \ }) | unlet bl
 
 command! Plugins call fzf#run({
-      \ 'source':  reverse(sort(map(globpath(g:plug_home, '*', 0, 1), 'fnamemodify(v:val, ":t")'))),
+      \ 'source':  reverse(sort(map(globpath(s:bundle_dir, '*', 0, 1), 'fnamemodify(v:val, ":t")'))),
       \ 'sink':    function('<sid>plugopen'),
       \ 'options': '+m',
       \ 'left':    30
