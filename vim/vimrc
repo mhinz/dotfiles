@@ -26,7 +26,7 @@
 "                ╚══════════════════════════════════════════╝
 
 " Plug {{{1
-let g:plug_home    = '~/.vim/bundle'
+let g:plug_home    = expand('~/.vim/bundle')
 let g:plug_shallow = 0
 let g:plug_window  = 'enew'
 let g:plug_pwindow = 'vertical rightbelow new'
