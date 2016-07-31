@@ -351,10 +351,10 @@ xnoremap <leader>*    :<c-u>silent! execute mhi#search_all()<cr>
 if has('nvim')
   nnoremap <leader>t  :vsplit +terminal<cr>
   tnoremap <esc>      <c-\><c-n>
-  tnoremap <a-h>      <c-\><c-n>:<c-u>call mhi#tmux_navigate('h')<cr>
-  tnoremap <a-j>      <c-\><c-n>:<c-u>call mhi#tmux_navigate('j')<cr>
-  tnoremap <a-k>      <c-\><c-n>:<c-u>call mhi#tmux_navigate('k')<cr>
-  tnoremap <a-l>      <c-\><c-n>:<c-u>call mhi#tmux_navigate('l')<cr>
+  tnoremap <silent><a-h> <c-\><c-n>:<c-u>call mhi#tmux_navigate('h')<cr>
+  tnoremap <silent><a-j> <c-\><c-n>:<c-u>call mhi#tmux_navigate('j')<cr>
+  tnoremap <silent><a-k> <c-\><c-n>:<c-u>call mhi#tmux_navigate('k')<cr>
+  tnoremap <silent><a-l> <c-\><c-n>:<c-u>call mhi#tmux_navigate('l')<cr>
 endif
 
 if has('nvim')
