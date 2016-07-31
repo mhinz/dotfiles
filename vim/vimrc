@@ -31,69 +31,48 @@ let g:plug_shallow = 0
 let g:plug_window  = 'enew'
 let g:plug_pwindow = 'vertical rightbelow new'
 
-try
-  call plug#begin()
-catch /E117/
-  if !filereadable(expand('~/.vim/autoload/plug.vim'))
-    echomsg '[*] Curling plug.vim'
-    call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-  endif
-  if exists('*mkdir') && !isdirectory(expand(g:plug_home))
-    echomsg '[*] Creating '. g:plug_home
-    call mkdir(expand(g:plug_home), 'p', 0700)
-    let s:delayed_bundle_install = 1
-  endif
-  call plug#begin()
-endtry
+call plug#begin()
+  Plug 'jonathanfilip/vim-lucius'
+  Plug 'morhetz/gruvbox'
+  Plug 'robertmeta/nofrils'
 
-Plug 'jonathanfilip/vim-lucius'
-Plug 'morhetz/gruvbox'
-Plug 'robertmeta/nofrils'
+  Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
+  Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
+  Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
+  Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
+  Plug 'junegunn/gv.vim',           { 'on': 'GV' }
+  Plug 'junegunn/vader.vim',
+  Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
+  Plug 'justinmk/vim-dirvish'
+  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
+  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-projectionist'
+  Plug 'tpope/vim-rsi'
+  Plug 'tpope/vim-scriptease'
+  Plug 'tpope/vim-surround'
+  Plug 'wellle/tmux-complete.vim'
 
-Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
-Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
-Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
-Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
-Plug 'junegunn/gv.vim',           { 'on': 'GV' }
-Plug 'junegunn/vader.vim',
-Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
-Plug 'justinmk/vim-dirvish'
-Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
-Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-projectionist'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-surround'
-Plug 'wellle/tmux-complete.vim'
+  Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
+  Plug 'fatih/vim-go',             { 'for': 'go' }
+  Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
+  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
+  Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
-Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
-Plug 'fatih/vim-go',             { 'for': 'go' }
-Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
-Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
-Plug 'xolox/vim-misc',           { 'for': 'lua' }
+  Plug '/data/github/vim-grepper'
+  Plug '/data/github/vim-janah'
+  Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
+  Plug '/data/github/vim-rfc',       { 'on': 'RFC'      }
+  Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
+  Plug '/data/github/vim-signify'
+  Plug '/data/github/vim-startify'
 
-Plug '/data/github/vim-grepper'
-Plug '/data/github/vim-janah'
-Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
-Plug '/data/github/vim-rfc',       { 'on': 'RFC'      }
-Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
-Plug '/data/github/vim-signify'
-Plug '/data/github/vim-startify'
-
-" Testing phase.
-" Plug 'mattn/emmet-vim',         { 'for': 'html' }
-
+  " Testing phase.
+  " Plug 'mattn/emmet-vim', { 'for': 'html' }
 call plug#end()
-
-if exists('s:delayed_bundle_install')
-  echomsg '[*] Installing plugins to '. g:plug_home
-  silent PlugInstall
-  quit
-endif
 " }}}1
 
 " Init {{{1
