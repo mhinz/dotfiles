@@ -276,9 +276,10 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
-= () {
+m () {
     bc -l <<< $@
 }
+alias m='noglob m'
 
 lookup() {
     open "https://pgp.mit.edu/pks/lookup?search=${*}"
