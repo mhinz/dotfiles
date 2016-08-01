@@ -107,6 +107,7 @@
     stl   = stash list
     sts   = stash show -p
     t     = tag
+    tr    = trail
     unmerged = branch --no-merged master
     wt    = worktree
 
