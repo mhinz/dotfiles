@@ -19,9 +19,9 @@ class ITBooks
       response = Net::HTTP.get(URI("http://it-ebooks-api.info/v1/search/#{query}/page/#{page}"))
       # Fix unescaped double quotes in JSON response.
       response.gsub!(/([^,:{])"([^,:}])/, '\1\"\2')
-      response = JSON.parse(response)
-      break if response['Total'].to_i == 0
-      books += response['Books']
+      response = JSON.parse(response, {symbolize_names: true})
+      break if response[:Total].to_i == 0
+      books += response[:Books]
       page += 1
     end
 
@@ -30,13 +30,13 @@ class ITBooks
       exit 1
     end
 
-    books.sort! { |a,b| a['Title'] <=> b['Title'] }
+    books.sort! { |a,b| a[:Title] <=> b[:Title] }
   end
 
   def menu(books)
     loop do
       books.each_with_index do |book, i|
-        puts "\e[32m %-4d \e[33m%s" % [ i, book['Title'] ]
+        puts "\e[32m %-4d \e[33m%s" % [ i, book[:Title] ]
       end
 
       print "\e[31m Select:\e[0m "
@@ -46,7 +46,7 @@ class ITBooks
         break
       end
 
-      show(books[choice]['ID'])
+      show(books[choice][:ID])
 
       print "\e[31m Select another? [Yn]\e[0m "
       begin
@@ -59,27 +59,27 @@ class ITBooks
   end
 
   def show(book_id)
-    isbn10 = 1
-
-    book = JSON.parse(Net::HTTP.get(URI(
-      "http://it-ebooks-api.info/v1/book/#{book_id}")))
+    book = Net::HTTP.get(URI("http://it-ebooks-api.info/v1/book/#{book_id}"))
+    book.gsub!(/([^,:{])"([^,:}])/, '\1\"\2')
+    book = JSON.parse(book, {symbolize_names: true})
 
     begin
       require 'lisbn'
-      isbn = Lisbn.new(book['ISBN']).isbn10
+      isbn = Lisbn.new(book[:ISBN]).isbn10
     rescue LoadError
       isbn = nil
     end
 
-    puts "\e[32m %-14s\e[0m%s" % [ 'Title',       book['Title' ]       ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'Subtitle',    book['SubTitle' ]    ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'Author',      book['Author' ]      ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'Year',        book['Year' ]        ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'Publisher',   book['Publisher' ]   ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'ISBN',        book['ISBN' ]        ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'Amazon',      "http://www.amazon.de/gp/product/#{isbn}" ] if isbn
-    puts "\e[32m %-14s\e[0m%s" % [ 'Download',    book['Download' ]    ]
-    puts "\e[32m %-14s\e[0m%s" % [ 'Description', book['Description' ] ]
+    puts "\e[32m %-14s\e[0m%s" % ['Title',       book[:Title]      ]
+    puts "\e[32m %-14s\e[0m%s" % ['Subtitle',    book[:SubTitle]   ]
+    puts "\e[32m %-14s\e[0m%s" % ['Author',      book[:Author]     ]
+    puts "\e[32m %-14s\e[0m%s" % ['Year',        book[:Year]       ]
+    puts "\e[32m %-14s\e[0m%s" % ['Publisher',   book[:Publisher]  ]
+    puts "\e[32m %-14s\e[0m%s" % ['ISBN',        book[:ISBN]       ]
+    puts "\e[32m %-14s\e[0m%s" % ['Amazon',
+                                  "http://www.amazon.de/gp/product/#{isbn}" ] if isbn
+    puts "\e[32m %-14s\e[0m%s" % ['Download',    book[:Download]   ]
+    puts "\e[32m %-14s\e[0m%s" % ['Description', book[:Description]]
   end
 end
 
