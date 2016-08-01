@@ -1,60 +1,91 @@
 #!/usr/bin/env ruby
 
-require 'net/http'
-require 'json'
-# require 'lisbn'
+class ITBooks
+  def initialize(args)
+    menu(lookup(args))
+  end
+
+  private
+
+  def lookup(args)
+    require 'net/http'
+    require 'json'
+
+    books = []
+    page  = 1
+    query = URI.encode(args.join(' '))
+
+    loop do
+      response = Net::HTTP.get(URI("http://it-ebooks-api.info/v1/search/#{query}/page/#{page}"))
+      # Fix unescaped double quotes in JSON response.
+      response.gsub!(/([^,:{])"([^,:}])/, '\1\"\2')
+      response = JSON.parse(response)
+      break if response['Total'].to_i == 0
+      books += response['Books']
+      page += 1
+    end
+
+    if books.empty?
+      puts 'No matches.'
+      exit 1
+    end
+
+    books.sort! { |a,b| a['Title'] <=> b['Title'] }
+  end
+
+  def menu(books)
+    loop do
+      books.each_with_index do |book, i|
+        puts "\e[32m %-4d \e[33m%s" % [ i, book['Title'] ]
+      end
+
+      print "\e[31m Select:\e[0m "
+      begin
+        choice = STDIN.gets.chomp.to_i
+      rescue Interrupt
+        break
+      end
+
+      show(books[choice]['ID'])
+
+      print "\e[31m Select another? [Yn]\e[0m "
+      begin
+        choice = STDIN.gets.chomp
+      rescue Interrupt
+        break
+      end
+      break if choice == 'n'
+    end
+  end
+
+  def show(book_id)
+    isbn10 = 1
+
+    book = JSON.parse(Net::HTTP.get(URI(
+      "http://it-ebooks-api.info/v1/book/#{book_id}")))
+
+    begin
+      require 'lisbn'
+      isbn = Lisbn.new(book['ISBN']).isbn10
+    rescue LoadError
+      isbn = nil
+    end
+
+    puts "\e[32m %-14s\e[0m%s" % [ 'Title',       book['Title' ]       ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'Subtitle',    book['SubTitle' ]    ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'Author',      book['Author' ]      ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'Year',        book['Year' ]        ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'Publisher',   book['Publisher' ]   ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'ISBN',        book['ISBN' ]        ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'Amazon',      "http://www.amazon.de/gp/product/#{isbn}" ] if isbn
+    puts "\e[32m %-14s\e[0m%s" % [ 'Download',    book['Download' ]    ]
+    puts "\e[32m %-14s\e[0m%s" % [ 'Description', book['Description' ] ]
+  end
+end
 
 if ARGV.empty?
   $stderr.puts "usage: #{File.basename($0)} <query>"
-  exit 0
-end
-
-page  = 1
-books = []
-args  = ARGV.join(' ')
-
-# Get all books.
-
-loop do
-  req = JSON.parse(Net::HTTP.get(URI(
-    "http://it-ebooks-api.info/v1/search/#{ARGV.join(' ')}/page/#{page}")))
-  break if req['Total'].to_i == 0
-  books += req['Books']
-  page  += 1
-end
-
-if books.empty?
-  puts 'No matches.'
   exit 1
 end
 
-books.sort! { |a,b| a['Title'] <=> b['Title'] }
-
-# Select a book.
-
-loop do
-  books.each_with_index do |book, i|
-    puts "\e[32m %-4d \e[33m%s" % [ i, book['Title'] ]
-  end
-
-  print "\e[31m Select:\e[0m "
-  choice = STDIN.gets.chomp.to_i
-
-  book_id = books[choice]['ID']
-  book = JSON.parse(Net::HTTP.get(URI(
-    "http://it-ebooks-api.info/v1/book/#{book_id}")))
-  # isbn = Lisbn.new(book['ISBN']).isbn10
-
-  puts "\e[32m %-14s\e[0m%s" % [ 'Title',       book['Title' ]       ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Subtitle',    book['SubTitle' ]    ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Author',      book['Author' ]      ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Year',        book['Year' ]        ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Publisher',   book['Publisher' ]   ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'ISBN',        book['ISBN' ]        ]
-  # puts "\e[32m %-14s\e[0m%s" % [ 'Amazon',      "http://www.amazon.de/gp/product/#{isbn}" ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Download',    book['Download' ]    ]
-  puts "\e[32m %-14s\e[0m%s" % [ 'Description', book['Description' ] ]
-
-  print "\e[31m Select another? [y/n]\e[0m "
-  break unless STDIN.gets.chomp == 'y'
-end
+ITBooks.new(ARGV)
