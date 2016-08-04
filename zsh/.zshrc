@@ -306,6 +306,12 @@ rd() {
     unset dir
 }
 
+camusedby() {
+    echo 'Recent camera uses:'
+    local usedby=$(lsof | grep -w "AppleCamera\|USBVDC\|iSight" | awk '{printf $2"\n"}' | xargs ps)
+    echo $usedby
+}
+
 fancy-dot() {
     local -a split=( ${=LBUFFER} )
     local dir=$split[-1]
