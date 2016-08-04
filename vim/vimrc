@@ -41,6 +41,7 @@ call plug#begin(s:bundle_dir)
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
+  Plug 'jamessan/vim-gnupg'
   Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
   Plug 'junegunn/vader.vim',
