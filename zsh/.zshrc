@@ -15,7 +15,11 @@ watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
-eval $(dircolors ~/.zsh/dircolors)
+if [[ $ITERM_PROFILE == Light ]]; then
+    eval $(dircolors ~/.zsh/dircolors.light)
+else
+    eval $(dircolors ~/.zsh/dircolors.dark)
+fi
 
 # misc options {{{1
 
@@ -124,66 +128,71 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 # zstyle ':completion:*:descriptions' format       $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
 
 # prompt {{{1
-
 autoload -U colors && colors
-autoload -Uz vcs_info
 
 precmd() {
-    vcs_info
+    if _prompt_top=$(git rev-parse --show-toplevel 2>/dev/null); then
+        _prompt_in_worktree=$(git rev-parse --is-inside-work-tree)
+        _prompt_type=git
+    else
+        unset _prompt_top _prompt_in_worktree _prompt_type
+    fi
+    _prompt_pwd=$(pwd -P)
 }
 
-typeset -A c p
+prompt() {
+    case $_prompt_type in
+        git) prompt_git ;;
+        *)   print '%F{15}%K{161} λ ' ;;
+    esac
+}
 
-# Color definitions.
-c[blue]='%F{111}'
-c[gray]='%F{240}'
-c[green]='%F{84}'
-c[orange]='%F{216}'
-c[red]='%F{168}'
-c[white]='%F{255}'
-c[yellow]='%F{222}'
+prompt_git() {
+    local p
 
-# Prompt configuration.
-p[deli_left]="${c[gray]}%f"
-p[deli_right]="${c[gray]}%f"
-p[jobcount]="%(1j.${c[orange]}%j${c[gray]}:%f.)"
+    # empty within .git/
+    [[ -n $_prompt_top ]] && p+="%F{15}%K{161} ${_prompt_top##*/} "
 
-p[colon]="${c[gray]}:%f"
-p[vcs]="${c[green]}%s${p[colon]}"
-p[repo]="${c[yellow]}%r${p[colon]}"
-p[branch]="${c[red]}%b%f"
-p[action]="${p[colon]}${c[orange]}%a%f"
-p[host]="${c[gray]}%M:%f"
+    # empty if not root commit yet
+    local branch=$(git name-rev --name-only HEAD 2>/dev/null)
+    [[ -n $branch ]] && p+="%F{15}%K{67} $branch "
 
-p[staged]="${p[colon]}%F{49}↻%f"
-p[unstaged]="${p[colon]}%F{81}↻%f"
+    if [[ $_prompt_in_worktree == true ]]; then
+        git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
+        (( $? && $? != 128)) && p+='%F{15}%K{209} ! '
 
-p[l_nvcsformats]="${c[yellow]}λ%f"
-p[r_nvcsformats]="${c[gray]}%~%f"
+        git diff-index --cached --quiet HEAD || p+='%F{15}%K{29} ✓ '
 
-#p[l_formats]="${p[vcs]}${p[repo]}${p[branch]}%u%c"
-p[l_formats]="${p[repo]}${p[branch]}%u%c"
-p[r_formats]="${c[gray]}%R/${c[yellow]}%S%f"
+        local gitdir="${_prompt_top}/.git"
+        if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
+            p+='%F{15}%K{16} merge '
+        elif [[ -f "${gitdir}/CHERRY_PICK_HEAD" ]]; then
+            p+='%F{15}%K{16} cherry '
+        elif [[ -f "${gitdir}/REVERT_HEAD" ]]; then
+            p+='%F{15}%K{16} revert '
+        elif [[ -f "${gitdir}/rebase-merge/interactive" ]]; then
+            p+='%F{15}%K{16} rebase-i '
+        elif [[ -d "${gitdir}/rebase-apply" ]]; then
+            p+='%F{15}%K{16} rebase '
+        fi
+    fi
 
-# p[l_actionformats]="${p[vcs]}${p[repo]}${p[action]}${p[branch]}%u%c"
-p[l_actionformats]="${p[repo]}${p[branch]}${p[action]}%u%c"
+    print $p
+}
 
-zstyle ':vcs_info:*'  enable             git hg svn
-zstyle ':vcs_info:*'  disable-patterns   '/data/linux/stable(|/*)'
-zstyle ':vcs_info:*'  check-for-changes  true
+rprompt() {
+    if [[ $_prompt_type == git && $_prompt_in_worktree == true ]]; then
+        print "%F{243}$_prompt_top/%F{161}${${_prompt_pwd#$_prompt_top}#/}"
+    else
+        print "%F{243}$PWD"
+    fi
+}
 
-zstyle ':vcs_info:*'  stagedstr          $p[staged]
-zstyle ':vcs_info:*'  unstagedstr        $p[unstaged]
-
-zstyle ':vcs_info:*'  nvcsformats        $p[l_nvcsformats]   $p[r_nvcsformats]
-zstyle ':vcs_info:*'  formats            $p[l_formats]       $p[r_formats]
-zstyle ':vcs_info:*'  actionformats      $p[l_actionformats] $p[r_formats]
-
-PROMPT='%B$p[deli_left]$p[jobcount]${vcs_info_msg_0_}$p[deli_right]%b '
-RPROMPT='%B$p[host]${vcs_info_msg_1_}%b'
-SPROMPT="${c[orange]}%R -> %r:%f "
-PROMPT2="${c[orange]}+%f "
-PROMPT3="${c[orange]}Select:%f "
+PROMPT='$(prompt)%f%k '
+RPROMPT='$(rprompt)'
+SPROMPT="%R -> %r:%f "
+PROMPT2="+%f "
+PROMPT3="Select:%f "
 
 # hashes {{{1
 hash -d asm='/data/programming/asm'
@@ -425,9 +434,9 @@ alias gv="nvim +'GV @{1}..' +'sil tabc 2' +'exe \"normal \<cr>\"'"
 
 # iTerm2 {{{1
 proftoggle() {
-    [[ $ITERM_PROFILE == Default ]] \
-        && export ITERM_PROFILE=Light \
-        || export ITERM_PROFILE=Default
+    [[ $ITERM_PROFILE == Light ]] \
+        && export ITERM_PROFILE=Dark \
+        || export ITERM_PROFILE=Light
     local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
     [[ -n $TMUX ]] && seq="\ePtmux;\e${seq}\e\\"
     printf $seq
