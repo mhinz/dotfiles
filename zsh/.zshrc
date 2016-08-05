@@ -423,6 +423,16 @@ gho() {
 
 alias gv="nvim +'GV @{1}..' +'sil tabc 2' +'exe \"normal \<cr>\"'"
 
+# iTerm2 {{{1
+proftoggle() {
+    [[ $ITERM_PROFILE == Default ]] \
+        && export ITERM_PROFILE=Light \
+        || export ITERM_PROFILE=Default
+    local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
+    [[ -n $TMUX ]] && seq="\ePtmux;\e${seq}\e\\"
+    printf $seq
+}
+
 # Tmux {{{1
 tm() {
     if (( $# )); then
