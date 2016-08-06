@@ -434,7 +434,6 @@ if has('gui_running')
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
-  set background=dark
   augroup vimrc
     autocmd ColorScheme janah
           \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
@@ -449,13 +448,13 @@ else
     "       \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
     "       \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
   augroup END
-  for scheme in ['janah', 'focus', 'gruvbox', 'desert']
-    try
-      execute 'colorscheme' scheme
-      break
-    catch
-    endtry
-  endfor
+  if !exists('$ITERM_PROFILE') || $ITERM_PROFILE == 'Light'
+    set background=light
+    colorscheme lucius
+  else
+    set background=dark
+    colorscheme janah
+  endif
 endif
 
 " Statusline {{{1
