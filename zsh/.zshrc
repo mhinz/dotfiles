@@ -17,8 +17,10 @@ WATCHFMT="%n from %M has %a tty%l at %T %W"
 
 if [[ $ITERM_PROFILE == Light ]]; then
     eval $(dircolors ~/.zsh/dircolors.light)
+    ln -fs ~/.config/git/config.colors{.light,}
 else
     eval $(dircolors ~/.zsh/dircolors.dark)
+    ln -fs ~/.config/git/config.colors{.dark,}
 fi
 
 # misc options {{{1
@@ -322,7 +324,8 @@ camusedby() {
 }
 
 fancy-dot() {
-    local -a split=( ${=LBUFFER} )
+    local -a split
+    split=( ${=LBUFFER} )
     local dir=$split[-1]
     if [[ $LBUFFER =~ '(^| )(\.\./)+$' ]]; then
         zle self-insert
@@ -434,12 +437,22 @@ alias gv="nvim +'GV @{1}..' +'sil tabc 2' +'exe \"normal \<cr>\"'"
 
 # iTerm2 {{{1
 proftoggle() {
-    [[ $ITERM_PROFILE == Light ]] \
-        && export ITERM_PROFILE=Dark \
-        || export ITERM_PROFILE=Light
+    if [[ -z $ITERM_PROFILE ]]; then
+        print "Not in iTerm" 1>&2
+        return
+    elif [[ $ITERM_PROFILE == Light ]]; then
+        export ITERM_PROFILE=Dark
+        eval $(dircolors ~/.zsh/dircolors.dark)
+        ln -fs ~/.config/git/config.colors{.dark,}
+    else
+        export ITERM_PROFILE=Light
+        eval $(dircolors ~/.zsh/dircolors.light)
+        ln -fs ~/.config/git/config.colors{.light,}
+    fi
     local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
     [[ -n $TMUX ]] && seq="\ePtmux;\e${seq}\e\\"
     printf $seq
+    clear
 }
 
 # Tmux {{{1
