@@ -1,0 +1,16 @@
+[alias]
+    l = log --graph --pretty='%C(245)%h %C(16)%s %C(reset)%C(ul 245)%an%C(reset), %C(248)%ar%C(124)%d' --decorate --date=relative
+
+[color "diff"]
+    new        = 28
+    old        = 124
+    context    = 248
+    commit     = 16 bold
+    frag       = 16
+    func       = 16
+    meta       = 16 bold
+    whitespace = 27 27
+
+[color "status"]
+    header = 240
+    branch = yellow

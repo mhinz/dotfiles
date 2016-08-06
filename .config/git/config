@@ -80,8 +80,6 @@
     f     = fetch
     g     = grep
     h     = help
-    ; l     = log --graph --pretty='%C(245)%h %C(bold black)%s %C(reset)%C(ul 245)%an%C(reset), %C(248)%ar%C(160)%d' --decorate --date=relative
-    l     = log --graph --pretty='%C(242)%h %C(156)%s %C(248)%an%C(242), %C(248)%ar%C(222)%d' --decorate --date=relative
     lfp   = !git l --first-parent
     ln    = !git l @{1}..
     lso   = ls-files --others --exclude-standard
@@ -129,15 +127,5 @@
     status      = auto
     ui          = auto
 
-[color "diff"]
-    frag       = 104
-    func       = 74
-    meta       = 137 bold
-    new        = 114
-    old        = 167
-    plain      = 240
-    whitespace = 24 24
-
-[color "status"]
-    header = 240
-    branch = yellow
+[include]
+    path = config.colors
