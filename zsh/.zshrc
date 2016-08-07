@@ -143,6 +143,7 @@ precmd() {
 }
 
 prompt() {
+    print -n '%(1j.%F{15}%K{103} %j .)'
     case $_prompt_type in
         git) prompt_git ;;
         *)   print '%F{15}%K{161} λ ' ;;
