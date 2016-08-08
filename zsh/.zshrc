@@ -452,7 +452,10 @@ proftoggle() {
         ln -fs ~/.config/git/config.colors{.light,}
     fi
     local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
-    [[ -n $TMUX ]] && seq="\ePtmux;\e${seq}\e\\"
+    if [[ -n $TMUX ]]; then
+        seq="\ePtmux;\e${seq}\e\\"
+        tmux set-environment -g ITERM_PROFILE $ITERM_PROFILE
+    fi
     printf $seq
     clear
 }
