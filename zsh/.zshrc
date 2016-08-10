@@ -454,7 +454,7 @@ proftoggle() {
     local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
     if [[ -n $TMUX ]]; then
         seq="\ePtmux;\e${seq}\e\\"
-        tmux set-environment -g ITERM_PROFILE $ITERM_PROFILE
+        tmux setenv ITERM_PROFILE $ITERM_PROFILE
     fi
     printf $seq
     clear
@@ -467,6 +467,10 @@ tm() {
     else
         tmux attach || tmux new-session -s default
     fi
+}
+
+tmup() {
+    [[ -n $TMUX ]] && export $(tmux showenv | grep --color=never '^[^-]' | xargs)
 }
 
 _tmux_sessions() {
