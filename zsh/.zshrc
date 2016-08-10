@@ -442,7 +442,9 @@ proftoggle() {
     if [[ -z $ITERM_PROFILE ]]; then
         print "Not in iTerm" 1>&2
         return
-    elif [[ $ITERM_PROFILE == Light ]]; then
+    fi
+    tmup
+    if [[ $ITERM_PROFILE == Light ]]; then
         export ITERM_PROFILE=Dark
         eval $(dircolors ~/.zsh/dircolors.dark)
         ln -fs ~/.config/git/config.colors{.dark,}
