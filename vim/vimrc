@@ -35,7 +35,9 @@ let g:plug_pwindow = 'vertical rightbelow new'
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
   Plug 'morhetz/gruvbox'
+  Plug 'rakr/vim-two-firewatch'
   Plug 'robertmeta/nofrils'
+  Plug 'whatyouhide/vim-gotham'
 
   Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
@@ -60,7 +62,7 @@ call plug#begin(s:bundle_dir)
 
   Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
   Plug 'fatih/vim-go',             { 'for': 'go' }
-  Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
+  " Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
   Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
   Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
@@ -638,7 +640,7 @@ let g:startify_transformations = [
       \ ['.*vimrc$', 'vimrc'],
       \ ]
 
-let g:startify_change_to_dir          = 0
+let g:startify_change_to_dir          = 1
 let g:startify_enable_special         = 0
 let g:startify_files_number           = 8
 let g:startify_session_autoload       = 0

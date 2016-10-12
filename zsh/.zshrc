@@ -209,7 +209,7 @@ hash -d z='/data/repo/zsh'
 # aliases {{{1
 alias g='git'
 alias gpg='gpg2'
-alias upg='brew update && brew upgrade --all && brew cleanup'
+alias upg='brew update && brew upgrade && brew cleanup'
 
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
