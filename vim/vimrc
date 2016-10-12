@@ -26,7 +26,7 @@
 "                ╚══════════════════════════════════════════╝
 
 let s:is_win = has('win32')
-let $v = $HOME.(s:is_win ? '\vimfiles' : '~/.vim')
+let $v = $HOME.(s:is_win ? '\vimfiles' : '/.vim')
 
 if s:is_win
   set shell=cmd.exe
