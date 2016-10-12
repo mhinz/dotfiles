@@ -25,8 +25,17 @@
 "                ║           ⎋ HERE BE VIMPIRES ⎋           ║
 "                ╚══════════════════════════════════════════╝
 
+let s:is_win = has('win32')
+let $v = $HOME.(s:is_win ? '\vimfiles' : '~/.vim')
+
+if s:is_win
+  set shell=cmd.exe
+  set shellcmdflag=/c
+  set encoding=utf-8
+endif
+
 " Plug {{{1
-let s:bundle_dir   = '~/.vim/bundle'
+let s:bundle_dir = $v.'/bundle'
 
 let g:plug_shallow = 0
 let g:plug_window  = 'enew'
@@ -44,7 +53,9 @@ call plug#begin(s:bundle_dir)
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
   Plug 'jamessan/vim-gnupg'
-  Plug 'junegunn/fzf',              { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
+  if !has('win32')
+    Plug 'junegunn/fzf',            { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
+  endif
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
   Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
@@ -66,13 +77,13 @@ call plug#begin(s:bundle_dir)
   Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
   Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
-  Plug '/data/github/vim-grepper'
-  Plug '/data/github/vim-janah'
-  Plug '/data/github/vim-randomtag', { 'on': 'Random'   }
-  Plug '/data/github/vim-rfc',       { 'on': 'RFC'      }
-  Plug '/data/github/vim-sayonara',  { 'on': 'Sayonara' }
-  Plug '/data/github/vim-signify'
-  Plug '/data/github/vim-startify'
+  Plug 'mhinz/vim-grepper'
+  Plug 'mhinz/vim-janah'
+  Plug 'mhinz/vim-randomtag', { 'on': 'Random'   }
+  Plug 'mhinz/vim-rfc',       { 'on': 'RFC'      }
+  Plug 'mhinz/vim-sayonara',  { 'on': 'Sayonara' }
+  Plug 'mhinz/vim-signify'
+  Plug 'mhinz/vim-startify'
 
   " Testing phase.
   " Plug 'mattn/emmet-vim', { 'for': 'html' }
@@ -123,17 +134,17 @@ set shiftround
 
 " backup/swap/info/undo settings
 set backup
-set backupdir     =$HOME/.vim/files/backup/
+set backupdir     =$v/files/backup/
 set backupext     =-vimbackup
 set backupskip    =
-set directory     =$HOME/.vim/files/swap//
-set undodir       =$HOME/.vim/files/undo/
+set directory     =$v/files/swap//
+set undodir       =$v/files/undo/
 set undofile
 set updatecount   =100
 if has('nvim')
   set shada       ='100
 else
-  set viminfo     ='100,n$HOME/.vim/files/info/viminfo
+  set viminfo     ='100,n$v/files/info/viminfo
 endif
 
 " better navigation
@@ -432,7 +443,7 @@ if has('gui_running')
   " let &guifont = 'Bitstream Vera Sans Mono 9'
   " let &guifont = 'DejaVu Sans Mono 9'
   " let &guifont = 'Droid Sans Mono 9'
-  let &guifont = 'Ubuntu Mono:h16'
+  let &guifont = s:is_win ? 'Source_Code_Pro:h10' : 'foo Mono:h16'
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
