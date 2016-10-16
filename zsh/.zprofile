@@ -18,6 +18,7 @@ path=(
     ~/bin
     ~/local/*/bin
 
+    $(ruby -rubygems -e 'puts Gem.user_dir')/bin
     ~/.npm-packages/bin
     /data/languages/elixir/bin
     $GOPATH/bin
