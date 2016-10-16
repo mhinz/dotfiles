@@ -385,13 +385,14 @@ ch() {
 
 f() {
     local -a files
-    files=( $(fzf-tmux -m -1 --tac --tiebreak=index) )
+    files=( $(fzf-tmux -m -1 --tac --tiebreak=index ${*:+-q "$*"}) )
     (( !$? )) && nvim $files[*]
 }
 
 p() {
     local dir
-    dir=$(find {/data/{github,repo},~/.vim/bundle} -type d -mindepth 1 -maxdepth 1 | fzf-tmux --tac)
+    dir=$(find {/data/{github,repo},~/.vim/bundle} -type d -mindepth 1 -maxdepth 1 \
+        | fzf-tmux -1 --tac ${*:+-q "$*"})
     (( !$? )) && cd $dir && clear
 }
 
