@@ -207,6 +207,7 @@ hash -d torrent='/data/torrent/download'
 hash -d z='/data/repo/zsh'
 
 # aliases {{{1
+alias d='docker'
 alias g='git'
 alias gpg='gpg2'
 alias upg='brew update && brew upgrade && brew cleanup'
@@ -390,7 +391,7 @@ f() {
 
 p() {
     local dir
-    dir=$(find /data/{github,repo} -type d -mindepth 1 -maxdepth 1 | fzf-tmux --tac)
+    dir=$(find {/data/{github,repo},~/.vim/bundle} -type d -mindepth 1 -maxdepth 1 | fzf-tmux --tac)
     (( !$? )) && cd $dir && clear
 }
 
