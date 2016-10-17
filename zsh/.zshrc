@@ -302,8 +302,10 @@ lookup() {
     open "https://pgp.mit.edu/pks/lookup?search=${*}"
 }
 
-secs() {
-    echo $(($(date +'%s') - $(date --date="$1 12:00:00" +'%s')))
+toiletpreview() {
+    cd /usr/local/Cellar/toilet/*/share/figlet
+    ls *.tlf | sort | fzf --reverse --preview "toilet -w 140 -f {} vimmer.net" \
+        --preview-window=right:80%
 }
 
 md() {
@@ -346,7 +348,6 @@ fancy-dot() {
         zle self-insert
     fi
 }
-
 zle -N fancy-dot
 bindkey '.' fancy-dot
 
@@ -359,7 +360,6 @@ fancy-ctrl-z() {
         zle clear-screen
     fi
 }
-
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 # }}}
