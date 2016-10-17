@@ -208,12 +208,15 @@ hash -d z='/data/repo/zsh'
 
 # aliases {{{1
 alias d='docker'
+alias dc='docker-compose'
 alias g='git'
 alias gpg='gpg2'
-alias upg='brew update && brew upgrade && brew cleanup'
+alias help='run-help'
 
+alias brewup='brew update && brew upgrade && brew cleanup'
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
+alias npmup="npm install npm@latest -g && npm -g update"
 
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
@@ -227,8 +230,6 @@ alias -s pdf='open'
 alias chrome='open -a Google\ Chrome'
 alias preview='open -a Preview'
 alias vlc='open -a VLC'
-
-alias help='run-help'
 
 alias ls='ls --color=always -N'
 alias grep='grep --color=always'
