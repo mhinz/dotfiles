@@ -44,6 +44,9 @@ let g:plug_pwindow = 'vertical rightbelow new'
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
 
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim',    { 'do': ':UpdateRemotePlugins' }
+  endif
   Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
@@ -66,12 +69,13 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'wellle/tmux-complete.vim'
+  " Plug 'wellle/tmux-complete.vim'
 
   " Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
   Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
   Plug 'fatih/vim-go',             { 'for': 'go' }
   Plug 'tpope/vim-rails'
+  Plug 'vim-ruby/vim-ruby',        { 'for': 'ruby' }
   Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
   Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
@@ -388,7 +392,7 @@ augroup vimrc
     autocmd BufEnter term://* startinsert
   endif
 
-  au BufEnter * Cd
+  au BufEnter * call mhi#cd()
   au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
 
   au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
@@ -417,7 +421,6 @@ augroup END
 " Command {{{1
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -bar -nargs=* -complete=help    H           helpgrep <args>
-command! -bar -bang    -complete=dir     Cd          call mhi#cd(<bang>0)
 " command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
@@ -515,6 +518,10 @@ endfunction
 " }}}1
 
 " Plugin {{{1
+" Plugin: deoplete {{{2
+let g:deoplete#enable_at_startup = 0
+let g:deoplete#enable_smart_case = 1
+
 " Plugin: fzf {{{2
 set runtimepath+=~/local/fzf
 
@@ -635,6 +642,13 @@ let g:sayonara_confirm_quit = 0
 " Plugin: vim-startify {{{2
 nnoremap <leader>st  :Startify<cr>
 
+let g:startify_list_order = [
+      \ ['   MRU '. getcwd()], 'dir',
+      \ ['   MRU'],            'files',
+      \ ['   Sessions'],       'sessions',
+      \ ['   Bookmarks'],      'bookmarks',
+      \ ['   Commands'],       'commands',
+      \ ]
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
       \ 'bundle/.*/doc',
@@ -715,16 +729,25 @@ augroup vimrc
   autocmd FileType python
         \  setlocal kp=pydoc mp=./%
         \| compiler pyunit
+        \| call deoplete#enable()
 
   " Filetype: Ruby {{{2
-  let [g:ruby_operators, g:ruby_space_errors] = [1, 1]
+  let g:ruby_operators                 = 1
+  let g:ruby_space_errors              = 1
+  let g:rubycomplete_buffer_loading    = 1
+  let g:rubycomplete_classes_in_global = 1
+  let g:rubycomplete_rails             = 1
 
   autocmd FileType ruby setl com-=:# sts=2 sw=2
+        \| call deoplete#enable()
 
   " Filetype: Sh, Zsh {{{2
   autocmd FileType zsh,sh setl com-=:# mp=shellcheck\ -f\ gcc\ %
 
   " Filetype: Text, Mail, Markdown {{{2
+  let g:instant_markdown_autostart = 0
+  let g:instant_markdown_slow      = 1
+
   autocmd FileType mail     setl tw=72 wrap lbr
   autocmd FileType markdown setl tw=80 mp=gomali\ %
   autocmd FileType text     setl tw=80 fo+=t

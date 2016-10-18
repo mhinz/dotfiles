@@ -157,7 +157,7 @@ endfunction
 "
 " Switch to VCS root, if there is one.
 "
-function! mhi#cd(bang) abort
+function! mhi#cd() abort
   if &buftype =~# '\v(nofile|terminal)' || expand('%') =~# '^fugitive'
     return
   endif
@@ -171,7 +171,7 @@ function! mhi#cd(bang) abort
     return
   endif
   if has_key(s:cache, curdir)
-    execute (a:bang ? 'cd' : 'lcd') fnameescape(s:cache[curdir])
+    execute 'lcd' fnameescape(s:cache[curdir])
     return
   endif
   for dir in dirs
@@ -182,7 +182,7 @@ function! mhi#cd(bang) abort
   endfor
   let dir = empty(founddir) ? curdir : resolve(fnamemodify(founddir, ':p:h:h'))
   let s:cache[curdir] = dir
-  execute (a:bang ? 'cd' : 'lcd') fnameescape(dir)
+  execute 'lcd' fnameescape(dir)
 endfunction
 
 "
@@ -242,30 +242,19 @@ function! mhi#tab_yeah(k, o)
 endfunction
 
 "
-" Guess what! Stolen from @sjl.
+" Guess what! (Idea stolen from @sjl.)
 "
 function! mhi#pulse()
   redir => old_cul
     silent execute 'highlight CursorLine'
   redir END
-
   let old_cul = split(old_cul, '\n')[0]
   let old_cul = substitute(old_cul, 'xxx', '', '')
-  let steps   = 8
-  let width   = 1
-  let start   = width
-  let end     = steps * width
-  let color   = 233
 
-  for i in range(start, end, width)
-    execute 'highlight CursorLine ctermbg=' . (color+i)
+  for color in [204,203,162,161,161,161,162,203,204]
+    execute 'highlight CursorLine ctermbg=' . color
     redraw
-    sleep 6m
-  endfor
-  for i in range(end, start, -1 * width)
-    execute 'highlight CursorLine ctermbg=' . (color+i)
-    redraw
-    sleep 6m
+    sleep 10m
   endfor
 
   execute 'highlight' old_cul
