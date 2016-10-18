@@ -10,7 +10,7 @@ export MANPAGER="nvim +'set ft=man' -"
 export MANWIDTH=80
 export GOPATH=/data/go GOROOT=/data/languages/go GOARCH=amd64 GOOS=${$(uname -s):l}
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-export FZF_DEFAULT_OPTS='--inline-info --color bg+:235,hl+:137,hl:167,info:245,pointer:245,prompt:235'
+export FZF_DEFAULT_OPTS='--inline-info --color=light'
 export GH=/data/github
 
 typeset -aU path
