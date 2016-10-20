@@ -61,7 +61,7 @@ call plug#begin(s:bundle_dir)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
-  Plug 'suan/vim-instant-markdown'
+  Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
@@ -426,6 +426,26 @@ command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 
 " Color {{{1
+
+augroup vimrc
+  autocmd ColorScheme *
+        \ highlight link User1 StatusLine |
+        \ highlight link User2 StatusLine |
+        \ highlight link User3 StatusLine |
+        \ highlight link User4 StatusLine |
+        \ highlight link User5 StatusLine |
+        \ highlight link SignifySignAdd DiffAdd |
+        \ highlight link SignifySignDelete DiffDelete |
+        \ highlight link SignifySignChange DiffChange
+  autocmd ColorScheme janah
+        \ highlight Normal ctermbg=236 |
+        \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
+        \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
+        \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
+        \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
+        \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
+augroup END
+
 if has('gui_running')
   set background=light
   for scheme in ['gruvbox', 'railscasts']
@@ -448,20 +468,6 @@ if has('gui_running')
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
   command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 else
-  augroup vimrc
-    autocmd ColorScheme janah
-          \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
-          \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
-          \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-          \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
-          \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
-    " autocmd ColorScheme focus
-    "       \ highlight User1 ctermfg=white ctermbg=black cterm=NONE |
-    "       \ highlight User2 ctermfg=white ctermbg=black cterm=NONE |
-    "       \ highlight User3 ctermfg=white ctermbg=black cterm=NONE |
-    "       \ highlight User4 ctermfg=white ctermbg=black cterm=NONE |
-    "       \ highlight User5 ctermfg=white ctermbg=black cterm=NONE
-  augroup END
   if !exists('$ITERM_PROFILE') || $ITERM_PROFILE == 'Light'
     set background=light
     colorscheme lucius
