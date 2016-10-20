@@ -426,24 +426,40 @@ command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 
 " Color {{{1
+function! s:colors_default() abort
+  highlight link User1 StatusLine   " master branch
+  highlight link User2 StatusLine   " other branch
+  highlight link User3 StatusLine   " separators
+  highlight link User4 StatusLine   " filename at beginning
+  highlight link User5 StatusLine   " ~changes
+  highlight link SignifySignAdd    DiffAdd
+  highlight link SignifySignDelete DiffDelete
+  highlight link SignifySignChange DiffChange
+endfunction
+
+function! s:colors_janah() abort
+  highlight Normal ctermbg=236
+  highlight User1  ctermfg=192 ctermbg=237 cterm=NONE
+  highlight User2  ctermfg=167 ctermbg=237 cterm=NONE
+  highlight User3  ctermfg=245 ctermbg=237 cterm=NONE
+  highlight User4  ctermfg=215 ctermbg=237 cterm=NONE
+  highlight User5  ctermfg=111 ctermbg=237 cterm=NONE
+endfunction
+
+function! s:colors_lucius() abort
+  let [fg, bg] = [synIDattr(hlID('StatusLine'), 'fg'),
+        \ synIDattr(hlID('StatusLine'), 'bg')]
+  if &background ==# 'light'
+    execute 'highlight User1 ctermfg=23 ctermbg=192 cterm=NONE'
+    execute 'highlight User2 ctermfg=20 ctermbg=195 cterm=NONE'
+    execute 'highlight User3 ctermfg='. (bg+5) 'ctermbg='. bg 'cterm=NONE'
+  endif
+endfunction
 
 augroup vimrc
-  autocmd ColorScheme *
-        \ highlight link User1 StatusLine |
-        \ highlight link User2 StatusLine |
-        \ highlight link User3 StatusLine |
-        \ highlight link User4 StatusLine |
-        \ highlight link User5 StatusLine |
-        \ highlight link SignifySignAdd DiffAdd |
-        \ highlight link SignifySignDelete DiffDelete |
-        \ highlight link SignifySignChange DiffChange
-  autocmd ColorScheme janah
-        \ highlight Normal ctermbg=236 |
-        \ highlight User1 ctermfg=192 ctermbg=237 cterm=NONE |
-        \ highlight User2 ctermfg=167 ctermbg=237 cterm=NONE |
-        \ highlight User3 ctermfg=245 ctermbg=237 cterm=NONE |
-        \ highlight User4 ctermfg=215 ctermbg=237 cterm=NONE |
-        \ highlight User5 ctermfg=111 ctermbg=237 cterm=NONE
+  autocmd ColorScheme *      call s:colors_default()
+  autocmd ColorScheme janah  call s:colors_janah()
+  autocmd ColorScheme lucius call s:colors_lucius()
 augroup END
 
 if has('gui_running')
@@ -487,8 +503,7 @@ nnoremap <silent><f11> :ToggleHighlight<cr>
 set statusline=%!SetStatusline()
 
 function! SetStatusline()
-  " let stl = ' %4*%<%f%*'
-  let stl = ' %<%f'
+  let stl = ' %4*%<%f%*'
 
   if exists('b:git_dir')
     let stl    .= '%3*:%*'
