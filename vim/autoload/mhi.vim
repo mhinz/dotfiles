@@ -245,19 +245,22 @@ endfunction
 " Guess what! (Idea stolen from @sjl.)
 "
 function! mhi#pulse()
-  redir => old_cul
-    silent execute 'highlight CursorLine'
-  redir END
-  let old_cul = split(old_cul, '\n')[0]
-  let old_cul = substitute(old_cul, 'xxx', '', '')
+  let fg = synIDattr(hlID('CursorLine'), 'fg', 'cterm')
+  let bg = synIDattr(hlID('CursorLine'), 'bg', 'cterm')
+
+  if empty(fg)
+    let fg = synIDattr(hlID('Normal'), 'fg', 'cterm')
+  endif
+
+  highlight CursorLine ctermfg=15 cterm=bold
 
   for color in [204,203,162,161,161,161,162,203,204]
-    execute 'highlight CursorLine ctermbg=' . color
+    execute 'highlight CursorLine ctermbg='. color
     redraw
     sleep 10m
   endfor
 
-  execute 'highlight' old_cul
+  execute printf('highlight CursorLine ctermfg=%s ctermbg=%s cterm=NONE', fg, bg)
 endfunction
 
 "

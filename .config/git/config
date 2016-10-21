@@ -8,7 +8,7 @@
     program = gpg2
 
 [commit]
-    gpgsign = true
+    ; gpgsign = true
 
 [core]
     editor       = vim
