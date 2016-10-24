@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+dir='/data/languages/erlang'
+prefix="${HOME}/local/erlang"
+
+flags="--prefix=${prefix} "
+flags+='--with-ssl=/usr/local/opt/openssl'
+flags+='--without-javac '
+
+cd "$dir" || exit
+
+if [[ $1 != -f ]]; then
+    git pull | grep 'Already up-to-date.' && exit 1
+fi
+
+export LANG=C
+
+make distclean
+./otp_build autoconf
+# shellcheck disable=SC2086
+./configure $flags
+make install
+make install-docs

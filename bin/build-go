@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+[[ -z ${GOROOT:+nope} ]] && { echo "Export \$GOROOT first."; exit 1; }
+[[ -z ${GOARCH:+nope} ]] && { echo "Export \$GOARCH first."; exit 1; }
+[[ -z ${GOOS:+nope}   ]] && { echo "Export \$GOOS first.";   exit 1; }
+
+if ! cd "${GOROOT}/src"; then
+    mkdir -p "${GOROOT}/.."
+    git clone https://github.com/golang/go.git "$GOROOT"
+    cd "${GOROOT}/src"
+else
+    git checkout master
+    if [[ $1 != -f ]]; then
+        git pull | grep 'Already up-to-date.' && exit 1
+    fi
+fi
+
+if ! command -v go; then
+    # shellcheck disable=SC2155
+    export GOROOT_BOOTSTRAP=$(mktemp -dt go-bootstrap-XXX)
+    curl -L "https://storage.googleapis.com/golang/go1.7.3.${GOOS}-amd64.tar.gz" \
+        | tar -C "$GOROOT_BOOTSTRAP" --strip-components=1 -x
+fi
+
+./make.bash

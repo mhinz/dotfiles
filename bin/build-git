@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+dir='/data/repo/git'
+prefix="${HOME}/local/git"
+
+flags="--prefix=${prefix} "
+
+# avoid "Document /<path>/git/Documentation/git-add.xml does not validate" errors
+export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+export CPPFLAGS=-I/usr/local/opt/openssl/include
+export LDFLAGS=-L/usr/local/opt/openssl/lib
+
+cd "$dir" || exit
+
+if [[ $1 != -f ]]; then
+    git pull | grep 'Already up-to-date.' && exit 1
+fi
+
+make distclean 1>/dev/null
+make configure 1>/dev/null
+
+# shellcheck disable=SC2086
+./configure $flags
+make install install-man
+
+cd contrib/subtree
+make install

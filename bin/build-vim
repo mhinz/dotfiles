@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+dir='/data/repo/vim'
+prefix="${HOME}/local/vim"
+
+flags="--prefix=${prefix} "
+flags+='--with-compiledby=mhi '
+flags+='--enable-cscope '
+flags+='--enable-pythoninterp=dynamic '
+flags+='--enable-python3interp=dynamic '
+flags+='--enable-rubyinterp=dynamic '
+
+if [[ $(uname) == Linux ]]; then
+    flags+='--with-x '
+fi
+
+echo_current_vim_version() {
+    local version patchlevel
+    version=$(vim --version | head -1 | cut -d' ' -f5)
+    patchlevel=$(vim --version | head -3 | tail -1 | cut -d'-' -f2)
+    echo "${version}.${patchlevel}"
+}
+
+cd "$dir" || exit 1
+echo '[*] Cleaning directory..'
+make distclean 1>/dev/null
+
+if [[ $1 == -f ]]; then
+    echo '[!] Force building..'
+else
+    echo '[*] Pulling changes..'
+    if git pull | grep 'Already up-to-date.' &>/dev/null; then
+        echo '[!] No changes found.'
+        echo "[*] Current version: $(echo_current_vim_version)"
+        exit 1
+    fi
+fi
+
+old_version=$(echo_current_vim_version)
+
+echo "[*] Build log: ${dir}/build.log"
+echo '[*] Configure..'
+
+# shellcheck disable=SC2086
+./configure $flags >build.log
+
+echo '[*] Compile sources..'
+make >>build.log
+
+echo '[*] Install..'
+make install >>build.log
+
+echo "[*] New version: $old_version => $(echo_current_vim_version)"

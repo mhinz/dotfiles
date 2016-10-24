@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+dir='/data/repo/zsh'
+prefix="${HOME}/local/zsh"
+
+flags="--prefix=${prefix}"
+
+cd "$dir" || exit
+echo '[*] Cleaning directory..'
+make distclean &>/dev/null
+
+if [[ $1 = '-f' ]]; then
+    echo '[!] Force building..'
+else
+    echo '[*] Pulling changes..'
+    if git pull | grep 'Already up-to-date.' &>/dev/null; then
+        echo '[!] No changes found.'
+        exit 1
+    fi
+fi
+
+echo "[*] Build log: ${dir}/build.log"
+
+echo '[*] Run preconfig..'
+./Util/preconfig >build.log
+
+echo '[*] Configure..'
+# shellcheck disable=SC2086
+./configure $flags >>build.log
+
+echo '[*] Compile sources..'
+make >>build.log
+
+echo '[*] Install..'
+make install >>build.log
