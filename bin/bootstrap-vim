@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+[[ ! $SHELLOPTS =~ braceexpand ]] && set -B
+
+mkdir -p ~/.vim/files/{backup,info,swap,undo}
+mkdir -p ~/.vim/bundle
+
+if [[ ! -d ~/.vim/bundle/vim-plug ]]; then
+    git clone https://github.com/junegunn/vim-plug.git ~/.vim/bundle/vim-plug
+fi
+
+if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
+    cd ~/.vim/autoload
+    ln -s ../bundle/vim-plug/plug.vim .
+fi
+
+vim +PlugInstall +quit
+
+if command -v nvim 1>/dev/null; then
+    cd ~/.vim
+    ln -s vimrc init.vim
+    nvim +PlugInstall +quit
+fi
