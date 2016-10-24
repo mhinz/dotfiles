@@ -1,4 +1,6 @@
 #!/bin/sh
 
-ctags --fields=+S --exclude=.git --tag-relative -Rf .git/tags.$$
-mv .git/tags.$$ .git/tags
+if [ `pwd` != $HOME ]; then
+    ctags --fields=+S --exclude=.git --tag-relative -Rf .git/tags.$$
+    mv .git/tags.$$ .git/tags
+fi
