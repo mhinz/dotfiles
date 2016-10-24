@@ -216,6 +216,7 @@ alias help='run-help'
 alias brewup='brew update && brew upgrade && brew cleanup'
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
 alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
+alias gemup="gem update --system && gem update"
 alias npmup="npm install npm@latest -g && npm -g update"
 
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'

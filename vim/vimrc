@@ -44,6 +44,7 @@ let g:plug_pwindow = 'vertical rightbelow new'
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
 
+  Plug 'AndrewRadev/splitjoin.vim'
   if has('nvim')
     Plug 'Shougo/deoplete.nvim',    { 'do': ':UpdateRemotePlugins' }
   endif
@@ -69,7 +70,6 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  " Plug 'wellle/tmux-complete.vim'
 
   " Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
   Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
@@ -89,6 +89,9 @@ call plug#begin(s:bundle_dir)
 
   " Testing phase.
   " Plug 'mattn/emmet-vim', { 'for': 'html' }
+  " Plug 'tweekmonster/nvim-api-viewer'
+  " Plug 'tweekmonster/headlines.vim'
+  " Plug 'wellle/tmux-complete.vim'
 call plug#end()
 " }}}1
 
