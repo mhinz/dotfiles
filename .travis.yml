@@ -1,0 +1,9 @@
+sudo: false
+dist: trusty
+
+addons:
+  apt:
+    sources: debian-sid
+    packages: shellcheck
+
+script: shellcheck bin/mhi* bin/build* bin/bootstrap*
