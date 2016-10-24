@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+case $1 in
+  hosts) # {{{1
+    awk '$1 == "HostName" { print $2 }' ~/.ssh/config | cut -d. -f1 | sort ;;
+
+  irc) # {{{1
+    [[ -n $TMUX ]] && tmux rename-window irc
+    exec ssh ranok -t 'tmux attach'
+    ;;
+
+  *) # {{{1
+    cat <<MSG
+hosts
+irc
+MSG
+    ;;
+esac
+
+# vim: sts=2 sw=2

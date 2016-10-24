@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+# Configuration {{{1
+mhi="$(readlink "$0")"
+mhi=${mhi:=$0}
+mhi="${mhi%/*}"
+
+# Helpers {{{1
+list_files() {
+  local path="$1"
+  for file in "$path"/*; do
+    file="${file##*/}"  # basename
+    echo "${file%.*}"   # strip ext
+  done
+}
+
+case $1 in
+  build|b) # {{{1
+    arg=$2 && shift 2
+    path="${mhi}"/build
+    if [[ -f "${path}/${arg}.bash" ]]; then
+      exec "${path}/${arg}.bash" "$@"
+    else
+      list_files "$path"
+    fi
+    ;;
+
+  colors) # {{{1
+    for i in {0..255}; do
+      tput setab $i && echo -n " $i "
+    done
+    tput sgr0
+    echo
+    ;;
+
+  conf|c) # {{{1
+    arg=$2
+    declare -A configs=(
+      [g]=~/.config/git/config
+      [m]=~/.muttrc
+      [t]=~/.tmux.conf
+      [v]=~/.vim/vimrc
+      [ze]=~/.zsh/.zshenv
+      [zp]=~/.zsh/.zprofile
+      [zr]=~/.zsh/.zshrc
+    )
+    if [[ -n $arg && -n ${configs[$arg]} ]]; then
+      exec "$EDITOR" "${configs[$arg]}"
+    else
+      for conf in "${!configs[@]}"; do
+        printf "%-6s %s\n" "$conf" "${configs[$conf]}"
+      done | sort
+    fi
+    ;;
+
+  edit|e) # {{{1
+    arg=$2
+    path="${mhi}"/build
+    if [[ -n $arg ]]; then
+      exec "$EDITOR" "${path}/${arg}.bash"
+    else
+      list_files "$path"
+    fi
+    ;;
+
+  fix) # {{{1
+    shift
+    exec "${mhi}/mhi-fix" "$@"
+    ;;
+
+  net|n) # {{{1
+    shift
+    exec "${mhi}/mhi-net" "$@"
+    ;;
+
+  path|p) # {{{1
+    IFS=:
+    if (( $# == 1 )); then
+      # shellcheck disable=SC2086
+      printf "%s\n" $PATH
+    else
+      shift
+      # shellcheck disable=SC2086
+      find $PATH -iname "$@" -exec ls -hl --time-style=long-iso {} + 2>/dev/null
+    fi
+    ;;
+
+  *) # {{{1
+    cat <<MSG
+build|b
+colors
+conf|c
+edit|e
+fix
+net|n
+path|p
+MSG
+    ;;
+esac
+
+# vim: sts=2 sw=2

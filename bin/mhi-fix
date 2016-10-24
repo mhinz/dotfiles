@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+case $1 in
+  spotlight) # {{{1
+    hash brew 2>/dev/null || exit 1
+    brew linkapps
+    find /Applications -type l -maxdepth 1 | while read -r file; do
+      [[ -f "${HOME}${file}" ]] || osascript -e 'on run {f}
+        set dir to path to applications folder from user domain
+        tell application "Finder" to make alias at dir to f as POSIX file
+      end' "$file"
+    done
+    ;;
+
+  *) # {{{1
+    cat <<MSG
+spotlight
+MSG
+    ;;
+esac
+
+# vim: sts=2 sw=2
