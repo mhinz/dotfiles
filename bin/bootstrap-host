@@ -1,0 +1,41 @@
+#!/bin/sh
+
+list_ssh_hosts() {
+    awk '$1 == "HostName" { print $2 }' ~/.ssh/config | \
+        cut -d. -f1 | \
+        sort
+}
+
+bootstrap() {
+    cd || exit 1
+    if [ ! -d .git ]; then
+        git init
+        git remote add -f origin https://github.com/mhinz/dotfiles
+    fi
+    # shellcheck disable=SC2006
+    if sh=`grep '\<zsh\>' /etc/shells` && [ "$SHELL" != "$sh" ]; then
+        chsh -s "$sh"
+    fi
+}
+
+bootstrap_to_host() {
+    ssh -T "$1" 'bash -s' < bootstrap-host .
+}
+
+if ! command -v git 1>/dev/null; then
+    echo 'Install git.'
+    exit 1
+fi
+
+
+if [ $# -eq 0 ]; then
+    list_ssh_hosts
+else
+    if [ "$1" = . ]; then
+        bootstrap
+    elif list_ssh_hosts | grep -q "\<$1\>"; then
+        bootstrap_to_host "$1"
+    else
+        list_ssh_hosts
+    fi
+fi

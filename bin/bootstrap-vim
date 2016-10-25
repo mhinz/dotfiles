@@ -21,6 +21,6 @@ vim +PlugInstall +quit
 
 if command -v nvim 1>/dev/null; then
     cd ~/.vim
-    ln -s vimrc init.vim
+    ln -fs vimrc init.vim
     nvim +PlugInstall +quit
 fi
