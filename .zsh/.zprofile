@@ -1,3 +1,7 @@
 # For login shells. Sourced before zshrc.
 
-. $HOME/.profile
+if [[ -r $HOME/.profile ]]; then
+  . $HOME/.profile
+else
+  echo 'No ~/.profile found.'
+fi

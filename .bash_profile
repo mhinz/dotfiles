@@ -1,3 +1,15 @@
-# For login shells. Sourced before bashrc.
+# For login shells. The bashrc doesn't get sourced by default, so do it here.
 
-. $HOME/.profile
+if [[ -r $HOME/.profile ]]; then
+  . $HOME/.profile
+else
+  echo 'No ~/.profile found.'
+fi
+
+if [[ $- != *i* && -r $HOME/.bashrc ]]; then
+  if [[ -r $HOME/.bashrc ]]; then
+    . $HOME/.bashrc
+  else
+    echo 'No ~/.bashrc found.'
+  fi
+fi
