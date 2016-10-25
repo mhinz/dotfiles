@@ -6,7 +6,7 @@ else
   echo 'No ~/.profile found.'
 fi
 
-if [[ $- != *i* && -r $HOME/.bashrc ]]; then
+if [[ $- == *i* ]]; then
   if [[ -r $HOME/.bashrc ]]; then
     . $HOME/.bashrc
   else

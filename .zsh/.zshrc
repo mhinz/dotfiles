@@ -1,5 +1,15 @@
 #!/usr/bin/env zsh
 
+if [[ -r $HOME/.shrc ]]; then
+    . $HOME/.shrc
+else
+    echo 'No .shrc found.'
+fi
+
+alias -g L='| less -r'
+alias -g N='>/dev/null'
+alias -g E='2>/dev/null'
+
 fpath=($ZDOTDIR/compsys $fpath)
 
 zmodload -i zsh/complist
@@ -205,58 +215,6 @@ hash -d c='/data/programming/c'
 hash -d g='/data/github'
 hash -d torrent='/data/torrent/download'
 hash -d z='/data/repo/zsh'
-
-# aliases {{{1
-alias d='docker'
-alias dc='docker-compose'
-alias g='git'
-alias gpg='gpg2'
-alias help='run-help'
-
-alias brewup='brew update && brew upgrade && brew cleanup'
-alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
-alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
-alias gemup="gem update --system && gem update"
-alias npmup="npm install npm@latest -g && npm -g update"
-
-alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
-alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias val='valgrind -v --leak-check=full --show-reachable=yes'
-alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg'
-
-alias rt='cd ~torrent/../session && rtorrent'
-
-alias -s html='open'
-alias -s pdf='open'
-alias chrome='open -a Google\ Chrome'
-alias preview='open -a Preview'
-alias vlc='open -a VLC'
-
-alias ls='ls --color=always -N'
-alias grep='grep --color=always'
-
-alias j='ls -lhd *(D-/)'
-alias k='ls -lhX *(D-^/)'
-alias l='ls -lh --group-directories-first'
-alias ll='ls -lhX --group-directories-first'
-alias la='ls -lhXA --group-directories-first'
-alias n='ls -lhS *(DOL[1,5]^/)'
-
-alias h='cd ..; l'
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-
-alias -g L='| less -r'
-alias -g N='>/dev/null'
-alias -g E='2>/dev/null'
-
-alias 1='fg %1'
-alias 2='fg %2'
-alias 3='fg %3'
-alias 11='bg %1'
-alias 22='bg %2'
-alias 33='bg %3'
 
 # completion {{{1
 
