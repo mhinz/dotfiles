@@ -766,7 +766,7 @@ augroup vimrc
         \| call deoplete#enable()
 
   " Filetype: Sh, Zsh {{{2
-  autocmd FileType zsh,sh setl sts=2 sw=2 com-=:# mp=shellcheck\ -f\ gcc\ %
+  autocmd FileType zsh,sh setl com-=:# mp=shellcheck\ -f\ gcc\ %
 
   " Filetype: Text, Mail, Markdown {{{2
   let g:instant_markdown_autostart = 0

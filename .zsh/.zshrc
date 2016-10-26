@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 if [[ -r $HOME/.shrc ]]; then
-    . $HOME/.shrc
+    emulate sh -c 'source ~/.shrc'
 else
     echo 'No .shrc found.'
 fi
@@ -24,14 +24,6 @@ umask 077
 watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
-
-if [[ $ITERM_PROFILE == Light ]]; then
-    eval $(dircolors ~/.zsh/dircolors.light)
-    ln -fs ~/.config/git/config.colors{.light,}
-else
-    eval $(dircolors ~/.zsh/dircolors.dark)
-    ln -fs ~/.config/git/config.colors{.dark,}
-fi
 
 # misc options {{{1
 
