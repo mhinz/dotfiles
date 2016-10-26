@@ -1,14 +1,14 @@
 # Keep it POSIX.
 
-if [ $ITERM_PROFILE = Light ]; then
-    eval $(dircolors ~/.zsh/dircolors.light)
-    ln -fs \
-        ~/.config/git/config.colors.light \
-        ~/.config/git/config.colors
-else
+if [ "$ITERM_PROFILE" = Dark ]; then
     eval $(dircolors ~/.zsh/dircolors.dark)
     ln -fs \
         ~/.config/git/config.colors.dark \
+        ~/.config/git/config.colors
+else
+    eval $(dircolors ~/.zsh/dircolors.light)
+    ln -fs \
+        ~/.config/git/config.colors.light \
         ~/.config/git/config.colors
 fi
 

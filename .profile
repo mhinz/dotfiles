@@ -1,9 +1,26 @@
 # Keep this POSIX.
 
 export TERM=xterm-256color
-export EDITOR=nvim
 
-export MANPAGER="nvim +'set ft=man' -"
+if command -v nvim 1>/dev/null; then
+    export EDITOR='nvim'
+elif command -v vim 1>/dev/null; then
+    export EDITOR='vim'
+elif command -v vi 1>/dev/null; then
+    export EDITOR='vi'
+elif command -v nano 1>/dev/null; then
+    export EDITOR='nano'
+elif command -v emacs 1>/dev/null; then
+    export EDITOR='emacs -nw'
+else
+    echo 'Install a proper editor.'
+fi
+
+case $EDITOR in
+    nvim) export MANPAGER="nvim +'set ft=man' -" ;;
+     vim) export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\"" ;;
+       *) export MANPAGER='less' ;;
+esac
 export MANWIDTH=80
 
 export GH=/data/github
