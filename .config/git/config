@@ -49,14 +49,6 @@
     cmd           = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
     trustExitCode = true
 
-[pager]
-    diff = diff-so-fancy | less -RFXx1,5
-    log  = diff-so-fancy | less -RFXx1,5
-    show = diff-so-fancy | less -RFXx1,5
-
-[interactive]
-    diffFilter = diff-so-fancy
-
 [advice]
     statusHints = no
 
