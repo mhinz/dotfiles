@@ -207,7 +207,8 @@ tmup() {
 
 # Vim {{{1
 alias vu='vim -u NONE -U NONE -i NONE -N'
-alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+alias nv='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+alias v=$EDITOR
 
 # Run a legacy test in ~v/src/testdir
 vt() {
