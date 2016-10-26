@@ -46,14 +46,14 @@ fi
 # Only unique elements, please.
 IFS=:
 for dir in $newpath; do
-  case :$PATH in
+  case $PATH in
     *:"$dir":*) ;;
     *) [ -d "$dir" ] && PATH=$dir:$PATH ;;
   esac
 done
 
 export PATH
-unset newpath gembin dir
+unset newpath gembin dir IFS
 
 # MANPATH {{{1
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH

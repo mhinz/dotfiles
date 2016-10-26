@@ -1,13 +1,13 @@
-# For login shells. The bashrc doesn't get sourced by default, so do it here.
-
-if [[ -r $HOME/.profile ]]; then
+if [[ -r ~/.profile ]]; then
   . $HOME/.profile
 else
   echo 'No ~/.profile found.'
 fi
 
+# bashrc doesn't get sourced for login shells; do it here.
+
 if [[ $- == *i* ]]; then
-  if [[ -r $HOME/.bashrc ]]; then
+  if [[ -r ~/.bashrc ]]; then
     . $HOME/.bashrc
   else
     echo 'No ~/.bashrc found.'

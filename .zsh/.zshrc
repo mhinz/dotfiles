@@ -250,46 +250,9 @@ compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 # functions {{{1
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
-r() {
-    exec $SHELL
-}
-
 m() {
     bc -l <<< $@
 }; alias m='noglob m'
-
-lookup() {
-    open "https://pgp.mit.edu/pks/lookup?search=${*}"
-}
-
-toiletpreview() {
-    cd /usr/local/Cellar/toilet/*/share/figlet
-    ls *.tlf | sort | fzf --reverse --preview "toilet -w 140 -f {} vimmer.net" \
-        --preview-window=right:80%
-}
-
-md() {
-    command mkdir $1 && builtin cd $1
-}
-
-rd() {
-    dir=$PWD
-    builtin cd ..
-    if command rmdir $dir 2>/dev/null; then
-        echo 'Removed empty directory:' $dir
-    else
-        builtin cd $dir
-        echo 'Directory is not empty:'
-        ls -A
-    fi
-    unset dir
-}
-
-camusedby() {
-    echo 'Recent camera uses:'
-    local usedby=$(lsof | grep -w "AppleCamera\|USBVDC\|iSight" | awk '{printf $2"\n"}' | xargs ps)
-    echo $usedby
-}
 
 fancy-dot() {
     local -a split
@@ -343,30 +306,6 @@ ch() {
   unset CONF_COLS CONF_SEP
 }
 
-# FZF {{{1
-. ~/local/fzf/shell/key-bindings.zsh 2>/dev/null
-
-f() {
-    local -a files
-    files=( $(fzf-tmux -m -1 --tac --tiebreak=index ${*:+-q "$*"}) )
-    (( !$? )) && nvim $files[*]
-}
-
-p() {
-    local dir
-    dir=$(find {/data/{github,repo},~/.vim/bundle} -type d -mindepth 1 -maxdepth 1 \
-        | fzf-tmux -1 --tac ${*:+-q "$*"})
-    (( !$? )) && cd $dir && clear
-}
-
-pf() {
-    p && f
-}
-
-c() {
-    cd ~/.dotfiles && { f; cd -; }
-}
-
 # Git {{{1
 pr() {
     local origin pr
@@ -386,18 +325,6 @@ pr() {
 
 b() {
     git checkout $(git branch -a | fzf -1 | cut -c3-)
-}
-
-gho() {
-    local prefix
-    prefix=$(git rev-parse --show-prefix)
-    (( $? )) && return 1
-    local branch=$(git symbolic-ref -q --short HEAD)
-    local remote=$(git config branch.master.remote || echo origin)
-    local url=$(git config remote.${remote}.url)
-    url=${url/git\@github\.com:/https:\/\/github.com/}
-    url=${url%\.git}
-    open ${url}/tree/${branch}/${prefix}${1:-}
 }
 
 alias gv="nvim +GV +'sil tabc 2' +'exe \"normal \<cr>\"'"
@@ -465,9 +392,6 @@ zstyle ':completion:tmux-comp-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}
 # Vim {{{1
 alias vu='vim -u NONE -U NONE -i NONE -N'
 alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
-
-hash -d v='/data/repo/vim'
-hash -d nv='/data/repo/neovim'
 
 # Run a legacy test in ~v/src/testdir
 vt() {

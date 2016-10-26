@@ -1,7 +1,7 @@
-# For login shells. Sourced before zshrc.
+# Opposed to Bash, Zsh doesn't source ~/.profile on its own.
 
-if [[ -r $HOME/.profile ]]; then
-  . $HOME/.profile
+if [[ -r ~/.profile ]]; then
+  emulate sh -c 'source ~/.profile'
 else
   echo 'No ~/.profile found.'
 fi

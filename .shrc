@@ -1,11 +1,8 @@
-# vim: set ft=sh
-
 # Aliases {{{1
 alias d='docker'
 alias dc='docker-compose'
 alias g='git'
 alias gpg='gpg2'
-alias help='run-help'
 
 alias brewup='brew update && brew upgrade && brew cleanup'
 alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
@@ -45,3 +42,74 @@ alias 3='fg %3'
 alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
+
+# Functions {{{1
+r() {
+  exec $SHELL
+}
+
+md() {
+  command mkdir $1 && builtin cd $1
+}
+
+rd() {
+  dir=$PWD
+  builtin cd ..
+  if command rmdir $dir 2>/dev/null; then
+    echo 'Removed empty directory:' $dir
+  else
+    builtin cd $dir
+    echo 'Directory is not empty:'
+    ls -A
+  fi
+  unset dir
+}
+
+lookup() {
+  open "https://pgp.mit.edu/pks/lookup?search=${*}"
+}
+
+camusedby() {
+  echo 'Recent camera uses:'
+  local usedby=$(lsof | grep -w "AppleCamera\|USBVDC\|iSight" | awk '{printf $2"\n"}' | xargs ps)
+  echo $usedby
+}
+# }}}
+
+# Git {{{1
+gho() {
+  local prefix
+  prefix=$(git rev-parse --show-prefix)
+  (( $? )) && return 1
+  local branch=$(git symbolic-ref -q --short HEAD)
+  local remote=$(git config branch.master.remote || echo origin)
+  local url=$(git config remote.${remote}.url)
+  url=${url/git\@github\.com:/https:\/\/github.com/}
+  url=${url%\.git}
+  open ${url}/tree/${branch}/${prefix}${1:-}
+}
+
+# FZF {{{1
+f() {
+  [ -n "$@" ] && args="-q $@"
+  IFS=$'\n'
+  files=`fzf-tmux -m -1 --tac --tiebreak=index $args`
+  [ -n "$files" ] && $EDITOR $files
+  unset IFS files args
+}
+
+p() {
+  dirs="/data/github /data/repo $HOME/.vim/bundle"
+  case $SHELL in *zsh) setopt local_options sh_word_split; esac
+  [ -n "$@" ] && args="-q $@"
+  IFS=$' '
+  dir=`find $dirs -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac "$args"`
+  [ -d "$dir" ] && cd $dir && clear
+  unset IFS dirs dir args
+}
+
+pf() {
+  p && f
+}
+
+# vim: ft=sh fdm=marker
