@@ -1,16 +1,10 @@
 #!/usr/bin/env zsh
 
-if [[ -r $HOME/.shrc ]]; then
+if [[ -r ~/.shrc ]]; then
     emulate sh -c 'source ~/.shrc'
 else
     echo 'No .shrc found.'
 fi
-
-alias -g L='| less -r'
-alias -g N='>/dev/null'
-alias -g E='2>/dev/null'
-
-fpath=($ZDOTDIR/compsys $fpath)
 
 zmodload -i zsh/complist
 
@@ -18,12 +12,15 @@ autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
 autoload -Uz run-help
 
-bindkey -e
 umask 077
 
 watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
+
+alias -g L='| less -r'
+alias -g N='>/dev/null'
+alias -g E='2>/dev/null'
 
 # misc options {{{1
 
