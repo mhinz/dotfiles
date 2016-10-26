@@ -1,7 +1,5 @@
 # For login shells.
 
-[ -n "${TMUX+nope}" -o $SHLVL -gt 1 ] && return
-
 export TERM=xterm-256color
 export EDITOR=nvim
 
@@ -37,6 +35,13 @@ newpath=$GOROOT/bin:$newpath
 newpath=/data/repo/camlistore/bin:$newpath
 newpath=/usr/local/opt/coreutils/libexec/gnubin:$newpath
 newpath=/usr/local/sbin:$newpath
+
+# Apple's path_helper gets called from /etc/profile and
+# /etc/zprofile and mangles $PATH. Work around it.
+if [ -x /usr/libexec/path_helper ]; then
+  PATH=
+  eval `/usr/libexec/path_helper -s`
+fi
 
 # Only unique elements, please.
 IFS=:
