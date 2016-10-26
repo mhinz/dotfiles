@@ -1,4 +1,4 @@
-# For login shells.
+# Keep this POSIX.
 
 export TERM=xterm-256color
 export EDITOR=nvim
@@ -17,43 +17,36 @@ export GOARCH=amd64
 export GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
 
 # PATH {{{1
-[ -z $ZSH_VERSION ] || setopt sh_word_split
-
-newpath=~/bin
-
-for dir in ~/local/*/bin; do
-  newpath="$dir":$newpath
-done
-
-gembin=`ruby -rubygems -e 'puts Gem.user_dir'`
-[ -n "$gembin" ] && newpath=$gembin:$newpath
-
-newpath=~/.npm-packages/bin:$newpath
-newpath=/data/languages/elixir/bin:$newpath
-newpath=$GOPATH/bin:$newpath
-newpath=$GOROOT/bin:$newpath
-newpath=/data/repo/camlistore/bin:$newpath
-newpath=/usr/local/opt/coreutils/libexec/gnubin:$newpath
-newpath=/usr/local/sbin:$newpath
+read -d '' newpath <<EOF
+  /usr/local/sbin
+  /usr/local/opt/coreutils/libexec/gnubin
+  /data/repo/camlistore/bin
+  $GOROOT/bin
+  $GOPATH/bin
+  /data/languages/elixir/bin
+  $HOME/.npm-packages/bin
+  $(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)
+  $HOME/local/*/bin
+  $HOME/bin
+EOF
 
 # Apple's path_helper gets called from /etc/profile and
 # /etc/zprofile and mangles $PATH. Work around it.
 if [ -x /usr/libexec/path_helper ]; then
   PATH=
-  eval `/usr/libexec/path_helper -s`
+  eval $(/usr/libexec/path_helper -s)
 fi
 
 # Only unique elements, please.
-IFS=:
 for dir in $newpath; do
   case $PATH in
     *:"$dir":*) ;;
-    *) [ -d "$dir" ] && PATH=$dir:$PATH ;;
+             *) [ -d $dir ] && PATH=$dir:$PATH ;;
   esac
 done
 
 export PATH
-unset newpath gembin dir IFS
+unset newpath dir
 
 # MANPATH {{{1
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
