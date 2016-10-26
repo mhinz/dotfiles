@@ -19,7 +19,7 @@ bootstrap() {
 }
 
 bootstrap_to_host() {
-    ssh -T "$1" 'bash -s' < bootstrap-host .
+    ssh -T "$1" 'bash -s' < ~/bin/bootstrap-host .
 }
 
 if ! command -v git 1>/dev/null; then
