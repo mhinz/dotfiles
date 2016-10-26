@@ -91,6 +91,26 @@ camusedby() {
 # }}}
 
 # Git {{{1
+pr() {
+    local origin pr
+    if [[ $# == 0 ]]; then
+        echo "usage: pr [remote] <ref>"
+        return 1
+    elif [[ $# == 1 ]]; then
+        origin=$(git config branch.master.remote || echo origin)
+        pr=$1
+    else
+        origin=$1
+        pr=$2
+    fi
+    git fetch $origin refs/pull/${pr}/head || return
+    git checkout -q FETCH_HEAD
+}
+
+b() {
+    git checkout $(git branch -a | fzf -1 | cut -c3-)
+}
+
 gho() {
   local prefix
   prefix=$(git rev-parse --show-prefix)
@@ -103,6 +123,8 @@ gho() {
   open ${url}/tree/${branch}/${prefix}${1:-}
 }
 
+alias gv="nvim +GV +'sil tabc 2' +'exe \"normal \<cr>\"'"
+
 # FZF {{{1
 f() {
   [ -n "$@" ] && args="-q $@"
@@ -114,7 +136,7 @@ f() {
 
 p() {
   dirs="/data/github /data/repo $HOME/.vim/bundle"
-  case $SHELL in *zsh) setopt local_options sh_word_split; esac
+  [ -n "$ZSH_VERSION" ] && setopt local_options sh_word_split
   [ -n "$@" ] && args="-q $@"
   IFS=$' '
   dir=`find $dirs -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac "$args"`

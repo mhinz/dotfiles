@@ -12,6 +12,7 @@ autoload -Uz compinit && compinit
 autoload -Uz edit-command-line
 autoload -Uz run-help
 
+bindkey -e
 umask 077
 
 watch=all
@@ -294,29 +295,6 @@ ch() {
 
   unset CONF_COLS CONF_SEP
 }
-
-# Git {{{1
-pr() {
-    local origin pr
-    if [[ $# == 0 ]]; then
-        echo "usage: pr [remote] <ref>"
-        return 1
-    elif [[ $# == 1 ]]; then
-        origin=$(git config branch.master.remote || echo origin)
-        pr=$1
-    else
-        origin=$1
-        pr=$2
-    fi
-    git fetch $origin refs/pull/${pr}/head || return
-    git checkout -q FETCH_HEAD
-}
-
-b() {
-    git checkout $(git branch -a | fzf -1 | cut -c3-)
-}
-
-alias gv="nvim +GV +'sil tabc 2' +'exe \"normal \<cr>\"'"
 
 # iTerm2 {{{1
 proftoggle() {
