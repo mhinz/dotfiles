@@ -90,6 +90,48 @@ camusedby() {
 }
 # }}}
 
+# Chrome {{{1
+ch() {
+  export CONF_COLS=$[ COLUMNS/2 ]
+  export CONF_SEP='{::}'
+
+  cp -f ~/Library/Application\ Support/Google/Chrome/Default/History /tmp/h
+
+  sqlite3 -separator $CONF_SEP /tmp/h 'select title, url from urls order by last_visit_time desc' \
+      | ruby -ne '
+  cols = ENV["CONF_COLS"].to_i
+  title, url = $_.split(ENV["CONF_SEP"])
+  puts "\x1b[33m#{title.ljust(cols)}\x1b[0m #{url}"' \
+      | fzf --ansi --multi --no-hscroll --tiebreak=index \
+      | grep --color=never -o 'https\?://.*' \
+      | xargs open
+
+  unset CONF_COLS CONF_SEP
+}
+
+# FZF {{{1
+f() {
+  [ -n "$@" ] && args="-q $@"
+  IFS=$'\n'
+  files=`fzf-tmux -m -1 --tac --tiebreak=index $args`
+  [ -n "$files" ] && $EDITOR $files
+  unset IFS files args
+}
+
+p() {
+  dirs="/data/github /data/repo $HOME/.vim/bundle"
+  [ -n "$ZSH_VERSION" ] && setopt local_options sh_word_split
+  [ -n "$@" ] && args="-q $@"
+  IFS=$' '
+  dir=`find $dirs -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac "$args"`
+  [ -d "$dir" ] && cd $dir && clear
+  unset IFS dirs dir args
+}
+
+pf() {
+  p && f
+}
+
 # Git {{{1
 pr() {
     local origin pr
@@ -125,27 +167,52 @@ gho() {
 
 alias gv="nvim +GV +'sil tabc 2' +'exe \"normal \<cr>\"'"
 
-# FZF {{{1
-f() {
-  [ -n "$@" ] && args="-q $@"
-  IFS=$'\n'
-  files=`fzf-tmux -m -1 --tac --tiebreak=index $args`
-  [ -n "$files" ] && $EDITOR $files
-  unset IFS files args
+# iTerm2 {{{1
+proftoggle() {
+    if [[ -z $ITERM_PROFILE ]]; then
+        print "Not in iTerm" 1>&2
+        return
+    fi
+    tmup
+    if [[ $ITERM_PROFILE == Light ]]; then
+        export ITERM_PROFILE=Dark
+        eval $(dircolors ~/.zsh/dircolors.dark)
+        ln -fs ~/.config/git/config.colors{.dark,}
+    else
+        export ITERM_PROFILE=Light
+        eval $(dircolors ~/.zsh/dircolors.light)
+        ln -fs ~/.config/git/config.colors{.light,}
+    fi
+    local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
+    if [[ -n $TMUX ]]; then
+        seq="\ePtmux;\e${seq}\e\\"
+        tmux setenv ITERM_PROFILE $ITERM_PROFILE
+    fi
+    printf $seq
+    clear
 }
 
-p() {
-  dirs="/data/github /data/repo $HOME/.vim/bundle"
-  [ -n "$ZSH_VERSION" ] && setopt local_options sh_word_split
-  [ -n "$@" ] && args="-q $@"
-  IFS=$' '
-  dir=`find $dirs -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac "$args"`
-  [ -d "$dir" ] && cd $dir && clear
-  unset IFS dirs dir args
+# Tmux {{{1
+tm() {
+    if (( $# )); then
+        tmux has-session -t "$*" && tmux attach -t "$*" || tmux new-session -s "$*"
+    else
+        tmux attach || tmux new-session -s default
+    fi
 }
 
-pf() {
-  p && f
+tmup() {
+    [[ -n $TMUX ]] && export $(tmux showenv | grep --color=never '^[^-]' | xargs)
+}
+
+# Vim {{{1
+alias vu='vim -u NONE -U NONE -i NONE -N'
+alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
+
+# Run a legacy test in ~v/src/testdir
+vt() {
+    vim -u unix.vim -U NONE --noplugin -s dotest.in $1
+    test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | diff-so-fancy
 }
 
 # vim: ft=sh fdm=marker

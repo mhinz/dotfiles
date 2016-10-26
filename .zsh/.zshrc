@@ -275,64 +275,6 @@ fancy-ctrl-z() {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
-# }}}
-
-# Chrome {{{1
-ch() {
-  export CONF_COLS=$[ COLUMNS/2 ]
-  export CONF_SEP='{::}'
-
-  cp -f ~/Library/Application\ Support/Google/Chrome/Default/History /tmp/h
-
-  sqlite3 -separator $CONF_SEP /tmp/h 'select title, url from urls order by last_visit_time desc' \
-      | ruby -ne '
-  cols = ENV["CONF_COLS"].to_i
-  title, url = $_.split(ENV["CONF_SEP"])
-  puts "\x1b[33m#{title.ljust(cols)}\x1b[0m #{url}"' \
-      | fzf --ansi --multi --no-hscroll --tiebreak=index \
-      | grep --color=never -o 'https\?://.*' \
-      | xargs open
-
-  unset CONF_COLS CONF_SEP
-}
-
-# iTerm2 {{{1
-proftoggle() {
-    if [[ -z $ITERM_PROFILE ]]; then
-        print "Not in iTerm" 1>&2
-        return
-    fi
-    tmup
-    if [[ $ITERM_PROFILE == Light ]]; then
-        export ITERM_PROFILE=Dark
-        eval $(dircolors ~/.zsh/dircolors.dark)
-        ln -fs ~/.config/git/config.colors{.dark,}
-    else
-        export ITERM_PROFILE=Light
-        eval $(dircolors ~/.zsh/dircolors.light)
-        ln -fs ~/.config/git/config.colors{.light,}
-    fi
-    local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
-    if [[ -n $TMUX ]]; then
-        seq="\ePtmux;\e${seq}\e\\"
-        tmux setenv ITERM_PROFILE $ITERM_PROFILE
-    fi
-    printf $seq
-    clear
-}
-
-# Tmux {{{1
-tm() {
-    if (( $# )); then
-        tmux has-session -t "$*" && tmux attach -t "$*" || tmux new-session -s "$*"
-    else
-        tmux attach || tmux new-session -s default
-    fi
-}
-
-tmup() {
-    [[ -n $TMUX ]] && export $(tmux showenv | grep --color=never '^[^-]' | xargs)
-}
 
 _tmux_sessions() {
     local -a sessions=( ${(f)"$(command tmux list-sessions)"} )
@@ -355,15 +297,6 @@ bindkey '^X^X' tmux-comp-anywhere
 zstyle ':completion:tmux-comp-(prefix|anywhere):*' completer _tmux_complete
 zstyle ':completion:tmux-comp-(prefix|anywhere):*' ignore-line current-shown
 zstyle ':completion:tmux-comp-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
+# }}}
 
-# Vim {{{1
-alias vu='vim -u NONE -U NONE -i NONE -N'
-alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
-
-# Run a legacy test in ~v/src/testdir
-vt() {
-    vim -u unix.vim -U NONE --noplugin -s dotest.in $1
-    test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed | diff-so-fancy
-}
-
-# vim: et sts=4 sw=4 fdm=marker
+# vim: ft=sh fdm=marker
