@@ -507,7 +507,7 @@ else
 endif
 
 " Statusline {{{1
-command! -bar ToggleStatusline let b:stl_location  = !get(b:, 'stl_location', 1)
+command! -bar ToggleStatusline let b:stl_location  = !get(b:, 'stl_location')
 command! -bar ToggleHighlight  let b:stl_highlight = !get(b:, 'stl_highlight')
 
 nnoremap <silent><f10> :ToggleStatusline<cr>
@@ -541,7 +541,7 @@ function! SetStatusline()
           \ . ']%* '
   endif
 
-  if get(b:, 'stl_location', 1)
+  if get(b:, 'stl_location')
     let stl .=
           \   '%3*[%*%v%3*,%*%l%3*/%*%L%3*]%* '
           \ . '%p%3*%%%* '
