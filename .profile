@@ -1,6 +1,7 @@
 # Keep this POSIX.
 
 export TERM=xterm-256color
+export LANG=en_US.UTF-8
 
 if command -v nvim 1>/dev/null; then
     export EDITOR='nvim'
