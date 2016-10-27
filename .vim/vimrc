@@ -174,7 +174,7 @@ set autoread
 set backspace     =indent,eol,start
 set clipboard     =unnamed
 set complete     -=i
-if v:version >= 800
+if has('nvim') || v:version >= 800
   set completeopt+=noselect
 endif
 set cpoptions    -=e
