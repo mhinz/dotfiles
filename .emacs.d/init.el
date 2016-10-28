@@ -45,12 +45,9 @@
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
-(use-package tao-theme
-             :init
-             (load-theme 'tao-yin t))
-; (use-package leuven-theme
-; 	     :init
-;              (load-theme 'leuven t))
+(if (display-graphic-p)
+    (load-theme 'subatomic t)
+  (load-theme 'leuven t))
 
 (use-package ace-window
              :bind (("M-q" . ace-window)))
