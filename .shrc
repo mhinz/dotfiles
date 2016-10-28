@@ -62,7 +62,7 @@ ssh() {
     if [ $# -eq 0 ]; then
         mhi net hosts
     else
-        command ssh -t $1 "export ITERM_PROFILE=$ITERM_PROFILE; exec \$SHELL"
+        command ssh -t $1 "export ITERM_PROFILE=$ITERM_PROFILE; exec \$SHELL -l"
     fi
 }
 
