@@ -248,7 +248,7 @@ function! mhi#pulse()
   let fg = synIDattr(hlID('CursorLine'), 'fg', 'cterm')
   let bg = synIDattr(hlID('CursorLine'), 'bg', 'cterm')
 
-  if empty(fg)
+  if fg == -1
     let fg = synIDattr(hlID('Normal'), 'fg', 'cterm')
   endif
 
