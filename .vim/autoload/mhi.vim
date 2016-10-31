@@ -80,15 +80,25 @@ function! mhi#jump()
     execute "normal \<c-]>"
   else
     if exists('g:cscoped')
-      " Todo: https://gist.github.com/mhinz/1a23d24f88b396b65aec
-      " nmap <expr> <cr> mhi#jump()
-      " execute "normal \<leader>cg"
-      execute 'cscope find g' expand('<cword>')
+      try
+        execute 'cscope find g' expand('<cword>')
+      catch /E259/
+        echohl WarningMsg
+        redraw | echomsg 'No match found: '. expand('<cword>')
+        echohl NONE
+      endtry
     else
-      execute "normal! g\<c-]>"
+      try
+        execute "normal! g\<c-]>"
+      catch /E349/ " no identifier under cursor
+      catch /E433/
+        echohl WarningMsg
+        redraw | echomsg 'No match found: '. expand('<cword>')
+        echohl NONE
+      endtry
     endif
     normal! zvzt
-    call mhi#pulse()
+    call halo#run()
   endif
 endfunction
 
