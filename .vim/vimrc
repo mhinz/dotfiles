@@ -80,6 +80,7 @@ call plug#begin(s:bundle_dir)
   Plug 'xolox/vim-misc',           { 'for': 'lua' }
 
   Plug 'mhinz/vim-grepper'
+  Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-randomtag', { 'on': 'Random'   }
   Plug 'mhinz/vim-rfc',       { 'on': 'RFC'      }
@@ -823,7 +824,7 @@ augroup vimrc
   autocmd FileType vim
         \  setl sts=2 sw=2 isk-=#
         \| let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
-        \| nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call mhi#pulse()<cr>
+        \| nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call halo#run()<cr>
 " }}}2
 augroup END
 " }}}1

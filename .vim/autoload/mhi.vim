@@ -252,63 +252,6 @@ function! mhi#tab_yeah(k, o)
 endfunction
 
 "
-" Blink! Blink!
-"
-if v:version >= 800 || has('nvim')
-  " Stolen from @justinmk.
-  highlight Halo guifg=white guibg=#F92672 ctermfg=white ctermbg=197
-  let g:halo = {}
-  function! s:halo_clear(id) abort
-    silent! call matchdelete(g:halo['hl_id'])
-  endfunction
-  function! s:halo() abort
-    call s:halo_show(-1)
-    call timer_start(100, function('s:halo_show'))
-    call timer_start(200, function('s:halo_show'))
-  endfunction
-  function! s:halo_show(id) abort
-    call s:halo_clear(-1)
-    let lcol = col('.') > 10 ? col('.') - 10 : 1
-    let g:halo['hl_id'] = matchaddpos('Halo',
-          \[[line('.'),   lcol, 20],
-          \ [line('.')-1, lcol, 20],
-          \ [line('.')-2, lcol, 20],
-          \ [line('.')+1, lcol, 20],
-          \ [line('.')+2, lcol, 20]]
-          \)
-    call timer_start(50, function('s:halo_clear'))
-  endfunction
-  augroup halo_plugin
-    autocmd!
-    autocmd WinLeave * call s:halo_clear(-1)
-  augroup END
-  function! mhi#pulse()
-    call s:halo()
-  endfunction
-else
-  " Idea stolen from @sjl.
-  function! mhi#pulse()
-    echomsg 'FOO'
-    let fg = synIDattr(hlID('CursorLine'), 'fg', 'cterm')
-    let bg = synIDattr(hlID('CursorLine'), 'bg', 'cterm')
-
-    if fg == -1
-      let fg = synIDattr(hlID('Normal'), 'fg', 'cterm')
-    endif
-
-    highlight CursorLine ctermfg=15 cterm=bold
-
-    for color in [204,203,162,161,161,161,162,203,204]
-      execute 'highlight CursorLine ctermbg='. color
-      redraw
-      sleep 10m
-    endfor
-
-    execute printf('highlight CursorLine ctermfg=%s ctermbg=%s cterm=NONE', fg, bg)
-  endfunction
-endif
-
-"
 " Get syntax group information. Stolen from @jamessan.
 "
 function! s:synnames()
