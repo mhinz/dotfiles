@@ -59,6 +59,7 @@ call plug#begin(s:bundle_dir)
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
   Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
+  Plug 'junegunn/vim-plug'
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
@@ -74,6 +75,7 @@ call plug#begin(s:bundle_dir)
   " Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
   Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
   Plug 'fatih/vim-go',             { 'for': 'go' }
+  Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
   Plug 'tpope/vim-rails'
   Plug 'vim-ruby/vim-ruby',        { 'for': 'ruby' }
   Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }

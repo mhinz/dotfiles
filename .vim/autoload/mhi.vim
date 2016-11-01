@@ -91,7 +91,7 @@ function! mhi#jump()
       try
         execute "normal! g\<c-]>"
       catch /E349/ " no identifier under cursor
-      catch /E433/
+      catch /E426/
         echohl WarningMsg
         redraw | echomsg 'No match found: '. expand('<cword>')
         echohl NONE
