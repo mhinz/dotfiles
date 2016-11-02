@@ -141,6 +141,26 @@ pf() {
   p && f
 }
 
+c() {
+    read -d '' configs <<EOF
+$HOME/.bash_profile
+$HOME/.bashrc
+$HOME/.config/git/config
+$HOME/.profile
+$HOME/.shrc
+$HOME/.tmux.conf
+$HOME/.vim/autoload/mhi.vim
+$HOME/.vim/vimrc
+$HOME/.zsh/.zprofile
+$HOME/.zsh/.zshrc
+$HOME/.zshenv
+EOF
+  [ -n "$@" ] && args="-q $@"
+  files=`echo "$configs" | fzf-tmux -m -1 --tac --tiebreak=index "$args" | xargs`
+  [ -n "$files" ] && $EDITOR $files
+  unset configs files args
+}
+
 # Git {{{1
 pr() {
     local origin pr
