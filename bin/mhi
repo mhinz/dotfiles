@@ -15,16 +15,6 @@ list_files() {
 }
 
 case $1 in
-  build|b) # {{{1
-    arg=$2 && shift 2
-    path="${mhi}"/build
-    if [[ -f "${path}/${arg}.bash" ]]; then
-      exec "${path}/${arg}.bash" "$@"
-    else
-      list_files "$path"
-    fi
-    ;;
-
   colors) # {{{1
     for i in {0..255}; do
       tput setab $i && echo -n " $i "
@@ -53,16 +43,6 @@ case $1 in
     fi
     ;;
 
-  edit|e) # {{{1
-    arg=$2
-    path="${mhi}"/build
-    if [[ -n $arg ]]; then
-      exec "$EDITOR" "${path}/${arg}.bash"
-    else
-      list_files "$path"
-    fi
-    ;;
-
   fix) # {{{1
     shift
     exec "${mhi}/mhi-fix" "$@"
@@ -87,10 +67,8 @@ case $1 in
 
   *) # {{{1
     cat <<MSG
-build|b
 colors
 conf|c
-edit|e
 fix
 net|n
 path|p
