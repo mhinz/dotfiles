@@ -146,16 +146,18 @@ set shiftround
 
 " backup/swap/info/undo settings
 set backup
-set backupdir     =$v/files/backup/
 set backupext     =-vimbackup
 set backupskip    =
-set directory     =$v/files/swap//
-set undodir       =$v/files/undo/
 set undofile
 set updatecount   =100
 if has('nvim')
+  set backupdir  -=.
   set shada       ='100
 else
+  set backupdir   =$v/files/backup
+  set directory   =$v/files/swap//
+  set undodir     =$v/files/undo
+  set viewdir     =$v/files/view
   set viminfo     ='100,n$v/files/info/viminfo
 endif
 
