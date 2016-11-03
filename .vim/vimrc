@@ -445,6 +445,7 @@ command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
 
 " Color {{{1
 function! s:colors_default() abort
+  highlight Comment cterm=italic
   highlight link User1 StatusLine   " master branch
   highlight link User2 StatusLine   " other branch
   highlight link User3 StatusLine   " separators
