@@ -63,6 +63,7 @@ call plug#begin(s:bundle_dir)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+  Plug 'rhysd/committia.vim'
   Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
