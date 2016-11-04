@@ -12,7 +12,6 @@ xterm-256color|xterm with 256 colors and italic,
     use=xterm-256color,
 tmux-256color|tmux with 256 colors and italic,
     smso=\E[7m, rmso=\E[27m,
-    Ms@,
     use=xterm-256color,
     use=screen-256color,
 EOF
