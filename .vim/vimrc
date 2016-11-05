@@ -467,12 +467,13 @@ function! s:colors_janah() abort
 endfunction
 
 function! s:colors_lucius() abort
-  let [fg, bg] = [synIDattr(hlID('StatusLine'), 'fg'),
-        \ synIDattr(hlID('StatusLine'), 'bg')]
   if &background ==# 'light'
-    execute 'highlight User1 ctermfg=23 ctermbg=192 cterm=NONE'
-    execute 'highlight User2 ctermfg=20 ctermbg=195 cterm=NONE'
-    execute 'highlight User3 ctermfg='. (bg+5) 'ctermbg='. bg 'cterm=NONE'
+    highlight User1      ctermfg=23  ctermbg=192 cterm=NONE
+    highlight User2      ctermfg=20  ctermbg=195 cterm=NONE
+    highlight User3      ctermfg=237 ctermbg=237 cterm=NONE
+    highlight User4      ctermfg=255 ctermbg=237 cterm=NONE
+    highlight User5      ctermfg=255 ctermbg=237 cterm=NONE
+    highlight StatusLine ctermfg=255 ctermbg=237 cterm=NONE
   endif
 endfunction
 
