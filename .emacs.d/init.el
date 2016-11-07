@@ -53,7 +53,7 @@
 (setq-default indent-tabs-mode nil)
 
 (if (display-graphic-p)
-    (load-theme 'subatomic t))
+    (use-package subatomic-theme))
 
 (use-package ace-window
              :bind (("M-q" . ace-window)))
