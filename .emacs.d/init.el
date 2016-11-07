@@ -9,6 +9,7 @@
 (setq ring-bell-function 'ignore)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
+(setq custom-file "~/.emacs.d/custom.el")
 
 (when (>= emacs-major-version 24)
   (require 'package)
@@ -62,5 +63,5 @@
   :bind* (("C-'" . avy-goto-char)
           ("C-," . avy-goto-char-2)))
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(if (file-readable-p custom-file)
+    (load custom-file))
