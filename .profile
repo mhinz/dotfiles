@@ -1,5 +1,15 @@
 # Keep it POSIX.
 
+export GH=/data/github
+
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_DEFAULT_OPTS='--inline-info --color=light'
+
+export GOPATH=/data/go
+export GOROOT=/data/languages/go
+export GOARCH=amd64
+export GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
+
 # PATH {{{1
 read -d '' newpath <<EOF
   /usr/local/sbin
@@ -59,13 +69,3 @@ case $EDITOR in
        *) export MANPAGER='less' ;;
 esac
 export MANWIDTH=80
-
-export GH=/data/github
-
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-export FZF_DEFAULT_OPTS='--inline-info --color=light'
-
-export GOPATH=/data/go
-export GOROOT=/data/languages/go
-export GOARCH=amd64
-export GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
