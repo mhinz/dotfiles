@@ -1,7 +1,17 @@
-(tooltip-mode -1)
-(menu-bar-mode -1)
+(when (member "Source Code Pro" (font-family-list))
+  (set-default-font "Source Code Pro-13"))
+
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(toggle-scroll-bar 0)
+(toggle-frame-maximized)
+
+(setq ring-bell-function 'ignore)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 (when (>= emacs-major-version 24)
   (require 'package)
@@ -23,9 +33,6 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-; (setq custom-file "~/.emacs.d/custom.el")
-; (load custom-file)
-
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
@@ -46,8 +53,7 @@
 (setq-default indent-tabs-mode nil)
 
 (if (display-graphic-p)
-    (load-theme 'subatomic t)
-  (load-theme 'leuven t))
+    (load-theme 'subatomic t))
 
 (use-package ace-window
              :bind (("M-q" . ace-window)))
