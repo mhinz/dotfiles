@@ -10,9 +10,6 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -64,3 +61,6 @@
 (use-package avy
   :bind* (("C-'" . avy-goto-char)
           ("C-," . avy-goto-char-2)))
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
