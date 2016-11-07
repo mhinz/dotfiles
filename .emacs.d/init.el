@@ -56,7 +56,10 @@
     (use-package subatomic-theme))
 
 (use-package ace-window
-             :bind (("M-q" . ace-window)))
+  :bind (("M-q" . ace-window)))
+
+(use-package git-gutter
+  :config (global-git-gutter-mode 1))
 
 (use-package avy
   :bind* (("C-'" . avy-goto-char)
