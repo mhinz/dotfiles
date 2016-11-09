@@ -206,11 +206,15 @@ proftoggle() {
     if [[ $ITERM_PROFILE == Light ]]; then
         export ITERM_PROFILE=Dark
         eval $(dircolors ~/.zsh/dircolors.dark)
-        ln -fs ~/.config/git/config.colors{.dark,}
+        ln -fs \
+            ~/.config/git/config.colors.dark \
+            ~/.config/git/config.colors
     else
         export ITERM_PROFILE=Light
         eval $(dircolors ~/.zsh/dircolors.light)
-        ln -fs ~/.config/git/config.colors{.light,}
+        ln -fs \
+            ~/.config/git/config.colors.light \
+            ~/.config/git/config.colors
     fi
     local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
     if [[ -n $TMUX ]]; then
