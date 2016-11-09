@@ -28,7 +28,7 @@ fi
 if [[ -z ${GOROOT_BOOTSTRAP+nope} ]]; then
     echo '[*] Building master..'
 else
-    echo "[*] Building master using bootstrap: $GOROOT_BOOSTRAP"
+    echo "[*] Building master using bootstrap: $GOROOT_BOOTSTRAP"
 fi
 
 ./make.bash
