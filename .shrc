@@ -20,8 +20,8 @@ alias gpg='gpg2'
 
 alias aptup="sudo -- sh -c 'apt-get update && apt-get upgrade'"
 alias brewup='brew update && brew upgrade && brew cleanup'
-alias pip2up="pip2 list | cut -d' ' -f1 | xargs pip2 --no-cache-dir install -U"
-alias pip3up="pip3 list | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
+alias pip2up="pip2 list --format=legacy | cut -d' ' -f1 | xargs pip2 install -U"
+alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 
