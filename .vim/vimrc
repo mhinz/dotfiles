@@ -43,6 +43,7 @@ let g:plug_pwindow = 'vertical rightbelow new'
 
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
+  Plug 'junegunn/seoul256.vim'
 
   Plug 'AndrewRadev/splitjoin.vim'
   if has('nvim')
@@ -59,6 +60,7 @@ call plug#begin(s:bundle_dir)
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
   Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
+  Plug 'junegunn/vim-peekaboo'
   Plug 'junegunn/vim-plug'
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
@@ -255,7 +257,7 @@ set formatoptions =tcrqnj
 
 if has('multi_byte') && &encoding ==# 'utf-8'
   let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
-  let &fillchars = 'diff:▚'
+  let &fillchars = 'diff: '  " ▚
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
   augroup vimrc
@@ -474,6 +476,8 @@ function! s:colors_lucius() abort
     highlight User4      ctermfg=255 ctermbg=237 cterm=NONE
     highlight User5      ctermfg=255 ctermbg=237 cterm=NONE
     highlight StatusLine ctermfg=255 ctermbg=237 cterm=NONE
+    highlight Question   ctermfg=24  ctermbg=255 cterm=NONE
+    highlight Search     ctermfg=fg  ctermbg=222 cterm=NONE
   endif
 endfunction
 
@@ -684,13 +688,6 @@ let g:sayonara_confirm_quit = 0
 " Plugin: vim-startify {{{2
 nnoremap <leader>st  :Startify<cr>
 
-let g:startify_list_order = [
-      \ ['   MRU '. getcwd()], 'dir',
-      \ ['   MRU'],            'files',
-      \ ['   Sessions'],       'sessions',
-      \ ['   Bookmarks'],      'bookmarks',
-      \ ['   Commands'],       'commands',
-      \ ]
 let g:startify_skiplist = [
       \ 'COMMIT_EDITMSG',
       \ 'bundle/.*/doc',
@@ -782,6 +779,7 @@ augroup vimrc
 
   autocmd FileType ruby setl com-=:# sts=2 sw=2
         \| call deoplete#enable()
+        \| compiler ruby
 
   " Filetype: Sh, Zsh {{{2
   autocmd FileType zsh,sh setl com-=:# mp=shellcheck\ -f\ gcc\ %
