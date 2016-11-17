@@ -56,7 +56,6 @@ call plug#begin(s:bundle_dir)
   if !has('win32')
     Plug 'junegunn/fzf',            { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
   endif
-  Plug 'junegunn/goyo.vim',         { 'on': 'Goyo' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
   Plug 'junegunn/vader.vim',
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
@@ -65,6 +64,7 @@ call plug#begin(s:bundle_dir)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+  Plug 'neomake/neomake'
   Plug 'rhysd/committia.vim'
   Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
@@ -74,12 +74,15 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
+  Plug 'wellle/tmux-complete.vim'
 
-  " Plug 'tweekmonster/helpful.vim', { 'for': 'help' }
   Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
   Plug 'fatih/vim-go',             { 'for': 'go' }
+  Plug 'mattn/emmet-vim',          { 'for': 'html' }
   Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
+  Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-rake'
   Plug 'vim-ruby/vim-ruby',        { 'for': 'ruby' }
   Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
   Plug 'xolox/vim-misc',           { 'for': 'lua' }
@@ -87,17 +90,11 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
-  Plug 'mhinz/vim-randomtag', { 'on': 'Random'   }
-  Plug 'mhinz/vim-rfc',       { 'on': 'RFC'      }
-  Plug 'mhinz/vim-sayonara',  { 'on': 'Sayonara' }
+  Plug 'mhinz/vim-randomtag',  { 'on': 'Random'   }
+  Plug 'mhinz/vim-rfc',        { 'on': 'RFC'      }
+  Plug 'mhinz/vim-sayonara',   { 'on': 'Sayonara' }
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
-
-  " Testing phase.
-  " Plug 'mattn/emmet-vim', { 'for': 'html' }
-  " Plug 'tweekmonster/nvim-api-viewer'
-  " Plug 'tweekmonster/headlines.vim'
-  " Plug 'wellle/tmux-complete.vim'
 call plug#end()
 " }}}1
 
@@ -275,120 +272,123 @@ else
 endif
 
 " Mapping {{{1
-inoremap jf           <esc>
+nnoremap \   ;
+inoremap jf  <esc>
 
-inoremap <expr> <tab>   mhi#tab_yeah("\<c-n>", "\<tab>")
-inoremap <expr> <s-tab> mhi#tab_yeah("\<c-p>", "\<s-tab>")
+nnoremap <leader>dl  :Lint<cr>
+nnoremap <leader>dn  :Neomake<cr>
 
-nnoremap <c-i>          <c-i>zvzz
-nnoremap <c-o>          <c-o>zvzz
+inoremap <expr> <tab>    mhi#tab_yeah("\<c-n>", "\<tab>")
+inoremap <expr> <s-tab>  mhi#tab_yeah("\<c-p>", "\<s-tab>")
 
-inoremap <silent> <c-g><c-t> <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
+nnoremap <c-i>  <c-i>zvzz
+nnoremap <c-o>  <c-o>zvzz
 
-nnoremap \            ;
+inoremap <silent> <c-g><c-t>  <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
 
-nnoremap <f12>        :setlocal spell!<cr>
 
-nnoremap <expr> n     'Nn'[v:searchforward].'zvzz'
-nnoremap <expr> N     'nN'[v:searchforward].'zvzz'
+nnoremap <f12>  :setlocal spell!<cr>
 
-nnoremap gg           ggzv
-nnoremap G            Gzv
+nnoremap <expr> n  'Nn'[v:searchforward].'zvzz'
+nnoremap <expr> N  'nN'[v:searchforward].'zvzz'
 
-nnoremap [q           :cprevious<cr>
-nnoremap ]q           :cnext<cr>
-nnoremap [Q           :cfirst<cr>
-nnoremap ]Q           :clast<cr>
+nnoremap gg  ggzv
+nnoremap G   Gzv
 
-nnoremap [l           :lprevious<cr>
-nnoremap ]l           :lnext<cr>
-nnoremap [L           :lfirst<cr>
-nnoremap ]L           :llast<cr>
+nnoremap [q  :cprevious<cr>
+nnoremap ]q  :cnext<cr>
+nnoremap [Q  :cfirst<cr>
+nnoremap ]Q  :clast<cr>
 
-nnoremap [b           :bprevious<cr>
-nnoremap ]b           :bnext<cr>
-nnoremap [B           :bfirst<cr>
-nnoremap ]B           :blast<cr>
+nnoremap [l  :lprevious<cr>
+nnoremap ]l  :lnext<cr>
+nnoremap [L  :lfirst<cr>
+nnoremap ]L  :llast<cr>
 
-nnoremap [t           :tabprevious<cr>
-nnoremap ]t           :tabnext<cr>
-nnoremap [T           :tabfirst<cr>
-nnoremap ]T           :tablast<cr>
+nnoremap [b  :bprevious<cr>
+nnoremap ]b  :bnext<cr>
+nnoremap [B  :bfirst<cr>
+nnoremap ]B  :blast<cr>
 
-nnoremap [<space>     :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
-nnoremap ]<space>     :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+nnoremap [t  :tabprevious<cr>
+nnoremap ]t  :tabnext<cr>
+nnoremap [T  :tabfirst<cr>
+nnoremap ]T  :tablast<cr>
 
-nnoremap [e           :<c-u>execute 'move -1-'. v:count1<cr>
-nnoremap ]e           :<c-u>execute 'move +'. v:count1<cr>
+nnoremap [<space>  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
+nnoremap ]<space>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+
+nnoremap [e  :<c-u>execute 'move -1-'. v:count1<cr>
+nnoremap ]e  :<c-u>execute 'move +'. v:count1<cr>
 
 " switch comma-separated arguments
-nnoremap [w           :normal F,h]w2w<cr>
-nnoremap ]w           :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP" \| let &isk=s<cr>
+nnoremap [w  :normal F,h]w2w<cr>
+nnoremap ]w  :let s=&isk \| setl isk+=\",' \| exe "norm diwmmebgPdw'mP" \| let &isk=s<cr>
 
-nnoremap }            }zz
-nnoremap {            {zz
-nnoremap ]]           ]]zz
-nnoremap [[           [[zz
-nnoremap []           []zz
-nnoremap ][           ][zz
+nnoremap }   }zz
+nnoremap {   {zz
+nnoremap ]]  ]]zz
+nnoremap [[  [[zz
+nnoremap []  []zz
+nnoremap ][  ][zz
 
-nnoremap g;           g;zvzz
-nnoremap g,           g,zvzz
+nnoremap g;  g;zvzz
+nnoremap g,  g,zvzz
 
-nnoremap <left>       <c-w>>
-nnoremap <right>      <c-w><
-nnoremap <up>         <c-w>-
-nnoremap <down>       <c-w>+
+nnoremap <left>   <c-w>>
+nnoremap <right>  <c-w><
+nnoremap <up>     <c-w>-
+nnoremap <down>   <c-w>+
 
-nnoremap <silent><a-h> :<c-u>call mhi#tmux_navigate('h')<cr>
-nnoremap <silent><a-j> :<c-u>call mhi#tmux_navigate('j')<cr>
-nnoremap <silent><a-k> :<c-u>call mhi#tmux_navigate('k')<cr>
-nnoremap <silent><a-l> :<c-u>call mhi#tmux_navigate('l')<cr>
+nnoremap <silent><a-h>  :<c-u>call mhi#tmux_navigate('h')<cr>
+nnoremap <silent><a-j>  :<c-u>call mhi#tmux_navigate('j')<cr>
+nnoremap <silent><a-k>  :<c-u>call mhi#tmux_navigate('k')<cr>
+nnoremap <silent><a-l>  :<c-u>call mhi#tmux_navigate('l')<cr>
 
-xnoremap <            <gv
-xnoremap >            >gv
+xnoremap <  <gv
+xnoremap >  >gv
 
-onoremap gv           :<c-u>normal! gv<cr>
+onoremap gv  :<c-u>normal! gv<cr>
 
-nnoremap Q            gqap
+nnoremap Q  gqap
 
-nnoremap <leader>ev   :vsplit $MYVIMRC<cr>
+nnoremap <leader>ev  :vsplit $MYVIMRC<cr>
 
-nnoremap <leader>si   :echo mhi#syninfo()<cr>
-nnoremap <leader>ss   :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
+nnoremap <leader>si  :echo mhi#syninfo()<cr>
+nnoremap <leader>ss  :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
 
-nnoremap <leader>M    :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <leader>j    <c-^>
-nnoremap <leader>o    :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
-nnoremap <leader>v    `[v`]
-nnoremap <leader>w    :update<cr>
-nnoremap <leader>x    :xit<cr>
+nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <leader>j  <c-^>
+nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
+nnoremap <leader>v  `[v`]
+nnoremap <leader>w  :update<cr>
+nnoremap <leader>x  :xit<cr>
 
-nnoremap <leader>l    :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
-nnoremap '            `
-nnoremap `            '
+nnoremap '  `
+nnoremap `  '
 
-nnoremap <bs>         <c-t>
-nnoremap <cr>         :call mhi#jump()<cr>
+nnoremap <bs>  <c-t>
+nnoremap <cr>  :call mhi#jump()<cr>
 
-cnoremap <c-n>        <down>
-cnoremap <c-p>        <up>
+cnoremap <c-n>  <down>
+cnoremap <c-p>  <up>
 
-cnoremap <leader>r    $VIMRUNTIME/
-cnoremap <leader>ft   ~/.vim/after/ftplugin/
+cnoremap <leader>r   $VIMRUNTIME/
+cnoremap <leader>ft  ~/.vim/after/ftplugin/
 
-xnoremap *            :<c-u>call mhi#search()<cr>//<cr>
-xnoremap #            :<c-u>call mhi#search()<cr>??<cr>
-xnoremap <leader>*    :<c-u>silent! execute mhi#search_all()<cr>
+xnoremap *          :<c-u>call mhi#search()<cr>//<cr>
+xnoremap #          :<c-u>call mhi#search()<cr>??<cr>
+xnoremap <leader>*  :<c-u>silent! execute mhi#search_all()<cr>
 
 if has('nvim')
-  nnoremap <leader>t  :vsplit +terminal<cr>
-  tnoremap <esc>      <c-\><c-n>
-  tnoremap <silent><a-h> <c-\><c-n>:<c-u>call mhi#tmux_navigate('h')<cr>
-  tnoremap <silent><a-j> <c-\><c-n>:<c-u>call mhi#tmux_navigate('j')<cr>
-  tnoremap <silent><a-k> <c-\><c-n>:<c-u>call mhi#tmux_navigate('k')<cr>
-  tnoremap <silent><a-l> <c-\><c-n>:<c-u>call mhi#tmux_navigate('l')<cr>
+  nnoremap <leader>t      :vsplit +terminal<cr>
+  tnoremap <esc>          <c-\><c-n>
+  tnoremap <silent><a-h>  <c-\><c-n>:<c-u>call mhi#tmux_navigate('h')<cr>
+  tnoremap <silent><a-j>  <c-\><c-n>:<c-u>call mhi#tmux_navigate('j')<cr>
+  tnoremap <silent><a-k>  <c-\><c-n>:<c-u>call mhi#tmux_navigate('k')<cr>
+  tnoremap <silent><a-l>  <c-\><c-n>:<c-u>call mhi#tmux_navigate('l')<cr>
 endif
 
 if has('nvim')
@@ -618,6 +618,10 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
+" Plugin: neomake {{{2
+let g:neomake_echo_current_error = 0
+let g:neomake_open_list          = 2
+
 " Plugin: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
@@ -674,6 +678,11 @@ nnoremap <leader>g :Grepper -tool git<cr>
 nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
+
+command! Todo :Grepper
+      \ -noprompt
+      \ -tool git
+      \ -grepprg git grep -nIi '\(TODO\|FIXME\)'
 
 " Plugin: vim-online-thesaurus {{{2
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
@@ -779,10 +788,11 @@ augroup vimrc
 
   autocmd FileType ruby setl com-=:# sts=2 sw=2
         \| call deoplete#enable()
-        \| compiler ruby
+        \| command -buffer -nargs=0 -bar Lint Neomake rubocop
 
   " Filetype: Sh, Zsh {{{2
-  autocmd FileType zsh,sh setl com-=:# mp=shellcheck\ -f\ gcc\ %
+  autocmd FileType zsh,sh setl com-=:#
+        \| command! -bar Lint Grepper -noprompt -buffer -grepprg shellcheck -fgcc
 
   " Filetype: Text, Mail, Markdown {{{2
   let g:instant_markdown_autostart = 0
