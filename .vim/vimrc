@@ -679,6 +679,13 @@ nnoremap <leader>G :Grepper -tool ag<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
+let grepper = {
+      \ 'tools': ['git', 'ag', 'rubocop'],
+      \ 'rubocop': {
+      \   'grepprg': 'rubocop -femacs',
+      \   'grepformat': '%f:%l:%c: %t: %m',
+      \ }}
+
 command! Todo :Grepper
       \ -noprompt
       \ -tool git
@@ -786,13 +793,13 @@ augroup vimrc
   let g:rubycomplete_classes_in_global = 1
   let g:rubycomplete_rails             = 1
 
-  autocmd FileType ruby setl com-=:# sts=2 sw=2
-        \| call deoplete#enable()
-        \| command -buffer -nargs=0 -bar Lint Neomake rubocop
+  au FileType ruby setl com-=:# sts=2 sw=2 | call deoplete#enable()
+  au FileType ruby com! -buffer -bang Lint
+        \ exe 'Grepper -tool rubocop -noprompt' ['-buffer',''][<bang>0]
 
   " Filetype: Sh, Zsh {{{2
-  autocmd FileType zsh,sh setl com-=:#
-        \| command! -bar Lint Grepper -noprompt -buffer -grepprg shellcheck -fgcc
+  au FileType zsh,sh setl com-=:#
+        \| com! -buffer Lint Grepper -noprompt -buffer -grepprg shellcheck -fgcc
 
   " Filetype: Text, Mail, Markdown {{{2
   let g:instant_markdown_autostart = 0
