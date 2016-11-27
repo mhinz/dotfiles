@@ -158,7 +158,7 @@ prompt_git() {
     [[ -n $_prompt_top ]] && p+="%F{15}%K{161} ${_prompt_top##*/} "
 
     # empty if not root commit yet
-    local branch=$(git name-rev --name-only HEAD 2>/dev/null)
+    local branch=$(git symbolic-ref --short -q HEAD || git rev-parse --short HEAD)
     [[ -n $branch ]] && p+="%F{15}%K{67} $branch "
 
     if [[ $_prompt_in_worktree == true ]]; then
