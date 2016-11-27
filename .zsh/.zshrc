@@ -165,7 +165,7 @@ prompt_git() {
         git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
         (( $? && $? != 128)) && p+='%F{15}%K{209} ! '
 
-        git diff-index --cached --quiet HEAD || p+='%F{15}%K{29} ✓ '
+        git diff-index --cached --quiet HEAD 2>/dev/null || p+='%F{15}%K{29} ✓ '
 
         local gitdir="${_prompt_top}/.git"
         if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
