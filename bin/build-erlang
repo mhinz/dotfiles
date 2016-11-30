@@ -4,7 +4,7 @@ dir='/data/languages/erlang'
 prefix="${HOME}/local/erlang"
 
 flags="--prefix=${prefix} "
-flags+='--with-ssl=/usr/local/opt/openssl'
+flags+='--with-ssl=/usr/local/opt/openssl '
 flags+='--without-javac '
 
 cd "$dir" || exit
