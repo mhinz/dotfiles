@@ -244,7 +244,7 @@ set spelllang     =en,de
 
 " breaking
 set wrap
-set linebreak
+set nolinebreak
 set breakindent
 set breakindentopt=min:40
 "set highlight    +=@:SpecialKey
