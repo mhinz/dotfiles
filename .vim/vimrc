@@ -100,7 +100,8 @@ call plug#end()
 
 " Init {{{1
 if has('nvim')
-  let g:python3_host_skip_check = 1
+  let g:python_host_prog  = '/usr/local/bin/python'
+  let g:python3_host_prog = '/usr/local/bin/python3'
 else
   filetype plugin indent on
   syntax   on
