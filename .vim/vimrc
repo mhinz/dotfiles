@@ -76,16 +76,17 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-surround'
   Plug 'wellle/tmux-complete.vim'
 
-  Plug 'elixir-lang/vim-elixir',   { 'for': 'elixir' }
-  Plug 'fatih/vim-go',             { 'for': 'go' }
-  Plug 'mattn/emmet-vim',          { 'for': 'html' }
-  Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
+  Plug 'elixir-lang/vim-elixir',       { 'for': 'elixir' }
+  Plug 'fatih/vim-go',                 { 'for': 'go' }
+  Plug 'mattn/emmet-vim',              { 'for': 'html' }
+  Plug 'pangloss/vim-javascript',      { 'for': 'javascript' }
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-rails'
   Plug 'tpope/vim-rake'
-  Plug 'vim-ruby/vim-ruby',        { 'for': 'ruby' }
-  Plug 'xolox/vim-lua-ftplugin',   { 'for': 'lua' }
-  Plug 'xolox/vim-misc',           { 'for': 'lua' }
+  Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
+  Plug 'vim-ruby/vim-ruby',            { 'for': 'ruby' }
+  Plug 'xolox/vim-lua-ftplugin',       { 'for': 'lua' }
+  Plug 'xolox/vim-misc',               { 'for': 'lua' }
 
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
