@@ -46,22 +46,18 @@ call plug#begin(s:bundle_dir)
   Plug 'junegunn/seoul256.vim'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim',    { 'do': ':UpdateRemotePlugins' }
-  endif
+  Plug 'Shougo/deoplete.nvim',      has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {}
   Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
-  if !has('win32')
-    Plug 'junegunn/fzf',            { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
-  endif
+  Plug 'junegunn/fzf',              has('win32') ? {} : { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
-  Plug 'junegunn/vader.vim',
+  Plug 'junegunn/vader.vim',        { 'on': 'Vader' }
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-peekaboo'
   Plug 'junegunn/vim-plug'
-  Plug 'justinmk/vim-dirvish'
+  Plug 'justinmk/vim-dirvish',      { 'on': 'Dirvish' }
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
   Plug 'neomake/neomake'
@@ -74,19 +70,27 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
+  Plug 'tweekmonster/deoplete-clang2'
   Plug 'wellle/tmux-complete.vim'
 
-  Plug 'elixir-lang/vim-elixir',       { 'for': 'elixir' }
-  Plug 'fatih/vim-go',                 { 'for': 'go' }
-  Plug 'mattn/emmet-vim',              { 'for': 'html' }
-  Plug 'pangloss/vim-javascript',      { 'for': 'javascript' }
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-rails'
   Plug 'tpope/vim-rake'
+  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+
+  Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
+  Plug 'mattn/emmet-vim',         { 'for': 'html' }
+  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+
+  Plug 'dgryski/vim-godef',            { 'for': 'go' }
+  Plug 'tweekmonster/gofmt.vim',       { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
-  Plug 'vim-ruby/vim-ruby',            { 'for': 'ruby' }
-  Plug 'xolox/vim-lua-ftplugin',       { 'for': 'lua' }
-  Plug 'xolox/vim-misc',               { 'for': 'lua' }
+  Plug 'zchee/deoplete-go',            { 'for': 'go', 'do': 'make' }
+
+  Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
+  Plug 'xolox/vim-misc',         { 'for': 'lua' }
+
+  " Plug 'fatih/vim-go', { 'for': 'go' }
 
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
@@ -96,6 +100,8 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-sayonara',   { 'on': 'Sayonara' }
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
+
+  Plug '/data/github/vim-easy-going'
 call plug#end()
 " }}}1
 
@@ -738,27 +744,17 @@ augroup vimrc
   " Filetype: C {{{2
   autocmd BufLeave *.{c,cpp} mark C
   autocmd BufLeave *.h       mark H
+  autocmd FileType c call deoplete#enable()
 
   " Filetype: Erlang {{{2
   autocmd FileType erlang setl com-=:%
 
   " Filetype: Go {{{2
-  let g:go_def_mode    = 'godef'
-  let g:go_fmt_command = 'goimports'
+  let g:gofmt_on_save = 0
 
   autocmd FileType go 
-        \  setlocal noet sts& sw& com-=:// isk-=. mp=go\ install
-        \| let [b:dispatch, b:start] = [':GoBuild', ':GoRun']
-        \| nnoremap <buffer> <cr>      :GoDef<cr>
-        \| nnoremap <buffer> <leader>b :GoBuild<cr>
-        \| nnoremap <buffer> <leader>c :GoCoverageToggle<cr>
-        \| nnoremap <buffer> <leader>i :GoInfo<cr>
-        \| nnoremap <buffer> <leader>r :GoReferrers<cr>
-        \| nnoremap <buffer> <leader>t :GoTest<cr>
-        \| command! -buffer -bang A  call go#alternate#Switch(<bang>0, 'edit')
-        \| command! -buffer -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-        \| command! -buffer -bang AS call go#alternate#Switch(<bang>0, 'split')
-        \| command! -buffer -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+        \  setlocal noet sts& sw& com-=:// isk-=.
+        \| call deoplete#enable()
 
   " Filetype: Help {{{2
   autocmd FileType help
