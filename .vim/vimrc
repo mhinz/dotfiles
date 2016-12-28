@@ -57,7 +57,7 @@ call plug#begin(s:bundle_dir)
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-peekaboo'
   Plug 'junegunn/vim-plug'
-  Plug 'justinmk/vim-dirvish',      { 'on': 'Dirvish' }
+  Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
   Plug 'neomake/neomake'
