@@ -25,6 +25,8 @@ alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 
+alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
+
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
