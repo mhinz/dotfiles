@@ -245,6 +245,14 @@ alias vu='vim -u NONE -U NONE -i NONE -N'
 alias nv='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 alias v=$EDITOR
 
+va() {
+    nvim -q <(ag --vimgrep "$@")
+}
+
+vg() {
+    nvim -q <(git grep -nI "$@")
+}
+
 # Run a legacy test in ~v/src/testdir
 vt() {
     vim -u unix.vim -U NONE --noplugin -s dotest.in $1
