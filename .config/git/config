@@ -60,6 +60,7 @@
     bl    = blame
     c     = commit
     ca    = commit --amend
+    cf    = commit --fixup
     cl    = clone
     co    = checkout
     cp    = cherry-pick
