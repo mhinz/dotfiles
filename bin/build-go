@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
 
 [[ -z ${GOROOT:+nope} ]] && { echo "Export \$GOROOT first."; exit 1; }
 [[ -z ${GOARCH:+nope} ]] && { echo "Export \$GOARCH first."; exit 1; }
@@ -17,10 +18,13 @@ else
     fi
 fi
 
-if ! command -v go; then
+# shellcheck disable=SC2155
+export GOROOT_BOOTSTRAP=$(mktemp -dt go-bootstrap-XXX)
+
+if [[ -x $GOROOT/bin/go ]]; then
+    rsync -a "$GOROOT"/ "$GOROOT_BOOTSTRAP" --exclude .git
+else
     echo '[*] No go binary found. Downloading Go 1.7.3..'
-    # shellcheck disable=SC2155
-    export GOROOT_BOOTSTRAP=$(mktemp -dt go-bootstrap-XXX)
     curl -#L "https://storage.googleapis.com/golang/go1.7.3.${GOOS}-${GOARCH}.tar.gz" \
         | tar -C "$GOROOT_BOOTSTRAP" --strip-components=1 -x
 fi
