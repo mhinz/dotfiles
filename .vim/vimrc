@@ -723,7 +723,6 @@ let g:startify_skiplist = [
       \ ]
 let g:startify_bookmarks = [
       \ { 'c': '~/.vim/vimrc' },
-      \ '~/.zsh/.zshrc',
       \ ]
 let g:startify_transformations = [
       \ ['.*vimrc$', 'vimrc'],
@@ -733,8 +732,8 @@ let g:startify_change_to_dir          = 0
 let g:startify_change_to_vcs_root     = 0
 let g:startify_enable_special         = 0
 let g:startify_files_number           = 8
+let g:startify_fortune_use_unicode    = 1
 let g:startify_session_autoload       = 0
-let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence    = 0
 let g:startify_update_oldfiles        = 1
 let g:startify_use_env                = 1
