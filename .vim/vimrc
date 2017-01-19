@@ -45,6 +45,7 @@ call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
   Plug 'junegunn/seoul256.vim'
 
+  Plug 'AndrewRadev/linediff.vim'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Shougo/deoplete.nvim',      has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {}
   Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
@@ -71,6 +72,7 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
   Plug 'tweekmonster/deoplete-clang2'
+  Plug 'tweekmonster/helpful.vim'
   Plug 'wellle/tmux-complete.vim'
 
   Plug 'tpope/vim-bundler'
