@@ -43,9 +43,7 @@ let g:plug_pwindow = 'vertical rightbelow new'
 
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
-  Plug 'junegunn/seoul256.vim'
 
-  Plug 'AndrewRadev/linediff.vim'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Shougo/deoplete.nvim',      has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {}
   Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
@@ -65,15 +63,17 @@ call plug#begin(s:bundle_dir)
   Plug 'rhysd/committia.vim'
   Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-projectionist'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
   Plug 'tweekmonster/deoplete-clang2'
+  Plug 'tweekmonster/exception.vim'
   Plug 'tweekmonster/helpful.vim'
   Plug 'wellle/tmux-complete.vim'
+
+  Plug 'mattn/emmet-vim',         { 'for': 'html' }
+  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-rails'
@@ -81,27 +81,26 @@ call plug#begin(s:bundle_dir)
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
-  Plug 'mattn/emmet-vim',         { 'for': 'html' }
-  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 
   Plug 'dgryski/vim-godef',            { 'for': 'go' }
   Plug 'tweekmonster/gofmt.vim',       { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
   Plug 'zchee/deoplete-go',            { 'for': 'go', 'do': 'make' }
+  " Plug 'fatih/vim-go', { 'for': 'go' }
 
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
 
-  " Plug 'fatih/vim-go', { 'for': 'go' }
-
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
+  Plug 'mhinz/vim-lookup'
   Plug 'mhinz/vim-randomtag',  { 'on': 'Random'   }
-  Plug 'mhinz/vim-rfc',        { 'on': 'RFC'      }
+  Plug 'mhinz/vim-rfc'
   Plug 'mhinz/vim-sayonara',   { 'on': 'Sayonara' }
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
+  Plug 'mhinz/vim-workhorse'
 
   Plug '/data/github/vim-easy-going'
 call plug#end()
@@ -370,17 +369,15 @@ nnoremap <leader>ss  :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, 
 nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>j  <c-^>
 nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
-nnoremap <leader>v  `[v`]
 nnoremap <leader>w  :update<cr>
 nnoremap <leader>x  :xit<cr>
-
 nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
 nnoremap '  `
 nnoremap `  '
 
 nnoremap <bs>  <c-t>
-nnoremap <cr>  :call mhi#jump()<cr>
+nnoremap <silent><cr>  :call mhi#jump()<cr>
 
 cnoremap <c-n>  <down>
 cnoremap <c-p>  <up>
@@ -480,14 +477,15 @@ endfunction
 
 function! s:colors_lucius() abort
   if &background ==# 'light'
-    highlight User1      ctermfg=23  ctermbg=192 cterm=NONE
-    highlight User2      ctermfg=20  ctermbg=195 cterm=NONE
-    highlight User3      ctermfg=237 ctermbg=237 cterm=NONE
-    highlight User4      ctermfg=255 ctermbg=237 cterm=NONE
-    highlight User5      ctermfg=255 ctermbg=237 cterm=NONE
-    highlight StatusLine ctermfg=255 ctermbg=237 cterm=NONE
-    highlight Question   ctermfg=24  ctermbg=255 cterm=NONE
-    highlight Search     ctermfg=fg  ctermbg=222 cterm=NONE
+    highlight User1      ctermfg=23   ctermbg=192 cterm=NONE
+    highlight User2      ctermfg=20   ctermbg=195 cterm=NONE
+    highlight User3      ctermfg=237  ctermbg=237 cterm=NONE
+    highlight User4      ctermfg=255  ctermbg=237 cterm=NONE
+    highlight User5      ctermfg=255  ctermbg=237 cterm=NONE
+    highlight StatusLine ctermfg=255  ctermbg=237 cterm=NONE
+    highlight SignColumn ctermfg=NONE ctermbg=255 cterm=NONE
+    highlight Question   ctermfg=24   ctermbg=255 cterm=NONE
+    highlight Search     ctermfg=fg   ctermbg=222 cterm=NONE
   endif
 endfunction
 
@@ -577,6 +575,9 @@ endfunction
 " Plugin: deoplete {{{2
 let g:deoplete#enable_at_startup = 0
 let g:deoplete#enable_smart_case = 1
+
+" Plugin: exception {{{2
+nnoremap <silent><leader>E :call exception#trace()<cr>
 
 " Plugin: fzf {{{2
 set runtimepath+=~/local/fzf
@@ -845,10 +846,9 @@ augroup vimrc
   xmap ac <plug>(signify-motion-outer-visual)
 
   " Filetype: Vim {{{2
-  autocmd FileType vim
-        \  setl sts=2 sw=2 isk-=#
-        \| let [b:dispatch, b:start] = [':Runtime', ':Runtime|PP']
-        \| nnoremap <buffer><silent> <cr> :call mhi#lookup()<cr>zvzz:call halo#run()<cr>
+  autocmd FileType vim nnoremap <buffer><silent> <cr> :call lookup#lookup() \| call halo#run()<cr>
+  autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<cr>
+  autocmd FileType vim setl sts=2 sw=2 isk-=#
 " }}}2
 augroup END
 " }}}1
