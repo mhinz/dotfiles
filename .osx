@@ -1,2 +1,8 @@
+#!/usr/bin/env bash
+
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 20
+
+if crontab -l 2>&1 | grep -qv ass; then
+    { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"Move your ass\!\"'"; } | crontab -
+fi
