@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+aws s3 rm "s3://foobarquux/$1" "${@:2}"

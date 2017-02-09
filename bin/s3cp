@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+aws s3 cp "$1" "s3://foobarquux/$2" --acl public-read "${@:3}"
+echo "https://s3.eu-west-2.amazonaws.com/foobarquux/$2"
