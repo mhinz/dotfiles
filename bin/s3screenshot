@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# -W  interactive selection (toggle with <space>); start in window selection mode
+# -o  no shadow
+if screencapture -Wo "/tmp/$1"; then
+    aws s3 cp "/tmp/$1" "s3://foobarquux/screenshots/$1" --acl public-read
+    echo "https://s3.eu-west-2.amazonaws.com/foobarquux/screenshots/$1" | tee >(pbcopy)
+fi
