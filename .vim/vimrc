@@ -45,8 +45,6 @@ call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'Shougo/deoplete.nvim',      has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {}
-  Plug 'beloglazov/vim-online-thesaurus', { 'on': ['Thesaurus', 'OnlineThesaurusCurrentWord'] }
   Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
@@ -59,7 +57,6 @@ call plug#begin(s:bundle_dir)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
-  Plug 'neomake/neomake'
   Plug 'rhysd/committia.vim'
   Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
@@ -67,7 +64,6 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'tweekmonster/deoplete-clang2'
   Plug 'tweekmonster/exception.vim'
   Plug 'tweekmonster/helpful.vim'
   Plug 'wellle/tmux-complete.vim'
@@ -82,11 +78,9 @@ call plug#begin(s:bundle_dir)
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
 
-  Plug 'dgryski/vim-godef',            { 'for': 'go' }
+  Plug 'fatih/vim-go',                 { 'for': 'go' }
   Plug 'tweekmonster/gofmt.vim',       { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
-  Plug 'zchee/deoplete-go',            { 'for': 'go', 'do': 'make' }
-  " Plug 'fatih/vim-go', { 'for': 'go' }
 
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
@@ -101,8 +95,6 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
   Plug 'mhinz/vim-workhorse'
-
-  Plug '/data/github/vim-easy-going'
 call plug#end()
 " }}}1
 
