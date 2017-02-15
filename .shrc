@@ -91,7 +91,7 @@ rd() {
 }
 
 lookup() {
-  open "https://pgp.mit.edu/pks/lookup?search=${*}"
+  open "https://sks-keyservers.net/pks/lookup?search=${*}"
 }
 
 camusedby() {
