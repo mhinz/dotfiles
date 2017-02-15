@@ -79,6 +79,7 @@ call plug#begin(s:bundle_dir)
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
 
   Plug 'fatih/vim-go',                 { 'for': 'go' }
+  Plug 'jodosha/vim-godebug',          { 'for': 'go' }
   Plug 'tweekmonster/gofmt.vim',       { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
 
@@ -564,10 +565,6 @@ endfunction
 " }}}1
 
 " Plugin {{{1
-" Plugin: deoplete {{{2
-let g:deoplete#enable_at_startup = 0
-let g:deoplete#enable_smart_case = 1
-
 " Plugin: exception {{{2
 nnoremap <silent><leader>E :call exception#trace()<cr>
 
@@ -738,7 +735,6 @@ augroup vimrc
   " Filetype: C {{{2
   autocmd BufLeave *.{c,cpp} mark C
   autocmd BufLeave *.h       mark H
-  autocmd FileType c call deoplete#enable()
 
   " Filetype: Erlang {{{2
   autocmd FileType erlang setl com-=:%
@@ -746,9 +742,7 @@ augroup vimrc
   " Filetype: Go {{{2
   let g:gofmt_on_save = 0
 
-  autocmd FileType go 
-        \  setlocal noet sts& sw& com-=:// isk-=.
-        \| call deoplete#enable()
+  autocmd FileType go setlocal noet sts& sw& com-=:// isk-=.
 
   " Filetype: Help {{{2
   autocmd FileType help
@@ -779,7 +773,6 @@ augroup vimrc
   autocmd FileType python
         \  setlocal kp=pydoc mp=./%
         \| compiler pyunit
-        \| call deoplete#enable()
 
   " Filetype: Ruby {{{2
   let g:ruby_operators                 = 1
@@ -788,7 +781,7 @@ augroup vimrc
   let g:rubycomplete_classes_in_global = 1
   let g:rubycomplete_rails             = 1
 
-  au FileType ruby setl com-=:# sts=2 sw=2 | call deoplete#enable()
+  au FileType ruby setl com-=:# sts=2 sw=2
   au FileType ruby com! -buffer -bang Lint
         \ exe 'Grepper -tool rubocop -noprompt' ['-buffer',''][<bang>0]
 
