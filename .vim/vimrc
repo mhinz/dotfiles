@@ -490,25 +490,18 @@ augroup END
 
 if has('gui_running')
   set background=light
-  for scheme in ['gruvbox', 'railscasts']
-    try
-      execute 'colorscheme' scheme
-      break
-    catch
-    endtry
-  endfor
-  set gcr        =a:blinkoff0
+  colorscheme lucius
+  set gcr=a:blinkoff0
+  set guioptions=a
   set mousehide
-  set guioptions =a
-  if has('gui_mac')
+  if s:is_win
+    autocmd GUIEnter * simalt ~x
+    let &guifont = 'Consolas:h10:b'
+  elseif has('gui_mac')
     set nomacmeta
   endif
-  " let &guifont = 'Bitstream Vera Sans Mono 9'
-  " let &guifont = 'DejaVu Sans Mono 9'
-  " let &guifont = 'Droid Sans Mono 9'
-  let &guifont = s:is_win ? 'Source_Code_Pro:h10' : 'foo Mono:h16'
-  command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
-  command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
+  command! Bigger  let &guifont = substitute(&guifont, '\d\+', '\=submatch(0)+1', '')
+  command! Smaller let &guifont = substitute(&guifont, '\d\+', '\=submatch(0)-1', '')
 else
   if !exists('$ITERM_PROFILE') || $ITERM_PROFILE == 'Light'
     set background=light
@@ -825,6 +818,7 @@ augroup vimrc
 
   " signify
   let g:signify_vcs_list = ['git', 'hg']
+  let g:signify_realtime = 1
   omap ic <plug>(signify-motion-inner-pending)
   xmap ic <plug>(signify-motion-inner-visual)
   omap ac <plug>(signify-motion-outer-pending)
