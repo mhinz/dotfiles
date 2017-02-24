@@ -82,6 +82,7 @@ call plug#begin(s:bundle_dir)
   Plug 'jodosha/vim-godebug',          { 'for': 'go' }
   Plug 'tweekmonster/gofmt.vim',       { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
+  " Plug 'zchee/nvim-go',                { 'for': 'go', 'do': 'make' }
 
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
@@ -497,8 +498,9 @@ if has('gui_running')
   if s:is_win
     autocmd GUIEnter * simalt ~x
     let &guifont = 'Consolas:h10:b'
-  elseif has('gui_mac')
-    set nomacmeta
+  elseif has('gui_macvim')
+    set macmeta
+    let &guifont = 'Source Code Pro:h13'
   endif
   command! Bigger  let &guifont = substitute(&guifont, '\d\+', '\=submatch(0)+1', '')
   command! Smaller let &guifont = substitute(&guifont, '\d\+', '\=submatch(0)-1', '')
