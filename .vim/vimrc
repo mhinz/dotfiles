@@ -534,9 +534,12 @@ function! SetStatusline()
     let stl    .= mhi#sy_stats_wrapper()
   endif
 
+  let stl .= '%m%r%h%w'
+  let stl .= grepper#statusline()
+
+  " right side
   let stl .=
-        \   '%m%r%h%w'
-        \ . '%= '
+        \   '%= '
         \ . '%#ErrorMsg#%{&paste ? " paste " : ""}%*'
         \ . '%#WarningMsg#%{&ff != "unix" ? " ".&ff." ":""}%* '
         \ . '%#warningmsg#%{&fenc != "utf-8" && &fenc != "" ? " ".&fenc." " :""}%* '
