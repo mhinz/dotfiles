@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if crontab -l 2>&1 | grep -qv ass; then
-  { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"Move your ass!\"'"; } | crontab -
+if crontab -l 2>&1 | grep -qv drink; then
+  { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"Drink! Move!\"'"; } | crontab -
 fi
 
 defaults write NSGlobalDomain KeyRepeat        -int 1
