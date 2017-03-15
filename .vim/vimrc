@@ -141,11 +141,11 @@ augroup END
 " Option {{{1
 " indent settings
 set autoindent
-set cinoptions    =>4,l1,p0,)50,*50,t0
+set cinoptions    =>2,l1,p0,)50,*50,t0
 set expandtab
 set smarttab
-set softtabstop   =4
-set shiftwidth    =4
+set softtabstop   =2
+set shiftwidth    =2
 set shiftround
 
 " backup/swap/info/undo settings
