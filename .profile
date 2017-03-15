@@ -14,6 +14,7 @@ export GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
 read -d '' newpath <<EOF
   /usr/local/sbin
   /usr/local/opt/coreutils/libexec/gnubin
+  /usr/local/opt/gnupg@2.1/bin
   /data/repo/camlistore/bin
   $GOROOT/bin
   $GOPATH/bin
