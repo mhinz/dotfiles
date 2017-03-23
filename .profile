@@ -21,6 +21,7 @@ read -d '' newpath <<EOF
   /data/languages/elixir/bin
   $HOME/.npm-packages/bin
   $(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)
+  $HOME/.rbenv/bin
   $HOME/local/*/bin
   $HOME/bin
 EOF
