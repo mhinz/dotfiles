@@ -11,7 +11,7 @@
     gpgsign = true
 
 [core]
-    editor       = vim
+    editor       = nvr --remote-wait-silent
     excludesfile = ~/.config/git/ignore
     autocrlf     = false
     filemode     = false
