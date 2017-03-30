@@ -99,6 +99,15 @@ camusedby() {
   local usedby=$(lsof | grep -w "AppleCamera\|USBVDC\|iSight" | awk '{printf $2"\n"}' | xargs ps)
   echo $usedby
 }
+
+fix-perm() {
+  [[ $1 = -h ]] && {
+    echo 'usage: fix-perm [dirs:700] [files:600]'
+    return 1
+  } 1>&2
+  find . -type d -exec chmod ${1-700} {} +
+  find . -type f -exec chmod ${2-600} {} +
+}
 # }}}
 
 # Chrome {{{1
