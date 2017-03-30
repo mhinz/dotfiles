@@ -6,7 +6,6 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
 export GOPATH=/data/go
-export GOROOT=/data/languages/go
 export GOARCH=amd64
 export GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
 
@@ -15,12 +14,11 @@ read -d '' newpath <<EOF
   /usr/local/sbin
   /usr/local/opt/coreutils/libexec/gnubin
   /usr/local/opt/gnupg@2.1/bin
-  /data/repo/camlistore/bin
-  $GOROOT/bin
   $GOPATH/bin
   /data/languages/elixir/bin
   $HOME/.npm-packages/bin
   $(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)
+  $HOME/.rbenv/shims
   $HOME/.rbenv/bin
   $HOME/local/*/bin
   $HOME/bin
@@ -57,10 +55,10 @@ elif command -v vim 1>/dev/null; then
     export EDITOR='vim'
 elif command -v vi 1>/dev/null; then
     export EDITOR='vi'
-elif command -v nano 1>/dev/null; then
-    export EDITOR='nano'
 elif command -v emacs 1>/dev/null; then
     export EDITOR='emacs -nw'
+elif command -v nano 1>/dev/null; then
+    export EDITOR='nano'
 else
     echo 'Install a proper editor.'
 fi
