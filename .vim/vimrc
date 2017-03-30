@@ -92,6 +92,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
+  Plug 'mhinz/vim-nginx'
   Plug 'mhinz/vim-randomtag',  { 'on': 'Random'   }
   Plug 'mhinz/vim-rfc'
   Plug 'mhinz/vim-sayonara',   { 'on': 'Sayonara' }
