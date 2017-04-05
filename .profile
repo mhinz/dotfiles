@@ -16,7 +16,7 @@ read -d '' newpath <<EOF
   /usr/local/opt/gnupg@2.1/bin
   $GOPATH/bin
   /data/languages/elixir/bin
-  $HOME/.npm-packages/bin
+  $HOME/.npm/bin
   $(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)
   $HOME/.rbenv/shims
   $HOME/.rbenv/bin
