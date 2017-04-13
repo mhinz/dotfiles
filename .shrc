@@ -268,4 +268,6 @@ vt() {
     test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed
 }
 
+test -r ~/.shenv && . ~/.shenv
+
 # vim: ft=sh fdm=marker
