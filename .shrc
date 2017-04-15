@@ -22,7 +22,7 @@ alias aptup="sudo -- sh -c 'apt-get update && apt-get upgrade'"
 alias brewup='brew update && brew upgrade && brew cleanup'
 alias pip2up="pip2 list --format=legacy | cut -d' ' -f1 | xargs pip2 install -U"
 alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
-alias gemup="rbenv exec gem update --system && rbenv exec gem update && rbenv exec gem cleanup"
+alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
