@@ -254,6 +254,12 @@ alias vu='vim -u NONE -U NONE -i NONE -N'
 alias nv='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 alias v=$EDITOR
 
+all() {
+  args="-highlight -jump -open -noswitch -query"
+  git rev-parse --is-inside-work-tree &>/dev/null && tool=git || tool=ag
+  nvim +"Grepper -tool $tool $args $@"
+}
+
 va() {
     nvim -q <(ag --vimgrep "$@")
 }
