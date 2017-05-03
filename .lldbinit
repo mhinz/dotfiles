@@ -1,0 +1,1 @@
+settings set frame-format "#${frame.index}: { {${function.name-with-args}}}{  [${line.file.basename}:${line.number}]} {${function.is-optimized}[opt]}\n"
