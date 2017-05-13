@@ -61,6 +61,7 @@ call plug#begin(s:bundle_dir)
   Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
@@ -80,10 +81,7 @@ call plug#begin(s:bundle_dir)
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
 
   Plug 'fatih/vim-go',                 { 'for': 'go' }
-  Plug 'jodosha/vim-godebug',          { 'for': 'go' }
-  Plug 'tweekmonster/gofmt.vim',       { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
-  " Plug 'zchee/nvim-go',                { 'for': 'go', 'do': 'make' }
 
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
@@ -439,7 +437,6 @@ augroup vimrc
   au InsertLeave * set cursorline
 
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
-  au BufReadPost * if getline(1) =~ '^#!' | let b:start = '-wait=always '.getline(1)[2:].' %' | endif
 augroup END
 
 " Command {{{1
@@ -494,7 +491,6 @@ augroup END
 if has('gui_running')
   set background=light
   colorscheme lucius
-  set gcr=a:blinkoff0
   set guioptions=a
   set mousehide
   if s:is_win
@@ -649,11 +645,6 @@ nnoremap <f3>  :UndotreeToggle<cr>
 autocmd FileType dirvish nmap <buffer> <c-o> -
 nnoremap <f1> :vsplit +Dirvish<cr><c-w>H<c-w>40<bar>
 
-" Plugin: vim-dispatch {{{2
-nnoremap <leader>dd  :Dispatch<cr>
-nnoremap <leader>dm  :Make<cr>
-nnoremap <leader>ds  :Start<cr>
-nnoremap <leader>dc  :Copen<cr>
 
 " Plugin: vim-easy-align {{{2
 xmap <cr> <plug>(LiveEasyAlign)
@@ -756,9 +747,7 @@ augroup vimrc
   " Filetype: Lua {{{2
   let g:lua_complete_omni = 1  " vim-lua-ftplugin
 
-  autocmd FileType lua
-        \  setl com-=:# sts=2 sw=2
-        \| let [b:dispatch, b:start] = ['luac -p %', '-wait=always luajit %']
+  autocmd FileType lua setl com-=:# sts=2 sw=2
 
   " Filetype: Perl {{{2
   let perl_include_pod = 1
@@ -786,7 +775,7 @@ augroup vimrc
         \ exe 'Grepper -tool rubocop -noprompt' ['-buffer',''][<bang>0]
 
   " Filetype: Sh, Zsh {{{2
-  au FileType zsh,sh setl com-=:#
+  au FileType zsh,sh setl com-=:# sts=4 sw=4
         \| com! -buffer Lint Grepper -noprompt -buffer -grepprg shellcheck -fgcc
 
   " Filetype: Text, Mail, Markdown {{{2
