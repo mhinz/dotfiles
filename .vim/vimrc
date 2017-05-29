@@ -417,12 +417,12 @@ augroup vimrc
   au BufEnter * call mhi#cd()
   au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
 
+  au BufRead,BufNewFile *                         call mhi#source_project_config()
   au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
   au BufRead,BufNewFile *.adoc                    setfiletype asciidoc
-  au BufRead,BufNewFile /data/repo/neo{mutt,vim}/*       setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
+  au BufRead,BufNewFile /data/repo/neo{mutt,vim}/* setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
   au BufRead,BufNewFile /data/repo/vim/*          setlocal noet
   au BufRead,BufNewFile /data/repo/vim/src/*.[ch] setlocal sw=4 sts=4
-  " au BufRead,BufNewFile Makefile.*,local.mk       setfiletype make | setl noet
 
   au BufWritePost       ~/.Xdefaults              redraw | echo system('xrdb ' . expand('<amatch>'))
   au CompleteDone       *                         pclose
@@ -531,7 +531,7 @@ function! SetStatusline()
     let stl    .= mhi#sy_stats_wrapper()
   endif
 
-  let stl .= '%m%r%h%w'
+  let stl .= '%m%r%h%w '
   let stl .= grepper#statusline()
 
   " right side

@@ -296,4 +296,14 @@ function! mhi#run_exercism_tests() abort
   endif
 endfunction
 
+"
+" Find and source project-specific Vim configs
+"
+function! mhi#source_project_config() abort
+  let projectfile = findfile('.project.vim', expand('%:p').';')
+  if !empty(projectfile)
+    execute 'source' projectfile
+  endif
+endfunction
+
 " vim: fdm=syntax
