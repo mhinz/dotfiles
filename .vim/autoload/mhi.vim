@@ -271,4 +271,29 @@ function! mhi#dump_api()
   endfor
 endfunction
 
+"
+" Run Exercism tests
+"
+function! mhi#run_exercism_tests() abort
+  if expand('%:e') == 'vim'
+    let testfile = printf('%s/%s.vader', expand('%:h'),
+          \ tr(expand('%:h:t'), '-', '_'))
+    if !filereadable(testfile)
+      echoerr 'File does not exist: '. testfile
+      return
+    endif
+    source %
+    execute 'Vader' testfile
+  else
+    let sourcefile = printf('%s/%s.vim', expand('%:h'),
+          \ tr(expand('%:h:t'), '-', '_'))
+    if !filereadable(sourcefile)
+      echoerr 'File does not exist: '. sourcefile
+      return
+    endif
+    execute 'source' sourcefile
+    Vader
+  endif
+endfunction
+
 " vim: fdm=syntax

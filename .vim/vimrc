@@ -820,10 +820,11 @@ augroup vimrc
   omap ac <plug>(signify-motion-outer-pending)
   xmap ac <plug>(signify-motion-outer-visual)
 
-  " Filetype: Vim {{{2
+  " Filetype: Vim, Vader {{{2
   autocmd FileType vim nnoremap <buffer><silent> <cr> :call lookup#lookup() \| call halo#run()<cr>
   autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<cr>
   autocmd FileType vim setl sts=2 sw=2 isk-=#
+  autocmd BufRead *.{vader,vim} command! -buffer Test call mhi#run_exercism_tests()
 " }}}2
 augroup END
 " }}}1
