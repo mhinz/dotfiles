@@ -18,12 +18,17 @@ alias dc='docker-compose'
 alias g='git'
 alias gpg='gpg2'
 
-alias aptup="sudo -- sh -c 'apt-get update && apt-get upgrade'"
-alias brewup='brew update && brew upgrade && brew cleanup'
 alias pip2up="pip2 list --format=legacy | cut -d' ' -f1 | xargs pip2 install -U"
 alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
+if [ "$(uname -s)" = Darwin ]; then
+    alias brewup='brew update && brew upgrade && brew cleanup'
+    alias allup="brewup; pip2up; pip3up; gemup; npmup"
+else
+    alias aptup="sudo -- sh -c 'apt-get update && apt-get upgrade'"
+    alias allup="aptup; pip2up; pip3up; gemup; npmup"
+fi
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 
@@ -255,9 +260,9 @@ alias nv='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 alias v=$EDITOR
 
 all() {
-  args="-highlight -jump -open -noswitch -query"
-  git rev-parse --is-inside-work-tree &>/dev/null && tool=git || tool=ag
-  nvim +"Grepper -tool $tool $args $@"
+    args="-highlight -jump -open -noswitch -query"
+    git rev-parse --is-inside-work-tree &>/dev/null && tool=git || tool=ag
+    nvim +"Grepper -tool $tool $args $@"
 }
 
 va() {
