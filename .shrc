@@ -85,10 +85,10 @@ md() {
 rd() {
   dir=$PWD
   builtin cd ..
-  if command rmdir $dir 2>/dev/null; then
+  if command rmdir "$dir" 2>/dev/null; then
     echo 'Removed empty directory:' $dir
   else
-    builtin cd $dir
+    builtin cd "$dir"
     echo 'Directory is not empty:'
     ls -A
   fi
@@ -255,9 +255,7 @@ tmup() {
 }
 
 # Vim {{{1
-alias vu='vim -u NONE -U NONE -i NONE -N'
-alias nv='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
-alias v=$EDITOR
+alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
 all() {
     args="-highlight -jump -open -noswitch -query"
