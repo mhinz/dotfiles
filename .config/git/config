@@ -1,125 +1,127 @@
 ; Config {{{1
 [user]
-    name       = Marco Hinz
-    email      = mh.codebro@gmail.com
-    signingKey = 1C980A1B657B4A4F
-
-[gpg]
-    program = gpg2
-
-[commit]
-    gpgsign = true
+	name       = Marco Hinz
+	email      = mh.codebro@gmail.com
+	signingKey = 1C980A1B657B4A4F
 
 [core]
-    editor       = nvr --remote-wait-silent
-    excludesfile = ~/.config/git/ignore
-    autocrlf     = false
-    filemode     = false
+	editor       = nvr --remote-wait-silent
+	excludesfile = ~/.config/git/ignore
+	autocrlf     = false
+	filemode     = false
 
 [init]
-    templatedir = ~/.config/git/template
+	templatedir = ~/.config/git/template
+
+[gpg]
+	program = gpg2
+
+[commit]
+	gpgsign = true
 
 [fetch]
-    prune = true
+	prune = true
 
 [push]
-    default = current
+	default = current
 
 [rebase]
-    autosquash = true
-    autostash  = true
+	autosquash = true
+	autostash  = true
 
 [rerere]
-    enabled = true
-
-[diff]
-    tool                = vimdiff
-    algorithm           = patience
-    mnemonicPrefix      = true
-    compactionHeuristic = true
-
-[difftool "accu"]
-    cmd = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
-
-[merge]
-    tool          = vimdiff
-    conflictstyle = diff3
-
-[mergetool "accu"]
-    cmd           = "vim -c 'call mergeutil#accurev()' \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
-    trustExitCode = true
+	enabled = true
 
 [advice]
-    statusHints = no
+	statusHints = no
 
-; Alias {{{1
+[diff]
+	tool                = vimdiff
+	algorithm           = patience
+	mnemonicPrefix      = true
+	compactionHeuristic = true
+
+[merge]
+	tool          = vimdiff
+	conflictstyle = diff3
+
+[difftool "nvim"]
+	cmd = "nvim -d \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
+
+[mergetool "nvim"]
+	cmd = "nvr -cc tabnew -o \"$BASE\" \"$REMOTE\" -O \"$LOCAL\" \"$MERGED\""
+	trustExitCode = true
+
+; Aliases {{{1
 [alias]
-    a     = add
-    b     = branch
-    bi    = bisect
-    bl    = blame
-    c     = commit
-    ca    = commit --amend
-    cf    = commit --fixup
-    cl    = clone
-    co    = checkout
-    cp    = cherry-pick
-    d     = diff --color --no-ext-diff
-    dc    = !git d --cached
-    dcs   = !git d --cached --stat
-    ds    = !git d --stat
-    dw    = !git d --word-diff=color
-    des   = describe --contains
-    dt    = difftool
-    f     = fetch
-    g     = grep
-    h     = help
-    lfp   = !git l --first-parent
-    ln    = !git l @{1}..
-    lso   = ls-files --others --exclude-standard
-    lsr   = ls-remote
-    m     = merge
-    ma    = merge --abort
-    n     = name-rev --name-only
-    p     = push
-    pl    = pull --ff-only
-    r     = reset
-    ra    = rebase --abort
-    rc    = rebase --continue
-    re    = rebase
-    rem   = remote
-    ri    = rebase -i
-    ru    = remote update
-    rs    = rebase --skip
-    s     = status -sb -uno
-    sh    = show
-    shs   = show --stat
-    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-    st    = stash
-    stl   = stash list
-    sts   = stash show -p
-    t     = tag
-    tr    = trail
-    unmerged = branch --no-merged master
-    wt    = worktree
+	a        = add
+	b        = branch
+	bi       = bisect
+	bl       = blame
+	c        = commit
+	ca       = commit --amend
+	cf       = commit --fixup
+	cl       = clone
+	co       = checkout
+	cp       = cherry-pick
+	d        = diff --color --no-ext-diff
+	dc       = !git d --cached
+	dcs      = !git d --cached --stat
+	des      = describe --contains
+	ds       = !git d --stat
+	dt       = difftool
+	dw       = !git d --word-diff=color
+	f        = fetch
+	g        = grep
+	h        = help
+	lfp      = !git l --first-parent
+	ln       = !git l @{1}..
+	lso      = ls-files --others --exclude-standard
+	lsr      = ls-remote
+	m        = merge
+	ma       = merge --abort
+	n        = name-rev --name-only
+	p        = push
+	pl       = pull --ff-only
+	r        = reset
+	ra       = rebase --abort
+	rc       = rebase --continue
+	re       = rebase
+	rem      = remote
+	ri       = rebase -i
+	rs       = rebase --skip
+	ru       = remote update
+	s        = status -sb -uno
+	sh       = show
+	shs      = show --stat
+	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+	st       = stash
+	stl      = stash list
+	sts      = stash show -p
+	t        = tag
+	tr       = trail
+	unmerged = branch --no-merged master
+	wt       = worktree
 
-    ours   = !git checkout --ours $@ && git add $@
-    theirs = !git checkout --theirs $@ && git add $@
+	ours   = !git checkout --ours $@ && git add $@
+	theirs = !git checkout --theirs $@ && git add $@
 
-    rank    = shortlog -sn --no-merges
-    authors = "!f() { git log --no-merges --pretty='format:%<(26)%an <%ae>' --author \"$*\" | sort | uniq; }; f"
-    by      = "!f() { IFS=$'\n'; select a in `git authors \"$*\"`; do git l --no-merges --author \"${a%%  *<*}\"; break; done; }; f"
+	rank    = shortlog -sn --no-merges
+	authors = "!f() { git log --no-merges --pretty='format:%<(26)%an <%ae>' --author \"$*\" | sort | uniq; }; f"
+	by      = "!f() { IFS=$'\n'; select a in `git authors \"$*\"`; do git l --no-merges --author \"${a%%  *<*}\"; break; done; }; f"
 
-    upstream = !git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
-    upstream-remote = !git upstream | sed -e 's/\\/.*$//g'
+	upstream = !git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+	upstream-remote = !git upstream | sed -e 's/\\/.*$//g'
 
-; Color {{{1
+; Colors {{{1
 [color]
-    branch      = auto
-    diff        = auto
-    interactive = auto
-    status      = auto
-    ui          = auto
+	branch      = auto
+	diff        = auto
+	interactive = auto
+	status      = auto
+	ui          = auto
 
 [include]
-    path = config.colors
+	path = config.colors
+
+; vim: noet
