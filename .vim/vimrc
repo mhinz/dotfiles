@@ -560,9 +560,11 @@ endfunction
 " }}}1
 
 " Plugin {{{1
+" Plugin: committia {{{2
+let g:committia_open_only_vim_starting = 0
+
 " Plugin: exception {{{2
 nnoremap <silent><leader>E :call exception#trace()<cr>
-
 " Plugin: fzf {{{2
 set runtimepath+=~/local/fzf
 

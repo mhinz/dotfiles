@@ -24,10 +24,10 @@ alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 if [ "$(uname -s)" = Darwin ]; then
     alias brewup='brew update && brew upgrade && brew cleanup'
-    alias allup="brewup; pip2up; pip3up; gemup; npmup"
+    alias allup="pip2up; pip3up; gemup; npmup; brewup"
 else
     alias aptup="sudo -- sh -c 'apt-get update && apt-get upgrade'"
-    alias allup="aptup; pip2up; pip3up; gemup; npmup"
+    alias allup="pip2up; pip3up; gemup; npmup, aptup"
 fi
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'

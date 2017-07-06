@@ -46,10 +46,10 @@
 	conflictstyle = diff3
 
 [difftool "nvim"]
-	cmd = "nvim -d \"$BASE\" \"$REMOTE\" \"$LOCAL\" \"$MERGED\""
+	cmd = nvr -s -cc 'tabnew | set diff' --remote-silent \"$LOCAL\" -O \"$REMOTE\"
 
 [mergetool "nvim"]
-	cmd = "nvr -cc tabnew -o \"$BASE\" \"$REMOTE\" -O \"$LOCAL\" \"$MERGED\""
+	cmd = nvr -s -cc 'tabnew | set diff' -o \"$BASE\" \"$REMOTE\" -O \"$LOCAL\" \"$MERGED\"
 	trustExitCode = true
 
 ; Aliases {{{1

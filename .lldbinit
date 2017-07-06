@@ -1,1 +1,0 @@
-settings set frame-format "#${frame.index}   \x1b[38;5;24m${function.name-with-args}\x1b[0m   {${line.file.basename}:${line.number}}{ ${function.is-optimized}[opt]}\n"
