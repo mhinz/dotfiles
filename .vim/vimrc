@@ -50,7 +50,7 @@ call plug#begin(s:bundle_dir)
   Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
   Plug 'junegunn/fzf',              has('win32') ? {} : { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
   Plug 'junegunn/gv.vim',           { 'on': 'GV' }
-  Plug 'junegunn/vader.vim',        { 'on': 'Vader' }
+  Plug 'junegunn/vader.vim'
   Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-peekaboo'
   Plug 'junegunn/vim-plug'
@@ -96,7 +96,6 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-sayonara',   { 'on': 'Sayonara' }
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
-  Plug 'mhinz/vim-workhorse'
 call plug#end()
 " }}}1
 
@@ -104,6 +103,7 @@ call plug#end()
 if has('nvim')
   let g:python_host_prog  = '/usr/local/bin/python'
   let g:python3_host_prog = '/usr/local/bin/python3'
+  let $VISUAL = 'nvr -cc split --remote-wait'
 else
   filetype plugin indent on
   syntax   on
