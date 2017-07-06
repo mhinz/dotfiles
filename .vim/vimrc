@@ -532,7 +532,6 @@ function! SetStatusline()
   endif
 
   let stl .= '%m%r%h%w '
-  let stl .= grepper#statusline()
 
   " right side
   let stl .=
