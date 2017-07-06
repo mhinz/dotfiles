@@ -4,8 +4,9 @@ if crontab -l 2>&1 | grep -qv drink; then
   { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"Drink! Move!\"'"; } | crontab -
 fi
 
-defaults write NSGlobalDomain KeyRepeat        -int 1
+defaults write ApplePressAndHoldEnabled        -bool true
 defaults write NSGlobalDomain InitialKeyRepeat -int 20
+defaults write NSGlobalDomain KeyRepeat        -int 1
 
 if [[ "$(csrutil status)" =~ enabled ]]; then
   echo 'Disable System Integrity Protection (rootless mode):'
