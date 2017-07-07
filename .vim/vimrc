@@ -681,10 +681,7 @@ let grepper = {
       \   'grepformat': '%f:%l:%c: %t: %m',
       \ }}
 
-command! Todo :Grepper
-      \ -noprompt
-      \ -tool git
-      \ -grepprg git grep -nIi '\(TODO\|FIXME\)'
+command! Todo Grepper -tool ag -query '(TODO|FIXME|XXX):'
 
 " Plugin: vim-online-thesaurus {{{2
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
