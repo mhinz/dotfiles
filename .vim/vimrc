@@ -725,6 +725,9 @@ augroup vimrc
   autocmd BufLeave *.{c,cpp} mark C
   autocmd BufLeave *.h       mark H
 
+  " Filetype: cmake {{{2
+  autocmd FileType cmake setlocal commentstring=#\ %s
+
   " Filetype: Erlang {{{2
   autocmd FileType erlang setl com-=:%
 
