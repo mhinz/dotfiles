@@ -9,6 +9,7 @@ flags+='--enable-cscope '
 flags+='--enable-pythoninterp=dynamic '
 flags+='--enable-python3interp=dynamic '
 flags+='--enable-rubyinterp=dynamic '
+flags+='--enable-terminal '
 
 if [[ $(uname) == Linux ]]; then
     flags+='--with-x '
