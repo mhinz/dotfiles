@@ -301,7 +301,7 @@ endfunction
 "
 function! mhi#source_project_config() abort
   let projectfile = findfile('.project.vim', expand('%:p').';')
-  if !empty(projectfile)
+  if filereadable(projectfile)
     execute 'source' projectfile
   endif
 endfunction
