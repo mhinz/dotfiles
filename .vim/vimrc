@@ -360,6 +360,7 @@ nnoremap <leader>ev  :vsplit $MYVIMRC<cr>
 nnoremap <leader>si  :echo mhi#syninfo()<cr>
 nnoremap <leader>ss  :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
 
+nnoremap <leader>m  :Messages<cr>
 nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>j  <c-^>
 nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
