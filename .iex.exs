@@ -8,4 +8,9 @@ IEx.configure [
     doc_headings:    [:red, :bright],
   ],
   width: 100,
+  default_prompt: [
+    :blue,
+    :bright,
+    "%prefix(%counter)>",
+  ] |> IO.ANSI.format |> IO.chardata_to_string
 ]
