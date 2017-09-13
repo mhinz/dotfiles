@@ -13,9 +13,6 @@
 [init]
 	templatedir = ~/.config/git/template
 
-[gpg]
-	program = gpg2
-
 [commit]
 	gpgsign = true
 
