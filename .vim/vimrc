@@ -72,6 +72,7 @@ call plug#begin(s:bundle_dir)
 
   Plug 'mattn/emmet-vim',         { 'for': 'html' }
   Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+  Plug 'prettier/vim-prettier',   { 'for': 'javascript' }
 
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-rails'
