@@ -46,12 +46,6 @@ unset newpath dir
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 # }}}1
 
-if [ -n "$TMUX" ]; then
-    export TERM=tmux-256color
-else
-    export TERM=xterm-256color
-fi
-
 export LANG=en_US.UTF-8
 
 if command -v nvim 1>/dev/null; then
