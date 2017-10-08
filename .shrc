@@ -78,7 +78,7 @@ r() {
 }
 
 md() {
-  command mkdir $1 && builtin cd $1
+  command mkdir -p $1 && builtin cd $1
 }
 
 rd() {
