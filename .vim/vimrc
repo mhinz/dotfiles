@@ -734,7 +734,9 @@ augroup vimrc
   autocmd FileType erlang setl com-=:%
 
   " Filetype: Go {{{2
-  let g:gofmt_on_save = 0
+  let g:go_bin_path    = $v.'/vendor/go'
+  let g:go_fmt_command = 'goimports'
+  let g:gofmt_on_save  = 0
 
   autocmd FileType go setlocal noet sts& sw& com-=:// isk-=.
 
