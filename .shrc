@@ -12,6 +12,55 @@ else
         ~/.config/git/config.colors
 fi
 
+# Prompt {{{1
+if [[ -n ${ZSH_VERSION-} ]]; then
+    _prompt_pink="%F{15}%K{161}"
+    _prompt_blue="%F{15}%K{67}"
+    _prompt_orange="%F{15}%K{209}"
+    _prompt_green="%F{15}%K{29}"
+    _prompt_black="%F{15}%K{16}"
+    _prompt_clear="%f%k"
+else
+    _prompt_pink="\[\e[38;5;15m\]\[\e[48;5;161m\]"
+    _prompt_blue="\[\e[38;5;15m\]\[\e[48;5;67m\]"
+    _prompt_orange="\[\e[38;5;15m\]\[\e[48;5;209m\]"
+    _prompt_green="\[\e[38;5;15m\]\[\e[48;5;29m\]"
+    _prompt_black="\[\e[38;5;15m\]\[\e[48;5;16m\]"
+    _prompt_clear="\[\e[0m\]"
+fi
+
+prompt_git() {
+    local top="$(git rev-parse --show-toplevel 2>/dev/null)"
+    [[ -z $top ]] && return
+    local p="$_prompt_pink ${top##*/} "
+
+    # branch name or short SHA if detached
+    local branch=$(git symbolic-ref --short -q HEAD || git rev-parse --short HEAD)
+    [[ -n $branch ]] && p+="$_prompt_blue $branch "
+
+    # dirty working tree
+    git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
+    (( $? )) && p+="$_prompt_orange ! "
+
+    # staged changes
+    git diff-index --cached --quiet HEAD 2>/dev/null || p+="$_prompt_green ✓ "
+
+    local gitdir="${top}/.git"
+    if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
+        p+="$_prompt_black merge "
+    elif [[ -f "${gitdir}/CHERRY_PICK_HEAD" ]]; then
+        p+='$_prompt_black cherry '
+    elif [[ -f "${gitdir}/REVERT_HEAD" ]]; then
+        p+="$_prompt_black revert "
+    elif [[ -f "${gitdir}/rebase-merge/interactive" ]]; then
+        p+="$_prompt_black rebase-i "
+    elif [[ -d "${gitdir}/rebase-apply" ]]; then
+        p+="$_prompt_black rebase "
+    fi
+
+    echo -e "${p}${_prompt_clear} "
+}
+
 # Aliases {{{1
 alias d='docker'
 alias dc='docker-compose'

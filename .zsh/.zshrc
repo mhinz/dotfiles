@@ -132,68 +132,7 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 # prompt {{{1
 autoload -U colors && colors
 
-precmd() {
-    if _prompt_top=$(git rev-parse --show-toplevel 2>/dev/null); then
-        _prompt_in_worktree=$(git rev-parse --is-inside-work-tree)
-        _prompt_type=git
-    else
-        unset _prompt_top _prompt_in_worktree _prompt_type
-    fi
-    _prompt_pwd=$(pwd -P)
-}
-
-prompt() {
-    print -n '%(0?..%F{15}%K{16} %? )'
-    print -n '%(1j.%F{15}%K{103} %j .)'
-    case $_prompt_type in
-        git) prompt_git ;;
-        *)   print '%F{15}%K{161} λ ' ;;
-    esac
-}
-
-prompt_git() {
-    local p
-
-    # empty within .git/
-    [[ -n $_prompt_top ]] && p+="%F{15}%K{161} ${_prompt_top##*/} "
-
-    # empty if not root commit yet
-    local branch=$(git symbolic-ref --short -q HEAD || git rev-parse --short HEAD)
-    [[ -n $branch ]] && p+="%F{15}%K{67} $branch "
-
-    if [[ $_prompt_in_worktree == true ]]; then
-        git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
-        (( $? && $? != 128)) && p+='%F{15}%K{209} ! '
-
-        git diff-index --cached --quiet HEAD 2>/dev/null || p+='%F{15}%K{29} ✓ '
-
-        local gitdir="${_prompt_top}/.git"
-        if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
-            p+='%F{15}%K{16} merge '
-        elif [[ -f "${gitdir}/CHERRY_PICK_HEAD" ]]; then
-            p+='%F{15}%K{16} cherry '
-        elif [[ -f "${gitdir}/REVERT_HEAD" ]]; then
-            p+='%F{15}%K{16} revert '
-        elif [[ -f "${gitdir}/rebase-merge/interactive" ]]; then
-            p+='%F{15}%K{16} rebase-i '
-        elif [[ -d "${gitdir}/rebase-apply" ]]; then
-            p+='%F{15}%K{16} rebase '
-        fi
-    fi
-
-    print $p
-}
-
-rprompt() {
-    if [[ $_prompt_type == git && $_prompt_in_worktree == true ]]; then
-        print "%F{243}$_prompt_top/%F{161}${${_prompt_pwd#$_prompt_top}#/}"
-    else
-        print "%F{243}$PWD"
-    fi
-}
-
-PROMPT='$(prompt)%f%k '
-RPROMPT='$(rprompt)'
+PROMPT=$'$(prompt_git)%B%n@%m:%~%b\n'
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
 PROMPT3="Select:%f "
