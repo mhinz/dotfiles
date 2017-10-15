@@ -14,51 +14,56 @@ fi
 
 # Prompt {{{1
 if [[ -n ${ZSH_VERSION-} ]]; then
-    _prompt_pink="%F{15}%K{161}"
-    _prompt_blue="%F{15}%K{67}"
-    _prompt_orange="%F{15}%K{209}"
-    _prompt_green="%F{15}%K{29}"
-    _prompt_black="%F{15}%K{16}"
-    _prompt_clear="%f%k"
+    _p_pink="%F{161}"
+    _p_clear="%f%k%b%u"
+    _p_bold="%B"
+    _p_underline="%U"
 else
-    _prompt_pink="\[\e[38;5;15m\]\[\e[48;5;161m\]"
-    _prompt_blue="\[\e[38;5;15m\]\[\e[48;5;67m\]"
-    _prompt_orange="\[\e[38;5;15m\]\[\e[48;5;209m\]"
-    _prompt_green="\[\e[38;5;15m\]\[\e[48;5;29m\]"
-    _prompt_black="\[\e[38;5;15m\]\[\e[48;5;16m\]"
-    _prompt_clear="\[\e[0m\]"
+    _p_pink="\[\e[38;5;161m\]"
+    _p_clear="\[\e[0m\]"
+    _p_bold="\[\e[1m\]"
+    _p_underline="\[\e[4m\]"
 fi
 
-prompt_git() {
-    local top="$(git rev-parse --show-toplevel 2>/dev/null)"
-    [[ -z $top ]] && return
-    local p="$_prompt_pink ${top##*/} "
+prompt() {
+    local gittop="$(git rev-parse --show-toplevel 2>/dev/null)"
+    local pwd="$(pwd -P)"
+    local p=$_p_pink
 
-    # branch name or short SHA if detached
-    local branch=$(git symbolic-ref --short -q HEAD || git rev-parse --short HEAD)
-    [[ -n $branch ]] && p+="$_prompt_blue $branch "
+    if [[ -z $gittop ]]; then
+        p+="$pwd "
+    else
+        local front="${gittop%/*}"
+        local middle="${_p_underline}${_p_bold}${gittop##*/}${_p_clear}"
+        local back="${_p_pink}${pwd#${gittop}}"
+        p+="${front}/${middle}${back}${_p_clear} "
 
-    # dirty working tree
-    git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
-    (( $? )) && p+="$_prompt_orange ! "
+        # branch name or short SHA if detached
+        local branch=$(git symbolic-ref --short -q HEAD || git rev-parse --short HEAD)
+        [[ -n $branch ]] && p+="${_p_bold}${branch}"
 
-    # staged changes
-    git diff-index --cached --quiet HEAD 2>/dev/null || p+="$_prompt_green ✓ "
+        # dirty working tree
+        git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
+        (( $? )) && p+="$_p_bold *"
 
-    local gitdir="${top}/.git"
-    if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
-        p+="$_prompt_black merge "
-    elif [[ -f "${gitdir}/CHERRY_PICK_HEAD" ]]; then
-        p+='$_prompt_black cherry '
-    elif [[ -f "${gitdir}/REVERT_HEAD" ]]; then
-        p+="$_prompt_black revert "
-    elif [[ -f "${gitdir}/rebase-merge/interactive" ]]; then
-        p+="$_prompt_black rebase-i "
-    elif [[ -d "${gitdir}/rebase-apply" ]]; then
-        p+="$_prompt_black rebase "
+        # staged changes
+        git diff-index --cached --quiet HEAD 2>/dev/null || p+="$_p_bold ✓"
+
+        local gitdir="${gittop}/.git"
+        if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
+            p+=' merge '
+        elif [[ -f "${gitdir}/CHERRY_PICK_HEAD" ]]; then
+            p+=' cherry '
+        elif [[ -f "${gitdir}/REVERT_HEAD" ]]; then
+            p+=' revert '
+        elif [[ -f "${gitdir}/rebase-merge/interactive" ]]; then
+            p+=' rebase-i '
+        elif [[ -d "${gitdir}/rebase-apply" ]]; then
+            p+=' rebase '
+        fi
     fi
 
-    echo -e "${p}${_prompt_clear} "
+    echo -e "${p}${_p_clear}\n❯ "
 }
 
 # Aliases {{{1

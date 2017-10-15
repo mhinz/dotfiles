@@ -132,7 +132,7 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 # prompt {{{1
 autoload -U colors && colors
 
-PROMPT=$'$(prompt_git)%B%n@%m:%~%b\n'
+PROMPT=$(prompt)
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
 PROMPT3="Select:%f "

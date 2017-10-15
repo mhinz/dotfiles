@@ -4,7 +4,7 @@ else
   echo 'No .shrc found.'
 fi
 
-prompt() {
-    PS1="$(prompt_git)\[\e[1m\]\u@\h:\w\n\[\e[0m\]"
+_p() {
+    PS1="$(prompt)"
 }
-PROMPT_COMMAND=prompt
+PROMPT_COMMAND=_p
