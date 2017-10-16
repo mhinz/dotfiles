@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 if [[ -r ~/.shrc ]]; then
-    emulate sh -c 'source ~/.shrc'
+    source ~/.shrc
 else
     echo 'No .shrc found.'
 fi
@@ -133,8 +133,7 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 autoload -U colors && colors
 
 precmd() {
-    jobs=${#jobtexts}
-    PS1='$(_prompt $jobs)'
+    PS1='$(_prompt)'
 }
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
