@@ -133,7 +133,8 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 autoload -U colors && colors
 
 precmd() {
-    PS1="$(_prompt)"
+    jobs=${#jobtexts}
+    PS1='$(_prompt $jobs)'
 }
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
