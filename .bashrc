@@ -5,6 +5,6 @@ else
 fi
 
 _p() {
-    PS1="$(prompt)"
+    PS1="$(_prompt)"
 }
 PROMPT_COMMAND=_p

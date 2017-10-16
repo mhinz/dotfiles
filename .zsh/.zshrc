@@ -133,7 +133,7 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 autoload -U colors && colors
 
 precmd() {
-    PS1="$(prompt)"
+    PS1="$(_prompt)"
 }
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
