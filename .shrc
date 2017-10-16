@@ -28,7 +28,11 @@ fi
 prompt() {
     local gittop="$(git rev-parse --show-toplevel 2>/dev/null)"
     local pwd="$(pwd -P)"
-    local p=$_p_pink
+    local p
+
+    [[ -n $SSH_CONNECTION ]] && p+="${USER}@${HOST}:"
+
+    p+=$_p_pink
 
     if [[ -z $gittop ]]; then
         p+="$pwd "

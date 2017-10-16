@@ -132,7 +132,9 @@ zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}
 # prompt {{{1
 autoload -U colors && colors
 
-PROMPT=$(prompt)
+precmd() {
+    PS1="$(prompt)"
+}
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
 PROMPT3="Select:%f "
