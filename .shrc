@@ -1,4 +1,4 @@
-# Keep it POSIX.
+# This file gets sourced by .bashrc and .zshrc.
 
 if [ "$ITERM_PROFILE" = Dark ]; then
     eval $(dircolors ~/.zsh/dircolors.dark)
@@ -100,7 +100,7 @@ fi
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 
-alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive $1'
+alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg'
@@ -326,9 +326,8 @@ tmup() {
 alias v='VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim'
 
 all() {
-    args="-highlight -jump -open -noswitch -query"
     git rev-parse --is-inside-work-tree &>/dev/null && tool=git || tool=ag
-    nvim +"Grepper -tool $tool $args $@"
+    nvim +"Grepper -tool $tool -highlight -jump -open -noswitch -query $1"
 }
 
 va() {
