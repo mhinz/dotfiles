@@ -1,70 +1,60 @@
-# Keep it POSIX.
+# This file gets sourced by every login shell.
 
-export GH=/data/github
+export LANG=en_US.UTF-8
 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
 export GOPATH=/data/go
 export GOARCH=amd64
-export GOOS=$(uname -s | tr '[:upper:]' '[:lower:]')
+export GOOS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+if   command -v nvim  1>/dev/null; then export EDITOR='nvim'
+elif command -v vim   1>/dev/null; then export EDITOR='vim'
+elif command -v vi    1>/dev/null; then export EDITOR='vi'
+elif command -v emacs 1>/dev/null; then export EDITOR='emacs -nw'
+elif command -v nano  1>/dev/null; then export EDITOR='nano'
+else echo 'Install a proper editor.'
+fi
 
 # PATH {{{1
-read -d '' newpath <<EOF
-  /usr/local/sbin
-  /usr/local/opt/coreutils/libexec/gnubin
-  /usr/local/opt/gnupg@2.1/bin
-  $GOPATH/bin
-  /data/languages/elixir/bin
-  $HOME/.npm/bin
-  $(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)
-  $HOME/.rbenv/shims
-  $HOME/.rbenv/bin
-  $HOME/local/*/bin
-  $HOME/bin
-EOF
+newpath=(
+    "/usr/local/sbin"
+    "/usr/local/opt/coreutils/libexec/gnubin"
+    "$GOPATH/bin"
+    "/data/languages/elixir/bin"
+    "$HOME/.npm/bin"
+    "$(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)"
+    "$HOME/.rbenv/shims"
+    "$HOME/.rbenv/bin"
+    "$HOME/local/*/bin"
+    "$HOME/bin"
+)
 
 # Apple's path_helper gets called from /etc/profile and
 # /etc/zprofile and mangles $PATH. Work around it.
-if [ -x /usr/libexec/path_helper ]; then
-  PATH=
-  eval $(/usr/libexec/path_helper -s)
+if [[ -x /usr/libexec/path_helper ]]; then
+    PATH=
+    eval "$(/usr/libexec/path_helper -s)"
 fi
 
 # Only unique elements, please.
-for dir in $newpath; do
-  case $PATH in
-    *:"$dir":*) ;;
-             *) [ -d $dir ] && PATH=$dir:$PATH ;;
-  esac
+for dir in "${newpath[@]}"; do
+    case $PATH in
+        *:"$dir":*) ;;
+        *) [[ -d $dir ]] && PATH="$dir:$PATH" ;;
+    esac
 done
 
 export PATH
 unset newpath dir
 
-# MANPATH {{{1
-export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
-# }}}1
+# MAN {{{1
+export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:"$MANPATH"
+export MANWIDTH=82
 
-export LANG=en_US.UTF-8
-
-if command -v nvim 1>/dev/null; then
-    export EDITOR='nvim'
-elif command -v vim 1>/dev/null; then
-    export EDITOR='vim'
-elif command -v vi 1>/dev/null; then
-    export EDITOR='vi'
-elif command -v emacs 1>/dev/null; then
-    export EDITOR='emacs -nw'
-elif command -v nano 1>/dev/null; then
-    export EDITOR='nano'
-else
-    echo 'Install a proper editor.'
-fi
-
-case $EDITOR in
+case "$EDITOR" in
     nvim) export MANPAGER="nvim +'set ft=man' -" ;;
-     vim) export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\"" ;;
-       *) export MANPAGER='less' ;;
+    vim)  export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\"" ;;
+    *)    export MANPAGER='less' ;;
 esac
-export MANWIDTH=80
