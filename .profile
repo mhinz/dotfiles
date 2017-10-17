@@ -19,16 +19,16 @@ fi
 
 # PATH {{{1
 newpath=(
-    "/usr/local/sbin"
-    "/usr/local/opt/coreutils/libexec/gnubin"
-    "$GOPATH/bin"
-    "/data/languages/elixir/bin"
-    "$HOME/.npm/bin"
+    /usr/local/sbin
+    /usr/local/opt/coreutils/libexec/gnubin
+    "$GOPATH"/bin
+    /data/languages/elixir/bin
+    ~/.npm/bin
     "$(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)"
-    "$HOME/.rbenv/shims"
-    "$HOME/.rbenv/bin"
-    "$HOME/local/*/bin"
-    "$HOME/bin"
+    ~/.rbenv/shims
+    ~/.rbenv/bin
+    ~/local/*/bin
+    ~/bin
 )
 
 # Apple's path_helper gets called from /etc/profile and
