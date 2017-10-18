@@ -8,3 +8,5 @@ _p() {
     PS1="$(_prompt)"
 }
 PROMPT_COMMAND=_p
+
+shopt -s globstar
