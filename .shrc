@@ -111,7 +111,12 @@ alias chrome='open -a Google\ Chrome'
 alias preview='open -a Preview'
 alias vlc='open -a VLC'
 
-alias ls='ls --color=always -N'
+if [[ "$(command -v ls)" =~ coreutils/libexec/gnubin ]]; then
+    alias ls='ls --color=always -N'
+elif command -v gnuls 1>/dev/null; then
+    alias ls='gnuls --color=always -N'
+fi
+
 alias grep='grep --color=always'
 
 alias j='ls -lhd *(D-/)'
