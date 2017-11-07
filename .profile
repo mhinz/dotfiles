@@ -31,16 +31,6 @@ done
 
 export PATH
 unset newpath dir
-
-# MAN {{{1
-export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:"$MANPATH"
-export MANWIDTH=82
-
-case "$EDITOR" in
-    nvim) export MANPAGER="nvim +'set ft=man' -" ;;
-    vim)  export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\"" ;;
-    *)    export MANPAGER='less' ;;
-esac
 # }}}
 
 export LANG=en_US.UTF-8
@@ -59,3 +49,12 @@ elif command -v emacs 1>/dev/null; then export EDITOR='emacs -nw'
 elif command -v nano  1>/dev/null; then export EDITOR='nano'
 else echo 'Install a proper editor.'
 fi
+
+export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:"$MANPATH"
+export MANWIDTH=82
+
+case "$EDITOR" in
+    nvim) export MANPAGER="nvim +'set ft=man' -" ;;
+    vim)  export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\"" ;;
+    *)    export MANPAGER='less' ;;
+esac
