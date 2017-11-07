@@ -1,11 +1,8 @@
 #!/bin/sh
 
-TERMINFO=~/.terminfo
-rm -rf "$TERMINFO"
+tinfo="$(mktemp)"
 
-tmp=$(mktemp)
-
-cat > "$tmp" <<EOF
+cat > "$tinfo" <<EOF
 xterm-256color|xterm with 256 colors and italic,
     kbs=\177,
     sitm=\E[3m, ritm=\E[23m,
@@ -17,4 +14,11 @@ tmux-256color|tmux with 256 colors and italic,
     use=screen-256color,
 EOF
 
-tic -x "$tmp"
+if [ "$(uname -s)" = FreeBSD ]; then
+    tcap="$(mktemp)"
+    tic -CKr0x "$tinfo" > "$tcap"
+    cap_mkdb -f ~/.termcap "$tcap"
+else
+    rm -rf ~/.terminfo
+    tic -xo ~/.terminfo "$tinfo"
+fi
