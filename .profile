@@ -55,6 +55,6 @@ export MANWIDTH=82
 
 case "$EDITOR" in
     nvim) export MANPAGER="nvim +'set ft=man' -" ;;
-    vim)  export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man' -\"" ;;
+    vim)  export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ro nomod nolist' -\"" ;;
     *)    export MANPAGER='less' ;;
 esac
