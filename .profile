@@ -38,6 +38,8 @@ export LANG=en_US.UTF-8
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
+export ELIXIR_EDITOR='ec +__LINE__ __FILE__'
+
 export GOPATH=/data/go
 export GOARCH=amd64
 export GOOS="$(uname -s | tr '[:upper:]' '[:lower:]')"
