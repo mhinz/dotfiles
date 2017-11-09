@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if emacsclient --eval t &>/dev/null; then
+    if [[ -z $@ ]]; then
+        emacsclient --eval "(dired \"${PWD}\")"
+    else
+        emacsclient --no-wait "$@"
+    fi
+else
+    if [[ -z $@ ]]; then
+        emacs --chdir "$PWD" --eval "(progn (dired \"${PWD}\") (server-start))" &
+    else
+        emacs --chdir "$PWD" --eval "(server-start)" "$@" &
+    fi
+fi
