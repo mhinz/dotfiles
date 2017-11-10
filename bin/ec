@@ -8,8 +8,8 @@ if emacsclient --eval t &>/dev/null; then
     fi
 else
     if [[ -z $@ ]]; then
-        emacs --chdir "$PWD" --eval "(progn (dired \"${PWD}\") (server-start))" &
+        emacs --chdir "$PWD" --eval "(dired \"${PWD}\")" &
     else
-        emacs --chdir "$PWD" --eval "(server-start)" "$@" &
+        emacs --chdir "$PWD" "$@" &
     fi
 fi

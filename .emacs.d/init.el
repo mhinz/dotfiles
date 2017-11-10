@@ -63,5 +63,9 @@
   :bind* (("C-'" . avy-goto-char)
           ("C-," . avy-goto-char-2)))
 
+(unless (and (fboundp 'server-running-p)
+             (server-running-p))
+  (server-start))
+
 (if (file-readable-p custom-file)
     (load custom-file))
