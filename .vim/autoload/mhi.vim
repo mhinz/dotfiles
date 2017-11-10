@@ -15,6 +15,14 @@ function! mhi#github_open_issue() abort
   silent execute '!open -a Google\ Chrome' url
 endfunction
 
+function! mhi#github_open_slug() abort
+  let old_isk = &iskeyword
+  let &iskeyword = 'a-z,A-z,48-57,-,_,/,.'
+  let slug = expand('<cword>')
+  let &iskeyword = old_isk
+  call system('open https://github.com/'. slug)
+endfunction
+
 "
 " Tmux
 "

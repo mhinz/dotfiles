@@ -280,6 +280,9 @@ endif
 nnoremap \   ;
 inoremap jf  <esc>
 
+nnoremap gh :call mhi#github_open_issue()<cr>
+nnoremap gH :call mhi#github_open_slug()<cr>
+
 nnoremap <leader>dl  :Lint<cr>
 nnoremap <leader>dn  :Neomake<cr>
 
@@ -290,7 +293,6 @@ nnoremap <c-i>  <c-i>zvzz
 nnoremap <c-o>  <c-o>zvzz
 
 inoremap <silent> <c-g><c-t>  <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
-
 
 nnoremap <f12>  :setlocal spell!<cr>
 
@@ -793,9 +795,7 @@ augroup vimrc
   autocmd FileType text     setl tw=80 fo+=t
 
   " Filetype: VCS {{{2
-  autocmd FileType git,gitcommit
-        \  setl tw=80 fo+=t
-        \| nnoremap <buffer> gh :call mhi#github_open_issue()<cr>
+  autocmd FileType git,gitcommit setl tw=80 fo+=t
 
   " fugitive
   autocmd BufReadPost fugitive:// setlocal bufhidden=delete
