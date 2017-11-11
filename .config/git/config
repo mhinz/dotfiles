@@ -80,6 +80,7 @@
 	n        = name-rev --name-only
 	p        = push
 	pl       = pull --ff-only
+	plr      = pull --rebase origin master
 	r        = reset
 	ra       = rebase --abort
 	rc       = rebase --continue
