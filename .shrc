@@ -86,6 +86,10 @@ alias d='docker'
 alias dc='docker-compose'
 alias g='git'
 
+alias t='task'
+alias tf='task -f'
+alias tn='task | head -n 1'
+
 alias pip2up="pip2 list --format=legacy | cut -d' ' -f1 | xargs pip2 install -U"
 alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
 alias gemup="gem update --system && gem update && gem cleanup"

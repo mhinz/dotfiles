@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#
+# Simple todo list manager.
+#
+# usage: task [-e] [-f [line]]
+#
+#   task        line-numbered tasks
+#   task -e     edit tasks using $EDITOR
+#   task -f 3   finish task on line 3
+#   task -f     finish all tasks
+#
+
+task_exists() {
+    if [[ -s ~/tasks ]]; then
+        if [[ "$(uname -s)" == Linux ]]; then
+            shaprog=sha1sum
+        else
+            shaprog='shasum -a 1'
+        fi
+        newline_sha="$($shaprog <<< "$*" | cut -d' ' -f1)"
+        while read -r line; do
+            line_sha="$($shaprog <<< "$line" | cut -d' ' -f1)"
+            if [ "$line_sha" = "$newline_sha" ]; then
+                return 0
+            fi
+        done < ~/tasks
+    fi
+    return 1
+}
+
+task() {
+    if (( $# )); then
+        if ! task_exists "$@"; then
+            echo "$@" >> ~/tasks
+        fi
+    else
+        if [[ -s ~/tasks ]]; then
+            nl -w2 -s'  ' ~/tasks
+        else
+            echo -e "\e[1mLAZY TIME\e[0m"
+        fi
+    fi
+}
+
+finish() {
+    sed -i "${1}d" ~/tasks
+}
+
+case "$1" in
+    -e)
+        $EDITOR ~/tasks
+        ;;
+    -f)
+        shift
+        finish "$@"
+        ;;
+    *)
+        task "$@"
+        ;;
+esac
