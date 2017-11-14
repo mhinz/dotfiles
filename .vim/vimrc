@@ -106,6 +106,7 @@ if has('nvim')
   let g:python_host_prog  = '/usr/local/bin/python'
   let g:python3_host_prog = '/usr/local/bin/python3'
   let $VISUAL = 'nvr -cc split --remote-wait'
+  let $ELIXIR_EDITOR = 'nvr -l +__LINE__ __FILE__'
 else
   filetype plugin indent on
   syntax   on
