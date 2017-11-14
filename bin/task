@@ -2,6 +2,9 @@
 #
 # Simple todo list manager.
 #
+# Tasks will be written to ~/tasks.
+# Finished tasks, plus a timestamp, will be written to ~/tasks.log.
+#
 # usage: task [-e] [-f [line]]
 #
 #   task        line-numbered tasks
@@ -43,7 +46,12 @@ task() {
 }
 
 finish() {
-    sed -i "${1}d" ~/tasks
+    line="$(sed -i -e "${1}w /dev/stdout" -e "${1}d" ~/tasks)"
+    if [[ -n $line ]]; then
+        while IFS= read -r task; do
+            echo "$(date +'%F %R') $task" >> ~/tasks.log
+        done <<< "$line"
+    fi
 }
 
 case "$1" in
