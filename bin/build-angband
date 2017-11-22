@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+dir='/data/repo/angband'
+
+cd "$dir" || exit
+echo '[*] Cleaning directory..'
+make distclean &>/dev/null
+
+if [[ $1 = '-f' ]]; then
+    echo '[!] Force building..'
+else
+    echo '[*] Pulling changes..'
+    if git pull | grep 'Already up[ -]to[ -]date.' &>/dev/null; then
+        echo '[!] No changes found.'
+        exit 1
+    fi
+fi
+
+export NCURSES_CONFIG=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/bin/ncurses5.4-config
+
+./autogen.sh
+./configure \
+    --prefix=${HOME}/local/angband \
+    --bindir=${HOME}/local/angband/bin \
+    --with-ncurses-prefix=/usr/lib \
+    --disable-ncursestest \
+    --disable-x11
+make
+make install
