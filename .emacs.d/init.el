@@ -60,8 +60,12 @@
   :config (global-git-gutter-mode 1))
 
 (use-package avy
-  :bind* (("C-'" . avy-goto-char)
-          ("C-," . avy-goto-char-2)))
+  :bind* ("C-," . avy-goto-char-2))
+
+(use-package slime
+  :init
+  (setq inferior-lisp-program "sbcl")
+  (setq slime-contribs '(slime-fancy)))
 
 (unless (and (fboundp 'server-running-p)
              (server-running-p))
