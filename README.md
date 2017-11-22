@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/mhinz/dotfiles.svg?branch=master)](https://travis-ci.org/mhinz/dotfiles)
 
-I use [Vim/Neovim](.vim/vimrc), [git](.config/git/config), [tmux](.tmux.conf),
-and [zsh](.zsh/.zshrc) ([profile](.profile), [shrc](.shrc)) on a daily basis and
-thus these configs are the most customized. Have fun reading them and steal what
-you need.
+I use [Vim/Neovim](.vim/vimrc), [Emacs](.emacs.d/init.el),
+[git](.config/git/config), [tmux](.tmux.conf), and [zsh](.zsh/.zshrc)
+([profile](.profile), [shrc](.shrc)) on a daily basis and thus these configs are
+the most customized. Have fun reading them and steal what you need.
 
 *Disclaimer: No Reddit users were hurt during the creation of these
 configuration files.*
