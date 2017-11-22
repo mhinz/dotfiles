@@ -1,5 +1,11 @@
 # This file gets sourced by .bashrc and .zshrc.
 
+# ^Q sends 0x11 (ASCII DC1 / XON  / "transmission on" )
+# ^S sends 0x13 (ASCII DC3 / XOFF / "transmission off")
+stty start ^Q stop ^S
+# Enable flow control, sending start/stop characters, only ^S restarts output.
+stty ixon ixoff -ixany
+
 if [ "$ITERM_PROFILE" = Dark ]; then
     eval $(dircolors ~/.zsh/dircolors.dark)
     ln -fs \
