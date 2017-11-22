@@ -93,6 +93,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-lookup'
   Plug 'mhinz/vim-mix-format', { 'on': ['MixFormat', 'MixFormatDiff'] }
   Plug 'mhinz/vim-nginx'
+  Plug 'mhinz/vim-panacea', { 'for': 'elixir' }
   Plug 'mhinz/vim-randomtag', { 'on': 'Random' }
   Plug 'mhinz/vim-rfc'
   Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
