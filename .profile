@@ -8,6 +8,7 @@ newpath=(
     /data/languages/elixir/bin
     ~/.npm/bin
     "$(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)"
+    ~/.rvm/bin
     ~/.rbenv/shims
     ~/.rbenv/bin
     ~/local/*/bin
