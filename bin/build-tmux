@@ -2,7 +2,7 @@
 
 cd /data/repo/tmux || exit
 
-if git pull | grep 'Already up-to-date.' && [ "$1" != -f ]; then
+if git pull | grep 'Already up[ -]to[ -]date.' && [ "$1" != -f ]; then
     exit 0
 fi
 

@@ -13,7 +13,7 @@ if [[ $1 = '-f' ]]; then
     echo '[!] Force building..'
 else
     echo '[*] Pulling changes..'
-    if git pull | grep 'Already up-to-date.' &>/dev/null; then
+    if git pull | grep 'Already up[ -]to[ -]date.' &>/dev/null; then
         echo '[!] No changes found.'
         exit 1
     fi
