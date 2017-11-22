@@ -196,6 +196,14 @@ fix-perm() {
   find . -type d -exec chmod ${1-700} {} +
   find . -type f -exec chmod ${2-600} {} +
 }
+
+angband() {
+    save_stty="$(stty --save)"
+    # Disable flow control and delayed suspend, since we need ^S and ^Y.
+    stty -ixon dsusp undef
+    command angband
+    stty "$save_stty"
+}
 # }}}
 
 # Chrome {{{1
