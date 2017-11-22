@@ -20,8 +20,8 @@ export NCURSES_CONFIG=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/bi
 
 ./autogen.sh
 ./configure \
-    --prefix=${HOME}/local/angband \
-    --bindir=${HOME}/local/angband/bin \
+    --prefix="${HOME}/local/angband" \
+    --bindir="${HOME}/local/angband/bin" \
     --with-ncurses-prefix=/usr/lib \
     --disable-ncursestest \
     --disable-x11
