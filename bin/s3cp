@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
 
-aws s3 cp "$1" "s3://foobarquux/$2" --acl public-read "${@:3}"
-echo "https://s3.eu-west-2.amazonaws.com/foobarquux/$2"
+if [[ $# -lt 1 ]]; then
+    echo "usage: s3cp <local path> [s3 path] [options]"
+    echo "See 'aws s3 cp help' for available options."
+    exit 1
+fi
+
+target="${2:-"$(basename $1)"}"
+aws s3 cp "$1" "s3://foobarquux/${target}" --acl public-read "${@:3}"
+echo "https://s3.eu-west-2.amazonaws.com/foobarquux/${target}" | tee >(pbcopy)

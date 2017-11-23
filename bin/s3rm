@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 
+if [[ $# -lt 1 ]]; then
+    echo "usage: s3rm <s3 path> [options]"
+    echo "See 'aws s3 rm help' for available options."
+    exit 1
+fi
+
 aws s3 rm "s3://foobarquux/$1" "${@:2}"

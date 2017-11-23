@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
-# -W  interactive selection (toggle with <space>); start in window selection mode
+if [[ $# -lt 1 ]]; then
+    echo "usage: s3screenshot <filename>"
+    echo "Use <space> to toggle between window selection and interactive selection."
+    exit 1
+fi
+
+target="${1%.png}.png"
+
+# -W  start in window selection mode
 # -o  no shadow
-if screencapture -Wo "/tmp/$1"; then
-    aws s3 cp "/tmp/$1" "s3://foobarquux/screenshots/$1" --acl public-read
-    echo "https://s3.eu-west-2.amazonaws.com/foobarquux/screenshots/$1" | tee >(pbcopy)
+if screencapture -Wo "/tmp/${target}"; then
+    aws s3 cp "/tmp/${target}" "s3://foobarquux/screenshots/${target}" --acl public-read
+    echo -n "Copied to pasteboard: "
+    echo "https://s3.eu-west-2.amazonaws.com/foobarquux/screenshots/${target}" | tee >(pbcopy)
 fi
