@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+xcode-select --install
+
+/usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+formulae=(
+    awscli
+    bash
+    coreutils
+    cscope
+    curl
+    emacs
+    erlang
+    exiftool
+    git
+    gnupg
+    go
+    gpg-agent
+    htop
+    jid
+    jq
+    ncdu
+    neovim
+    ngrep
+    ninja
+    nmap
+    node
+    openssl
+    pinentry-mac
+    postgresql
+    reattach-to-user-namespace
+    shellcheck
+    ssh-copy-id
+    the_silver_searcher
+    tmux
+    universal-ctags
+    wget
+    zsh
+)
+
+for formula in "${formulae[@]}"; do
+    brew install "$formula"
+done
