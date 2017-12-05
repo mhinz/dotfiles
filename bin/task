@@ -7,9 +7,11 @@
 #
 # usage: task [-e] [-f [line]]
 #
-#   task        line-numbered tasks
+#   task        list tasks
+#   task ...    add task
 #   task -e     edit tasks using $EDITOR
 #   task -f 3   finish task on line 3
+#   task 3      finish task on line 3
 #   task -f     finish all tasks
 #
 
@@ -33,7 +35,11 @@ task_exists() {
 
 task() {
     if (( $# )); then
-        if ! task_exists "$@"; then
+        if [[ "$@" =~ ^[0-9]+$ ]]; then
+            finish "$@"
+        elif task_exists "$@"; then
+            echo "Task exists already."
+        else
             echo "$@" >> ~/tasks
         fi
     else
@@ -46,7 +52,11 @@ task() {
 }
 
 finish() {
-    line="$(sed -i -e "${1}w /dev/stdout" -e "${1}d" ~/tasks)"
+    if (( $# == 0 )); then
+        read -p "Really? [yN] " answer
+        [[ "$answer" != y ]] && return
+    fi
+    line="$(sed -i '' -e "${1}w /dev/stdout" -e "${1}d" ~/tasks)"
     if [[ -n $line ]]; then
         while IFS= read -r task; do
             echo "$(date +'%F %R') $task" >> ~/tasks.log
