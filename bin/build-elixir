@@ -5,7 +5,7 @@ if [[ ! -d /data/languages/elixir ]]; then
     git clone https://github.com/elixir-lang/elixir /data/languages/elixir
 fi
 
-cd /data/languages/elixir
+cd /data/languages/elixir || exit
 
 if [[ $1 != '-f' ]]; then
     git pull | grep 'Already up[ -]to[ -]date.' && exit 1
