@@ -5,8 +5,10 @@ xcode-select --install
 /usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 formulae=(
+    automake
     awscli
     bash
+    cmake
     coreutils
     cscope
     curl
@@ -20,6 +22,7 @@ formulae=(
     htop
     jid
     jq
+    libtool
     ncdu
     neovim
     ngrep
@@ -28,6 +31,7 @@ formulae=(
     node
     openssl
     pinentry-mac
+    pkg-config
     postgresql
     reattach-to-user-namespace
     shellcheck
@@ -42,3 +46,5 @@ formulae=(
 for formula in "${formulae[@]}"; do
     brew install "$formula"
 done
+
+brew cask install font-input
