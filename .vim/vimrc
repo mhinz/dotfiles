@@ -477,15 +477,17 @@ endfunction
 
 function! s:colors_lucius() abort
   if &background ==# 'light'
-    highlight User1      ctermfg=23   ctermbg=192 cterm=NONE
-    highlight User2      ctermfg=20   ctermbg=195 cterm=NONE
-    highlight User3      ctermfg=237  ctermbg=237 cterm=NONE
-    highlight User4      ctermfg=255  ctermbg=237 cterm=NONE
-    highlight User5      ctermfg=255  ctermbg=237 cterm=NONE
-    highlight StatusLine ctermfg=255  ctermbg=237 cterm=NONE
-    highlight SignColumn ctermfg=NONE ctermbg=255 cterm=NONE
-    highlight Question   ctermfg=24   ctermbg=255 cterm=NONE
-    highlight Search     ctermfg=fg   ctermbg=222 cterm=NONE
+    highlight Normal                  ctermbg=NONE
+    highlight CursorLine              ctermbg=255
+    highlight User1      ctermfg=23   ctermbg=192  cterm=NONE
+    highlight User2      ctermfg=20   ctermbg=195  cterm=NONE
+    highlight User3      ctermfg=237  ctermbg=237  cterm=NONE
+    highlight User4      ctermfg=255  ctermbg=237  cterm=NONE
+    highlight User5      ctermfg=255  ctermbg=237  cterm=NONE
+    highlight StatusLine ctermfg=NONE ctermbg=237  cterm=NONE
+    highlight SignColumn ctermfg=NONE ctermbg=NONE cterm=NONE
+    highlight Question   ctermfg=24   ctermbg=255  cterm=NONE
+    highlight Search     ctermfg=fg   ctermbg=222  cterm=NONE
   endif
 endfunction
 
@@ -703,12 +705,6 @@ let g:sayonara_confirm_quit = 0
 " Plugin: vim-startify {{{2
 nnoremap <leader>st  :Startify<cr>
 
-let g:startify_skiplist = [
-      \ 'COMMIT_EDITMSG',
-      \ 'bundle/.*/doc',
-      \ '/data/repo/neovim/runtime/doc',
-      \ '/Users/mhi/local/vim/share/vim/vim74/doc',
-      \ ]
 let g:startify_bookmarks = [
       \ { 'c': '~/.vim/vimrc' },
       \ ]
