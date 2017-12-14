@@ -87,13 +87,13 @@ call plug#begin(s:bundle_dir)
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
   Plug 'xolox/vim-misc',         { 'for': 'lua' }
 
+  Plug 'mhinz/nvim-panacea', { 'for': 'elixir' }
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
   Plug 'mhinz/vim-mix-format', { 'on': ['MixFormat', 'MixFormatDiff'] }
   Plug 'mhinz/vim-nginx'
-  Plug 'mhinz/vim-panacea', { 'for': 'elixir' }
   Plug 'mhinz/vim-randomtag', { 'on': 'Random' }
   Plug 'mhinz/vim-rfc'
   Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
