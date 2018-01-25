@@ -42,7 +42,7 @@ _prompt() {
     local pwd="$(pwd -P)"
     local p
 
-    [[ -n $SSH_CONNECTION ]] && p+="${USER}@${HOSTNAME}:"
+    [[ -n $SSH_CONNECTION ]] && p+="${USER}@$(hostname):"
 
     p+=$_p_pink
 
