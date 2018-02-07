@@ -33,7 +33,6 @@ formulae=(
     pkg-config
     postgresql
     rbenv
-    reattach-to-user-namespace
     shellcheck
     ssh-copy-id
     the_silver_searcher
