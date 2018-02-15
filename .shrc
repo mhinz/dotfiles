@@ -229,21 +229,19 @@ ch() {
 
 # FZF {{{1
 f() {
-  [ -n "$@" ] && args="-q $@"
-  IFS=$'\n'
-  files=`fzf-tmux -m -1 --tac --tiebreak=index $args`
-  [ -n "$files" ] && $EDITOR $files
-  unset IFS files args
+  local IFS=$'\n'
+  local files=($(fzf-tmux -m -1 --tac --tiebreak=index))
+  [[ -n $files ]] && v "${files[@]}"
 }
 
 p() {
-  dirs="/data/github /data/repo $HOME/.vim/bundle"
-  [ -n "$ZSH_VERSION" ] && setopt local_options sh_word_split
-  [ -n "$@" ] && args="-q $@"
-  IFS=$' '
-  dir=`find $dirs -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac "$args"`
-  [ -d "$dir" ] && cd $dir && clear
-  unset IFS dirs dir args
+  local dirs=(
+    /data/github
+    /data/repo
+    $HOME/.vim/bundle
+  )
+  local dir="$(find "${dirs[@]}" -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac)"
+  [[ -n $dir ]] && cd "$dir" && clear
 }
 
 pf() {
@@ -251,23 +249,22 @@ pf() {
 }
 
 c() {
-    read -d '' configs <<EOF
-$HOME/.bash_profile
-$HOME/.bashrc
-$HOME/.config/git/config
-$HOME/.profile
-$HOME/.shrc
-$HOME/.tmux.conf
-$HOME/.vim/autoload/mhi.vim
-$HOME/.vim/vimrc
-$HOME/.zsh/.zprofile
-$HOME/.zsh/.zshrc
-$HOME/.zshenv
-EOF
-  [ -n "$@" ] && args="-q $@"
-  files=`echo "$configs" | fzf-tmux -m -1 --tac --tiebreak=index "$args" | xargs`
-  [ -n "$files" ] && $EDITOR $files
-  unset configs files args
+  local configs=(
+    $HOME/.bash_profile
+    $HOME/.bashrc
+    $HOME/.config/git/config
+    $HOME/.profile
+    $HOME/.shrc
+    $HOME/.tmux.conf
+    $HOME/.vim/autoload/mhi.vim
+    $HOME/.vim/vimrc
+    $HOME/.zsh/.zprofile
+    $HOME/.zsh/.zshrc
+    $HOME/.zshenv
+  )
+  local IFS=$'\n'
+  local files=($(echo "${configs[*]}" | fzf-tmux -m -1 --tac --tiebreak=index))
+  [[ -n $files ]] && v "${files[@]}"
 }
 
 # Git {{{1
