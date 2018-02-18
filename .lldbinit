@@ -1,0 +1,1 @@
+command alias brf breakpoint set --file %1 --line %2
