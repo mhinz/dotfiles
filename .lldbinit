@@ -1,1 +1,3 @@
 command alias brf breakpoint set --file %1 --line %2
+command alias ptype target modules lookup -t %1
+command alias reload command source -s 1 ~/.lldbinit
