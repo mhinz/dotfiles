@@ -4,6 +4,7 @@
 newpath=(
     /usr/local/sbin
     /usr/local/opt/coreutils/libexec/gnubin
+    /usr/local/opt/ncurses/bin
     "$GOPATH"/bin
     /data/languages/elixir/bin
     ~/.npm/bin
@@ -36,7 +37,7 @@ unset newpath dir
 
 export LANG=en_US.UTF-8
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_DEFAULT_COMMAND='ag --hidden --unrestricted --ignore .git -g ""'
 export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
 export ELIXIR_EDITOR='ec +__LINE__ __FILE__'
