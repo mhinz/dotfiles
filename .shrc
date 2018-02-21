@@ -288,6 +288,11 @@ pr() {
     git checkout -q FETCH_HEAD
 }
 
+changed() {
+    local files=($(git diff --name-only 2>/dev/null))
+    [[ -n $files ]] && v "${files[@]}"
+}
+
 b() {
     git checkout $(git branch -a | fzf -1 | cut -c3-)
 }
