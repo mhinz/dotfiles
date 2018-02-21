@@ -12,6 +12,7 @@ formulae=(
     coreutils
     cscope
     curl
+    diff-so-fancy
     emacs
     erlang
     exiftool
