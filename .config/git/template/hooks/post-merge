@@ -2,8 +2,8 @@
 
 if [ `uname -s` = Darwin ]; then
     osascript <<EOF
-    display notification "ctags -R `pwd`" with title "post-merge"
+    display notification "git-tags: `pwd`" with title "post-merge"
 EOF
 fi
 
-.git/hooks/ctags 1>/dev/null 2>&1 &
+git-tags &

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $PWD = $HOME ]]; then
+    echo "nö" 1>&2
+    exit 1
+fi
+
+cd "$(git rev-parse --show-toplevel)"
+
+files="$(git ls-files -- '*.c' '*.h' '*.cc' '*.hh' '*.cpp', '*.hpp' '*.java')"
+
+if [[ -n $files ]]; then
+    cscope -b -q -i - <<< "$files"
+    mv cscope* .git
+else
+    ctags --fields=+S --exclude=.git --tag-relative=yes -Rf .git/tags.$$
+    mv .git/tags.$$ .git/tags
+fi
