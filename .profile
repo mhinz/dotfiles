@@ -1,5 +1,11 @@
 # This file gets sourced by every login shell.
 
+# There is no need to add the user directories for Ruby gems and Python
+# packages to $PATH, when using rbenv/pyenv.
+#
+#   echo "$(ruby -e 'puts Gem.user_dir')"
+#   echo "$(python3 -c 'import site; print(site.USER_BASE)')"
+
 # PATH {{{1
 newpath=(
     /usr/local/sbin
@@ -8,10 +14,8 @@ newpath=(
     "$GOPATH"/bin
     /data/languages/elixir/bin
     ~/.npm/bin
-    "$(ruby -rubygems -e 'puts Gem.user_dir' 2>/dev/null)"
-    ~/.rvm/bin
+    ~/.pyenv/shims
     ~/.rbenv/shims
-    ~/.rbenv/bin
     ~/local/*/bin
     ~/bin
 )
