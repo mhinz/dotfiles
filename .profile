@@ -10,7 +10,7 @@
 newpath=(
     /usr/local/sbin
     /usr/local/opt/coreutils/libexec/gnubin
-    /usr/local/opt/ncurses/bin
+    # /usr/local/opt/ncurses/bin
     "$GOPATH"/bin
     /data/languages/elixir/bin
     ~/.npm/bin

@@ -271,6 +271,11 @@ c() {
   [[ -n $files ]] && v "${files[@]}"
 }
 
+book() {
+    local book="$(ls /data/books | fzf -1 --tac)"
+    [[ -n $book ]] && open /data/books/"$book"
+}
+
 # Git {{{1
 pr() {
     local origin pr

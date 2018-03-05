@@ -58,7 +58,6 @@ call plug#begin(s:bundle_dir)
   Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
   Plug 'rhysd/committia.vim'
-  Plug 'suan/vim-instant-markdown', { 'on': 'InstantMarkdownPreview' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
@@ -104,8 +103,6 @@ call plug#end()
 
 " Init {{{1
 if has('nvim')
-  let g:python_host_prog  = '/usr/local/bin/python'
-  let g:python3_host_prog = '/usr/local/bin/python3'
   let $VISUAL = 'nvr -cc split --remote-wait'
   let $ELIXIR_EDITOR = 'nvr -l +__LINE__ __FILE__'
 else
@@ -176,7 +173,7 @@ set foldtext      =mhi#foldy()
 set hlsearch
 set ignorecase
 set incsearch
-set mouse         =
+set mouse         =a
 set scrolloff     =4
 set sidescroll    =5
 set smartcase
@@ -261,7 +258,7 @@ set formatoptions =tcrqnj
 
 if has('multi_byte') && &encoding ==# 'utf-8'
   let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
-  let &fillchars = 'diff: '  " ▚
+  let &fillchars = 'vert: ,diff: '  " ▚
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
   augroup vimrc
@@ -270,7 +267,7 @@ if has('multi_byte') && &encoding ==# 'utf-8'
   augroup END
 else
   let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
-  let &fillchars = 'stlnc:#'
+  let &fillchars = 'vert: ,stlnc:#'
   let &showbreak = '-> '
   augroup vimrc
     autocmd InsertEnter * set listchars-=trail:.
@@ -396,6 +393,7 @@ nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L
 nnoremap <leader>w  :update<cr>
 nnoremap <leader>x  :xit<cr>
 nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+nnoremap <leader>v  :Runtime<cr>
 
 nnoremap '  `
 nnoremap `  '
@@ -450,9 +448,6 @@ augroup vimrc
   au BufRead,BufNewFile *                         call mhi#source_project_config()
   au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
   au BufRead,BufNewFile *.adoc                    setfiletype asciidoc
-  au BufRead,BufNewFile /data/repo/neo{mutt,vim}/* setlocal et sts=2 sw=2 cino=>2,l1,p0,)50,*50,t0
-  au BufRead,BufNewFile /data/repo/vim/*          setlocal noet
-  au BufRead,BufNewFile /data/repo/vim/src/*.[ch] setlocal sw=4 sts=4
 
   au BufWritePost       ~/.Xdefaults              redraw | echo system('xrdb ' . expand('<amatch>'))
   au CompleteDone       *                         pclose
@@ -466,6 +461,7 @@ augroup vimrc
   au InsertEnter * set nocursorline
   au InsertLeave * set cursorline
 
+  au VimEnter,DirChanged * if filereadable('.git/cscope.out') | exe 'sil! cs add .git/cscope.out' | endif
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
 augroup END
 
@@ -507,7 +503,7 @@ function! s:colors_lucius() abort
     highlight User3      ctermfg=237  ctermbg=237  cterm=NONE
     highlight User4      ctermfg=255  ctermbg=237  cterm=NONE
     highlight User5      ctermfg=255  ctermbg=237  cterm=NONE
-    highlight StatusLine ctermfg=NONE ctermbg=237  cterm=NONE
+    highlight StatusLine              ctermbg=237  cterm=NONE
     highlight SignColumn ctermfg=NONE ctermbg=NONE cterm=NONE
     highlight Question   ctermfg=24   ctermbg=255  cterm=NONE
     highlight Search     ctermfg=fg   ctermbg=222  cterm=NONE
@@ -849,7 +845,7 @@ augroup vimrc
   xmap ac <plug>(signify-motion-outer-visual)
 
   " Filetype: Vim, Vader {{{2
-  autocmd FileType vim nnoremap <buffer><silent> <cr> :call lookup#lookup() \| call halo#run()<cr>
+  autocmd FileType vim nnoremap <buffer><silent> <cr> :call lookup#lookup()<cr>
   autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<cr>
   autocmd FileType vim setl sts=2 sw=2 isk-=#
   autocmd BufRead *.{vader,vim} command! -buffer Test call mhi#run_exercism_tests()

@@ -14,7 +14,7 @@ files="$(git ls-files -- '*.c' '*.h' '*.cc' '*.hh' '*.cpp', '*.hpp' '*.java')"
 if [[ -n $files ]]; then
     cscope -b -q -i - <<< "$files"
     mv cscope* .git
-else
-    ctags --fields=+S --exclude=.git --tag-relative=yes -Rf .git/tags.$$
-    mv .git/tags.$$ .git/tags
 fi
+
+ctags --fields=+S --exclude=.git --tag-relative=yes -Rf .git/tags.$$
+mv .git/tags.$$ .git/tags

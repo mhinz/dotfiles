@@ -53,10 +53,7 @@ let c_no_curly_error = 1
 let c_space_errors   = 1
 let c_syntax_for_h   = 1
 
-setlocal cinoptions  =>4,l1,p0,)50,*50,t0
 setlocal comments    =sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/
-setlocal shiftwidth  =4
-setlocal softtabstop =4
 
 nnoremap <buffer> <F8>      :!clear && ./%:r<CR>
 nnoremap <buffer> <F9>      :call <sid>make()<CR>

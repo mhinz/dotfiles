@@ -41,28 +41,21 @@ endfunction
 "
 function! mhi#jump()
   if (&filetype == 'vim' && &buftype == 'nofile') || &buftype == 'quickfix'
-    execute "normal! \<cr>"
+      execute "normal! \<cr>"
   elseif &filetype == 'neoman'
-    execute "normal \<c-]>"
+    execute "normal! \<c-]>"
   else
-    if exists('g:cscoped')
-      try
-        execute 'cscope find g' expand('<cword>')
-      catch /E259/
-        echohl WarningMsg
-        redraw | echomsg 'No match found: '. expand('<cword>')
-        echohl NONE
-      endtry
-    else
-      try
-        execute "normal! g\<c-]>"
-      catch /E349/ " no identifier under cursor
-      catch /E426/
-        echohl WarningMsg
-        redraw | echomsg 'No match found: '. expand('<cword>')
-        echohl NONE
-      endtry
+    let word = expand('<cword>')
+    if empty(word)
+      return
     endif
+    try
+      execute 'cstag' word
+    catch /E433/
+      redraw | echomsg 'No tags file' | return
+    catch /E257/
+      redraw | echomsg 'No match:' word | return
+    endtry
     normal! zvzt
     call halo#run()
   endif
