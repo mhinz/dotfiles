@@ -2,7 +2,9 @@
 
 xcode-select --install
 
-/usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+if ! command -v brew &>/dev/null; then
+    /usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
 
 formulae=(
     automake
@@ -38,14 +40,21 @@ formulae=(
     ssh-copy-id
     the_silver_searcher
     tmux
-    universal-ctags
     wget
     youtube-dl
     zsh
 )
 
-for formula in "${formulae[@]}"; do
-    brew install "$formula"
-done
+brew install "${formulae[@]}"
 
-brew cask install font-input
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+
+brew tap caskroom/cask
+
+formulae=(
+    calibre
+    font-input
+    wireshark
+)
+
+brew cask install "${formulae[@]}"
