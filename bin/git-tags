@@ -1,20 +1,32 @@
 #!/usr/bin/env bash
 
+ps -o stat= -p $$ | grep -v + &>/dev/null
+in_foreground=$?
+
 set -e
 
-if [[ $PWD = $HOME ]]; then
-    echo "nö" 1>&2
-    exit 1
-fi
+blacklist=(
+    ~
+    /usr/local/Homebrew
+)
+
+for dir in "${blacklist[@]}"; do
+    if [[ $PWD = $dir ]]; then
+        (( in_foreground )) && echo 'nö' 1>&2
+        exit 1
+    fi
+done
 
 cd "$(git rev-parse --show-toplevel)"
 
 files="$(git ls-files -- '*.c' '*.h' '*.cc' '*.hh' '*.cpp', '*.hpp' '*.java')"
 
 if [[ -n $files ]]; then
+    (( in_foreground )) && echo 'Creating cscope database...'
     cscope -b -q -i - <<< "$files"
     mv cscope* .git
 fi
 
+(( in_foreground )) && echo 'Creating tags...'
 ctags --fields=+S --exclude=.git --tag-relative=yes -Rf .git/tags.$$
 mv .git/tags.$$ .git/tags
