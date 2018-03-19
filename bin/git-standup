@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+standup() {
+    dir=$1
+    shift
+    if git -C "$dir" rev-parse --git-dir &>/dev/null; then
+        changes="$(git -C "$dir" log --all --author='Marco Hinz' --since='6am yesterday' --format=%s "$@")"
+        if [[ -n $changes ]]; then
+            echo -e "\e[31;3m⇒ ${dir}\e[0m"
+            echo "$changes"
+        fi
+    fi
+}
+
+if git rev-parse --git-dir &>/dev/null; then
+    standup "$PWD" "$@"
+else
+    for dir in *; do
+        standup "$dir" "$@"
+    done
+fi
