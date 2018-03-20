@@ -3,7 +3,7 @@
 xcode-select --install
 
 if ! command -v brew &>/dev/null; then
-    /usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 formulae=(
@@ -22,6 +22,7 @@ formulae=(
     gnupg
     go
     htop
+    hub
     jid
     jq
     libtool
@@ -38,8 +39,10 @@ formulae=(
     rbenv
     shellcheck
     ssh-copy-id
+    sslyze
     the_silver_searcher
     tmux
+    tree
     wget
     youtube-dl
     zsh
@@ -53,7 +56,16 @@ brew tap caskroom/cask
 
 formulae=(
     calibre
+    docker
+    evernote
     font-input
+    gimp
+    iterm2
+    java
+    keycastr
+    vagrant
+    virtualbox
+    virtualbox-extension-pack
     wireshark
 )
 
