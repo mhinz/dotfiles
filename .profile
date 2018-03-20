@@ -50,6 +50,8 @@ export GOPATH=/data/go
 export GOARCH=amd64
 export GOOS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
+export PGDATA=/usr/local/var/postgres
+
 if   command -v nvim  1>/dev/null; then export EDITOR='nvim'
 elif command -v vim   1>/dev/null; then export EDITOR='vim'
 elif command -v vi    1>/dev/null; then export EDITOR='vi'
@@ -59,6 +61,7 @@ else echo 'Install a proper editor.'
 fi
 
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:"$MANPATH"
+export MANPATH=/usr/local/opt/erlang/lib/erlang/man:"$MANPATH"
 export MANWIDTH=82
 
 case "$EDITOR" in
