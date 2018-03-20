@@ -59,6 +59,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
   Plug 'rhysd/committia.vim'
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-dadbod'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-rsi'
@@ -507,6 +508,7 @@ function! s:colors_lucius() abort
     highlight SignColumn ctermfg=NONE ctermbg=NONE cterm=NONE
     highlight Question   ctermfg=24   ctermbg=255  cterm=NONE
     highlight Search     ctermfg=fg   ctermbg=222  cterm=NONE
+    highlight Folded                  ctermbg=253  cterm=NONE
   endif
 endfunction
 
@@ -722,24 +724,28 @@ nnoremap <silent><leader>Q  :Sayonara!<cr>
 let g:sayonara_confirm_quit = 0
 
 " Plugin: vim-startify {{{2
-nnoremap <leader>st  :Startify<cr>
+nnoremap <leader>st :Startify<cr>
 
-let g:startify_bookmarks = [
-      \ { 'c': '~/.vim/vimrc' },
-      \ ]
-let g:startify_transformations = [
-      \ ['.*vimrc$', 'vimrc'],
+function! s:neovim_commits()
+  let git = 'git -C /data/repo/neovim'
+  let commits = systemlist(git .' log --oneline | head -n10')
+  let git = 'G'. git[1:]
+  return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+endfunction
+
+let g:startify_lists = [
+      \ { 'header': ['   MRU'],            'type': 'files' },
+      \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+      \ { 'header': ['   Sessions'],       'type': 'sessions' },
+      \ { 'header': ['   Neovim commits'], 'type': function('s:neovim_commits') },
       \ ]
 
-let g:startify_change_to_dir          = 0
-let g:startify_change_to_vcs_root     = 0
-let g:startify_enable_special         = 0
-let g:startify_files_number           = 8
-let g:startify_fortune_use_unicode    = 1
-let g:startify_session_autoload       = 0
-let g:startify_session_persistence    = 0
-let g:startify_update_oldfiles        = 1
-let g:startify_use_env                = 1
+let g:startify_change_to_dir       = 0
+let g:startify_custom_header       = 'map(startify#fortune#boxed(), "\"   \".v:val")'
+let g:startify_enable_special      = 0
+let g:startify_fortune_use_unicode = 1
+let g:startify_update_oldfiles     = 1
+let g:startify_use_env             = 1
 
 " Filetype {{{1
 augroup vimrc
