@@ -21,7 +21,6 @@ formulae=(
     git
     gnupg
     go
-    htop
     hub
     jid
     jq

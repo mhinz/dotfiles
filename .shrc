@@ -153,6 +153,14 @@ dsf() {
     git diff --no-index --color "$@" | diff-so-fancy | less -RFXx2
 }
 
+s() {
+    if (( $# )); then
+        ps -eo pid,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@"
+    else
+        ps -eo pid,%cpu,%mem,state,command
+    fi
+}
+
 ssh() {
     if [ $# -eq 0 ]; then
         mhi net hosts
@@ -294,7 +302,7 @@ pr() {
 }
 
 changed() {
-    local files=($(git diff --name-only 2>/dev/null))
+    local files=($(git diff --name-only "$@" 2>/dev/null))
     [[ -n $files ]] && v "${files[@]}"
 }
 

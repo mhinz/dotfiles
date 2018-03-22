@@ -83,7 +83,6 @@
   s        = status --short --branch --untracked-files=no
   sh       = show
   shs      = show --stat
-  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   st       = stash
   stl      = stash list
   sts      = stash show -p
@@ -91,6 +90,12 @@
   tr       = trail
   unmerged = branch --no-merged master
   wt       = worktree
+
+  description = !git config --get "branch.$(git rev-parse --abbrev-ref HEAD).description"
+
+  since-tag = "!f() { git log --oneline --no-merges ...${@:-$(git describe --abbrev=0)} | wc -l; }; f"
+
+  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
 
   ours   = !git checkout --ours $@ && git add $@
   theirs = !git checkout --theirs $@ && git add $@
