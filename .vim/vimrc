@@ -443,7 +443,6 @@ augroup vimrc
     autocmd BufEnter term://* startinsert
   endif
 
-  au BufEnter * call mhi#cd()
   au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
 
   au BufRead,BufNewFile *                         call mhi#source_project_config()
@@ -472,6 +471,7 @@ command! -bar -nargs=* -complete=help    H           helpgrep <args>
 " command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
 command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
 command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
+command! -bar                            Cd          call mhi#cd()
 
 " Color {{{1
 function! s:colors_default() abort
@@ -674,6 +674,7 @@ nnoremap <f3>  :UndotreeToggle<cr>
 
 " Plugin: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
+autocmd VimEnter * if &ft == 'dirvish' | exe 'lcd' expand('%') | endif
 nnoremap <f1> :vsplit +Dirvish<cr><c-w>H<c-w>40<bar>
 
 
@@ -706,6 +707,7 @@ highlight Conceal ctermfg=NONE ctermbg=250
 
 let grepper = {
       \ 'tools': ['git', 'ag', 'rubocop'],
+      \ 'dir': 'repo,filecwd',
       \ 'rubocop': {
       \   'grepprg': 'rubocop -femacs',
       \   'grepformat': '%f:%l:%c: %t: %m',
@@ -728,7 +730,7 @@ nnoremap <leader>st :Startify<cr>
 
 function! s:neovim_commits()
   let git = 'git -C /data/repo/neovim'
-  let commits = systemlist(git .' log --oneline | head -n10')
+  let commits = systemlist(git .' log --oneline --no-merges | head -n10')
   let git = 'G'. git[1:]
   return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
 endfunction
