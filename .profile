@@ -3,7 +3,7 @@
 # There is no need to add the user directories for Ruby gems and Python
 # packages to $PATH, when using rbenv/pyenv.
 #
-#   echo "$(ruby -e 'puts Gem.user_dir')"
+#   echo "$(ruby -e 'puts Gem.dir')"
 #   echo "$(python3 -c 'import site; print(site.USER_BASE)')"
 
 # PATH {{{1

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+gem install rbenv gem-ctags
+gem ctags
+
+mkdir -p ~/.rbenv/plugins
+git clone git://github.com/tpope/rbenv-ctags.git ~/.rbenv/plugins/rbenv-ctags
+rbenv ctags

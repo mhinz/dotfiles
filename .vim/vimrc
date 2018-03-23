@@ -74,9 +74,6 @@ call plug#begin(s:bundle_dir)
   Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
   Plug 'prettier/vim-prettier',   { 'for': 'javascript' }
 
-  Plug 'tpope/vim-bundler'
-  Plug 'tpope/vim-rails'
-  Plug 'tpope/vim-rake'
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
   Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
