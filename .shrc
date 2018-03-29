@@ -319,7 +319,7 @@ prpush() {
 }
 
 changed() {
-    local files=($(git diff --name-only "$@" 2>/dev/null))
+    local files=($(git diff --name-only --relative "$@" 2>/dev/null))
     [[ -n $files ]] && v "${files[@]}"
 }
 
@@ -339,7 +339,9 @@ gho() {
   open ${url}/tree/${branch}/${prefix}${1:-}
 }
 
-alias gv="nvim +GV +'sil tabc 2' +'exe \"normal \<cr>\"'"
+gv() {
+    nvim +"GV $*" +'sil tabc 2' +'exe "normal \<cr>"'
+}
 
 # iTerm2 {{{1
 proftoggle() {
