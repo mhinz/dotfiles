@@ -301,6 +301,23 @@ pr() {
     git checkout -q FETCH_HEAD
 }
 
+prpush() {
+    local pr=$1
+    local local_branch=$(git rev-parse --abbrev-ref HEAD)
+    [[ $local_branch == pr[[:digit:]]* ]] && pr=${local_branch#??}
+
+    local url=$(git config remote.$(git config branch.master.remote).url)
+    local slug=${${url#*github.com?}%.git}
+    local repo="${slug#*/}"
+
+    local url=https://api.github.com/repos/${slug}/pulls/${pr}
+    local label=$(curl -s "$url" | jq -r '.head.label')
+    local author=${label%%:*}
+    local remote_branch=${label#*:}
+
+    git push https://github.com/${author}/${repo} ${local_branch}:${remote_branch}
+}
+
 changed() {
     local files=($(git diff --name-only "$@" 2>/dev/null))
     [[ -n $files ]] && v "${files[@]}"
