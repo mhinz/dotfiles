@@ -4,5 +4,6 @@ gem install rbenv gem-ctags
 gem ctags
 
 mkdir -p ~/.rbenv/plugins
-git clone git://github.com/tpope/rbenv-ctags.git ~/.rbenv/plugins/rbenv-ctags
+git clone https://github.com/tpope/rbenv-ctags.git    ~/.rbenv/plugins/rbenv-ctags
+git clone https://github.com/ianheggie/rbenv-binstubs ~/.rbenv/plugins/rbenv-binstubs
 rbenv ctags
