@@ -16,6 +16,7 @@
   prune = true
 [push]
   default = current
+  followTags = true
 [rebase]
   autosquash = true
   autostash  = true
@@ -49,6 +50,7 @@
   ca       = commit --amend
   caa      = commit --amend --no-edit
   cf       = commit --fixup
+  cl       = clone
   co       = checkout
   cp       = cherry-pick
   d        = diff --color --no-ext-diff
@@ -63,6 +65,7 @@
   h        = help
   lfp      = !git l --first-parent
   ln       = !git l @{1}..
+  ls       = ls-files
   lso      = ls-files --others --exclude-standard
   lsr      = ls-remote
   m        = merge
@@ -95,7 +98,7 @@
 
   since-tag = "!f() { git log --oneline --no-merges ...${@:-$(git describe --abbrev=0)} | wc -l; }; f"
 
-  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+  snapshot = !git stash push "snapshot: $(date)" && git stash apply "stash@{0}"
 
   ours   = !git checkout --ours $@ && git add $@
   theirs = !git checkout --theirs $@ && git add $@
