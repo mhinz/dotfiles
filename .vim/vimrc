@@ -89,7 +89,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
-  Plug 'mhinz/vim-mix-format', { 'on': ['MixFormat', 'MixFormatDiff'] }
+  Plug 'mhinz/vim-mix-format'
   Plug 'mhinz/vim-nginx'
   Plug 'mhinz/vim-randomtag', { 'on': 'Random' }
   Plug 'mhinz/vim-rfc'
@@ -139,7 +139,7 @@ augroup END
 " Option {{{1
 " indent settings
 set autoindent
-set cinoptions    =>2,l1,p0,)50,*50,t0
+set cinoptions    =l1,p0,)50,*50,t0
 set expandtab
 set smarttab
 set softtabstop   =2
@@ -445,6 +445,7 @@ augroup vimrc
   au BufRead,BufNewFile *                         call mhi#source_project_config()
   au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
   au BufRead,BufNewFile *.adoc                    setfiletype asciidoc
+  au BufRead,BufNewFile /data/repo/git/*.{c,h}    setl noet sw=0 sts=0
 
   au BufWritePost       ~/.Xdefaults              redraw | echo system('xrdb ' . expand('<amatch>'))
   au CompleteDone       *                         pclose
@@ -463,12 +464,10 @@ augroup vimrc
 augroup END
 
 " Command {{{1
-command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
-command! -bar -nargs=* -complete=help    H           helpgrep <args>
-" command! -bar                            Scriptnames call mhi#scratch('scriptnames') | sil keepp g/^$/d
-command! -bar -nargs=1 -complete=command Scratch     call mhi#scratch(<f-args>)
-command! -bar                            CleanSpell  runtime! spell/cleanadd.vim
-command! -bar                            Cd          call mhi#cd()
+command! -nargs=1 -complete=command Scratch call mhi#scratch(<f-args>)
+command! CleanSpell  runtime! spell/cleanadd.vim
+command! Cd call mhi#cd()
+command! Evo exe printf('GV -L :%s:%s', expand('<cword>'), expand('%:p'))
 
 " Color {{{1
 function! s:colors_default() abort
