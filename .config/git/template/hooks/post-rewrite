@@ -1,5 +1,12 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 case "$1" in
-    rebase) exec .git/hooks/post-merge ;;
+    rebase)
+        if [[ "$(uname -s)" = Darwin ]]; then
+            osascript <<EOF
+            display notification "git-ctags: `pwd`" with title "post-rewrite"
+EOF
+        fi
+        ~/bin/git-ctags &>/dev/null &
+        ;;
 esac

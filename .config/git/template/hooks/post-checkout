@@ -1,9 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-if [ `uname -s` = Darwin ]; then
+if [[ "$(uname -s)" = Darwin ]]; then
     osascript <<EOF
-    display notification "git-tags: `pwd`" with title "post-checkout"
+    display notification "git-ctags: `pwd`" with title "post-checkout"
 EOF
 fi
 
-git-tags &
+~/bin/git-ctags &>/dev/null &
+
+if [[ $3 -eq 1 ]] && git diff --name-only $1 $2 | egrep -q '^Gemfile|\.gemspec$'; then
+    command -v bundle &>/dev/null && exec bundle
+fi

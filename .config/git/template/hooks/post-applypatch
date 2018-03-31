@@ -2,7 +2,7 @@
 
 if [[ "$(uname -s)" = Darwin ]]; then
     osascript <<EOF
-    display notification "git-ctags: `pwd`" with title "post-merge"
+    display notification "git-ctags: `pwd`" with title "post-applypatch"
 EOF
 fi
 
