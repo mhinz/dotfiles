@@ -8,6 +8,10 @@ fi
 
 ~/bin/git-ctags &>/dev/null &
 
-if [[ $3 -eq 1 ]] && git diff --name-only $1 $2 | egrep -q '^Gemfile|\.gemspec$'; then
-    command -v bundle &>/dev/null && exec bundle
+if [[ $1 -ne 0 ]] \
+    && [[ $3 -eq 1 ]] \
+    && git diff --name-only $1 $2 | egrep -q '^Gemfile|\.gemspec$' \
+    && command -v bundle &>/dev/null
+then
+    exec bundle
 fi
