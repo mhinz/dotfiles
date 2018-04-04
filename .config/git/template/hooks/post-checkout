@@ -8,7 +8,7 @@ fi
 
 ~/bin/git-ctags &>/dev/null &
 
-if [[ $1 -ne 0 ]] \
+if [[ $1 != 0000000000000000000000000000000000000000 ]] \
     && [[ $3 -eq 1 ]] \
     && git diff --name-only $1 $2 | egrep -q '^Gemfile|\.gemspec$' \
     && command -v bundle &>/dev/null
