@@ -94,6 +94,8 @@
   unmerged = branch --no-merged master
   wt       = worktree
 
+  rehook = "!f() { cd \"$(git rev-parse --show-toplevel)\"; rm -r .git/hooks; git init; }; f"
+
   description = !git config --get "branch.$(git rev-parse --abbrev-ref HEAD).description"
 
   since-tag = "!f() { git log --oneline --no-merges ...${@:-$(git describe --abbrev=0)} | wc -l; }; f"
