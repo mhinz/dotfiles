@@ -1,5 +1,7 @@
 # This file gets sourced by .bashrc and .zshrc.
 
+os="$(uname -s)"
+
 # ^Q sends 0x11 (ASCII DC1 / XON  / "transmission on" )
 # ^S sends 0x13 (ASCII DC3 / XOFF / "transmission off")
 stty start ^Q stop ^S
@@ -100,12 +102,12 @@ alias pip2up="pip2 list --format=legacy | cut -d' ' -f1 | xargs pip2 install -U"
 alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
-if [ "$(uname -s)" = Darwin ]; then
+if [[ $os = Darwin ]]; then
     alias brewup='brew update && brew upgrade && brew cleanup'
     alias allup="pip2up; pip3up; gemup; npmup; brewup"
-else
-    alias aptup="sudo -- sh -c 'apt-get update && apt-get upgrade'"
-    alias allup="pip2up; pip3up; gemup; npmup, aptup"
+elif [[ $os = Linux ]]; then
+    alias aptup="sudo -- sh -c 'apt update && apt upgrade'"
+    alias allup="pip2up; pip3up; gemup; npmup; aptup"
 fi
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
@@ -117,24 +119,25 @@ alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg
 
 alias rt='cd ~torrent/../session && rtorrent'
 
-alias chrome='open -a Google\ Chrome'
-alias preview='open -a Preview'
-alias vlc='open -a VLC'
-
-if [[ "$(command -v ls)" =~ coreutils/libexec/gnubin ]]; then
-    alias ls='ls --color=always -N'
-elif command -v gnuls 1>/dev/null; then
-    alias ls='gnuls --color=always -N'
+if [[ $os = Darwin ]]; then
+    alias chrome='open -a Google\ Chrome'
+    alias preview='open -a Preview'
+    alias vlc='open -a VLC'
 fi
 
-alias grep='grep --color=always'
-
+if [[ $os = FreeBSD ]]; then
+    alias ls='gnuls --color=auto -N'
+else
+    alias ls='ls --color=auto -N'
+fi
 alias j='ls -lhd *(D-/)'
 alias k='ls -lhX *(D-^/)'
 alias l='ls -lh --group-directories-first'
 alias ll='ls -lhX --group-directories-first'
 alias la='ls -lhXA --group-directories-first'
 alias n='ls -lhS *(DOL[1,5]^/)'
+
+alias grep='grep --color=auto'
 
 alias h='cd ..; l'
 alias ..="cd .."
