@@ -318,7 +318,9 @@ prpush() {
     local author=${label%%:*}
     local remote_branch=${label#*:}
 
-    git push https://github.com/${author}/${repo} ${local_branch}:${remote_branch}
+    local cmd="git push -f git@github.com:${author}/${repo} ${local_branch}:${remote_branch}"
+    echo "$cmd"
+    eval "$cmd"
 }
 
 changed() {
