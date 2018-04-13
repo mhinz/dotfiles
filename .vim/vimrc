@@ -71,8 +71,9 @@ call plug#begin(s:bundle_dir)
   Plug 'wellle/tmux-complete.vim'
 
   Plug 'mattn/emmet-vim',         { 'for': 'html' }
-  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+  Plug 'pangloss/vim-javascript'
   Plug 'prettier/vim-prettier',   { 'for': 'javascript' }
+  Plug 'HerringtonDarkholme/yats.vim'
 
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
@@ -468,6 +469,7 @@ command! -nargs=1 -complete=command Scratch call mhi#scratch(<f-args>)
 command! CleanSpell  runtime! spell/cleanadd.vim
 command! Cd call mhi#cd()
 command! Evo exe printf('GV -L :%s:%s', expand('<cword>'), expand('%:p'))
+command! Changed exe 'args' join(map(systemlist('git diff --name-only --relative "$@" 2>/dev/null'), 'fnameescape(v:val)'))
 
 " Color {{{1
 function! s:colors_default() abort
