@@ -29,9 +29,5 @@ color =
 pager =
 churn =
 
-[hooks]
-changegroup = rm -f .hg/tags && ctags --fields=+S --tag-relative -R -f .hg/tags --exclude=.hg 2>&1 &
-commit = rm -f .hg/tags && ctags --fields=+S --tag-relative -R -f .hg/tags --exclude=.hg 2>&1 &
-
 [color]
 diff.trailingwhitespace = bold red_background
