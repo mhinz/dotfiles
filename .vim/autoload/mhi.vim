@@ -11,7 +11,8 @@ function! mhi#github_open_issue() abort
   endif
   let remote = systemlist('git config branch.master.remote || echo origin')[0]
   let url = systemlist(printf('git config remote.%s.url', remote))[0]
-  let url = 'https://github.com/'. matchstr(url, '\v[/:]\zs.*') .'/issues/'. issue
+  let slug = substitute(matchstr(url, '\v[/:]\zs.*'), '\.git', '', '')
+  let url = 'https://github.com/'. slug .'/issues/'. issue
   silent execute '!open -a Google\ Chrome' url
 endfunction
 
