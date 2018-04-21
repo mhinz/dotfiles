@@ -20,6 +20,8 @@
 [rebase]
   autosquash = true
   autostash  = true
+[tag]
+  sort = version:refname
 [rerere]
   enabled = true
 [advice]
