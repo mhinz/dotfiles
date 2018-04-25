@@ -45,45 +45,46 @@ call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'chrisbra/unicode.vim',      { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
+  Plug 'chrisbra/unicode.vim', { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
-  Plug 'godlygeek/csapprox',        { 'for': 'fugitiveblame' }
-  Plug 'junegunn/fzf',              has('win32') ? {} : { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
-  Plug 'junegunn/gv.vim',           { 'on': 'GV' }
+  Plug 'godlygeek/csapprox', { 'for': 'fugitiveblame' }
+  Plug 'junegunn/fzf', has('win32') ? {} : { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
+  Plug 'junegunn/gv.vim', { 'on': 'GV' }
+  Plug 'junegunn/heytmux'
   Plug 'junegunn/vader.vim'
-  Plug 'junegunn/vim-easy-align',   { 'on': '<plug>(LiveEasyAlign)' }
+  Plug 'junegunn/vim-easy-align', { 'on': '<plug>(LiveEasyAlign)' }
+  Plug 'junegunn/vim-emoji'
   Plug 'junegunn/vim-peekaboo'
   Plug 'junegunn/vim-plug'
   Plug 'justinmk/vim-dirvish'
-  Plug 'majutsushi/tagbar',         { 'on': 'TagbarToggle' }
-  Plug 'mbbill/undotree',           { 'on': 'UndotreeToggle' }
+  Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
   Plug 'rhysd/committia.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dadbod'
+  Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'tweekmonster/exception.vim'
   Plug 'tweekmonster/helpful.vim'
-  Plug 'tweekmonster/startuptime.vim'
   Plug 'wellle/tmux-complete.vim'
 
-  Plug 'mattn/emmet-vim',         { 'for': 'html' }
+  Plug 'mattn/emmet-vim', { 'for': 'html' }
   Plug 'pangloss/vim-javascript'
-  Plug 'prettier/vim-prettier',   { 'for': 'javascript' }
+  Plug 'prettier/vim-prettier', { 'for': 'javascript' }
   Plug 'HerringtonDarkholme/yats.vim'
 
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
-  Plug 'elixir-lang/vim-elixir',  { 'for': 'elixir' }
+  Plug 'elixir-lang/vim-elixir'
 
-  Plug 'fatih/vim-go',                 { 'for': 'go' }
+  Plug 'fatih/vim-go', { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
 
   Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
-  Plug 'xolox/vim-misc',         { 'for': 'lua' }
+  Plug 'xolox/vim-misc', { 'for': 'lua' }
 
   Plug 'mhinz/nvim-panacea', { 'for': 'elixir' }
   Plug 'mhinz/vim-grepper'
@@ -389,6 +390,7 @@ nnoremap <leader>m  :Messages<cr>
 nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>j  <c-^>
 nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
+nnoremap <leader>u  :call mhi#next_completion()<cr>
 nnoremap <leader>w  :update<cr>
 nnoremap <leader>x  :xit<cr>
 nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
@@ -703,15 +705,15 @@ xmap gs <plug>(GrepperOperator)
 highlight GrepperSideFile ctermfg=161 cterm=reverse
 highlight Conceal ctermfg=NONE ctermbg=250
 
-let grepper = {
-      \ 'tools': ['git', 'ag', 'rubocop'],
-      \ 'dir': 'repo,filecwd',
-      \ 'rubocop': {
-      \   'grepprg': 'rubocop -femacs',
-      \   'grepformat': '%f:%l:%c: %t: %m',
-      \ }}
+let g:grepper = {}
+let g:grepper.dir = 'repo,filecwd'
+let g:grepper.tools = ['git', 'ag', 'rubocop']
+let g:grepper.rubocop = {
+      \ 'grepprg': 'rubocop -femacs',
+      \ 'grepformat': '%f:%l:%c: %t: %m' }
 
-command! Todo Grepper -tool ag -query '(TODO|FIXME|XXX):'
+command! Rubocop Grepper -tool rubocop -buffer -noprompt
+command! Todo Grepper -tool ag -query '(TODO|FIX|FIXME|XXX|NOTE|HACK|OPTIMIZE):'
 
 " Plugin: vim-online-thesaurus {{{2
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
@@ -726,22 +728,7 @@ let g:sayonara_confirm_quit = 0
 " Plugin: vim-startify {{{2
 nnoremap <leader>st :Startify<cr>
 
-function! s:neovim_commits()
-  let git = 'git -C /data/repo/neovim'
-  let commits = systemlist(git .' log --oneline --no-merges | head -n10')
-  let git = 'G'. git[1:]
-  return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
-endfunction
-
-let g:startify_lists = [
-      \ { 'header': ['   MRU'],            'type': 'files' },
-      \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
-      \ { 'header': ['   Sessions'],       'type': 'sessions' },
-      \ { 'header': ['   Neovim commits'], 'type': function('s:neovim_commits') },
-      \ ]
-
 let g:startify_change_to_dir       = 0
-let g:startify_custom_header       = 'map(startify#fortune#boxed(), "\"   \".v:val")'
 let g:startify_enable_special      = 0
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles     = 1

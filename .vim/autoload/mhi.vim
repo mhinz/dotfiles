@@ -281,4 +281,13 @@ function! mhi#source_project_config() abort
   endif
 endfunction
 
+"
+" Cycle through completion functions.
+"
+function! mhi#next_completion() abort
+  let compls = [ 'emoji#complete', 'tmuxcomplete#complete' ]
+  let &cfu = compls[(index(compls, &cfu) + 1) % len(compls)]
+  echomsg 'Using '. &cfu
+endfunction
+
 " vim: fdm=syntax
