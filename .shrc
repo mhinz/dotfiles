@@ -158,9 +158,9 @@ dsf() {
 
 s() {
     if (( $# )); then
-        ps -eo pid,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@"
+        ps -eo pid,ppid,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@"
     else
-        ps -eo pid,%cpu,%mem,state,command
+        ps -eo pid,ppid,%cpu,%mem,state,command
     fi
 }
 
