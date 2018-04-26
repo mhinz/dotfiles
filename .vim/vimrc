@@ -713,7 +713,6 @@ let g:grepper.rubocop = {
       \ 'grepprg': 'rubocop -femacs',
       \ 'grepformat': '%f:%l:%c: %t: %m' }
 
-command! Rubocop Grepper -tool rubocop -buffer -noprompt
 command! Todo Grepper -tool ag -query '(TODO|FIX|FIXME|XXX|NOTE|HACK|OPTIMIZE):'
 
 " Plugin: vim-online-thesaurus {{{2
@@ -730,6 +729,7 @@ let g:sayonara_confirm_quit = 0
 nnoremap <leader>st :Startify<cr>
 
 let g:startify_change_to_dir       = 0
+let g:startify_custom_header       = []
 let g:startify_enable_special      = 0
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles     = 1
@@ -789,9 +789,14 @@ augroup vimrc
   let g:rubycomplete_classes_in_global = 1
   let g:rubycomplete_rails             = 1
 
-  au FileType ruby setl com-=:# sts=2 sw=2
-  au FileType ruby com! -buffer -bang Lint
-        \ exe 'Grepper -tool rubocop -noprompt' ['-buffer',''][<bang>0]
+  function! s:ruby()
+    setlocal com-=:# sts=2 sw=2
+    command! -buffer -bang Rubocop exe 'Grepper -tool rubocop -noprompt' ['-buffer',''][<bang>0]
+    command! -buffer -nargs=* -bang Rspec exe '<mods> T clear; bundle exec rspec <args>' expand('%:p').['', ':'.line('.')][<bang>0]
+    nnoremap <buffer> <leader>rs :vertical Rspec!<cr>
+  endfunction
+
+  autocmd FileType ruby call s:ruby()
 
   " Filetype: Sh, Zsh {{{2
   au FileType zsh,sh setl com-=:# sts=4 sw=4
