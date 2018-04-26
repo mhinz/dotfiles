@@ -472,6 +472,7 @@ command! CleanSpell  runtime! spell/cleanadd.vim
 command! Cd call mhi#cd()
 command! Evo exe printf('GV -L :%s:%s', expand('<cword>'), expand('%:p'))
 command! Changed exe 'args' join(map(systemlist('git diff --name-only --relative "$@" 2>/dev/null'), 'fnameescape(v:val)'))
+command! -nargs=1 -bang T call mhi#terminal(<bang>0, <f-mods>, <f-args>)
 
 " Color {{{1
 function! s:colors_default() abort

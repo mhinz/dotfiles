@@ -290,4 +290,18 @@ function! mhi#next_completion() abort
   echomsg 'Using '. &cfu
 endfunction
 
+"
+" Wrapper for :terminal
+"
+function! mhi#terminal(bang, mods, cmd) abort
+  let terms = filter(map(tabpagebuflist(), 'getbufvar(v:val, ''terminal_job_id'')'), '!empty(v:val)')
+  if empty(terms)
+    execute a:mods 'new'
+    let g:terminal = termopen($SHELL)
+    $
+    if a:bang | wincmd p | endif
+  endif
+  call chansend(g:terminal, a:cmd."\n")
+endfunction
+
 " vim: fdm=syntax
