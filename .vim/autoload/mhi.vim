@@ -304,4 +304,19 @@ function! mhi#terminal(bang, mods, cmd) abort
   call chansend(g:terminal, a:cmd."\n")
 endfunction
 
+"
+" Switch buffer. Skip buffers already shown in another window.
+"
+function! mhi#switch_buffer(cmd) abort
+  execute a:cmd
+  let bufs = tabpagebuflist()
+  while !empty(bufs)
+    let buf = bufnr('')
+    if count(bufs, buf) == 1 | break | endif
+    execute a:cmd
+    call filter(bufs, 'v:val != '.buf)
+  endwhile
+  stopinsert
+endfunction
+
 " vim: fdm=syntax

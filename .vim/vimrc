@@ -334,8 +334,8 @@ nnoremap ]l  :lnext<cr>
 nnoremap [L  :lfirst<cr>
 nnoremap ]L  :llast<cr>
 
-nnoremap [b  :bprevious<cr>
-nnoremap ]b  :bnext<cr>
+nnoremap [b  :call mhi#switch_buffer('bprevious')<cr>
+nnoremap ]b  :call mhi#switch_buffer('bnext')<cr>
 nnoremap [B  :bfirst<cr>
 nnoremap ]B  :blast<cr>
 
@@ -381,7 +381,8 @@ onoremap gv  :<c-u>normal! gv<cr>
 
 nnoremap Q  gqap
 
-nnoremap <leader>ev  :vsplit $MYVIMRC<cr>
+nnoremap <leader>ev  :edit $MYVIMRC<cr>
+nnoremap <leader>em  :edit ~/.vim/autoload/mhi.vim<cr>
 
 nnoremap <leader>si  :echo mhi#syninfo()<cr>
 nnoremap <leader>ss  :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
@@ -676,8 +677,7 @@ nnoremap <f3>  :UndotreeToggle<cr>
 " Plugin: vim-dirvish {{{2
 autocmd FileType dirvish nmap <buffer> <c-o> -
 autocmd VimEnter * if &ft == 'dirvish' | exe 'lcd' expand('%') | endif
-nnoremap <f1> :vsplit +Dirvish<cr><c-w>H<c-w>40<bar>
-
+nnoremap <expr> <f1> (&ft == 'dirvish' ? ':close' : ':leftabove 40vs +Dirvish')."\<cr>"
 
 " Plugin: vim-easy-align {{{2
 xmap <cr> <plug>(LiveEasyAlign)
@@ -729,7 +729,7 @@ let g:sayonara_confirm_quit = 0
 nnoremap <leader>st :Startify<cr>
 
 let g:startify_change_to_dir       = 0
-let g:startify_custom_header       = []
+let g:startify_custom_header       = 'map(startify#fortune#boxed(), ''"   ".v:val'')'
 let g:startify_enable_special      = 0
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles     = 1
