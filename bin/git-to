@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# usage: git to [ref]
+#
+# The number of commits between a given ref and HEAD. If no ref is given, the
+# last tag (lightweight or annotated) is used.
+#
+# This works in both directions (the ref can appear before or after HEAD),
+# hence "to" and not "since".
+
+last_tag() {
+    git describe --tags --exact-match "$(git rev-list --tags --max-count=1)"
+}
+
+number_of_commits_relative_to() {
+    git log --oneline --no-merges ..."$1" | wc -l
+}
+
+ref="${1:-"$(last_tag)"}"
+
+echo "$(number_of_commits_relative_to "$ref") commits to $ref"

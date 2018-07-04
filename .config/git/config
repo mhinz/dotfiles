@@ -100,12 +100,6 @@
 
   description = !git config --get "branch.$(git rev-parse --abbrev-ref HEAD).description"
 
-  to = "!f() { \
-    ref=${1:-$(git describe --abbrev=0 HEAD^ 2>/dev/null || echo HEAD)}; \
-    n=$(git log --oneline --no-merges ...${ref}  | wc -l); \
-    echo $n 'commits to' $ref ; \
-    }; f"
-
   snapshot = !git stash push "snapshot: $(date)" && git stash apply "stash@{0}"
 
   ours   = !git checkout --ours $@ && git add $@
