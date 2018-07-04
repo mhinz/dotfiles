@@ -135,7 +135,7 @@ function! mhi#cd() abort
     let s:cache = {}
   endif
   let dirs   = [ '.git', '.hg', '.svn' ]
-  let curdir = resolve(expand('%:p:h'))
+  let curdir = mhi#normalize(resolve(expand('%:p:h')))
   if !isdirectory(curdir)
     echohl WarningMsg | echo 'No such directory: '. curdir | echohl NONE
     return
@@ -150,7 +150,7 @@ function! mhi#cd() abort
       break
     endif
   endfor
-  let dir = empty(founddir) ? curdir : resolve(fnamemodify(founddir, ':p:h:h'))
+  let dir = empty(founddir) ? curdir : mhi#normalize(resolve(fnamemodify(founddir, ':p:h:h')))
   let s:cache[curdir] = dir
   execute 'lcd' fnameescape(dir)
 endfunction
@@ -317,6 +317,18 @@ function! mhi#switch_buffer(cmd) abort
     call filter(bufs, 'v:val != '.buf)
   endwhile
   stopinsert
+endfunction
+
+"
+" :cd chokes on UNC paths with two backslashes. Use one backslash instead.
+"
+" Bad:  :cd z:\\share
+" Good: :cd z:\share
+"
+function! mhi#normalize(path) abort
+  return has('win32') && &shellslash == 0
+        \ ? substitute(a:path, '\v^(\w):\\\\', '\1:\\', '')
+        \ : a:path
 endfunction
 
 " vim: fdm=syntax
