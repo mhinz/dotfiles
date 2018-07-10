@@ -744,6 +744,9 @@ augroup vimrc
   " Filetype: cmake {{{2
   autocmd FileType cmake setlocal commentstring=#\ %s
 
+  " Filetype: crontab {{{2
+  autocmd FileType crontab setlocal nobackup nowritebackup
+
   " Filetype: Erlang {{{2
   autocmd FileType erlang setl com-=:%
 
