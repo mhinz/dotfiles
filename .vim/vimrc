@@ -83,9 +83,6 @@ call plug#begin(s:bundle_dir)
   Plug 'fatih/vim-go', { 'for': 'go' }
   Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
 
-  Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
-  Plug 'xolox/vim-misc', { 'for': 'lua' }
-
   Plug 'mhinz/nvim-panacea', { 'for': 'elixir' }
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
