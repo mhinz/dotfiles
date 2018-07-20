@@ -67,7 +67,7 @@
   h        = help
   lfp      = !git l --first-parent
   ln       = !git l @{1}..
-  ls       = ls-files
+  ls       = "!f() { git ls-files | grep "${@:-''}"; }; f"
   lso      = ls-files --others --exclude-standard
   lsr      = ls-remote
   m        = merge
