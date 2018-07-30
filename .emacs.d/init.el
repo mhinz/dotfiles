@@ -1,21 +1,23 @@
+(when (< emacs-major-version 24)
+  (princ "Install at least Emacs 24.\n" #'external-debugging-output)
+  (kill-emacs))
+
 (when (member "Source Code Pro" (font-family-list))
   (set-default-font "Source Code Pro-13"))
 
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (toggle-scroll-bar 0)
-(toggle-frame-maximized)
 
 (setq ring-bell-function 'ignore)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 (setq custom-file "~/.emacs.d/custom.el")
 
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  (package-initialize))
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -26,7 +28,6 @@
   (require 'cl)
   (require 'use-package)
   (require 'bind-key)
-  (require 'diminish)
   (setq use-package-always-ensure t))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -50,8 +51,9 @@
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
-(if (display-graphic-p)
-    (use-package subatomic-theme))
+(when (display-graphic-p)
+  (use-package subatomic-theme)
+  (toggle-frame-maximized))
 
 (use-package ace-window
   :bind (("M-q" . ace-window)))
