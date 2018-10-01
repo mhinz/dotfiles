@@ -56,7 +56,7 @@ finish() {
         read -p "Really? [yN] " answer
         [[ "$answer" != y ]] && return
     fi
-    line="$(sed -i '' -e "${1}w /dev/stdout" -e "${1}d" ~/tasks)"
+    line="$(2>/dev/null sed -i '' -e "${1}w /dev/stdout" -e "${1}d" ~/tasks)"
     if [[ -n $line ]]; then
         while IFS= read -r task; do
             echo "$(date +'%F %R') $task" >> ~/tasks.log
