@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'rainbow'
+
+words = YAML.load_file('/data/english.yaml')
+
+while words.any?
+  word = words.keys.sample
+  print "\n#{Rainbow(word).cyan} "
+  begin
+    gets
+  rescue Interrupt
+    exit
+  end
+  puts words[word]
+  words.delete(word)
+end
