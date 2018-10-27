@@ -1,5 +1,6 @@
 [ui]
 username = Marco Hinz <mh.codebro@gmail.com>
+color = always
 
 [pager]
 pager = LESS='FRX' less

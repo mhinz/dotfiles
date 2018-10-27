@@ -42,7 +42,7 @@ endfunction
 "
 function! mhi#jump()
   if (&filetype == 'vim' && &buftype == 'nofile') || &buftype == 'quickfix'
-      execute "normal! \<cr>"
+    execute "normal! \<cr>"
   elseif &filetype == 'neoman'
     execute "normal! \<c-]>"
   else

@@ -50,7 +50,6 @@ call plug#begin(s:bundle_dir)
   Plug 'godlygeek/csapprox', { 'for': 'fugitiveblame' }
   Plug 'junegunn/fzf', has('win32') ? {} : { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
   Plug 'junegunn/gv.vim', { 'on': 'GV' }
-  Plug 'junegunn/heytmux'
   Plug 'junegunn/vader.vim'
   Plug 'junegunn/vim-easy-align', { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'junegunn/vim-emoji'
@@ -88,6 +87,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
+  Plug 'mhinz/vim-mini-lsp'
   Plug 'mhinz/vim-mix-format'
   Plug 'mhinz/vim-nginx'
   Plug 'mhinz/vim-randomtag', { 'on': 'Random' }
@@ -203,6 +203,7 @@ set pastetoggle   =<F5>
 set norelativenumber
 set report        =0
 set sessionoptions-=options
+set sessionoptions+=localoptions
 set showfulltag
 set showtabline   =1
 set splitbelow
@@ -387,7 +388,8 @@ nnoremap <leader>ss  :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, 
 nnoremap <leader>m  :Messages<cr>
 nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 nnoremap <leader>j  <c-^>
-nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
+" nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
+nnoremap <leader>o  :silent !open <c-r>=fnameescape('<c-r><c-a>')<cr><cr>
 nnoremap <leader>u  :call mhi#next_completion()<cr>
 nnoremap <leader>w  :update<cr>
 nnoremap <leader>x  :xit<cr>
@@ -468,7 +470,7 @@ augroup END
 command! -nargs=1 -complete=command Scratch call mhi#scratch(<f-args>)
 command! CleanSpell  runtime! spell/cleanadd.vim
 command! Cd call mhi#cd()
-command! Evo exe printf('GV -L :%s:%s', expand('<cword>'), expand('%:p'))
+" command! Evo exe printf('GV -L :%s:%s', expand('<cword>'), expand('%:p'))
 command! Changed exe 'args' join(map(systemlist('git diff --name-only --relative "$@" 2>/dev/null'), 'fnameescape(v:val)'))
 command! -nargs=1 -bang T call mhi#terminal(<bang>0, <f-mods>, <f-args>)
 
@@ -734,6 +736,11 @@ let g:startify_use_env             = 1
 
 " Filetype {{{1
 augroup vimrc
+  " Filetype: Assembly {{{2
+  let g:asmsyntax = 'nasm'
+  " vim-commentary uses 'commentstring', not 'comments'
+  autocmd FileType nasm let &commentstring = '; %s'
+
   " Filetype: C {{{2
   autocmd BufLeave *.{c,cpp} mark C
   autocmd BufLeave *.h       mark H
@@ -764,8 +771,6 @@ augroup vimrc
   autocmd FileType html setl et sts=2 sw=2
 
   " Filetype: Lua {{{2
-  let g:lua_complete_omni = 1  " vim-lua-ftplugin
-
   autocmd FileType lua setl com-=:# sts=2 sw=2
 
   " Filetype: Perl {{{2
@@ -796,6 +801,7 @@ augroup vimrc
     nnoremap <buffer> <leader>rs :vertical Rspec!<cr>
   endfunction
 
+  autocmd BufNewFile *.rb call append(0, ['#!/usr/bin/env ruby', ''])
   autocmd FileType ruby call s:ruby()
 
   " Filetype: Sh, Zsh {{{2
@@ -824,8 +830,8 @@ augroup vimrc
   autocmd FileType GV
         \  set foldlevel=1
         \| nnoremap <buffer> q :qa<cr>
-        \| nmap     <buffer> j j<cr>
-        \| nmap     <buffer> k k<cr>
+        \| nmap     <buffer> j ]]<cr>
+        \| nmap     <buffer> k [[<cr>
 
   highlight link diffAdded     DiffAdd
   highlight link diffRemoved   DiffDelete
@@ -835,7 +841,6 @@ augroup vimrc
   highlight link diffSubname   Comment
 
   " signify
-  let g:signify_vcs_list = ['git', 'hg']
   let g:signify_realtime = 1
   let g:signify_sign_show_text = 0
   omap ic <plug>(signify-motion-inner-pending)
@@ -844,12 +849,14 @@ augroup vimrc
   xmap ac <plug>(signify-motion-outer-visual)
 
   " Filetype: Vim, Vader {{{2
-  autocmd FileType vim nnoremap <buffer><silent> <cr> :call lookup#lookup()<cr>
-  autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<cr>
+  autocmd FileType vim nnoremap <buffer><silent> <cr> :if lookup#lookup()<bar>call halo#run()<bar>endif<cr>
+  autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<cr:call halo#run()<cr>
   autocmd FileType vim setl sts=2 sw=2 isk-=#
   autocmd BufRead *.{vader,vim} command! -buffer Test call mhi#run_exercism_tests()
 " }}}2
 augroup END
 " }}}1
+
+let g:lsp = { 'ruby': 'solargraph stdio' }
 
 " vim: sw=2 sts=2 tw=0 fdm=marker

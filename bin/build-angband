@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
+repo='https://github.com/angband/angband'
 dir='/data/repo/angband'
 
-cd "$dir" || exit
+cd "$dir" 2>/dev/null || {
+    cd "${dir%/*}"
+    git clone "$repo"
+    cd "${repo##*/}"
+}
+
 echo '[*] Cleaning directory..'
 make distclean &>/dev/null
 

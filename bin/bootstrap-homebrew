@@ -16,7 +16,6 @@ formulae=(
     coreutils
     cscope
     curl
-    diff-so-fancy
     emacs
     erlang
     exiftool
@@ -29,7 +28,7 @@ formulae=(
     libtool
     ncdu
     neovim
-    ngrep
+    netcat
     ninja
     nmap
     node
@@ -37,8 +36,12 @@ formulae=(
     pinentry-mac
     pkg-config
     postgresql
+    python
     rbenv
+    ruby-build
     shellcheck
+    socat
+    sqlite
     ssh-copy-id
     sslyze
     the_silver_searcher
@@ -56,15 +59,14 @@ brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 brew tap caskroom/cask
 
 formulae=(
+    caffeine
     calibre
     docker
-    evernote
+    flux
     font-input
-    gimp
     iterm2
     java
-    keycastr
-    vagrant
+    spectacle
     virtualbox
     virtualbox-extension-pack
     wireshark

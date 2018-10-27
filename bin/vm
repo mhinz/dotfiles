@@ -1,13 +1,21 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ "$1" == 'list' ]]; then
     VBoxManage list vms
 elif [[ "$1" == 'running' ]]; then
     VBoxManage list runningvms
 elif [[ "$1" == 'ssh' ]]; then
-    ssh -p 3022 mhi@localhost
-elif [[ "$2" == 'start' ]]; then
-    VBoxHeadless -s "$1" &
-elif [[ "$2" == 'save' ]]; then
-    VBoxManage controlvm "$1" savestate
+    shift
+    ssh -o UserKnownHostsFile=/dev/null -p3022 "$@" mhi@localhost
+elif [[ "$1" == 'start' ]]; then
+    VBoxManage modifyvm "$2" --natpf1 'ssh,tcp,,3022,,22'
+    VBoxHeadless --startvm "$2" &
+elif [[ "$1" == 'save' ]]; then
+    VBoxManage controlvm "$2" savestate
+elif [[ "$1" == 'stop' ]]; then
+    VBoxManage controlvm "$2" poweroff
+elif [[ "$1" == 'info' ]]; then
+    VBoxManage showvminfo "$2"
+elif [[ "$1" == 'dhcp' ]]; then
+    VBoxManage list dhcpservers
 fi

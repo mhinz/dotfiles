@@ -98,12 +98,12 @@ alias t='task'
 alias tf='task -f'
 alias tn='task | head -n 1'
 
-alias pip2up="pip2 list --format=legacy | cut -d' ' -f1 | xargs pip2 install -U"
-alias pip3up="pip3 list --format=legacy | cut -d' ' -f1 | xargs pip3 install -U"
+alias pip2up="pip2 list --format=columns | sed -e '1,2d' | cut -d' ' -f1 | xargs pip2 install -U"
+alias pip3up="pip3 list --format=columns | sed -e '1,2d' | cut -d' ' -f1 | xargs pip3 install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 if [[ $os = Darwin ]]; then
-    alias brewup='brew update && brew upgrade && brew cleanup'
+    alias brewup='brew update && brew upgrade && brew cask upgrade && brew cleanup'
     alias allup="pip2up; pip3up; gemup; npmup; brewup"
 elif [[ $os = Linux ]]; then
     alias aptup="sudo -- sh -c 'apt update && apt upgrade'"
@@ -115,7 +115,7 @@ alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
-alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg'
+alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg -o "%(title)s.%(ext)s"'
 
 alias rt='cd ~torrent/../session && rtorrent'
 
@@ -168,7 +168,7 @@ ssh() {
     if [ $# -eq 0 ]; then
         mhi net hosts
     elif [[ $ITERM_PROFILE ]]; then
-        command ssh -t $1 "export ITERM_PROFILE=$ITERM_PROFILE; exec \$SHELL -l"
+        command ssh -t "$@" "export ITERM_PROFILE=$ITERM_PROFILE; exec \$SHELL -l"
     else
         command ssh "$@"
     fi
