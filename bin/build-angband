@@ -4,9 +4,9 @@ repo='https://github.com/angband/angband'
 dir='/data/repo/angband'
 
 cd "$dir" 2>/dev/null || {
-    cd "${dir%/*}"
+    cd "${dir%/*}" || exit 1
     git clone "$repo"
-    cd "${repo##*/}"
+    cd "${repo##*/}" || exit 1
 }
 
 echo '[*] Cleaning directory..'

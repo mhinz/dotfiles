@@ -33,7 +33,7 @@ if [ $# -eq 0 ]; then
 else
     if [ "$1" = . ]; then
         bootstrap
-    elif list_ssh_hosts | grep -q "\<$1\>"; then
+    elif list_ssh_hosts | grep -q "\\<$1\\>"; then
         bootstrap_to_host "$1"
     else
         list_ssh_hosts

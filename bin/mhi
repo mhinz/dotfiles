@@ -38,7 +38,7 @@ case $1 in
       exec "$EDITOR" "${configs[$arg]}"
     else
       for conf in "${!configs[@]}"; do
-        printf "%-6s %s\n" "$conf" "${configs[$conf]}"
+        printf '%-6s %s\n' "$conf" "${configs[$conf]}"
       done | sort
     fi
     ;;
@@ -57,7 +57,7 @@ case $1 in
     IFS=:
     if (( $# == 1 )); then
       # shellcheck disable=SC2086
-      printf "%s\n" $PATH
+      printf '%s\n' $PATH
     else
       shift
       # shellcheck disable=SC2086
