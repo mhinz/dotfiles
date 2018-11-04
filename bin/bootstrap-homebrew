@@ -67,6 +67,7 @@ formulae=(
     iterm2
     java
     spectacle
+    vienna
     virtualbox
     virtualbox-extension-pack
     wireshark
