@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+# Quick'n'dirty way to dump a tweet and its replies. Great for dumping wisdom
+# dropped in a thread.
+#
+# The name stands for "tweet dump". It's no pun on a misogynic, homophobic,
+# criminal, orange US president.
+
+require 'open-uri'
+require 'nokogiri'
+
+if ARGV.length < 1
+  puts "usage: #{$0[/[^\/]*$/]} <tweet url>"
+  exit 1
+end
+
+doc = Nokogiri::HTML(open(ARGV[0]))
+puts doc.css('p.tweet-text').map { |node| "#{node.content}\n\n" }
