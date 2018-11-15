@@ -1,34 +1,43 @@
 #compdef mix
 
 _arguments \
-  '1:task name:->tasks' \
-  '2:task argument:->arguments' \
-  '*:: :->rest'
+  '1:task names:->tasks' \
+  '*:task arguments:->arguments'
 
 local candidates
 
-case "$state" in
+case $state in
   tasks)
     candidates=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
     candidates=(${candidates/ *\# /:})
     _describe 'tasks' candidates
-    ;;
-  arguments)
-    case $words[2] in
-      archive.uninstall)
-        candidates=(${(f)"$(mix archive | grep '^* ' | cut -b3-)"})
-        _describe 'archives' candidates
-        ;;
-      help)
-        candidates=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
-        candidates=(${candidates/ *\# /:})
-        _describe 'tasks' candidates
-        ;;
-      hex.install)
-        if [[ -n $words[3] ]]; then
-          candidates=(${(f)"$(mix hex.search $words[3] | tail -n+2 | sed 's/  http.*$//')"})
+    return
+esac
+
+case $words[2] in
+  archive.install)
+    case $words[3] in
+      hex)
+        if [[ -z $words[4] ]]; then
+          _message 'enter query for searching remote hex packges'
+        else
+          candidates=(${(f)"$(mix hex.search $words[4] | tail -n+2 | sed 's/  http.*$//')"})
           candidates=(${candidates/[[:space:]]##/:})
-          _describe 'hex archives' candidates
+          _describe 'remote hex archives' candidates
         fi
+        ;;
     esac
+    ;;
+  archive.uninstall)
+    candidates=(${(f)"$(mix archive | grep '^* ' | cut -b3-)"})
+    _describe 'local archives' candidates
+    ;;
+  help)
+    candidates=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
+    candidates=(${candidates/ *\# /:})
+    _describe 'tasks' candidates
+    ;;
+  *)
+    _files
+    ;;
 esac
