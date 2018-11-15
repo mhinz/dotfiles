@@ -1,14 +1,27 @@
 #compdef mix
 
-_arguments -C \
-  '1:task:->tasks' \
-  '*:: :->args'
+_arguments \
+  '1:task name:->tasks' \
+  '2:task argument:->arguments' \
+  '*:: :->rest'
+
+local candidates
 
 case "$state" in
-  (tasks)
-    local tasks
-    tasks=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
-    tasks=(${tasks/ *\# /:})
-    _describe -t tasks 'task' tasks
+  tasks)
+    candidates=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
+    candidates=(${candidates/ *\# /:})
+    _describe 'tasks' candidates
     ;;
+  arguments)
+    case $words[2] in
+      archive.uninstall)
+        candidates=(${(f)"$(mix archive | grep '^* ' | cut -b3-)"})
+        _describe 'archives' candidates
+        ;;
+      help)
+        candidates=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
+        candidates=(${candidates/ *\# /:})
+        _describe 'tasks' candidates
+    esac
 esac
