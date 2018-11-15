@@ -23,5 +23,12 @@ case "$state" in
         candidates=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
         candidates=(${candidates/ *\# /:})
         _describe 'tasks' candidates
+        ;;
+      hex.install)
+        if [[ -n $words[3] ]]; then
+          candidates=(${(f)"$(mix hex.search $words[3] | tail -n+2 | sed 's/  http.*$//')"})
+          candidates=(${candidates/[[:space:]]##/:})
+          _describe 'hex archives' candidates
+        fi
     esac
 esac
