@@ -1,0 +1,14 @@
+#compdef mix
+
+_arguments -C \
+  '1:task:->tasks' \
+  '*:: :->args'
+
+case "$state" in
+  (tasks)
+    local tasks
+    tasks=(${(f)"$(mix help | tail -n+2 | grep '^mix ' | cut -b5-)"})
+    tasks=(${tasks/ *\# /:})
+    _describe -t tasks 'task' tasks
+    ;;
+esac

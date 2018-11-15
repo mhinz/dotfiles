@@ -6,6 +6,8 @@ else
     echo 'No .shrc found.'
 fi
 
+[[ -d $ZDOTDIR/completion ]] && fpath=($ZDOTDIR/completion $fpath)
+
 zmodload -i zsh/complist
 
 autoload -Uz compinit && compinit
