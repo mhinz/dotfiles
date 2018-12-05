@@ -258,7 +258,7 @@ f() {
 
 p() {
   local dirs=(
-    /data/github
+    /data/github/*
     /data/repo
     $HOME/.vim/bundle
   )
@@ -398,13 +398,7 @@ tmup() {
 }
 
 # Vim {{{1
-v() {
-    if [[ -x /data/repo/neovim/build/bin/nvim ]]; then
-        VIMRUNTIME=/data/repo/neovim/runtime /data/repo/neovim/build/bin/nvim "$@"
-    else
-        $EDITOR "$@"
-    fi
-}
+alias v=/data/github/neovim/neovim/build/bin/nvim
 
 all() {
     git rev-parse --is-inside-work-tree &>/dev/null && tool=git || tool=ag
