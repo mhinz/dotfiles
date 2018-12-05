@@ -57,11 +57,13 @@ brew install "${formulae[@]}"
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
 brew tap caskroom/cask
+brew tap homebrew/cask-fonts
+brew tap homebrew/cask-versions
 
 formulae=(
     caffeine
     calibre
-    docker
+    docker-edge
     flux
     font-input
     iterm2
