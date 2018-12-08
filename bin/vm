@@ -1,21 +1,88 @@
 #!/usr/bin/env bash
 
-if [[ "$1" == 'list' ]]; then
-    VBoxManage list vms
-elif [[ "$1" == 'running' ]]; then
-    VBoxManage list runningvms
-elif [[ "$1" == 'ssh' ]]; then
-    shift
-    ssh -o UserKnownHostsFile=/dev/null -p3022 "$@" mhi@localhost
-elif [[ "$1" == 'start' ]]; then
-    VBoxManage modifyvm "$2" --natpf1 'ssh,tcp,,3022,,22'
-    VBoxHeadless --startvm "$2" &
-elif [[ "$1" == 'save' ]]; then
-    VBoxManage controlvm "$2" savestate
-elif [[ "$1" == 'stop' ]]; then
-    VBoxManage controlvm "$2" poweroff
-elif [[ "$1" == 'info' ]]; then
-    VBoxManage showvminfo "$2"
-elif [[ "$1" == 'dhcp' ]]; then
-    VBoxManage list dhcpservers
-fi
+cmds=(
+    dhcp
+    info
+    list
+    save
+    ssh
+    start
+    stop
+)
+
+usage() {
+    printf 'vm %s\n' "${cmds[@]}"
+    exit 0
+}
+
+list_vms() {
+    declare -A vms
+
+    while read line; do
+        if [[ $line =~ ^\"(.*)\" ]]; then
+            vms[${BASH_REMATCH[1]}]=
+        fi
+    done < <(VBoxManage list vms)
+
+    while read line; do
+        if [[ $line =~ ^\"(.*)\" ]]; then
+            vms[${BASH_REMATCH[1]}]=[running]
+        fi
+    done < <(VBoxManage list runningvms)
+
+    for vm in ${!vms[@]}; do
+        if [[ ${vms[$vm]} =~ running ]]; then
+            echo -e "   -> \e[1m$vm ${vms[$vm]}\e[0m"
+        else
+            echo "   -> $vm ${vms[$vm]}"
+        fi
+    done | sort
+}
+
+case "$1" in
+    dhcp)
+        VBoxManage list dhcpservers
+        ;;
+    info)
+        if (( $# < 2 )); then
+            echo 'vm info <vm>'
+            list_vms
+            exit 0
+        fi
+        VBoxManage showvminfo "$2"
+        ;;
+    l*)
+        list_vms
+        ;;
+    save)
+        if (( $# < 2 )); then
+            echo 'vm save <vm>'
+            list_vms
+            exit 0
+        fi
+        VBoxManage controlvm "$2" savestate
+        ;;
+    ssh)
+        shift
+        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p3022 "$@" mhi@localhost
+        ;;
+    start)
+        if (( $# < 2 )); then
+            echo 'vm start <vm>'
+            list_vms
+            exit 0
+        fi
+        VBoxManage modifyvm "$2" --natpf1 'ssh,tcp,,3022,,22'
+        VBoxHeadless --startvm "$2" &
+        ;;
+    stop)
+        if (( $# < 2 )); then
+            echo 'vm stop <vm>'
+            list_vms
+            exit 0
+        fi
+        VBoxManage controlvm "$2" poweroff
+        ;;
+    *)
+        usage
+esac
