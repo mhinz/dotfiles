@@ -191,18 +191,25 @@ fancy-dot() {
     local -a split
     split=( ${=LBUFFER} )
     local dir=$split[-1]
-    if [[ $LBUFFER =~ '(^| )(\.\./)+$' ]]; then
-        zle self-insert
-        zle self-insert
-        LBUFFER+=/
-        [ -e $dir ] && zle -M $dir(:a:h)
-    elif [[ $LBUFFER =~ '(^| )\.$' ]]; then
-        zle self-insert
-        LBUFFER+=/
-        [ -e $dir ] && zle -M $dir(:a:h)
-    else
-        zle self-insert
-    fi
+    case $LBUFFER in
+        .)
+            LBUFFER='cd ../'
+            [[ -d $dir ]] && zle -M $dir(:a:h)
+            ;;
+        *.)
+            zle self-insert
+            LBUFFER+=/
+            [[ -d $dir ]] && zle -M $dir(:a:h)
+            ;;
+        *../)
+            zle self-insert
+            zle self-insert
+            LBUFFER+=/
+            [[ -d $dir ]] && zle -M $dir(:a:h)
+            ;;
+        *)
+            zle self-insert
+    esac
 }
 zle -N fancy-dot
 bindkey '.' fancy-dot
