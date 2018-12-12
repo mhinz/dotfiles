@@ -65,6 +65,7 @@ formulae=(
     calibre
     docker-edge
     flux
+    font-fira-code
     font-input
     iterm2
     java
