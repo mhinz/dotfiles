@@ -393,7 +393,13 @@ tmup() {
 }
 
 # Vim {{{1
-alias v=/data/github/neovim/neovim/build/bin/nvim
+v() {
+ if [[ -x /data/github/neovim/neovim/build/bin/nvim ]]; then
+     VIMRUNTIME=/data/github/neovim/neovim/runtime /data/github/neovim/neovim/build/bin/nvim "$@"
+ else
+     $EDITOR "$@"
+ fi
+}
 
 all() {
     git rev-parse --is-inside-work-tree &>/dev/null && tool=git || tool=ag

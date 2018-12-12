@@ -58,6 +58,7 @@ call plug#begin(s:bundle_dir)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+  Plug 'powerman/vim-plugin-AnsiEsc', {'on': 'AnsiEsc' }
   Plug 'rhysd/committia.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dadbod'
@@ -103,10 +104,8 @@ call plug#end()
 if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
   let $ELIXIR_EDITOR = 'nvr -l +__LINE__ __FILE__'
-  if v:progpath =~ 'github'
-    let $VIM = '/data/github/neovim/neovim'
-    let $VIMRUNTIME = $VIM.'/runtime'
-    " for build/runtime/syntax/generated.vim
+  if v:progpath =~# 'build/bin/nvim$'
+    " for build/runtime/syntax/vim/generated.vim
     let &runtimepath .= ','.$VIM.'/build/runtime'
   endif
 else
