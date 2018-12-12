@@ -128,7 +128,7 @@ fi
 if [[ $os = FreeBSD ]]; then
     alias ls='gnuls --color=auto -N'
 else
-    alias ls='ls --color=auto -N'
+    alias ls='ls --color=auto -Nv'
 fi
 alias j='ls -lhd *(D-/)'
 alias k='ls -lhX *(D-^/)'
