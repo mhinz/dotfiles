@@ -139,11 +139,6 @@ alias n='ls -lhS *(DOL[1,5]^/)'
 
 alias grep='grep --color=auto'
 
-alias h='cd ..; l'
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-
 alias 1='fg %1'
 alias 2='fg %2'
 alias 3='fg %3'
