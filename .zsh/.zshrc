@@ -47,6 +47,7 @@ setopt nohup
 setopt nolistambiguous
 setopt nolog
 setopt notify
+setopt numericglobsort
 setopt promptsubst
 # setopt extendedglob
 
@@ -126,7 +127,7 @@ zstyle ':completion::complete:*'          use-cache    true
 zstyle ':completion:*'                    cache-path   ~/.zsh/cache
 zstyle ':completion:*'                    verbose      true
 zstyle ':completion:*'                    menu         select=2
-zstyle ':completion:*'                    special-dirs true
+zstyle ':completion:*'                    special-dirs ..
 zstyle ':completion:*'                    group-name   ''
 zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
 # zstyle ':completion:*:descriptions' format       $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
