@@ -25,7 +25,7 @@ alias -g L='| less -r'
 alias -g N='>/dev/null'
 alias -g E='2>/dev/null'
 
-# misc options {{{1
+# options {{{1
 
 setopt cdablevars
 setopt checkjobs
@@ -66,52 +66,95 @@ setopt hist_verify
 setopt inc_append_history   # add commands as they're typed
 setopt share_history        # share history between sessions
 
-# zle {{{1
+# prompt {{{1
 
-_ciw() {
-    setopt localoptions extendedglob
-    LBUFFER=${LBUFFER%%[^ ]#}
-    RBUFFER=${RBUFFER##[^ ]#}
-    #zle vi-insert
+autoload -U colors && colors
+
+precmd() {
+    PS1='$(_prompt)'
+}
+SPROMPT="%R -> %r:%f "
+PROMPT2="+%f "
+PROMPT3="Select:%f "
+
+# bindings {{{1
+
+_zle_backward_kill_word() {
+    LBUFFER="$({ sed -E 's#[^ _/]+[ _/]+$##' | sed -E 's#[^ _/]+$##' } <<< $LBUFFER)"
 }
 
-_insert_last_typed_word() {
+_zle_ctrl_z() {
+    if [[ $#BUFFER -eq 0 ]]; then
+        BUFFER=fg
+        zle accept-line
+    else
+        zle push-input
+        zle clear-screen
+    fi
+}
+
+_zle_fancy_dot() {
+    local -a split
+    split=( ${=LBUFFER} )
+    local dir=$split[-1]
+    case $LBUFFER in
+        .)
+            LBUFFER='cd ../'
+            [[ -d $dir ]] && zle -M $dir(:a:h)
+            ;;
+        *.)
+            zle self-insert
+            LBUFFER+=/
+            [[ -d $dir ]] && zle -M $dir(:a:h)
+            ;;
+        *../)
+            zle self-insert
+            zle self-insert
+            LBUFFER+=/
+            [[ -d $dir ]] && zle -M $dir(:a:h)
+            ;;
+        *)
+            zle self-insert
+    esac
+}
+
+_zle_insert_last_typed_word() {
         zle insert-last-word -- 0 -1
 }
 
-_jump_after_first_word() {
+_zle_jump_after_first_word() {
     CURSOR=$#BUFFER[(w)1]
 }
 
-_run_with_sudo() {
+_zle_sudo() {
     LBUFFER="sudo $LBUFFER"
 }
 
-zle_keymap_select() {
-    [[ $KEYMAP == vicmd ]] && local main="$(tput setaf 197)"
-    zle reset-prompt
-}
-
+zle -N _zle_backward_kill_word
+zle -N _zle_ctrl_z
+zle -N _zle_fancy_dot
+zle -N _zle_insert_last_typed_word
+zle -N _zle_jump_after_first_word
+zle -N _zle_sudo
 zle -N edit-command-line
-zle -N _insert_last_typed_word
-zle -N _jump_after_first_word
-zle -N _zle_keymap_select
+
+bindkey ''   up-line-or-search
+bindkey ''   down-line-or-search
+bindkey ''   _zle_backward_kill_word
+bindkey 'e'  edit-command-line
+bindkey 'm'  expand-word
+bindkey 'n'  list-expand
+bindkey ''   _zle_ctrl_z
+bindkey '.'    _zle_fancy_dot
+bindkey ';f'   _zle_jump_after_first_word
+bindkey ';g'   _zle_insert_last_typed_word
+bindkey ';s'   _zle_sudo
 
 bindkey -M menuselect 'h' backward-char
+bindkey -M menuselect 'i' accept-and-menu-complete
 bindkey -M menuselect 'j' down-line-or-history
 bindkey -M menuselect 'k' up-line-or-history
 bindkey -M menuselect 'l' forward-char
-bindkey -M menuselect 'i' accept-and-menu-complete
-
-bindkey ';f'   _insert_last_typed_word
-bindkey ';g'   _jump_after_first_word
-
-bindkey ''   vi-backward-kill-word
-bindkey ''   up-line-or-search
-bindkey ''   down-line-or-search
-bindkey 'e'  edit-command-line
-bindkey 'n'  list-expand
-bindkey 'm'  expand-word
 
 # completion {{{1
 
@@ -131,26 +174,6 @@ zstyle ':completion:*'                    special-dirs ..
 zstyle ':completion:*'                    group-name   ''
 zstyle ':completion:*:descriptions'       format       $'%{[(00);(38;05;167)m%}=> %d%{[0m%}'
 # zstyle ':completion:*:descriptions' format       $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
-
-# prompt {{{1
-autoload -U colors && colors
-
-precmd() {
-    PS1='$(_prompt)'
-}
-SPROMPT="%R -> %r:%f "
-PROMPT2="+%f "
-PROMPT3="Select:%f "
-
-# hashes {{{1
-hash -d asm='/data/programming/asm'
-hash -d b='/data/books'
-hash -d c='/data/programming/c'
-hash -d g='/data/github'
-hash -d torrent='/data/torrent/download'
-hash -d z='/data/repo/zsh'
-
-# completion {{{1
 
 compctl -g '*.class'      java
 compctl -g '*.(c|o|a)':   cc gcc
@@ -181,73 +204,19 @@ compctl -fg '*.(avi|mp*g|mp4|wmv|ogm|mkv|xvid|divx)' mplayer gmplayer vlc
 compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbsetbg
 compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
 
-# functions {{{1
+_completion_tmux_sessions() {
+    local -a sessions=( ${(f)"$(command tmux list-sessions)"} )
+    _describe -t sessions '' sessions "$@"
+}
+
+compdef _completion_tmux_sessions tm
+
+# }}}
+
 command_not_found_handler() { ~/bin/shell_function_missing $* }
 
 m() {
     bc -l <<< $@
 }; alias m='noglob m'
-
-fancy-dot() {
-    local -a split
-    split=( ${=LBUFFER} )
-    local dir=$split[-1]
-    case $LBUFFER in
-        .)
-            LBUFFER='cd ../'
-            [[ -d $dir ]] && zle -M $dir(:a:h)
-            ;;
-        *.)
-            zle self-insert
-            LBUFFER+=/
-            [[ -d $dir ]] && zle -M $dir(:a:h)
-            ;;
-        *../)
-            zle self-insert
-            zle self-insert
-            LBUFFER+=/
-            [[ -d $dir ]] && zle -M $dir(:a:h)
-            ;;
-        *)
-            zle self-insert
-    esac
-}
-zle -N fancy-dot
-bindkey '.' fancy-dot
-
-fancy-ctrl-z() {
-    if [[ $#BUFFER -eq 0 ]]; then
-        BUFFER=fg
-        zle accept-line
-    else
-        zle push-input
-        zle clear-screen
-    fi
-}
-zle -N fancy-ctrl-z
-bindkey '^Z' fancy-ctrl-z
-
-_tmux_sessions() {
-    local -a sessions=( ${(f)"$(command tmux list-sessions)"} )
-    _describe -t sessions '' sessions "$@"
-}
-compdef _tmux_sessions tm
-
-_tmux_complete() {
-    [ -z $TMUX ] && { _message 'I double dare you!'; return 1 }
-    local pane words=()
-    for pane ($(tmux list-panes -F '#P')) {
-        words+=( ${(u)=$(tmux capture-pane -Jpt $pane)} )
-    }
-    _wanted values expl '' compadd -a words
-}
-zle -C tmux-comp-prefix   complete-word _generic
-zle -C tmux-comp-anywhere complete-word _generic
-bindkey '^X^U' tmux-comp-prefix
-bindkey '^X^X' tmux-comp-anywhere
-zstyle ':completion:tmux-comp-(prefix|anywhere):*' completer _tmux_complete
-zstyle ':completion:tmux-comp-(prefix|anywhere):*' ignore-line current-shown
-zstyle ':completion:tmux-comp-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
-# }}}
 
 # vim: ft=sh fdm=marker
