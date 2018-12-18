@@ -158,6 +158,7 @@ bindkey -M menuselect 'l' forward-char
 
 # completion {{{1
 
+zstyle ':completion:*'                    matcher-list 'm:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
 zstyle ':completion:*:default'            list-colors  ${(s.:.)LS_COLORS} 'ma=01;38;05;255;48;05;161'
 zstyle ':completion:*:descriptions'       format       $'%{\e[0;31m%}=> %B%d%b%{\e[0m%}'
 zstyle ':completion:*:approximate:*'      max-errors   '(( reply=($#PREFIX+$#SUFFIX)/3 ))'
