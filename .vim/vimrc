@@ -52,7 +52,6 @@ call plug#begin(s:bundle_dir)
   Plug 'junegunn/gv.vim', { 'on': 'GV' }
   Plug 'junegunn/vader.vim'
   Plug 'junegunn/vim-easy-align', { 'on': '<plug>(LiveEasyAlign)' }
-  Plug 'junegunn/vim-emoji'
   Plug 'junegunn/vim-peekaboo'
   Plug 'junegunn/vim-plug'
   Plug 'justinmk/vim-dirvish'
@@ -102,7 +101,7 @@ call plug#end()
 
 " Init {{{1
 if has('nvim')
-  let $VISUAL = 'nvr -cc split --remote-wait'
+  let $GIT_EDITOR = 'nvr -cc split --remote-wait'
   let $ELIXIR_EDITOR = 'nvr -l +__LINE__ __FILE__'
   if v:progpath =~# 'build/bin/nvim$'
     " for build/runtime/syntax/vim/generated.vim
