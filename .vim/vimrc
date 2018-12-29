@@ -185,11 +185,9 @@ set autoread
 set backspace     =indent,eol,start
 set clipboard     =unnamed
 set complete     -=i
-if has('nvim') || v:version >= 800
-  set completeopt+=noselect
-endif
+set completeopt  +=noselect
 set cpoptions    -=e
-set diffopt       =filler,vertical,foldcolumn:0
+set diffopt      +=vertical,foldcolumn:0,indent-heuristic,algorithm:patience
 set fileformats   =unix,dos,mac
 set hidden
 set history       =1000
