@@ -107,6 +107,14 @@ if has('nvim')
     " for build/runtime/syntax/vim/generated.vim
     let &runtimepath .= ','.$VIM.'/build/runtime'
   endif
+  if has('mac')
+    let g:clipboard = {
+          \ 'name': 'pbcopy',
+          \ 'copy':  { '+': 'pbcopy',  '*': 'pbcopy'  },
+          \ 'paste': { '+': 'pbpaste', '*': 'pbpaste' },
+          \ 'cache_enabled': 0
+          \ }
+  endif
 else
   filetype plugin indent on
   syntax   on
