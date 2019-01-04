@@ -451,7 +451,7 @@ endif
 " Autocmd {{{1
 augroup vimrc
   if has('nvim')
-    autocmd BufEnter term://* startinsert
+    autocmd TermOpen,BufEnter term://* startinsert
   endif
 
   au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
