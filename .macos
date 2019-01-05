@@ -1,14 +1,22 @@
 #!/usr/bin/env bash
 
-if crontab -l 2>&1 | grep -qv drink; then
-  { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"Drink! Move!\"'"; } | crontab -
+sudo -v
+
+# Cron {{{1
+# This needs full disk access enabled for the calling terminal emulator.
+# E.g. Security & Privacy -> Full Disk Access -> iTerm.app
+# Reference: https://gitlab.com/gnachman/iterm2/wikis/fulldiskaccess
+if crontab -l 2>&1 | grep -qv Now; then
+  { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"\" with title \"Now!\"'"; } | crontab -
 fi
 
+# Defaults {{{1
 defaults write ApplePressAndHoldEnabled        -bool true
 defaults write NSGlobalDomain InitialKeyRepeat -int 20
 defaults write NSGlobalDomain KeyRepeat        -int 1
 defaults write NSRequiresAquaSystemAppearance  -bool true
 
+# Defaults (need disabled SIP) {{{1
 if [[ "$(csrutil status)" =~ enabled ]]; then
   echo 'Disable System Integrity Protection (rootless mode):'
   echo '  * restart'
