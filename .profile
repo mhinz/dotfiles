@@ -41,7 +41,7 @@ unset newpath dir
 
 export LANG=en_US.UTF-8
 
-export FZF_DEFAULT_COMMAND='ag --hidden --unrestricted --ignore .git -g ""'
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
 export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
 export ELIXIR_EDITOR='ec +__LINE__ __FILE__'
