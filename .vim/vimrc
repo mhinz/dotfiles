@@ -238,7 +238,7 @@ set wildmode      =list:longest,full
 set wildoptions   =tagfile
 
 " display settings
-set display       =lastline
+set display      +=lastline
 set laststatus    =2
 set list
 set modeline
