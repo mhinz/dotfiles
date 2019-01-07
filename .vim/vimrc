@@ -839,7 +839,7 @@ augroup vimrc
   " fugitive
   autocmd BufReadPost fugitive:// setlocal bufhidden=delete
   autocmd User        fugitive
-        \  if fugitive#buffer().type() =~# '\v^%(tree|blob)$'
+        \  if get(b:, 'fugitive_type', '') =~# '\v^%(tree|blob)$'
         \|   nnoremap <buffer> .. :edit %:h<cr>
         \| endif
 
