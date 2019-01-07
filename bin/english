@@ -3,7 +3,7 @@
 require 'yaml'
 require 'rainbow'
 
-words = YAML.load_file('/data/english.yaml')
+words = YAML.load_file(File.expand_path('~/english.yaml'))
 
 while words.any?
   word = words.keys.sample

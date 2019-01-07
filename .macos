@@ -9,8 +9,8 @@ sudo nvram SystemAudioVolume=" "
 # This needs full disk access enabled for the calling terminal emulator.
 # E.g. Security & Privacy -> Full Disk Access -> iTerm.app
 # Reference: https://gitlab.com/gnachman/iterm2/wikis/fulldiskaccess
-if crontab -l 2>&1 | grep -qv Now; then
-  { crontab -l 2>/dev/null; echo "0 * * * * osascript <<< 'display notification \"\" with title \"Now!\"'"; } | crontab -
+if crontab -l 2>&1 | grep -qv english; then
+  { crontab -l 2>/dev/null; echo "*/30 * * * * ~/bin/english-notification"; } | crontab -
 fi
 
 # Defaults {{{1

@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'YAML'
+
+words = YAML.load_file(File.expand_path('~/english.yaml'))
+
+english = words.keys.sample
+german  = words[english]
+
+%x{ osascript <<< 'display notification "#{german}" with title "#{english}"' }
