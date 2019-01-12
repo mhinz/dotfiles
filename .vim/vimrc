@@ -43,57 +43,50 @@ let g:plug_pwindow = 'vertical rightbelow new'
 
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
+  Plug 'nightsense/snow'
 
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'chrisbra/unicode.vim', { 'on': ['<plug>(UnicodeComplete)', '<plug>(UnicodeGA)', 'UnicodeTable'] }
-  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
-  Plug 'godlygeek/csapprox', { 'for': 'fugitiveblame' }
-  Plug 'junegunn/fzf', has('win32') ? {} : { 'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin' }
-  Plug 'junegunn/gv.vim', { 'on': 'GV' }
+  Plug 'chrisbra/unicode.vim', {'on': ['UnicodeName', 'UnicodeTable']}
+  Plug 'easymotion/vim-easymotion', {'on': '<plug>(easymotion-s2)'}
+  Plug 'godlygeek/csapprox', {'for': 'fugitiveblame' }
+  Plug 'junegunn/fzf', has('win32') ? {} : {'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin'}
+  Plug 'junegunn/gv.vim', {'on': 'GV'}
   Plug 'junegunn/vader.vim'
-  Plug 'junegunn/vim-easy-align', { 'on': '<plug>(LiveEasyAlign)' }
-  Plug 'junegunn/vim-peekaboo'
+  Plug 'junegunn/vim-easy-align', {'on': '<plug>(LiveEasyAlign)'}
   Plug 'junegunn/vim-plug'
   Plug 'justinmk/vim-dirvish'
-  Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-  Plug 'powerman/vim-plugin-AnsiEsc', {'on': 'AnsiEsc' }
+  Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+  Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+  Plug 'powerman/vim-plugin-AnsiEsc', {'on': 'AnsiEsc'}
   Plug 'rhysd/committia.vim'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-dadbod'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'tweekmonster/helpful.vim'
-  Plug 'wellle/tmux-complete.vim'
 
-  Plug 'mattn/emmet-vim', { 'for': 'html' }
+  Plug 'mattn/emmet-vim', {'for': 'html'}
   Plug 'pangloss/vim-javascript'
-  Plug 'prettier/vim-prettier', { 'for': 'javascript' }
   Plug 'HerringtonDarkholme/yats.vim'
 
-  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+  Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
 
   Plug 'elixir-lang/vim-elixir'
 
-  Plug 'fatih/vim-go', { 'for': 'go' }
-  Plug 'tweekmonster/hl-goimport.vim', { 'for': 'go' }
+  Plug 'fatih/vim-go', {'for': 'go'}
+  Plug 'tweekmonster/hl-goimport.vim', {'for': 'go'}
 
-  Plug 'mhinz/nvim-panacea', { 'for': 'elixir' }
+  Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
   Plug 'mhinz/nvim-travis'
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
-  Plug 'mhinz/vim-mini-lsp'
   Plug 'mhinz/vim-mix-format'
-  Plug 'mhinz/vim-nginx'
-  Plug 'mhinz/vim-randomtag', { 'on': 'Random' }
   Plug 'mhinz/vim-rfc'
-  Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
+  Plug 'mhinz/vim-sayonara', {'on': 'Sayonara'}
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
 call plug#end()
@@ -107,22 +100,10 @@ if has('nvim')
     " for build/runtime/syntax/vim/generated.vim
     let &runtimepath .= ','.$VIM.'/build/runtime'
   endif
-  if has('mac')
-    let g:clipboard = {
-          \ 'name': 'pbcopy',
-          \ 'copy':  { '+': 'pbcopy',  '*': 'pbcopy'  },
-          \ 'paste': { '+': 'pbpaste', '*': 'pbpaste' },
-          \ 'cache_enabled': 0
-          \ }
-  endif
 else
   filetype plugin indent on
-  syntax   on
-  if v:version >= 800
-    packadd! matchit
-  else
-    runtime macros/matchit.vim
-  endif
+  syntax on
+  packadd! matchit
 endif
 
 let mapleader = ';'
@@ -524,10 +505,15 @@ function! s:colors_lucius() abort
   endif
 endfunction
 
+function! s:colors_snow() abort
+  highlight Normal ctermbg=NONE guibg=NONE
+endfunction
+
 augroup vimrc
   autocmd ColorScheme *      call s:colors_default()
   autocmd ColorScheme janah  call s:colors_janah()
   autocmd ColorScheme lucius call s:colors_lucius()
+  autocmd ColorScheme snow   call s:colors_snow()
 augroup END
 
 if has('gui_running')
@@ -708,8 +694,7 @@ let g:EasyMotion_skipfoldedline = 0
 map <silent><space> <plug>(easymotion-s2)
 
 " Plugin: vim-grepper {{{2
-nnoremap <leader>g :Grepper -tool git<cr>
-nnoremap <leader>G :Grepper -tool ag<cr>
+nnoremap <leader>g :Grepper<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
@@ -718,7 +703,7 @@ highlight Conceal ctermfg=NONE ctermbg=250
 
 let g:grepper = {}
 let g:grepper.dir = 'repo,filecwd'
-let g:grepper.tools = ['git', 'ag', 'rubocop']
+let g:grepper.tools = ['git', 'rg', 'rubocop']
 let g:grepper.rubocop = {
       \ 'grepprg': 'rubocop -femacs',
       \ 'grepformat': '%f:%l:%c: %t: %m' }
