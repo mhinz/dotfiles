@@ -123,6 +123,7 @@ if [[ $os = Darwin ]]; then
     alias chrome='open -a Google\ Chrome'
     alias preview='open -a Preview'
     alias vlc='open -a VLC'
+    alias xcode='open -a Xcode'
 fi
 
 if [[ $os = FreeBSD ]]; then
@@ -130,12 +131,12 @@ if [[ $os = FreeBSD ]]; then
 else
     alias ls='ls --color=auto -Nv'
 fi
-alias j='ls -lhd *(D-/)'
-alias k='ls -lhX *(D-^/)'
-alias l='ls -lh --group-directories-first'
-alias ll='ls -lhX --group-directories-first'
-alias la='ls -lhXA --group-directories-first'
-alias n='ls -lhS *(DOL[1,5]^/)'
+alias j='ls -lhd -- *(D-/)'
+alias k='ls -lhX -- *(D-^/)'
+alias l='ls -1h --group-directories-first'
+alias ll='ls -lh --group-directories-first'
+alias la='ll -A'
+alias n='ls -lhS -- *(DOL[1,5]^/)'
 
 alias grep='grep --color=auto'
 
@@ -285,17 +286,17 @@ c() {
 }
 
 book() {
-    local book="$(ls /data/books | fzf -1 --tac)"
-    [[ -n $book ]] && open /data/books/"$book"
+    local book="$(rg --files /data/books | fzf -1 --tac)"
+    [[ -n $book ]] && open "$book"
 }
 
 # Git {{{1
 pr() {
     local origin pr
-    if [[ $# == 0 ]]; then
+    if [[ $# -eq 0 ]]; then
         echo "usage: pr [remote] <ref>"
         return 1
-    elif [[ $# == 1 ]]; then
+    elif [[ $# -eq 1 ]]; then
         origin=$(git config branch.master.remote || echo origin)
         pr=$1
     else

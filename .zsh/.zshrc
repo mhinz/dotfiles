@@ -80,7 +80,7 @@ PROMPT3="Select:%f "
 # bindings {{{1
 
 _zle_backward_kill_word() {
-    LBUFFER="$({ sed -E 's#[^ _/]+[ _/]+$##' | sed -E 's#[^ _/]+$##' } <<< $LBUFFER)"
+    LBUFFER="$({ sed -E 's#[^ _/\-]+[ _/\-]+$##' | sed -E 's#[^ _/\-]+$##' } <<< $LBUFFER)"
 }
 
 _zle_ctrl_z() {
@@ -100,6 +100,7 @@ _zle_fancy_dot() {
     case $LBUFFER in
         .)
             LBUFFER='cd ../'
+            RBUFFER=' && l'
             [[ -d $dir ]] && zle -M $dir(:a:h)
             ;;
         *.)

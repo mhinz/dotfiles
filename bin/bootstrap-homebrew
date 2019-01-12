@@ -10,19 +10,17 @@ brew analytics off
 
 formulae=(
     automake
-    awscli
     bash
     cmake
     coreutils
     cscope
-    curl
+    curl-openssl
     emacs
     erlang
     exiftool
     git
     gnupg
     go
-    hub
     jid
     jq
     libtool
@@ -38,13 +36,11 @@ formulae=(
     postgresql
     python
     rbenv
-    ruby-build
+    ripgrep
     shellcheck
     socat
     sqlite
     ssh-copy-id
-    sslyze
-    the_silver_searcher
     tmux
     tree
     wget
@@ -68,11 +64,11 @@ formulae=(
     font-fira-code
     font-input
     iterm2
-    java
     spectacle
     vienna
     virtualbox
     virtualbox-extension-pack
+    vlc
     wireshark
 )
 
