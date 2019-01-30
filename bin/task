@@ -8,12 +8,13 @@
 usage() {
     cat << 'EOF'
   task ...    add task
-  task        show task with highest priority
+  task        show task #1
   task -a     show all tasks
   task -e     edit tasks using $EDITOR
-  task -f 3   finish task on line 3
-  task 3      finish task on line 3
-  task -f     finish all tasks
+  task -f     finish task #1
+  task -f 3   finish task #3
+  task 3      finish task #3
+  task -fa    finish all tasks
 EOF
 }
 
@@ -66,6 +67,7 @@ remove_task() {
     if [[ -n $line ]]; then
         while IFS= read -r task; do
             echo "$(date +'%F %R') $task" >> ~/tasks.log
+            echo "Finished: $task"
         done <<< "$line"
     fi
 }
@@ -87,7 +89,14 @@ case "$1" in
         ;;
     -f)
         shift
-        remove_task "$@"
+        if (( $# == 0 )); then
+            remove_task 1
+        else
+            remove_task "$1"
+        fi
+        ;;
+    -fa)
+        remove_task
         ;;
     -h)
         usage
