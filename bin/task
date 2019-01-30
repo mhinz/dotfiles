@@ -4,16 +4,18 @@
 #
 # Tasks will be written to ~/tasks.
 # Finished tasks, plus a timestamp, will be written to ~/tasks.log.
-#
-# usage: task [-e] [-f [line]]
-#
-#   task        list tasks
-#   task ...    add task
-#   task -e     edit tasks using $EDITOR
-#   task -f 3   finish task on line 3
-#   task 3      finish task on line 3
-#   task -f     finish all tasks
-#
+
+usage() {
+    cat << 'EOF'
+  task ...    add task
+  task        show task with highest priority
+  task -a     show all tasks
+  task -e     edit tasks using $EDITOR
+  task -f 3   finish task on line 3
+  task 3      finish task on line 3
+  task -f     finish all tasks
+EOF
+}
 
 task_exists() {
     if [[ -s ~/tasks ]]; then
@@ -33,27 +35,31 @@ task_exists() {
     return 1
 }
 
-task() {
-    if (( $# )); then
-        if [[ "$@" =~ ^[0-9]+$ ]]; then
-            finish "$@"
-        elif task_exists "$@"; then
-            echo "Task exists already."
-        else
-            echo "$@" >> ~/tasks
-        fi
-    else
-        if [[ -s ~/tasks ]]; then
+list_tasks() {
+    if [[ -s ~/tasks ]]; then
+        if (( $# == 0 )); then
             nl -w2 -s'  ' ~/tasks
         else
-            echo -e "\e[1mLAZY TIME\e[0m"
+            sed -n "${1}p" < ~/tasks
         fi
+    else
+        echo -e "\e[1mLAZY TIME\e[0m"
     fi
 }
 
-finish() {
+add_task() {
+    if [[ "$*" =~ ^[0-9]+$ ]]; then
+        remove_task "$@"
+    elif task_exists "$@"; then
+        echo "Task exists already."
+    else
+        echo "$@" >> ~/tasks
+    fi
+}
+
+remove_task() {
     if (( $# == 0 )); then
-        read -p "Really? [yN] " answer
+        read -rp "Really? [yN] " answer
         [[ "$answer" != y ]] && return
     fi
     line="$(2>/dev/null sed -i '' -e "${1}w /dev/stdout" -e "${1}d" ~/tasks)"
@@ -64,13 +70,27 @@ finish() {
     fi
 }
 
+task() {
+    if (( $# )); then
+        add_task "$@"
+    else
+        list_tasks 1
+    fi
+}
+
 case "$1" in
+    -a)
+        list_tasks
+        ;;
     -e)
         $EDITOR ~/tasks
         ;;
     -f)
         shift
-        finish "$@"
+        remove_task "$@"
+        ;;
+    -h)
+        usage
         ;;
     *)
         task "$@"
