@@ -68,16 +68,19 @@ _prompt() {
         git diff-index --cached --quiet HEAD 2>/dev/null || p+="$_p_bold ✓"
 
         local gitdir="${gittop}/.git"
+
+        [[ -f "${gitdir}/refs/stash" ]] && p+=' [stash]'
+
         if [[ -f "${gitdir}/MERGE_HEAD" ]]; then
-            p+=' merge '
+            p+=' [merge]'
         elif [[ -f "${gitdir}/CHERRY_PICK_HEAD" ]]; then
-            p+=' cherry '
+            p+=' [cherry]'
         elif [[ -f "${gitdir}/REVERT_HEAD" ]]; then
-            p+=' revert '
+            p+=' [revert]'
         elif [[ -f "${gitdir}/rebase-merge/interactive" ]]; then
-            p+=' rebase-i '
+            p+=' [rebase-i]'
         elif [[ -d "${gitdir}/rebase-apply" ]]; then
-            p+=' rebase '
+            p+=' [rebase]'
         fi
     fi
 
