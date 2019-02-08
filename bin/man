@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# On :Man, Nvim uses `MANWIDTH=999 man` for the purpose of soft wrapping the
+# resulting long lines afterwards. This works for all window sizes and supports
+# resizing. But my eyes are too used to the manpager always giving me 80
+# columns, so this wrapper forces $MANWIDTH to be set again.
+
+MANWIDTH=80 exec /usr/bin/man "$@"
