@@ -761,7 +761,7 @@ augroup vimrc
   let g:go_fmt_command = 'goimports'
   let g:gofmt_on_save  = 0
 
-  autocmd FileType go setlocal noet sts& sw& com-=:// isk-=.
+  autocmd FileType go setlocal noet sts& sw& com-=:// isk-=. lcs+=tab:\ \ 
 
   " Filetype: Help {{{2
   autocmd FileType help
