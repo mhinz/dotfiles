@@ -9,6 +9,7 @@ fi
 brew analytics off
 
 formulae=(
+    asciinema
     automake
     bash
     cmake
@@ -65,11 +66,13 @@ formulae=(
     font-input
     iterm2
     spectacle
+    tor-browser
     vienna
     virtualbox
     virtualbox-extension-pack
     vlc
     wireshark
+    yacreader
 )
 
 brew cask install "${formulae[@]}"
