@@ -315,25 +315,15 @@ nnoremap <expr> N  'nN'[v:searchforward].'zvzz'
 nnoremap gg  ggzv
 nnoremap G   Gzv
 
-nnoremap [q  :cprevious<cr>
-nnoremap ]q  :cnext<cr>
-nnoremap [Q  :cfirst<cr>
-nnoremap ]Q  :clast<cr>
-
-nnoremap [l  :lprevious<cr>
-nnoremap ]l  :lnext<cr>
-nnoremap [L  :lfirst<cr>
-nnoremap ]L  :llast<cr>
-
-nnoremap [b  :call mhi#switch_buffer('bprevious')<cr>
-nnoremap ]b  :call mhi#switch_buffer('bnext')<cr>
-nnoremap [B  :bfirst<cr>
-nnoremap ]B  :blast<cr>
-
-nnoremap [t  :tabprevious<cr>
-nnoremap ]t  :tabnext<cr>
-nnoremap [T  :tabfirst<cr>
-nnoremap ]T  :tablast<cr>
+nnoremap <silent> [q    :cprevious \| call halo#run()<cr>
+nnoremap <silent> ]q    :cnext \| call halo#run()<cr>
+nnoremap <silent> [l    :lprevious \| call halo#run()<cr>
+nnoremap <silent> ]l    :lnext \| call halo#run()<cr>
+nnoremap <silent> [b    :call mhi#switch_buffer('bprevious')<cr>
+nnoremap <silent> ]b    :call mhi#switch_buffer('bnext')<cr>
+nnoremap <silent> [t    :tabprevious \| call halo#run()<cr>
+nnoremap <silent> ]t    :tabnext \| call halo#run()<cr>
+nnoremap <silent> <tab> <c-w>w:call halo#run()<cr>
 
 nnoremap [<space>  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
 nnoremap ]<space>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
@@ -478,6 +468,7 @@ function! s:colors_default() abort
   highlight link SignifySignAdd    DiffAdd
   highlight link SignifySignDelete DiffDelete
   highlight link SignifySignChange DiffChange
+  highlight Halo guifg=white guibg=#F92672 ctermfg=white ctermbg=197
 endfunction
 
 function! s:colors_janah() abort
@@ -853,7 +844,7 @@ augroup vimrc
 
   " Filetype: Vim, Vader {{{2
   autocmd FileType vim nnoremap <buffer><silent> <cr> :if lookup#lookup()<bar>call halo#run()<bar>endif<cr>
-  autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<cr:call halo#run()<cr>
+  autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<bar>call halo#run()<cr>
   autocmd FileType vim setl sts=2 sw=2 isk-=#
   autocmd BufRead *.{vader,vim} command! -buffer Test call mhi#run_exercism_tests()
 " }}}2

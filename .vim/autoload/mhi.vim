@@ -308,7 +308,11 @@ endfunction
 " Switch buffer. Skip buffers already shown in another window.
 "
 function! mhi#switch_buffer(cmd) abort
-  execute a:cmd
+  try
+    execute a:cmd
+  catch /E85/  " There is no listed buffer
+    return
+  endtry
   let bufs = tabpagebuflist()
   while !empty(bufs)
     let buf = bufnr('')
@@ -317,6 +321,7 @@ function! mhi#switch_buffer(cmd) abort
     call filter(bufs, 'v:val != '.buf)
   endwhile
   stopinsert
+  call halo#run()
 endfunction
 
 "
