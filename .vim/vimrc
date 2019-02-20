@@ -90,6 +90,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-sayonara', {'on': 'Sayonara'}
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
+  Plug 'mhinz/vim-tree'
 call plug#end()
 " }}}1
 
@@ -296,9 +297,6 @@ inoremap jf  <esc>
 nnoremap gh :call mhi#github_open_issue()<cr>
 nnoremap gH :call mhi#github_open_slug()<cr>
 
-nnoremap <leader>dl  :Lint<cr>
-nnoremap <leader>dn  :Neomake<cr>
-
 inoremap <expr> <tab>    mhi#tab_yeah("\<c-n>", "\<tab>")
 inoremap <expr> <s-tab>  mhi#tab_yeah("\<c-p>", "\<s-tab>")
 
@@ -378,6 +376,7 @@ nnoremap <leader>w  :update<cr>
 nnoremap <leader>x  :xit<cr>
 nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 nnoremap <leader>v  :Runtime<cr>
+nnoremap <leader>t  :Tree<cr>
 
 nnoremap '  `
 nnoremap `  '
@@ -396,7 +395,7 @@ xnoremap #          :<c-u>call mhi#search()<cr>??<cr>
 xnoremap <leader>*  :<c-u>silent! execute mhi#search_all()<cr>
 
 if has('nvim')
-  nnoremap <leader>t      :vsplit +terminal<cr>
+  nnoremap <leader>T      :vsplit +terminal<cr>
   tnoremap <esc>          <c-\><c-n>
   tnoremap <silent><a-h>  <c-\><c-n>:<c-u>call mhi#tmux_navigate('h')<cr>
   tnoremap <silent><a-j>  <c-\><c-n>:<c-u>call mhi#tmux_navigate('j')<cr>
