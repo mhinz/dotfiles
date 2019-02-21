@@ -377,6 +377,7 @@ nnoremap <leader>x  :xit<cr>
 nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 nnoremap <leader>v  :Runtime<cr>
 nnoremap <leader>t  :Tree<cr>
+nnoremap <silent> <leader>d  :exe 'sil !open' fnameescape(printf('https://devdocs.io/#q=%s%%20%s', &ft, expand('<cword>')))<cr>
 
 nnoremap '  `
 nnoremap `  '
