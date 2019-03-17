@@ -10,12 +10,13 @@
 newpath=(
     /usr/local/sbin
     /usr/local/opt/coreutils/libexec/gnubin
+    /usr/local/opt/llvm/bin
     /usr/local/opt/ncurses/bin
-    "$GOPATH"/bin
     /data/languages/elixir/bin
+    "$GOPATH"/bin
     ~/.npm/bin
-    ~/.pyenv/shims
     ~/.rbenv/shims
+    ~/.cargo/bin
     ~/local/*/bin
     ~/bin
 )
