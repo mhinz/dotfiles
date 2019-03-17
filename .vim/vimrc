@@ -68,19 +68,19 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-surround'
   Plug 'tweekmonster/helpful.vim'
 
+  Plug 'rust-lang/rust.vim', {'for': 'rust'}
+  Plug 'lifepillar/pgsql.vim', {'for': 'sql'}
   Plug 'mattn/emmet-vim', {'for': 'html'}
   Plug 'pangloss/vim-javascript'
   Plug 'HerringtonDarkholme/yats.vim'
-
-  Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
-
   Plug 'elixir-lang/vim-elixir'
-
   Plug 'fatih/vim-go', {'for': 'go'}
   Plug 'tweekmonster/hl-goimport.vim', {'for': 'go'}
 
+  Plug 'mhinz/nvim-langserver'
   Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
   Plug 'mhinz/nvim-travis'
+  Plug 'mhinz/vim-exercism'
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
@@ -217,8 +217,12 @@ set whichwrap     =h,l
 set suffixes     +=.a,.1,.class
 set wildignore   +=*.o,*.so,*.zip,*.png
 set wildmenu
-set wildmode      =list:longest,full
 set wildoptions   =tagfile
+if has('nvim-0.4.0')
+  set wildoptions+=pum
+else
+  set wildmode=list:longest,full
+endif
 
 " display settings
 set display      +=lastline
@@ -368,7 +372,6 @@ nnoremap <leader>ss  :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, 
 
 nnoremap <leader>m  :Messages<cr>
 nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-nnoremap <leader>j  <c-^>
 " nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
 nnoremap <leader>o  :silent !open <c-r>=fnameescape('<c-r><c-a>')<cr><cr>
 nnoremap <leader>u  :call mhi#next_completion()<cr>
