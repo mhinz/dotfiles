@@ -1,4 +1,31 @@
 "
+" Close nearest open bracket.
+"
+function! mhi#close_bracket() abort
+  highlight BracketRange cterm=underline
+  let pos = [0, 0]
+  let pairs = {}
+  for [open, close] in map(split(&matchpairs, ','), 'split(v:val, ":")')
+    let pairs[open] = close
+    let m = searchpairpos(escape(open, '['), '', close, 'bnW')
+    if m[0] > pos[0]
+      let pos = m
+    elseif m[1] > pos[1] && m[0] == pos[0]
+      let pos[1] = m[1]
+    endif
+  endfor
+  if pos != [0, 0]
+    let cur = getcurpos()[1:2]
+    call clearmatches()
+    call matchadd('BracketRange',
+          \ '\%'.pos[0].'l\%'.pos[1].'c.*\_.\+\%'.cur[0].'l\%'.cur[1].'c')
+    call timer_start(&matchtime * 100, {-> clearmatches()})
+    return pairs[matchstr(getline(pos[0]), '.', pos[1]-1)]
+  endif
+  return ''
+endfunction
+
+"
 " GitHub
 "
 function! mhi#github_open_issue() abort

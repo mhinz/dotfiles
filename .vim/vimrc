@@ -317,6 +317,8 @@ nnoremap <expr> N  'nN'[v:searchforward].'zvzz'
 nnoremap gg  ggzv
 nnoremap G   Gzv
 
+inoremap <expr> <c-]> mhi#close_bracket()
+
 nnoremap <silent> [q    :cprevious \| call halo#run()<cr>
 nnoremap <silent> ]q    :cnext \| call halo#run()<cr>
 nnoremap <silent> [l    :lprevious \| call halo#run()<cr>
