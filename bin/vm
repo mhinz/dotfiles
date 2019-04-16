@@ -64,7 +64,12 @@ case "$1" in
         ;;
     ssh)
         shift
-        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p3022 "$@" mhi@localhost
+        ssh -o UserKnownHostsFile=/dev/null \
+            -o StrictHostKeyChecking=no \
+            -o ConnectionAttempts=10 \
+            -o ConnectTimeout=2 \
+            -o LogLevel=ERROR  \
+            -p3022 "$@" mhi@localhost
         ;;
     start)
         if (( $# < 2 )); then
@@ -72,8 +77,9 @@ case "$1" in
             list_vms
             exit 0
         fi
-        VBoxManage modifyvm "$2" --natpf1 'ssh,tcp,,3022,,22'
+        VBoxManage modifyvm "$2" --natpf1 'ssh,tcp,,3022,,22' 2>/dev/null
         VBoxHeadless --startvm "$2" &
+        vm ssh
         ;;
     stop)
         if (( $# < 2 )); then
