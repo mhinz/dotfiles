@@ -28,6 +28,8 @@ if [[ -n ${ZSH_VERSION-} ]]; then
     _p_clear='%f%k%b%u'
     _p_bold='%B'
     _p_underline='%U'
+    _p_user='%F{19}'
+    _p_host='%F{32}'
 else
     _p_pink='\[\e[38;5;161m\]'
     _p_red='\[\e[38;5;9m\]'
@@ -35,6 +37,8 @@ else
     _p_clear='\[\e[0m\]'
     _p_bold='\[\e[1m\]'
     _p_underline='\[\e[4m\]'
+    _p_user='\[\e[38;5;19m\]'
+    _p_host='\[\e[38;5;32m\]'
 fi
 
 _prompt() {
@@ -44,7 +48,7 @@ _prompt() {
     local pwd="$(pwd -P)"
     local p
 
-    [[ -n $SSH_CONNECTION ]] && p+="${USER}@$(hostname):"
+    [[ -n $SSH_CONNECTION ]] && p+="${_p_user}${USER}${_p_clear} ${_p_host}$(hostname) "
 
     p+=$_p_pink
 
@@ -403,6 +407,10 @@ v() {
  else
      $EDITOR "$@"
  fi
+}
+
+vd() {
+    VIMRUNTIME=/data/github/neovim/neovim/runtime lldb -- /data/github/neovim/neovim/build/bin/nvim "$@"
 }
 
 all() {
