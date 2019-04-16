@@ -18,19 +18,19 @@ usage() {
 list_vms() {
     declare -A vms
 
-    while read line; do
+    while read -r line; do
         if [[ $line =~ ^\"(.*)\" ]]; then
             vms[${BASH_REMATCH[1]}]=
         fi
     done < <(VBoxManage list vms)
 
-    while read line; do
+    while read -r line; do
         if [[ $line =~ ^\"(.*)\" ]]; then
-            vms[${BASH_REMATCH[1]}]=[running]
+            vms[${BASH_REMATCH[1]}]='[running]'
         fi
     done < <(VBoxManage list runningvms)
 
-    for vm in ${!vms[@]}; do
+    for vm in "${!vms[@]}"; do
         if [[ ${vms[$vm]} =~ running ]]; then
             echo -e "   -> \e[1m$vm ${vms[$vm]}\e[0m"
         else
