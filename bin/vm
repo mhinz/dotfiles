@@ -83,11 +83,12 @@ case "$1" in
         ;;
     stop)
         if (( $# < 2 )); then
-            echo 'vm stop <vm>'
-            list_vms
-            exit 0
+            vm="$(VBoxManage list runningvms | head -n1 | cut -d'"' -f2)"
+            [[ -z $vm ]] && exit 1
+        else
+            vm="$2"
         fi
-        VBoxManage controlvm "$2" poweroff
+        VBoxManage controlvm "$vm" poweroff
         ;;
     *)
         usage
