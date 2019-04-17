@@ -54,6 +54,7 @@
   cf       = commit --fixup
   cl       = clone
   co       = checkout
+  codate   = "!f() { git checkout `git rev-list -n1 --before \"$@\" HEAD`; }; f"
   cp       = cherry-pick
   d        = diff --color --no-ext-diff
   dc       = !git d --cached
