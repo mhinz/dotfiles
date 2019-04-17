@@ -64,12 +64,12 @@ case "$1" in
         ;;
     ssh)
         shift
-        ssh -o UserKnownHostsFile=/dev/null \
+        exec ssh -o UserKnownHostsFile=/dev/null \
             -o StrictHostKeyChecking=no \
             -o ConnectionAttempts=10 \
             -o ConnectTimeout=2 \
             -o LogLevel=ERROR  \
-            -p3022 "$@" mhi@localhost
+            -p3022 -A "$@" mhi@localhost
         ;;
     start)
         if (( $# < 2 )); then
