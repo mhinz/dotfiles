@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# This only works for stream sockets.
+# For datagram sockets use UNIX-RECVFROM/UNIX-RECV.
+
+if [[ $# -lt 1 ]]; then
+    printf "usage: %s [socat flags] <unix domain socket>\n" "$(basename "$0")" 1>&2
+    exit 1
+fi
+
+flags="${*: 1:$#-1}"
+socket="${*: -1}"
+
+mv "$socket" "$socket".tmp
+socat ${flags:--v} UNIX-LISTEN:"$socket",fork UNIX-CONNECT:"$socket.tmp"
+mv "$socket".tmp "$socket"
