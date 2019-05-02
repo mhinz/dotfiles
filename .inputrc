@@ -1,0 +1,5 @@
+set show-all-if-ambiguous on
+
+Control-p: history-search-backward
+Control-k: history-search-backward
+Control-n: history-search-forward

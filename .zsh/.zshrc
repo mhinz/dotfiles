@@ -139,6 +139,7 @@ zle -N _zle_jump_after_first_word
 zle -N _zle_sudo
 zle -N edit-command-line
 
+bindkey ''   up-line-or-search
 bindkey ''   up-line-or-search
 bindkey ''   down-line-or-search
 bindkey ''   _zle_backward_kill_word
