@@ -1,6 +1,11 @@
 #!/bin/sh
 
+os="$(uname -s)"
 tinfo="$(mktemp)"
+
+if [ "$os" = Darwin ]; then
+    export TERMINFO=/usr/share/terminfo
+fi
 
 cat > "$tinfo" <<EOF
 xterm-256color|xterm with 256 colors and italic,
@@ -14,7 +19,7 @@ tmux-256color|tmux with 256 colors and italic,
     use=screen-256color,
 EOF
 
-if [ "$(uname -s)" = FreeBSD ]; then
+if [ "$os" = FreeBSD ]; then
     tcap="$(mktemp)"
     tic -CKr0x "$tinfo" > "$tcap"
     cap_mkdb -f ~/.termcap "$tcap"

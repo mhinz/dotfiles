@@ -218,4 +218,34 @@ m() {
     bc -l <<< $@
 }; alias m='noglob m'
 
+# http://mika.l3ib.org/code/zsh-functions/backdoor
+backdoor() {
+    if [[ $1 == -f ]]; then
+        shift
+        local fifo
+        exec {fifo}<>$1
+        backdoor -i $fifo
+    elif [[ $1 == -i ]]; then
+        shift
+        zle -F $1 backdoor
+    elif [[ $1 == <-> ]]; then
+        local line
+        # can get DoSed by someone writing data without a newline,
+        # but obviously that's the least of your problems if the
+        # other end is not trusted
+        if ! IFS= read -r line <&$1; then
+            zle -F $1
+            return 1
+        fi
+        eval $line
+    else
+        echo >&2 "Usage: backdoor -f [fifo]"
+        echo >&2 "       backdoor -i [fd]"
+        echo >&2
+        echo >&2 "Will read lines from given fifo and eval them in the zle -F context"
+        echo >&2 "You can also attach it to an fd yourself with backdoor -i fd, and"
+        echo >&2 "it will run all lines read from FD."
+    fi
+}
+
 # vim: ft=sh fdm=marker

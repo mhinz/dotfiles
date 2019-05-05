@@ -10,6 +10,7 @@ brew analytics off
 
 formulae=(
     asciinema
+    asdf
     automake
     bash
     cmake
@@ -36,7 +37,6 @@ formulae=(
     pkg-config
     postgresql
     python
-    rbenv
     ripgrep
     shellcheck
     socat

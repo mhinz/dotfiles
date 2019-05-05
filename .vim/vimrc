@@ -69,8 +69,10 @@ call plug#begin(s:bundle_dir)
   Plug 'tweekmonster/helpful.vim'
 
   Plug 'rust-lang/rust.vim', {'for': 'rust'}
+  Plug 'rhysd/rust-doc.vim', {'for': 'rust'}
   Plug 'lifepillar/pgsql.vim', {'for': 'sql'}
   Plug 'mattn/emmet-vim', {'for': 'html'}
+  Plug 'AndrewRadev/tagalong.vim', {'for': 'html'}
   Plug 'pangloss/vim-javascript'
   Plug 'HerringtonDarkholme/yats.vim'
   Plug 'elixir-lang/vim-elixir'
@@ -79,7 +81,6 @@ call plug#begin(s:bundle_dir)
 
   Plug 'mhinz/nvim-langserver'
   Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
-  Plug 'mhinz/nvim-travis'
   Plug 'mhinz/vim-exercism'
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
@@ -319,6 +320,8 @@ nnoremap G   Gzv
 
 inoremap <expr> <c-]> mhi#close_bracket()
 
+nnoremap <silent> <c-p> :cprevious \| call halo#run()<cr>
+nnoremap <silent> <c-n> :cnext \| call halo#run()<cr>
 nnoremap <silent> [q    :cprevious \| call halo#run()<cr>
 nnoremap <silent> ]q    :cnext \| call halo#run()<cr>
 nnoremap <silent> [l    :lprevious \| call halo#run()<cr>
@@ -477,7 +480,6 @@ function! s:colors_default() abort
 endfunction
 
 function! s:colors_janah() abort
-  highlight Normal ctermbg=236
   highlight User1  ctermfg=192 ctermbg=237 cterm=NONE
   highlight User2  ctermfg=167 ctermbg=237 cterm=NONE
   highlight User3  ctermfg=245 ctermbg=237 cterm=NONE
@@ -489,8 +491,8 @@ function! s:colors_lucius() abort
   if &background ==# 'light'
     highlight Normal                  ctermbg=NONE
     highlight CursorLine              ctermbg=255
-    highlight User1      ctermfg=23   ctermbg=192  cterm=NONE
-    highlight User2      ctermfg=20   ctermbg=195  cterm=NONE
+    highlight User1      ctermfg=84   ctermbg=237  cterm=NONE
+    highlight User2      ctermfg=222  ctermbg=237  cterm=NONE
     highlight User3      ctermfg=237  ctermbg=237  cterm=NONE
     highlight User4      ctermfg=255  ctermbg=237  cterm=NONE
     highlight User5      ctermfg=255  ctermbg=237  cterm=NONE
@@ -499,6 +501,7 @@ function! s:colors_lucius() abort
     highlight Question   ctermfg=24   ctermbg=255  cterm=NONE
     highlight Search     ctermfg=fg   ctermbg=222  cterm=NONE
     highlight Folded                  ctermbg=253  cterm=NONE
+    highlight NormalFloat ctermfg=231 ctermbg=240  cterm=NONE
   endif
 endfunction
 
@@ -652,6 +655,22 @@ let g:netrw_keepdir      = 0
 let g:netrw_liststyle    = 1
 let g:netrw_sort_options = 'i'
 
+" Plugin: nvim-langserver {{{2
+let g:ls = {
+      \ 'c':          ['clangd'],
+      \ 'go':         ['gopls'],
+      \ 'python':     ['pyls'],
+      \ 'rust':       ['rls'],
+      \ 'javascript': ['javascript-typescript-stdio'],
+      \ 'typescript': ['javascript-typescript-stdio'],
+      \ }
+
+nmap <leader>jd <plug>(ls-definition)
+nmap <leader>jh <plug>(ls-hover)
+nmap <leader>jr <plug>(ls-references)
+nmap <leader>js <plug>(ls-signature-help)
+nmap <leader>jf <plug>(ls-formatting)
+
 " Plugin: surround {{{2
 let g:surround_indent = 1
 let g:surround_{char2nr('k')} = "<kbd>\r</kbd>"
@@ -705,10 +724,7 @@ let g:grepper.rubocop = {
       \ 'grepprg': 'rubocop -femacs',
       \ 'grepformat': '%f:%l:%c: %t: %m' }
 
-command! Todo Grepper -tool ag -query '(TODO|FIX|FIXME|XXX|NOTE|HACK|OPTIMIZE):'
-
-" Plugin: vim-mini-lsp {{{2
-" let g:lsp = { 'ruby': 'solargraph stdio' }
+command! Todo Grepper -noprompt -tool rg -query '(TODO|FIX|FIXME|XXX|NOTE|HACK|OPTIMIZE):'
 
 " Plugin: vim-online-thesaurus {{{2
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
@@ -831,6 +847,7 @@ augroup vimrc
         \| nnoremap <buffer> q :qa<cr>
         \| nmap     <buffer> j ]]<cr>
         \| nmap     <buffer> k [[<cr>
+        \| nmap     <buffer> <LeftRelease> o
 
   highlight link diffAdded     DiffAdd
   highlight link diffRemoved   DiffDelete

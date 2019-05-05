@@ -66,7 +66,7 @@ case "$1" in
         shift
         exec ssh -o UserKnownHostsFile=/dev/null \
             -o StrictHostKeyChecking=no \
-            -o ConnectionAttempts=10 \
+            -o ConnectionAttempts=20 \
             -o ConnectTimeout=2 \
             -o LogLevel=ERROR  \
             -p3022 -A "$@" mhi@localhost

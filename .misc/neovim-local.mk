@@ -1,4 +1,4 @@
-# export CC := /usr/local/opt/llvm/bin/clang
+export CC := /usr/local/opt/llvm/bin/clang
 
 CMAKE_BUILD_TYPE  := Debug
 

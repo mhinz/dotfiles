@@ -5,6 +5,6 @@ require 'YAML'
 words = YAML.load_file(File.expand_path('~/english.yaml'))
 
 english = words.keys.sample
-german  = words[english].gsub('"', '\"')
+german  = words[english].gsub('"', '\"').gsub("'", "''\\'''")
 
 %x{ osascript <<< 'display notification "#{german}" with title "#{english}"' }

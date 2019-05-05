@@ -2,11 +2,7 @@
 
 os="$(uname -s)"
 
-# ^Q sends 0x11 (ASCII DC1 / XON  / "transmission on" )
-# ^S sends 0x13 (ASCII DC3 / XOFF / "transmission off")
-stty start ^Q stop ^S
-# Enable flow control, sending start/stop characters, only ^S restarts output.
-stty ixon ixoff -ixany
+stty discard undef
 
 if [ "$ITERM_PROFILE" = Dark ]; then
     eval $(dircolors ~/.zsh/dircolors.dark)
@@ -167,16 +163,6 @@ s() {
     fi
 }
 
-ssh() {
-    if [ $# -eq 0 ]; then
-        mhi net hosts
-    elif [[ $ITERM_PROFILE ]]; then
-        command ssh -t "$@" "export ITERM_PROFILE=$ITERM_PROFILE; exec \$SHELL -l"
-    else
-        command ssh "$@"
-    fi
-}
-
 r() {
   exec $SHELL
 }
@@ -200,6 +186,10 @@ rd() {
 
 lookup() {
   open "https://sks-keyservers.net/pks/lookup?search=${*}"
+}
+
+oman() {
+    open "https://man.openbsd.org/${*}"
 }
 
 camusedby() {
