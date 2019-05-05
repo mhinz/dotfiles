@@ -83,7 +83,7 @@
   rc       = rebase --continue
   re       = rebase
   rem      = remote
-  ri       = rebase -i
+  ri       = rebase -i --keep-empty
   rs       = rebase --skip
   ru       = remote update
   s        = status --short --branch --untracked-files=no
