@@ -1,4 +1,23 @@
 "
+" Show the commit that touched the current line last.
+"
+function! mhi#git_blame_current_line() abort
+  let gitdir = finddir('.git', expand('%:p').';')
+  if empty(gitdir)
+    echo 'no git'
+    return
+  endif
+  let sha = matchstr(systemlist(printf('git blame --porcelain -lL%d,+1 %s',
+        \ line('.'), expand('%')))[0], '\x\+')
+  new
+  execute 'silent file fugitive://'.gitdir.'//'.sha
+  edit
+  silent! %foldopen
+  set bufhidden=wipe
+  nnoremap <silent><buffer> q :quit<cr>
+endfunction
+
+"
 " Close nearest open bracket.
 "
 function! mhi#close_bracket() abort

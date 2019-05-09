@@ -387,6 +387,8 @@ nnoremap <leader>v  :Runtime<cr>
 nnoremap <leader>t  :Tree<cr>
 nnoremap <silent> <leader>d  :exe 'sil !open' fnameescape(printf('https://devdocs.io/#q=%s%%20%s', &ft, expand('<cword>')))<cr>
 
+nnoremap <silent><leader>b  :call mhi#git_blame_current_line()<cr>
+
 nnoremap '  `
 nnoremap `  '
 
