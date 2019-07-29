@@ -157,7 +157,7 @@ dsf() {
 
 s() {
     if (( $# )); then
-        ps -eo pid,ppid,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@"
+        ps -eo pid,ppid,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@" | grep "$@"
     else
         ps -eo pid,ppid,%cpu,%mem,state,command
     fi
@@ -284,7 +284,10 @@ c() {
 
 book() {
     local book="$(rg --files /data/books | fzf -1 --tac)"
-    [[ -n $book ]] && open "$book"
+    [[ -z $book ]] && return 1
+    cd "${book%/*}"
+    clear
+    ls -1 --group-directories-first
 }
 
 # Git {{{1
