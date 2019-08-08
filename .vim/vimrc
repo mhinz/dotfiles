@@ -645,9 +645,6 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
-" Plugin: neomake {{{2
-let g:neomake_echo_current_error = 0
-let g:neomake_open_list          = 2
 
 " Plugin: netrw {{{2
 " let g:loaded_netrwPlugin = 1
@@ -727,10 +724,6 @@ let g:grepper.rubocop = {
       \ 'grepformat': '%f:%l:%c: %t: %m' }
 
 command! Todo Grepper -noprompt -tool rg -query '(TODO|FIX|FIXME|XXX|NOTE|HACK|OPTIMIZE):'
-
-" Plugin: vim-online-thesaurus {{{2
-nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
-nnoremap <leader>K :Thesaurus<space>
 
 " Plugin: vim-sayonara {{{2
 nnoremap <silent><leader>q  :Sayonara<cr>
