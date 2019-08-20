@@ -327,8 +327,20 @@ prpush() {
 }
 
 changed() {
-    local files=($(git diff --name-only --relative "$@" 2>/dev/null))
-    [[ -n $files ]] && v "${files[@]}"
+    local files=$(git diff -U0 --no-prefix --relative "$@" 2>/dev/null | quickfix_diff_to_hunk)
+    [[ -z $files ]] && { echo '¯\_(ツ)_/¯'; return 1; }
+    v -q <(echo $files)
+}
+
+quickfix_diff_to_hunk() {
+    ruby -ne  '
+    (file = $1; next) if $_ =~ /^\+\+\+ (.*)/;
+    next if file.nil?;
+    (linenr = $1; next) if $_ =~ /^@@ .*\+(\d+)/;
+    next if linenr.nil?;
+    puts "#{file}:#{linenr}: #{$1}" if $_ =~ /^[+-](.*)/;
+    linenr = nil
+    '
 }
 
 b() {
