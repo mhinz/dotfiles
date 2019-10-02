@@ -2,8 +2,7 @@ export CC := /usr/local/opt/llvm/bin/clang
 
 CMAKE_BUILD_TYPE  := Debug
 
-CMAKE_EXTRA_FLAGS := -DBUSTED_OUTPUT_TYPE=gtest
-CMAKE_EXTRA_FLAGS += -DCMAKE_INSTALL_PREFIX=${HOME}/local/nvim
+CMAKE_EXTRA_FLAGS := -DCMAKE_INSTALL_PREFIX=${HOME}/local/nvim
 
 USE_BUNDLED_DEPS  := ON
 

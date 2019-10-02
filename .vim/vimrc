@@ -205,6 +205,7 @@ set splitbelow
 set splitright
 set switchbuf     =
 set synmaxcol     =200
+set tags         ^=./.git/tags;
 set timeout
 set timeoutlen    =1000
 set titlestring   =VIM:\ %f
@@ -379,7 +380,6 @@ nnoremap <leader>m  :Messages<cr>
 nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 " nnoremap <leader>o  :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<cr> \| xargs open<cr><cr>
 nnoremap <leader>o  :silent !open <c-r>=fnameescape('<c-r><c-a>')<cr><cr>
-nnoremap <leader>u  :call mhi#next_completion()<cr>
 nnoremap <leader>w  :update<cr>
 nnoremap <leader>x  :xit<cr>
 nnoremap <leader>l  :noh<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
@@ -662,6 +662,7 @@ let g:ls = {
       \ 'rust':       ['rls'],
       \ 'javascript': ['javascript-typescript-stdio'],
       \ 'typescript': ['javascript-typescript-stdio'],
+      \ 'elixir':     ['/data/elixir/elixir-ls/build/language_server.sh'],
       \ }
 
 nmap <leader>jd <plug>(ls-definition)
@@ -735,7 +736,7 @@ let g:sayonara_confirm_quit = 0
 nnoremap <leader>st :Startify<cr>
 
 let g:startify_change_to_dir       = 0
-let g:startify_custom_header       = 'map(startify#fortune#boxed(), ''"   ".v:val'')'
+let g:startify_custom_header       = 'startify#pad(startify#fortune#boxed())'
 let g:startify_enable_special      = 0
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles     = 1
@@ -858,7 +859,8 @@ augroup vimrc
   xmap ic <plug>(signify-motion-inner-visual)
   omap ac <plug>(signify-motion-outer-pending)
   xmap ac <plug>(signify-motion-outer-visual)
-  nnoremap <leader>p :SignifyDiffPreview<cr>
+  nnoremap <leader>p :SignifyHunkPreview<cr>
+  nnoremap <leader>u :SignifyHunkUndo<cr>
 
   " Filetype: Vim, Vader {{{2
   autocmd FileType vim nnoremap <buffer><silent> <cr> :if lookup#lookup()<bar>call halo#run()<bar>endif<cr>
