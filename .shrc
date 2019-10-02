@@ -214,6 +214,8 @@ angband() {
     command angband
     stty "$save_stty"
 }
+
+_() { for file in "$@"; do mv -nv "$file" _"$file"; done }
 # }}}
 
 # Chrome {{{1
