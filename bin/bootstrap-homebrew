@@ -9,13 +9,11 @@ fi
 brew analytics off
 
 formulae=(
-    asciinema
     asdf
     automake
     bash
     cmake
     coreutils
-    cscope
     curl-openssl
     emacs
     erlang
@@ -58,13 +56,13 @@ brew tap homebrew/cask-fonts
 brew tap homebrew/cask-versions
 
 formulae=(
-    caffeine
+    android-file-transfer
     calibre
     docker-edge
     flux
     font-fira-code
-    font-input
     iterm2
+    kap
     spectacle
     tor-browser
     vienna
