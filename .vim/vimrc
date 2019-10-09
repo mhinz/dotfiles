@@ -273,29 +273,6 @@ else
   augroup END
 endif
 
-if has('cscope')
-  set cscopetag
-  set cscopetagorder=0
-  set cscopeverbose
-  set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
-  "  s  symbol:   find all references to the token under cursor
-  "  g  global:   find global definition(s) of the token under cursor
-  "  c  calls:    find all calls to the function name under cursor
-  "  t  text:     find all instances of the text under cursor
-  "  e  egrep:    egrep search for the word under cursor
-  "  f  file:     open the filename under cursor
-  "  i  includes: find files that include the filename under cursor
-  "  d  called:   find functions that function under cursor calls
-  nnoremap <leader>cs :cscope find s  <c-r>=expand('<cword>')<cr><cr>
-  nnoremap <leader>cg :cscope find g  <c-r>=expand('<cword>')<cr><cr>
-  nnoremap <leader>cc :cscope find c  <c-r>=expand('<cword>')<cr><cr>
-  nnoremap <leader>ct :cscope find t  <c-r>=expand('<cword>')<cr><cr>
-  nnoremap <leader>ce :cscope find e  <c-r>=expand('<cword>')<cr><cr>
-  nnoremap <leader>cf :cscope find f  <c-r>=expand('<cfile>')<cr><cr>
-  nnoremap <leader>ci :cscope find i ^<c-r>=expand('<cfile>')<cr>$<cr>
-  nnoremap <leader>cd :cscope find d  <c-r>=expand('<cword>')<cr><cr>
-endif
-
 " Mapping {{{1
 nnoremap \   ;
 inoremap jf  <esc>

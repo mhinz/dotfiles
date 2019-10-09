@@ -5,7 +5,6 @@ prefix="${HOME}/local/vim"
 
 flags="--prefix=${prefix} "
 flags+='--with-compiledby=mhi '
-flags+='--enable-cscope '
 flags+='--enable-pythoninterp=dynamic '
 flags+='--enable-python3interp=dynamic '
 flags+='--enable-rubyinterp=dynamic '

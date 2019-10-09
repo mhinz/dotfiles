@@ -13,13 +13,6 @@ done
 
 cd "$(git rev-parse --show-toplevel)"
 
-files="$(git ls-files -- '*.c' '*.h' '*.cc' '*.hh' '*.cpp', '*.hpp' '*.java')"
-if [[ -n $files ]]; then
-    echo 'Creating cscope database...'
-    cscope -b -q -i - <<< "$files"
-    mv cscope* .git
-fi
-
 echo 'Creating tags...'
 ctags --fields=+S --exclude=.git --tag-relative=yes -Rf .git/tags.$$
 mv .git/tags.$$ .git/tags
