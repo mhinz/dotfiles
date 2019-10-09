@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+#
+# usage: git whereami
+#
+# Show next and previous tags from HEAD and their distance.
+
+def out(title, tag, distance)
+  printf("%-20s %-20s %d commits away\n", title, tag, distance)
+end
+
+def distance(tag)
+  `git log --oneline --no-merges ...#{tag}`.lines.count
+end
+
+exact = `git describe --abbrev=0 --exact-match HEAD 2>/dev/null`.rstrip
+
+case $?.exitstatus
+when 0
+  prev_anno  = `git describe --abbrev=0        HEAD^ 2>/dev/null`.rstrip
+  prev_light = `git describe --abbrev=0 --tags HEAD^ 2>/dev/null`.rstrip
+  out('exact',            exact,      0)
+  out('prev annotated',   prev_anno,  distance(prev_anno))  unless prev_anno.empty?
+  out('prev lightweight', prev_light, distance(prev_light)) unless prev_light.empty?
+else
+  next_light = `git describe --contains        HEAD 2>/dev/null`.rstrip
+  prev_anno  = `git describe --abbrev=0        HEAD 2>/dev/null`.rstrip
+  prev_light = `git describe --abbrev=0 --tags HEAD 2>/dev/null`.rstrip
+  out('next',             *next_light.split('~'))           unless next_light.empty?
+  out('prev annotated',   prev_anno,  distance(prev_anno))  unless prev_anno.empty?
+  out('prev lightweight', prev_light, distance(prev_light)) unless prev_light.empty?
+end
