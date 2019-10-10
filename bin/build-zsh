@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dir='/data/repo/zsh'
+dir="${ME}/repo/zsh"
 prefix="${HOME}/local/zsh"
 
 flags="--prefix=${prefix}"

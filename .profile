@@ -1,16 +1,12 @@
 # This file gets sourced by every login shell.
 
-# ruby -e 'puts Gem.dir'
-# python3 -c 'import site; print(site.USER_BASE)'
-
 # PATH {{{1
 newpath=(
     /usr/local/sbin
     /usr/local/opt/coreutils/libexec/gnubin
     /usr/local/opt/llvm/bin
     /usr/local/opt/ncurses/bin
-    /data/languages/elixir/bin
-    "$GOPATH"/bin
+    ~/data/go/bin
     ~/.npm/bin
     ~/.asdf/bin
     ~/.asdf/shims
@@ -38,6 +34,7 @@ export PATH
 unset newpath dir
 # }}}
 
+export ME=$HOME/data
 export LANG=en_US.UTF-8
 
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
@@ -45,7 +42,7 @@ export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
 export ELIXIR_EDITOR='ec +__LINE__ __FILE__'
 
-export GOPATH=/data/go
+export GOPATH=$ME/go
 export GOARCH=amd64
 export GOOS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 

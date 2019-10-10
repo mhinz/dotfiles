@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /data/repo/tmux || exit
+cd "${ME}/repo/tmux" || exit
 
 if git pull | grep 'Already up[ -]to[ -]date.' && [ "$1" != -f ]; then
     exit 0

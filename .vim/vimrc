@@ -639,7 +639,7 @@ let g:ls = {
       \ 'rust':       ['rls'],
       \ 'javascript': ['javascript-typescript-stdio'],
       \ 'typescript': ['javascript-typescript-stdio'],
-      \ 'elixir':     ['/data/elixir/elixir-ls/build/language_server.sh'],
+      \ 'elixir':     [$ME.'/elixir/elixir-ls/build/language_server.sh'],
       \ }
 
 nmap <leader>jd <plug>(ls-definition)

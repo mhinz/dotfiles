@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dir='/data/languages/erlang'
+dir="${ME}/languages/erlang"
 prefix="${HOME}/local/erlang"
 
 flags="--prefix=${prefix} "

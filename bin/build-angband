@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 repo='https://github.com/angband/angband'
-dir='/data/repo/angband'
+dir="${ME}/repo/angband"
 
 cd "$dir" 2>/dev/null || {
     cd "${dir%/*}" || exit 1

@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-if [[ ! -d /data/languages/elixir ]]; then
-    mkdir -p /data/languages
-    git clone https://github.com/elixir-lang/elixir /data/languages/elixir
+dir="${ME}/github/elixir-lang/elixir"
+
+if [[ ! -d $dir ]]; then
+    mkdir -p "${ME}/github/elixir-lang"
+    git clone https://github.com/elixir-lang/elixir "$dir"
 fi
 
-cd /data/languages/elixir || exit
+cd "$dir" || exit
 
 if [[ $1 != '-f' ]]; then
     git pull | grep 'Already up[ -]to[ -]date.' && exit 1

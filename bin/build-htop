@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dir='/data/repo/htop'
+dir="${ME}/repo/htop"
 prefix="${HOME}/local/htop"
 
 flags="--prefix=${prefix} "

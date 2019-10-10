@@ -253,8 +253,8 @@ f() {
 
 p() {
   local dirs=(
-    /data/github/*
-    /data/repo
+    $ME/github/*
+    $ME/repo
     $HOME/.vim/bundle
   )
   local dir="$(find "${dirs[@]}" -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac)"
@@ -285,7 +285,7 @@ c() {
 }
 
 book() {
-    local book="$(rg --files /data/books | fzf -1 --tac)"
+    local book="$(rg --files $ME/books | fzf -1 --tac)"
     [[ -z $book ]] && return 1
     cd "${book%/*}"
     clear
@@ -409,15 +409,15 @@ tmup() {
 
 # Vim {{{1
 v() {
- if [[ -x /data/github/neovim/neovim/build/bin/nvim ]]; then
-     VIMRUNTIME=/data/github/neovim/neovim/runtime /data/github/neovim/neovim/build/bin/nvim "$@"
+ if [[ -x $ME/github/neovim/neovim/build/bin/nvim ]]; then
+     VIMRUNTIME=$ME/github/neovim/neovim/runtime $ME/github/neovim/neovim/build/bin/nvim "$@"
  else
      $EDITOR "$@"
  fi
 }
 
 vd() {
-    VIMRUNTIME=/data/github/neovim/neovim/runtime lldb -- /data/github/neovim/neovim/build/bin/nvim "$@"
+    VIMRUNTIME=$ME/github/neovim/neovim/runtime lldb -- $ME/github/neovim/neovim/build/bin/nvim "$@"
 }
 
 all() {
