@@ -44,7 +44,12 @@ _prompt() {
     local pwd="$(pwd -P)"
     local p
 
-    [[ -n $SSH_CONNECTION ]] && p+="${_p_user}${USER}${_p_clear} ${_p_host}$(hostname) "
+    [[ $UID -eq 0 ]] && p+="${_p_red}${_p_underline}ROOT${_p_clear} "
+
+    if [[ -n $SSH_CONNECTION ]]; then
+        [[ $UID -ne 0 ]] && p+="${_p_user}${USER}${_p_clear} "
+        p+="${_p_host}$(hostname) "
+    fi
 
     p+=$_p_pink
 
