@@ -3,18 +3,16 @@
 dir="${ME}/repo/vim"
 prefix="${HOME}/local/vim"
 
-flags="--prefix=${prefix} "
-flags+='--with-compiledby=mhi '
-flags+='--enable-pythoninterp=dynamic '
-flags+='--enable-python3interp=dynamic '
-flags+='--enable-rubyinterp=dynamic '
-flags+='--enable-terminal '
+flags=(
+    "--prefix=${prefix}"
+    '--with-compiledby=mhi'
+    '--enable-python3interp=dynamic'
+    '--enable-rubyinterp=dynamic'
+)
 
-if [[ $(uname) == Linux ]]; then
-    flags+='--with-x '
-fi
+[[ $(uname) == Linux ]] && flags+=('--with-x')
 
-echo_current_vim_version() {
+current_vim_version() {
     local version patchlevel
     version=$(vim --version | head -1 | cut -d' ' -f5)
     patchlevel=$(vim --version | head -3 | tail -1 | cut -d'-' -f2)
@@ -22,32 +20,24 @@ echo_current_vim_version() {
 }
 
 cd "$dir" || exit 1
-echo '[*] Cleaning directory..'
-make distclean 1>/dev/null
-
-if [[ $1 == -f ]]; then
-    echo '[!] Force building..'
-else
-    echo '[*] Pulling changes..'
-    if git pull | grep 'Already up[ -]to[ -]date.' &>/dev/null; then
-        echo '[!] No changes found.'
-        echo "[*] Current version: $(echo_current_vim_version)"
-        exit 1
-    fi
+if [[ $1 != -f ]]; then
+    git pull | grep 'Already up[ -]to[ -]date.' && exit 1
 fi
 
-old_version=$(echo_current_vim_version)
+old_version=$(current_vim_version)
 
-echo "[*] Build log: ${dir}/build.log"
-echo '[*] Configure..'
+echo "Build log: ${dir}/build.log"
 
-# shellcheck disable=SC2086
-./configure $flags >build.log
+echo 'Cleaning...'
+make distclean 1>/dev/null
 
-echo '[*] Compile sources..'
+echo 'Configure...'
+./configure "${flags[@]}" >build.log
+
+echo 'Compile...'
 make >>build.log
 
-echo '[*] Install..'
+echo 'Install...'
 make install >>build.log
 
-echo "[*] New version: $old_version => $(echo_current_vim_version)"
+echo "New version: $old_version => $(current_vim_version)"

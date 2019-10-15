@@ -3,8 +3,6 @@
 dir="${ME}/repo/htop"
 prefix="${HOME}/local/htop"
 
-flags="--prefix=${prefix} "
-
 cd "$dir" || exit
 
 if [[ $1 != -f ]]; then
@@ -12,6 +10,5 @@ if [[ $1 != -f ]]; then
 fi
 
 sh autogen.sh
-# shellcheck disable=SC2086
-./configure $flags
+./configure --prefix="${prefix}"
 make install

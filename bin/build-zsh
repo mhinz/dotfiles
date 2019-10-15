@@ -3,8 +3,6 @@
 dir="${ME}/repo/zsh"
 prefix="${HOME}/local/zsh"
 
-flags="--prefix=${prefix}"
-
 cd "$dir" || exit
 echo '[*] Cleaning directory..'
 make distclean &>/dev/null
@@ -25,8 +23,7 @@ echo '[*] Run preconfig..'
 ./Util/preconfig >build.log
 
 echo '[*] Configure..'
-# shellcheck disable=SC2086
-./configure $flags >>build.log
+./configure --prefix="${prefix}" >>build.log
 
 echo '[*] Compile sources..'
 make >>build.log

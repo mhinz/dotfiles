@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-dir="${ME}/languages/erlang"
+dir="${ME}/github/erlang/otp"
 prefix="${HOME}/local/erlang"
 
-flags="--prefix=${prefix} "
-flags+='--with-ssl=/usr/local/opt/openssl '
-flags+='--without-javac '
+flags=(
+    "--prefix=${prefix}"
+    '--with-ssl=/usr/local/opt/openssl'
+    '--without-javac'
+)
 
 cd "$dir" || exit
 
@@ -15,9 +17,6 @@ fi
 
 export LANG=C
 
-make distclean
-./otp_build autoconf
-# shellcheck disable=SC2086
-./configure $flags
-make install
-make install-docs
+[[ ! -f ./configure ]] && ./otp_build autoconf && ./configure "${flags[@]}"
+./configure "${flags[@]}"
+# make

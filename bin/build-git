@@ -6,8 +6,6 @@ set -x
 dir="${ME}/repo/git"
 prefix="${HOME}/local/git"
 
-flags="--prefix=${prefix} "
-
 # avoid "Document /<path>/git/Documentation/git-add.xml does not validate" errors
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 export CPPFLAGS=-I/usr/local/opt/openssl/include
@@ -22,8 +20,7 @@ fi
 make distclean 1>/dev/null
 make configure 1>/dev/null
 
-# shellcheck disable=SC2086
-./configure $flags
+./configure --prefix="${prefix}"
 make install install-man
 
 cd contrib/subtree
