@@ -44,8 +44,16 @@ _prompt() {
     local pwd="$(pwd -P)"
     local p
 
+    # shorten $HOME to ~ unless $HOME is a git repo
+    if [[ $gittop != $HOME ]]; then
+        gittop="${gittop/#${HOME}/~}"
+        pwd="${pwd/#${HOME}/~}"
+    fi
+
+    # root!
     [[ $UID -eq 0 ]] && p+="${_p_red}${_p_underline}ROOT${_p_clear} "
 
+    # show user and host on remote systems
     if [[ -n $SSH_CONNECTION ]]; then
         [[ $UID -ne 0 ]] && p+="${_p_user}${USER}${_p_clear} "
         p+="${_p_host}$(hostname) "
