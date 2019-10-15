@@ -68,6 +68,8 @@ remove_task() {
         while IFS= read -r task; do
             echo "$(date +'%F %R') $task" >> ~/tasks.log
             echo "Finished: $task"
+            printf 'Next:     '
+            list_tasks 1
         done <<< "$line"
     fi
 }
