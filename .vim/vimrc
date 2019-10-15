@@ -43,7 +43,6 @@ let g:plug_pwindow = 'vertical rightbelow new'
 
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
-  Plug 'nightsense/snow'
 
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chrisbra/unicode.vim', {'on': ['UnicodeName', 'UnicodeTable']}
@@ -57,7 +56,6 @@ call plug#begin(s:bundle_dir)
   Plug 'justinmk/vim-dirvish'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
   Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-  Plug 'powerman/vim-plugin-AnsiEsc', {'on': 'AnsiEsc'}
   Plug 'rhysd/committia.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
@@ -76,12 +74,9 @@ call plug#begin(s:bundle_dir)
   Plug 'pangloss/vim-javascript'
   Plug 'HerringtonDarkholme/yats.vim'
   Plug 'elixir-lang/vim-elixir'
-  Plug 'fatih/vim-go', {'for': 'go'}
-  Plug 'tweekmonster/hl-goimport.vim', {'for': 'go'}
 
   Plug 'mhinz/nvim-langserver'
   Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
-  Plug 'mhinz/vim-exercism'
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
   Plug 'mhinz/vim-janah'
@@ -171,6 +166,7 @@ set mouse         =a
 set scrolloff     =4
 set sidescroll    =5
 set smartcase
+set tagcase       =match
 
 " misc settings
 set autoread
@@ -413,27 +409,17 @@ augroup vimrc
     autocmd TermOpen,BufEnter term://* startinsert
   endif
 
-  au BufEnter * if isdirectory(expand('<afile>')) | set nobuflisted | endif
+  autocmd BufReadPost *
+        \ if line("'\"") > 1 && line("'\"") <= line("$") |
+        \   execute 'normal! g`"zvzz' |
+        \ endif
 
-  au BufRead,BufNewFile *                         call mhi#source_project_config()
-  au BufRead,BufNewFile *.[sS]                    let b:asmsyntax = 'gas'
-  au BufRead,BufNewFile *.adoc                    setfiletype asciidoc
-  au BufRead,BufNewFile /data/repo/git/*.{c,h}    setl noet sw=0 sts=0
+  autocmd WinEnter    * set cursorline
+  autocmd WinLeave    * set nocursorline
+  autocmd InsertEnter * set nocursorline
+  autocmd InsertLeave * set cursorline
 
-  au BufWritePost       ~/.Xdefaults              redraw | echo system('xrdb ' . expand('<amatch>'))
-  au CompleteDone       *                         pclose
-
-  au BufReadPost  * if &bin | silent! exe '%!xxd'    | setlocal filetype=xxd | endif
-  au BufWritePre  * if &bin | silent! exe '%!xxd -r' | endif
-  au BufWritePost * if &bin | silent! exe '%!xxd'    | setlocal nomodified | endif
-
-  au WinEnter    * set cursorline
-  au WinLeave    * set nocursorline
-  au InsertEnter * set nocursorline
-  au InsertLeave * set cursorline
-
-  au VimEnter,DirChanged * if filereadable('.git/cscope.out') | exe 'sil! cs add .git/cscope.out' | endif
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"zvzz' | endif
+  autocmd CompleteDone * pclose
 augroup END
 
 " Command {{{1
@@ -830,14 +816,13 @@ augroup vimrc
   highlight link diffSubname   Comment
 
   " signify
-  let g:signify_realtime = 1
   let g:signify_sign_show_text = 0
   omap ic <plug>(signify-motion-inner-pending)
   xmap ic <plug>(signify-motion-inner-visual)
   omap ac <plug>(signify-motion-outer-pending)
   xmap ac <plug>(signify-motion-outer-visual)
-  nnoremap <leader>p :SignifyHunkPreview<cr>
-  nnoremap <leader>u :SignifyHunkUndo<cr>
+  nnoremap <silent><leader>p :SignifyHunkDiff<cr>
+  nnoremap <silent><leader>u :SignifyHunkUndo<cr>
 
   " Filetype: Vim, Vader {{{2
   autocmd FileType vim nnoremap <buffer><silent> <cr> :if lookup#lookup()<bar>call halo#run()<bar>endif<cr>
