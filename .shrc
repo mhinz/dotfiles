@@ -44,6 +44,9 @@ _prompt() {
     local pwd="$(pwd -P)"
     local p
 
+    # this directory might be below a git repo but not part of it
+    [[ -n $gittop && -z $(git ls-files) ]] && gittop=
+
     # shorten $HOME to ~ unless $HOME is a git repo
     if [[ $gittop != $HOME ]]; then
         gittop="${gittop/#${HOME}/~}"
