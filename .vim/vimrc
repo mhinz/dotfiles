@@ -626,6 +626,7 @@ let g:ls = {
       \ 'objc':       {'cmd': ['clangd']},
       \ 'go':         {'cmd': ['gopls']},
       \ 'python':     {'cmd': ['pyls']},
+      \ 'lua':        {'cmd': ['lua-lsp']},
       \ 'rust':       {'cmd': ['rls']},
       \ 'javascript': {'cmd': ['javascript-typescript-stdio']},
       \ 'typescript': {'cmd': ['javascript-typescript-stdio']},
