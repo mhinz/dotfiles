@@ -619,13 +619,15 @@ let g:netrw_sort_options = 'i'
 
 " Plugin: nvim-langserver {{{2
 let g:ls = {
-      \ 'c':          ['clangd'],
-      \ 'go':         ['gopls'],
-      \ 'python':     ['pyls'],
-      \ 'rust':       ['rls'],
-      \ 'javascript': ['javascript-typescript-stdio'],
-      \ 'typescript': ['javascript-typescript-stdio'],
-      \ 'elixir':     [$ME.'/elixir/elixir-ls/build/language_server.sh'],
+      \ 'c':          {'cmd': ['clangd']},
+      \ 'cpp':        {'cmd': ['clangd']},
+      \ 'objc':       {'cmd': ['clangd']},
+      \ 'go':         {'cmd': ['gopls']},
+      \ 'python':     {'cmd': ['pyls']},
+      \ 'rust':       {'cmd': ['rls']},
+      \ 'javascript': {'cmd': ['javascript-typescript-stdio']},
+      \ 'typescript': {'cmd': ['javascript-typescript-stdio']},
+      \ 'elixir':     {'cmd': [$ME.'/elixir/elixir-ls/build/language_server.sh']},
       \ }
 
 nmap <leader>jd <plug>(ls-definition)
@@ -795,7 +797,8 @@ augroup vimrc
 
   " fugitive
   autocmd BufReadPost fugitive:// setlocal bufhidden=delete
-  autocmd User        fugitive
+  autocmd FileType fugitiveblame nmap q gq
+  autocmd User fugitive
         \  if get(b:, 'fugitive_type', '') =~# '\v^%(tree|blob)$'
         \|   nnoremap <buffer> .. :edit %:h<cr>
         \| endif
