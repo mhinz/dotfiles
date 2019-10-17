@@ -75,6 +75,7 @@ call plug#begin(s:bundle_dir)
   Plug 'HerringtonDarkholme/yats.vim'
   Plug 'elixir-lang/vim-elixir'
 
+  let g:plug_url_format = 'git@github.com:%s.git'
   Plug 'mhinz/nvim-langserver'
   Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
   Plug 'mhinz/vim-grepper'
@@ -87,6 +88,7 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-signify'
   Plug 'mhinz/vim-startify'
   Plug 'mhinz/vim-tree'
+  unlet! g:plug_url_format
 call plug#end()
 " }}}1
 
