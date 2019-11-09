@@ -14,6 +14,7 @@
   gpgsign = true
 [fetch]
   prune = true
+  writeCommitGraph = true
 [push]
   default = current
   followTags = true
@@ -25,6 +26,7 @@
 [rerere]
   enabled = true
 [advice]
+  detachedHead = no
   statusHints = no
 [diff]
   tool                = nvr
