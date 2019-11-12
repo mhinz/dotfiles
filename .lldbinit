@@ -1,5 +1,5 @@
-settings set target.x86-disassembly-flavor intel
-
-command alias brf breakpoint set --file %1 --line %2
 command alias ptype target modules lookup -t %1
 command alias reload command source -s 1 ~/.lldbinit
+
+settings set target.x86-disassembly-flavor intel
+settings set frame-format "frame #${frame.index}: ${frame.pc}{ \x1b\x5b36m${module.file.basename}\x1b\x5b39m{` \x1b\x5b32m${function.name-with-args} \x1b\x5b39m${function.pc-offset}}}{ at \x1b\x5b31m${line.file.basename}\x1b\x5b0m ${line.number}}\n"
