@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Just a hack to keep macOS from sleeping without having to fiddle with the
+# energy saver settings or using apps like caffeine and amphetamine.
+
+[[ $(uname -s) == Darwin ]] || exit 1
+
+declare -A map=(
+    [Apple_Terminal]=Terminal
+    [iTerm.app]=iTerm
+)
+
+term=${map[$TERM_PROGRAM]}
+[[ -z $term ]] && exit 2
+
+time osascript <<EOF
+tell application "System Events"
+    keystroke "cat\n"
+end tell
+repeat
+    tell application "$term"
+        activate
+        tell application "System Events"
+            keystroke "yay\n"
+        end tell
+    end tell
+    delay 10
+end repeat
+EOF
