@@ -5,9 +5,9 @@
 (when (member "Source Code Pro" (font-family-list))
   (set-default-font "Source Code Pro-13"))
 
-(tool-bar-mode 0)
+(if (fboundp 'tool-bar-mode)     (tool-bar-mode 0))
+(if (fboundp 'toggle-scroll-bar) (toggle-scroll-bar 0))
 (menu-bar-mode 0)
-(toggle-scroll-bar 0)
 
 (setq ring-bell-function 'ignore)
 (setq inhibit-splash-screen t)
