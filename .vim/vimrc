@@ -65,7 +65,7 @@ call plug#begin(s:bundle_dir)
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'tweekmonster/helpful.vim'
+  Plug 'tweekmonster/helpful.vim', {'on': 'MANUALLY'}
 
   Plug 'rust-lang/rust.vim', {'for': 'rust'}
   Plug 'rhysd/rust-doc.vim', {'for': 'rust'}
@@ -592,6 +592,16 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
+" Plugin: helpful {{{2
+function! s:helpful()
+  if plug#load('helpful.vim')
+    autocmd! help_versions
+    augroup! help_versions
+  endif
+  call helpful#cursor_word()
+endfunction
+autocmd FileType help nnoremap <buffer><silent> <leader>h :call <sid>helpful()<cr>
+
 " Plugin: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
@@ -724,7 +734,6 @@ augroup vimrc
   " Filetype: Help {{{2
   autocmd FileType help
         \  setl noet
-        \| let b:helpful = 1
         \| execute 'silent wincmd' 'TL'[winnr('$') == 2]
 
   " Filetype: HTML {{{2
