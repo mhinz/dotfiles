@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dir="${ME}/repo/vim"
+dir="${ME}/github/vim/vim"
 prefix="${HOME}/local/vim"
 
 flags=(

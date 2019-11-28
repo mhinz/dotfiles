@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 dir="${ME}/github/elixir-lang/elixir"
 
 if [[ ! -d $dir ]]; then
@@ -7,7 +9,7 @@ if [[ ! -d $dir ]]; then
     git clone https://github.com/elixir-lang/elixir "$dir"
 fi
 
-cd "$dir" || exit
+cd "$dir"
 
 if [[ $1 != '-f' ]]; then
     git pull | grep 'Already up[ -]to[ -]date.' && exit 1

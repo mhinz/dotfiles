@@ -21,9 +21,14 @@ watch=all
 logcheck=60
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
+alias -g G='| grep -i'
 alias -g L='| less -r'
 alias -g N='>/dev/null'
 alias -g E='2>/dev/null'
+
+alias j='ls -lhd -- *(D-/)'
+alias k='ls -lhX -- *(D-^/)'
+alias n='ls -lhS -- *(DOL[1,5]^/)'
 
 # options {{{1
 
@@ -213,10 +218,6 @@ compdef _completion_tmux_sessions tm
 # }}}
 
 command_not_found_handler() { ~/bin/shell_function_missing $* }
-
-m() {
-    bc -l <<< $@
-}; alias m='noglob m'
 
 # http://mika.l3ib.org/code/zsh-functions/backdoor
 backdoor() {

@@ -58,6 +58,7 @@ fi
 
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:"$MANPATH"
 export MANPATH=/usr/local/opt/erlang/lib/erlang/man:"$MANPATH"
+export MANPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/share/man:"$MANPATH"
 export MANWIDTH=82
 
 case "$EDITOR" in

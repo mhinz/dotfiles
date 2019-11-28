@@ -47,12 +47,6 @@ _prompt() {
     # this directory might be below a git repo but not part of it
     [[ -n $gittop && -z $(git ls-files) ]] && gittop=
 
-    # shorten $HOME to ~ unless $HOME is a git repo
-    if [[ $gittop != $HOME ]]; then
-        gittop="${gittop/#${HOME}/~}"
-        pwd="${pwd/#${HOME}/~}"
-    fi
-
     # root!
     [[ $UID -eq 0 ]] && p+="${_p_red}${_p_underline}ROOT${_p_clear} "
 
@@ -67,7 +61,8 @@ _prompt() {
     if [[ -z $gittop ]]; then
         p+="$pwd "
     else
-        local front="${gittop%/*}"
+        local parentdir="${gittop%/*}"
+        local front="${parentdir/#${HOME}/~}"
         local middle="${_p_underline}${_p_bold}${gittop##*/}${_p_clear}"
         local back="${_p_pink}${pwd#${gittop}}"
         p+="${front}/${middle}${back}${_p_clear} "
@@ -77,8 +72,7 @@ _prompt() {
         [[ -n $branch ]] && p+="${_p_bold}${branch}"
 
         # dirty working tree
-        git diff --no-ext-diff --quiet &>/dev/null 2>/dev/null
-        (( $? )) && p+="$_p_bold *"
+        git diff --no-ext-diff --quiet 2>/dev/null || p+="$_p_bold *"
 
         # staged changes
         git diff-index --cached --quiet HEAD 2>/dev/null || p+="$_p_bold ✓"
@@ -112,26 +106,26 @@ _prompt() {
 alias d='docker'
 alias dc='docker-compose'
 alias g='git'
+alias m='mhi'
 
 alias t='task'
 alias tf='task -f'
 alias tn='task | head -n 1'
 
-alias pip2up="pip2 list --format=columns | sed -e '1,2d' | cut -d' ' -f1 | xargs pip2 install -U"
-alias pip3up="pip3 list --format=columns | sed -e '1,2d' | cut -d' ' -f1 | xargs pip3 install -U"
+alias pip3up="pip3 list --format=columns | sed -e '1,2d' | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 if [[ $os = Darwin ]]; then
-    alias brewup='brew update && brew upgrade && brew cask upgrade && brew cleanup'
-    alias allup="pip2up; pip3up; gemup; npmup; brewup"
+    alias brewup='brew update && brew upgrade && brew cask upgrade && brew cleanup --prune 1'
+    alias allup="pip3up; gemup; npmup; brewup"
 elif [[ $os = Linux ]]; then
     alias aptup="sudo -- sh -c 'apt update && apt upgrade'"
-    alias allup="pip2up; pip3up; gemup; npmup; aptup"
+    alias allup="pip3up; gemup; npmup; aptup"
 fi
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 
-alias mirror='noglob wget --mirror --no-parent --recursive --timestamping --continue --recursive'
+alias mirror='wget --mirror --no-parent --continue'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg -o "%(title)s.%(ext)s"'
@@ -150,12 +144,9 @@ if [[ $os = FreeBSD ]]; then
 else
     alias ls='ls --color=auto -Nv'
 fi
-alias j='ls -lhd -- *(D-/)'
-alias k='ls -lhX -- *(D-^/)'
 alias l='ls -1h --group-directories-first'
 alias ll='ls -lh --group-directories-first'
 alias la='ll -A'
-alias n='ls -lhS -- *(DOL[1,5]^/)'
 
 alias grep='grep --color=auto'
 
@@ -262,9 +253,8 @@ url() {
 }
 
 f() {
-  local IFS=$'\n'
-  local files=($(fzf-tmux -m -1 --tac --tiebreak=index))
-  [[ -n $files ]] && v "${files[@]}"
+  local file="$(fzf-tmux -1 --tac --tiebreak=index)"
+  [[ -n $file ]] && cd "$(dirname "$file")"
 }
 
 p() {
@@ -404,7 +394,7 @@ proftoggle() {
     local seq="\e]1337;SetProfile=${ITERM_PROFILE}\x7"
     if [[ -n $TMUX ]]; then
         seq="\ePtmux;\e${seq}\e\\"
-        tmux setenv ITERM_PROFILE $ITERM_PROFILE
+        tmux setenv -g ITERM_PROFILE $ITERM_PROFILE
     fi
     printf $seq
     clear
@@ -420,7 +410,7 @@ tm() {
 }
 
 tmup() {
-    [[ -n $TMUX ]] && export $(tmux showenv | grep --color=never '^[^-]' | xargs)
+    [[ -n $TMUX ]] && export "$(tmux showenv -s)"
 }
 
 # Vim {{{1

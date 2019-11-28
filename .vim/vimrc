@@ -43,6 +43,7 @@ let g:plug_pwindow = 'vertical rightbelow new'
 
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
+  Plug 'sainnhe/vim-color-forest-night'
 
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chrisbra/unicode.vim', {'on': ['UnicodeName', 'UnicodeTable']}
@@ -78,9 +79,9 @@ call plug#begin(s:bundle_dir)
   let g:plug_url_format = 'git@github.com:%s.git'
   Plug 'mhinz/nvim-langserver'
   Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
+  Plug 'mhinz/vim-crates'
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
-  Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
   Plug 'mhinz/vim-mix-format'
   Plug 'mhinz/vim-rfc'
@@ -105,8 +106,6 @@ else
   syntax on
   packadd! matchit
 endif
-
-let mapleader = ';'
 
 let g:vimsyn_folding = 'f'
 let g:is_bash        = 1
@@ -140,11 +139,10 @@ set shiftwidth    =2
 set shiftround
 
 " backup/swap/info/undo settings
-set backup
-set backupext     =-vimbackup
-set backupskip    =
+set nobackup
+set nowritebackup
 set undofile
-set updatecount   =100
+set swapfile
 if has('nvim')
   set backupdir  -=.
   set shada       ='100
@@ -159,14 +157,15 @@ endif
 " better navigation
 set cursorline
 set foldmethod    =marker
+set foldopen     -=hor
 set foldopen     +=jump
 set foldtext      =mhi#foldy()
 set hlsearch
-set ignorecase
 set incsearch
 set mouse         =a
 set scrolloff     =4
 set sidescroll    =5
+set ignorecase
 set smartcase
 set tagcase       =match
 
@@ -176,7 +175,6 @@ set backspace     =indent,eol,start
 set clipboard     =unnamed
 set complete     -=i
 set completeopt  +=noselect
-set cpoptions    -=e
 set diffopt      +=vertical,foldcolumn:0,indent-heuristic,algorithm:patience
 set fileformats   =unix,dos,mac
 set hidden
@@ -272,41 +270,31 @@ else
 endif
 
 " Mapping {{{1
-nnoremap \   ;
-inoremap jf  <esc>
+let mapleader = ';'
+nnoremap \ ;
+
+inoremap jf <esc>
 
 nnoremap gh :call mhi#github_open_issue()<cr>
 nnoremap gH :call mhi#github_open_slug()<cr>
 
-inoremap <expr> <tab>    mhi#tab_yeah("\<c-n>", "\<tab>")
-inoremap <expr> <s-tab>  mhi#tab_yeah("\<c-p>", "\<s-tab>")
-
-nnoremap <c-i>  <c-i>zvzz
-nnoremap <c-o>  <c-o>zvzz
-
-inoremap <silent> <c-g><c-t>  <c-r>=repeat(complete(col('.'), map(["%Y-%m-%d %H:%M:%S","%a, %d %b %Y %H:%M:%S %z","%Y %b %d","%d-%b-%y","%a %b %d %T %Z %Y"],'strftime(v:val)')+[localtime()]),0)<cr>
-
-nnoremap <f12>  :setlocal spell!<cr>
+inoremap <expr> <tab> mhi#tab_yeah()
+inoremap <expr> <c-]> mhi#close_bracket()
 
 nnoremap <expr> n  'Nn'[v:searchforward].'zvzz'
 nnoremap <expr> N  'nN'[v:searchforward].'zvzz'
 
-nnoremap gg  ggzv
-nnoremap G   Gzv
-
-inoremap <expr> <c-]> mhi#close_bracket()
-
-nnoremap <silent> <c-p> :cprevious \| call halo#run()<cr>
-nnoremap <silent> <c-n> :cnext \| call halo#run()<cr>
-nnoremap <silent> [q    :cprevious \| call halo#run()<cr>
-nnoremap <silent> ]q    :cnext \| call halo#run()<cr>
-nnoremap <silent> [l    :lprevious \| call halo#run()<cr>
-nnoremap <silent> ]l    :lnext \| call halo#run()<cr>
+nnoremap <silent> <tab> <c-w>w
+nnoremap <silent> <c-p> :call mhi#switch_buffer('bprevious')<cr>
+nnoremap <silent> <c-n> :call mhi#switch_buffer('bnext')<cr>
 nnoremap <silent> [b    :call mhi#switch_buffer('bprevious')<cr>
 nnoremap <silent> ]b    :call mhi#switch_buffer('bnext')<cr>
-nnoremap <silent> [t    :tabprevious \| call halo#run()<cr>
-nnoremap <silent> ]t    :tabnext \| call halo#run()<cr>
-nnoremap <silent> <tab> <c-w>w:call halo#run()<cr>
+nnoremap <silent> [q    :cprevious<cr>
+nnoremap <silent> ]q    :cnext<cr>
+nnoremap <silent> [l    :lprevious<cr>
+nnoremap <silent> ]l    :lnext<cr>
+nnoremap <silent> [t    :tabprevious<cr>
+nnoremap <silent> ]t    :tabnext<cr>
 
 nnoremap [<space>  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
 nnoremap ]<space>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
@@ -393,27 +381,26 @@ if !has('nvim')
   if empty($TMUX)
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-    if v:version >= 800
-      let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-    endif
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
   else
     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
     let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-    if v:version >= 800
-      let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-    endif
+    let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
   endif
 endif
 
 " Autocmd {{{1
 augroup vimrc
+  " foldopen=hor sucks
+  autocmd BufWinEnter * normal! zvzz
+
   if has('nvim')
     autocmd TermOpen,BufEnter term://* startinsert
   endif
 
   autocmd BufReadPost *
         \ if line("'\"") > 1 && line("'\"") <= line("$") |
-        \   execute 'normal! g`"zvzz' |
+        \   execute 'normal! g`"' |
         \ endif
 
   autocmd WinEnter    * set cursorline
@@ -456,7 +443,7 @@ endfunction
 
 function! s:colors_lucius() abort
   if &background ==# 'light'
-    highlight Normal                  ctermbg=NONE
+    highlight Normal                  ctermbg=NONE guibg=NONE
     highlight CursorLine              ctermbg=255
     highlight User1      ctermfg=84   ctermbg=237  cterm=NONE
     highlight User2      ctermfg=222  ctermbg=237  cterm=NONE
@@ -472,15 +459,10 @@ function! s:colors_lucius() abort
   endif
 endfunction
 
-function! s:colors_snow() abort
-  highlight Normal ctermbg=NONE guibg=NONE
-endfunction
-
 augroup vimrc
   autocmd ColorScheme *      call s:colors_default()
   autocmd ColorScheme janah  call s:colors_janah()
   autocmd ColorScheme lucius call s:colors_lucius()
-  autocmd ColorScheme snow   call s:colors_snow()
 augroup END
 
 if has('gui_running')
@@ -503,7 +485,7 @@ else
     colorscheme lucius
   else
     set background=dark
-    colorscheme janah
+    colorscheme forest-night
   endif
 endif
 
@@ -610,7 +592,6 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
-
 " Plugin: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
@@ -621,17 +602,19 @@ let g:netrw_sort_options = 'i'
 
 " Plugin: nvim-langserver {{{2
 let g:ls = {
+      \ 'tex':        {'cmd': ['/Users/mhi/data/repo/texlab/target/release/texlab']},
       \ 'c':          {'cmd': ['clangd']},
-      \ 'cpp':        {'cmd': ['clangd']},
       \ 'objc':       {'cmd': ['clangd']},
       \ 'go':         {'cmd': ['gopls']},
       \ 'python':     {'cmd': ['pyls']},
-      \ 'lua':        {'cmd': ['lua-lsp']},
       \ 'rust':       {'cmd': ['rls']},
       \ 'javascript': {'cmd': ['javascript-typescript-stdio']},
       \ 'typescript': {'cmd': ['javascript-typescript-stdio']},
       \ 'elixir':     {'cmd': [$ME.'/elixir/elixir-ls/build/language_server.sh']},
-      \ }
+      \ 'ruby': {
+      \   'cmd': ['solargraph', 'stdio'],
+      \   'initializationOptions': { 'diagnostics': v:true },
+      \ }}
 
 nmap <leader>jd <plug>(ls-definition)
 nmap <leader>jh <plug>(ls-hover)
@@ -672,8 +655,7 @@ let g:EasyMotion_smartcase         = 0
 let g:EasyMotion_startofline       = 0
 let g:EasyMotion_use_smartsign_us  = 1
 let g:EasyMotion_use_upper         = 0
-
-let g:EasyMotion_skipfoldedline = 0
+let g:EasyMotion_skipfoldedline    = 0
 
 map <silent><space> <plug>(easymotion-s2)
 
@@ -783,6 +765,11 @@ augroup vimrc
 
   " -> after/ftplugin/ruby.vim
 
+  " Filetype: Rust {{{2
+  if has('nvim')
+    autocmd BufRead Cargo.toml call crates#toggle()
+  endif
+
   " Filetype: Sh, Zsh {{{2
   au FileType zsh,sh setl com-=:# sts=4 sw=4
         \| com! -buffer Lint Grepper -noprompt -buffer -grepprg shellcheck -fgcc
@@ -829,9 +816,9 @@ augroup vimrc
   xmap ac <plug>(signify-motion-outer-visual)
   nnoremap <silent><leader>p :SignifyHunkDiff<cr>
   nnoremap <silent><leader>u :SignifyHunkUndo<cr>
+  autocmd User SignifyAutocmds autocmd! signify CursorHold,CursorHoldI
 
   " Filetype: Vim, Vader {{{2
-  autocmd FileType vim nnoremap <buffer><silent> <cr> :if lookup#lookup()<bar>call halo#run()<bar>endif<cr>
   autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<bar>call halo#run()<cr>
   autocmd FileType vim setl sts=2 sw=2 isk-=#
   autocmd BufRead *.{vader,vim} command! -buffer Test call mhi#run_exercism_tests()

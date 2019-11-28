@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
 #
+# frozen_string_literal: true
+
 # usage: git whereami [HEAD]
 #
 # Show next and previous tags from ref and their distance.
 
-ref = ARGV.length > 0 ? ARGV[0] : 'HEAD'
+ref = !ARGV.empty? ? ARGV[0] : 'HEAD'
 
 def out(title, tag, distance)
   printf("%-20s %-20s %d commits away\n", title, tag, distance)

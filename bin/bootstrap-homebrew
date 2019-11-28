@@ -12,6 +12,7 @@ formulae=(
     asdf
     automake
     bash
+    bats-core
     cmake
     coreutils
     curl-openssl
@@ -21,7 +22,6 @@ formulae=(
     git
     gnupg
     go
-    jid
     jq
     libtool
     ncdu
@@ -61,9 +61,9 @@ formulae=(
     docker-edge
     flux
     font-fira-code
+    gifox
     iterm2
-    kap
-    spectacle
+    magicavoxel
     tor-browser
     vienna
     virtualbox

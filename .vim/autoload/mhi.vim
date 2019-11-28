@@ -84,28 +84,31 @@ function! mhi#tmux_navigate(direction) abort
 endfunction
 
 "
-" Smarter tag-based jumping.
+" Smarter jumping.
 "
 function! mhi#jump()
-  if (&filetype == 'vim' && &buftype == 'nofile') || &buftype == 'quickfix'
+  if (&filetype ==# 'vim' && &buftype ==# 'nofile') || &buftype ==# 'quickfix'
     execute "normal! \<cr>"
-  elseif &filetype == 'neoman'
-    execute "normal! \<c-]>"
+  elseif &filetype ==# 'vim'
+    call lookup#lookup()
+  elseif &filetype ==# 'man'
+    execute "normal \<c-]>"
+  elseif has_key(get(g:, 'ls#servers', {}), &filetype)
+    call ls#feature#definition()
   else
     let word = expand('<cword>')
     if empty(word)
       return
     endif
     try
-      execute 'cstag' word
-    catch /E433/
-      redraw | echomsg 'No tags file' | return
-    catch /E257/
-      redraw | echomsg 'No match:' word | return
+      execute 'tag' word
+    catch
+      echoerr substitute(v:exception, '.\{-}:', '', '')
+      return
     endtry
-    normal! zvzt
     call halo#run()
   endif
+  " normal! zvzt
 endfunction
 
 "
@@ -223,42 +226,40 @@ function! mhi#scratch(cmd) abort
 endfunction
 
 "
-" Make <tab> a little bit more useful. Stolen from @junegunn.
+" Make <tab> a little bit more useful. Stolen from junegunn.
 "
 function! s:can_complete(func, prefix)
-  if empty(a:func) || call(a:func, [1, '']) < 0
+  if empty(a:func) || a:func(1, '') < 0
     return 0
   endif
-  let result = call(a:func, [0, matchstr(a:prefix, '\k\+$')])
+  let result = a:func(0, matchstr(a:prefix, '\k\+$'))
   return !empty(type(result) == type([]) ? result : result.words)
 endfunction
 
-function! mhi#tab_yeah(k, o)
+function! mhi#tab_yeah()
   if pumvisible()
-    return a:k
+    return "\<c-n>"
   endif
-
   let line = getline('.')
   let col = col('.') - 2
   if empty(line) || line[col] !~ '\k\|[/~.]' || line[col + 1] =~ '\k'
-    return a:o
+    return "\<tab>"
   endif
-
   let prefix = expand(matchstr(line[0:col], '\S*$'))
   if prefix =~ '^[~/.]'
     return "\<c-x>\<c-f>"
   endif
-  if s:can_complete(&omnifunc, prefix)
-    return "\<c-x>\<c-o>"
-  endif
-  if s:can_complete(&completefunc, prefix)
+  if !empty(&completefunc) && s:can_complete(function(&completefunc), prefix)
     return "\<c-x>\<c-u>"
   endif
-  return a:k
+  if !empty(&omnifunc) && s:can_complete(function(&omnifunc), prefix)
+    return "\<c-x>\<c-o>"
+  endif
+  return "\<c-n>"
 endfunction
 
 "
-" Get syntax group information. Stolen from @jamessan.
+" Get syntax group information. Stolen from jamessan.
 "
 function! s:synnames()
   let syn                 = {}
@@ -380,6 +381,18 @@ function! mhi#normalize(path) abort
   return has('win32') && &shellslash == 0
         \ ? substitute(a:path, '\v^(\w):\\\\', '\1:\\', '')
         \ : a:path
+endfunction
+
+"
+" Highlight the '123' in 'ctermfg=123' according to its number.
+"
+function! mhi#vim_highlight_groups()
+  for c in range(256)
+    execute 'syntax match CtermFg'.c '/\<\%(ctermfg=\)\@<='.c.'\>/ display containedin=vimHiNmbr'
+    execute 'syntax match CtermBg'.c '/\<\%(ctermbg=\)\@<='.c.'\>/ display containedin=vimHiNmbr'
+    execute 'highlight CtermFg'.c 'ctermfg='.c 'cterm=NONE'
+    execute 'highlight CtermBg'.c 'ctermfg='.c 'cterm=NONE'
+  endfor
 endfunction
 
 " vim: fdm=syntax
