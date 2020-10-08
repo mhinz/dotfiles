@@ -7,6 +7,7 @@ newpath=(
     /usr/local/opt/llvm/bin
     /usr/local/opt/ncurses/bin
     ~/data/go/bin
+    ~/Library/Python/*/bin
     ~/.npm/bin
     ~/.asdf/bin
     ~/.asdf/shims

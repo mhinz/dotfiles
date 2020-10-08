@@ -140,10 +140,19 @@ function! mhi#search() abort
   let @@ = regsave
 endfunction
 
-function! mhi#search_all() abort
-  call mhi#search()
-  call setqflist([])
-  execute 'bufdo vimgrepadd! /'. @/ .'/ %'
+"
+" Jump forward/backward to next match and highlight it.
+"
+function! mhi#search_highlight_next_match(cmd) abort
+  silent! call matchdelete(s:match)
+  execute 'normal!' a:cmd.'zvzz'
+  let line = line('.')
+  let col = col('.')
+  call search(@/, 'zce', line, 100)
+  let len = col('.') - col + 1
+  call cursor(line, col)
+  echom [line, col, len]
+  let s:match = matchaddpos('IncSearch', [[line, col, len]])
 endfunction
 
 "
