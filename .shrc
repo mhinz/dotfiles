@@ -112,14 +112,16 @@ alias t='task'
 alias tf='task -f'
 alias tn='task | head -n 1'
 
-alias pip3up="pip3 list --format=columns | sed -e '1,2d' | cut -d' ' -f1 | xargs pip3 --no-cache-dir install -U"
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+
+alias pip3up="pip3 list | sed -e '1,2d; s/ .*//' | xargs pip3 --no-cache-dir install --use-feature=2020-resolver -U --user"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 if [[ $os = Darwin ]]; then
-    alias brewup='brew update && brew upgrade && brew cask upgrade && brew cleanup --prune 1'
+    alias brewup='brew update && brew upgrade && brew upgrade --cask && brew cleanup --prune 1'
     alias allup="pip3up; gemup; npmup; brewup"
 elif [[ $os = Linux ]]; then
-    alias aptup="sudo -- sh -c 'apt update && apt upgrade'"
+    alias aptup='sudo apt update && sudo apt upgrade && sudo apt autoremove'
     alias allup="pip3up; gemup; npmup; aptup"
 fi
 
@@ -128,7 +130,7 @@ alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 alias mirror='wget --mirror --no-parent --continue'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
-alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 --prefer-ffmpeg -o "%(title)s.%(ext)s"'
+alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 -o "%(title)s.%(ext)s"'
 
 alias rt='cd ~torrent/../session && rtorrent'
 
@@ -164,9 +166,9 @@ dsf() {
 
 s() {
     if (( $# )); then
-        ps -eo pid,ppid,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@" | grep "$@"
+        ps -eo pid,ppid,user,%cpu,%mem,state,command | grep -i "$@" | grep -v "grep.*$@" | grep "$@"
     else
-        ps -eo pid,ppid,%cpu,%mem,state,command
+        ps -eo pid,ppid,user,%cpu,%mem,state,command
     fi
 }
 
@@ -223,6 +225,25 @@ angband() {
 }
 
 _() { for file in "$@"; do mv -nv "$file" _"$file"; done }
+
+fsed() {
+    [[ $# -lt 2 ]] && { echo 'usage: fsed <sed cmd> <files>' 2>&1; return 1; }
+    for file in "${@:2}"; do mv -nv "$file" "$(sed "$1" <<< "$file")"; done
+}
+
+asn() {
+    (( !$# )) && { echo 'usage: asn <host>' 2>&1; return 1; }
+    local ip="$1"
+    grep ':' 1>/dev/null <<< "$ip" && ip="$(dig -x "$ip" +short)"     # IPv6 to domain
+    grep '[g-z]' 1>/dev/null <<< "$ip" && ip="$(dig "$ip" A +short)"  # domain to IPv4
+    local rr="$(printf '%s' "$ip." | tac -s.)"origin.asn.cymru.com
+    dig "$rr" TXT +short
+    whois -h whois.cymru.com -- "$ip"
+}
+
+hex() {
+    { echo 'obase=16'; seq "$1" "$2"; } | bc | paste -s -d ' '
+}
 # }}}
 
 # Chrome {{{1
@@ -260,7 +281,6 @@ f() {
 p() {
   local dirs=(
     $ME/github/*
-    $ME/repo
     $HOME/.vim/bundle
   )
   local dir="$(find "${dirs[@]}" -type d -mindepth 1 -maxdepth 1 | fzf-tmux -1 --tac)"

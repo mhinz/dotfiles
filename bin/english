@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'yaml'
-require 'rainbow'
 
 words = YAML.load_file(File.expand_path('~/english.yaml'))
 
 while words.any?
   word = words.keys.sample
-  print "\n#{Rainbow(word).cyan} "
+  print "\n\x1b[1;36m#{word}\x1b[0m "
   begin
     gets
   rescue Interrupt

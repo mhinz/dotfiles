@@ -10,3 +10,6 @@ _p() {
 PROMPT_COMMAND=_p
 
 shopt -s globstar
+
+stty werase undef
+bind '\C-w:unix-filename-rubout'

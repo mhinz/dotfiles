@@ -64,11 +64,12 @@ case "$1" in
         ;;
     ssh)
         shift
-        exec ssh -o UserKnownHostsFile=/dev/null \
+        # work around SSH banner timeout
+        # ConnectionAttempts/ConnectTimeout won't help here
+        while ! nc localhost 3022 </dev/null; do sleep 1; done
+        exec ssh \
+            -o UserKnownHostsFile=/dev/null \
             -o StrictHostKeyChecking=no \
-            -o ConnectionAttempts=20 \
-            -o ConnectTimeout=2 \
-            -o LogLevel=ERROR  \
             -p3022 -A "$@" mhi@localhost
         ;;
     start)
@@ -77,6 +78,8 @@ case "$1" in
             list_vms
             exit 0
         fi
+        # VBoxManage modifyvm "$2" --nic1 bridged
+        VBoxManage modifyvm "$2" --nic1 nat
         VBoxManage modifyvm "$2" --natpf1 'ssh,tcp,,3022,,22' 2>/dev/null
         VBoxHeadless --startvm "$2" &
         vm ssh
