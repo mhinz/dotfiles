@@ -19,6 +19,9 @@ fi
 
 export LANG=C
 
-[[ ! -f ./configure ]] && ./otp_build autoconf && ./configure "${flags[@]}"
+if [[ ! -f ./configure ]]; then
+    ./otp_build autoconf
+    ./configure "${flags[@]}"
+fi
 
 make install

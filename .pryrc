@@ -1,5 +1,3 @@
-Pry.config.prompt = proc { |obj, lvl, _| "[#{lvl}] #{obj} ❯ " }
-
 def line(obj, depth, indent=true)
   print indent ? obj.rjust(depth.to_i + obj.length) : obj
 end
@@ -20,3 +18,5 @@ def ppp(obj, depth=0, indent=true)
     line "#{':' if obj.is_a? Symbol}#{obj},\n", depth, indent
   end
 end
+
+# vim: ft=ruby
