@@ -114,7 +114,7 @@ alias tn='task | head -n 1'
 
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 
-alias pip3up="pip3 list | sed -e '1,2d; s/ .*//' | xargs pip3 --no-cache-dir install --use-feature=2020-resolver -U --user"
+alias pip3up="pip3 list --outdated | sed -e '1,2d; s/ .*//' | xargs pip3 --no-cache-dir install --use-feature=2020-resolver -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 if [[ $os = Darwin ]]; then
@@ -224,7 +224,15 @@ angband() {
     stty "$save_stty"
 }
 
-_() { for file in "$@"; do mv -nv "$file" _"$file"; done }
+_() {
+    for file in "$@"; do
+        if [[ ${file:0:1} = _ ]]; then
+            mv -nv "$file" "${file:1}"
+        else
+            mv -nv "$file" _"$file"
+        fi
+    done
+}
 
 fsed() {
     [[ $# -lt 2 ]] && { echo 'usage: fsed <sed cmd> <files>' 2>&1; return 1; }

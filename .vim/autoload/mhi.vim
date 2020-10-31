@@ -145,13 +145,16 @@ endfunction
 "
 function! mhi#search_highlight_next_match(cmd) abort
   silent! call matchdelete(s:match)
-  execute 'normal!' a:cmd.'zvzz'
+  try
+    execute 'normal!' a:cmd.'zvzz'
+  catch /E486/  " pattern not found
+    echohl ErrorMsg | echo substitute(v:exception, '^.\{-}:', '', '') | echohl NONE
+  endtry
   let line = line('.')
   let col = col('.')
   call search(@/, 'zce', line, 100)
   let len = col('.') - col + 1
   call cursor(line, col)
-  echom [line, col, len]
   let s:match = matchaddpos('IncSearch', [[line, col, len]])
 endfunction
 
