@@ -2,9 +2,6 @@
 
 sudo -v
 
-# Disable sound effects on boot
-sudo nvram SystemAudioVolume=" "
-
 # Cron {{{1
 # This needs full disk access enabled for the calling terminal emulator.
 # E.g. Security & Privacy -> Full Disk Access -> iTerm.app
