@@ -1,0 +1,27 @@
+{
+  "title": "Any",
+  "rules": [
+    {
+      "manipulators": [
+        {
+          "description": "(Any) caps_lock > left_control, caps_lock alone > escape",
+          "from": {
+            "key_code": "caps_lock"
+          },
+          "to": [
+            {
+              "key_code": "left_control",
+              "lazy": true
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "escape"
+            }
+          ],
+          "type": "basic"
+        }
+      ]
+    }
+  ]
+}
