@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+if [[ -d __unbook ]]; then
+    echo 'Directory "__unbook" exists. Remove it manually.' 1>&2
+    exit 1
+fi
+
+if [[ $# -eq 0 ]]; then
+    echo "usage: $0 <.rar/.zip>" 1>&2
+    exit 1
+fi
+
+mkdir __unbook && cd __unbook
+mv ../"$1" .
+
+ext="${1##*.}"
+
+if [[ $ext = rar ]]; then
+    unrar x "$1"
+elif [[ $ext = zip ]]; then
+    unzip "$1"
+fi
+
+dir="$(find . -type d | tail -n1)"
+books="$(find "$dir" -type f \( -name '*.epub' -o -name '*.pdf' \))"
+
+book="$(grep '\.epub$' <<< "$books")"
+[[ -z $book ]] && book="$(grep '\.pdf$' <<< "$books")"
+
+if [[ -z $book ]]; then
+    echo 'No boook found!' 1>&2
+    exit 1
+fi
+
+mv "$book" ..
+cd ..
+
+echo "→ ${book##*/}"
+
+read -n 1 -p 'Remove __unbook? [y/n] ' choice
+[[ $choice == [yY] ]] && rm -r __unbook
