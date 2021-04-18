@@ -43,45 +43,44 @@ let g:plug_pwindow = 'vertical rightbelow new'
 
 call plug#begin(s:bundle_dir)
   Plug 'jonathanfilip/vim-lucius'
-  Plug 'sainnhe/vim-color-forest-night'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'mhartington/oceanic-next'
+  Plug 'joshdick/onedark.vim'
 
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chrisbra/unicode.vim', {'on': ['UnicodeName', 'UnicodeTable']}
-  Plug 'easymotion/vim-easymotion', {'on': '<plug>(easymotion-s2)'}
   Plug 'godlygeek/csapprox', {'for': 'fugitiveblame' }
   Plug 'junegunn/fzf', has('win32') ? {} : {'on': 'FZF', 'dir': '~/local/fzf', 'do': './install --bin'}
-  Plug 'junegunn/gv.vim', {'on': 'GV'}
-  Plug 'junegunn/vader.vim'
   Plug 'junegunn/vim-easy-align', {'on': '<plug>(LiveEasyAlign)'}
   Plug 'junegunn/vim-plug'
-  Plug 'justinmk/vim-dirvish'
-  Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
-  Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-  Plug 'rhysd/committia.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-rsi'
   Plug 'tpope/vim-scriptease'
   Plug 'tpope/vim-surround'
-  Plug 'tweekmonster/helpful.vim', {'on': 'MANUALLY'}
 
-  Plug 'rust-lang/rust.vim', {'for': 'rust'}
-  Plug 'rhysd/rust-doc.vim', {'for': 'rust'}
-  Plug 'lifepillar/pgsql.vim', {'for': 'sql'}
-  Plug 'mattn/emmet-vim', {'for': 'html'}
-  Plug 'AndrewRadev/tagalong.vim', {'for': 'html'}
-  Plug 'pangloss/vim-javascript'
-  Plug 'HerringtonDarkholme/yats.vim'
-  Plug 'elixir-lang/vim-elixir'
+  if has('nvim-0.5')
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+    Plug 'nvim-treesitter/playground'
+    Plug 'norcalli/nvim-colorizer.lua'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'mhinz/telescope-spotlight.nvim'
+    Plug 'bfredl/luarefvim'
+    Plug 'phaazon/hop.nvim'
+  endif
 
   let g:plug_url_format = 'git@github.com:%s.git'
-  " Plug 'mhinz/nvim-langserver'
-  Plug 'mhinz/nvim-panacea', {'for': 'elixir'}
   Plug 'mhinz/vim-crates'
   Plug 'mhinz/vim-grepper'
   Plug 'mhinz/vim-halo'
+  Plug 'mhinz/vim-janah'
   Plug 'mhinz/vim-lookup'
   Plug 'mhinz/vim-mix-format'
   Plug 'mhinz/vim-rfc'
@@ -91,7 +90,11 @@ call plug#begin(s:bundle_dir)
   Plug 'mhinz/vim-tree'
   unlet! g:plug_url_format
 call plug#end()
-" }}}1
+
+if has('nvim-0.5')
+  lua require 'config'
+  lua require 'tree'
+endif
 
 " Init {{{1
 if has('nvim')
@@ -107,6 +110,7 @@ else
   packadd! matchit
 endif
 
+let g:vimsyn_embed   = 'l'
 let g:vimsyn_folding = 'f'
 let g:is_bash        = 1
 let g:lisp_rainbow   = 1
@@ -117,6 +121,7 @@ let g:loaded_2html_plugin     = 1
 let g:loaded_getscriptPlugin  = 1
 let g:loaded_gzip             = 1
 let g:loaded_logipat          = 1
+" let g:loaded_matchit          = 1
 " let g:loaded_matchparen       = 1
 let g:loaded_rrhelper         = 1
 let g:loaded_spellfile_plugin = 1
@@ -216,7 +221,7 @@ set suffixes     +=.a,.1,.class
 set wildignore   +=*.o,*.so,*.zip,*.png
 set wildmenu
 set wildoptions   =tagfile
-if has('nvim-0.4.0')
+if has('nvim')
   set wildoptions+=pum
 else
   set wildmode=list:longest,full
@@ -251,14 +256,14 @@ set cpoptions     =aABcefFqsZ
 set formatoptions =tcrqnj
 
 if has('multi_byte') && &encoding ==# 'utf-8'
-  let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
+  let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±,trail:⣿'
   let &fillchars = 'vert: ,diff: '  " ▚
   let &showbreak = '↪ '
   highlight VertSplit ctermfg=242
-  augroup vimrc
-    autocmd InsertEnter * set listchars-=trail:⣿
-    autocmd InsertLeave * set listchars+=trail:⣿
-  augroup END
+  " augroup vimrc
+  "   autocmd InsertEnter * set listchars-=trail:⣿
+  "   autocmd InsertLeave * set listchars+=trail:⣿
+  " augroup END
 else
   let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
   let &fillchars = 'vert: ,stlnc:#'
@@ -267,6 +272,10 @@ else
     autocmd InsertEnter * set listchars-=trail:.
     autocmd InsertLeave * set listchars+=trail:.
   augroup END
+endif
+
+if has('nvim')
+  set signcolumn=auto:2
 endif
 
 " Mapping {{{1
@@ -345,7 +354,8 @@ nnoremap <leader>x  :xit<cr>
 nnoremap <leader>l  :noh<bar>diffupdate<bar>call clearmatches()<bar>syntax sync fromstart<cr><c-l>
 nnoremap <leader>v  :Runtime<cr>
 nnoremap <leader>t  :Tree<cr>
-nnoremap <silent> <leader>d  :exe 'sil !open' fnameescape(printf('https://devdocs.io/#q=%s%%20%s', &ft, expand('<cword>')))<cr>
+nnoremap <silent> <leader>d  :Dirview<cr>
+" nnoremap <silent> <leader>d  :exe 'sil !open' fnameescape(printf('https://devdocs.io/#q=%s%%20%s', &ft, expand('<cword>')))<cr>
 
 nnoremap <silent><leader>b  :call mhi#git_blame_current_line()<cr>
 
@@ -355,8 +365,8 @@ nnoremap `  '
 nnoremap <bs>  <c-t>
 nnoremap <silent><cr>  :call mhi#jump()<cr>
 
-cnoremap <c-n>  <down>
-cnoremap <c-p>  <up>
+cnoremap <expr> <c-n> wildmenumode() ? "\<c-n>" : "\<down>"
+cnoremap <expr> <c-p> wildmenumode() ? "\<c-p>" : "\<up>"
 
 cnoremap <leader>r   $VIMRUNTIME/
 cnoremap <leader>ft  ~/.vim/after/ftplugin/
@@ -407,6 +417,8 @@ augroup vimrc
   autocmd InsertEnter * set nocursorline
   autocmd InsertLeave * set cursorline
 
+  autocmd FocusGained * call halo#run()
+
   autocmd CompleteDone * pclose
 augroup END
 
@@ -414,22 +426,33 @@ augroup END
 command! -nargs=1 -complete=command Scratch call mhi#scratch(<f-args>)
 command! CleanSpell  runtime! spell/cleanadd.vim
 command! Cd call mhi#cd()
-" command! Evo exe printf('GV -L :%s:%s', expand('<cword>'), expand('%:p'))
+command! -range Evo call mhi#git_log_evolution(<line1>, <line2>, expand('%'))
 command! Changed exe 'args' join(map(systemlist('git diff --name-only --relative "$@" 2>/dev/null'), 'fnameescape(v:val)'))
 command! -nargs=1 -bang T call mhi#terminal(<bang>0, <f-mods>, <f-args>)
+command! Signs PP sign_getplaced('.', {'lnum': line('.'), 'group': '*'})
+
+if has('nvim')
+  command! LuaG lua print(vim.inspect(_G))
+  command! LspClients lua print(vim.inspect(vim.lsp.buf_get_clients()))
+endif
 
 " Color {{{1
 function! s:colors_default() abort
-  highlight Comment cterm=italic
+  " highlight Comment cterm=italic
   highlight link User1 StatusLine   " master branch
   highlight link User2 StatusLine   " other branch
   highlight link User3 StatusLine   " separators
   highlight link User4 StatusLine   " filename at beginning
   highlight link User5 StatusLine   " ~changes
-  highlight link SignifySignAdd    DiffAdd
-  highlight link SignifySignDelete DiffDelete
-  highlight link SignifySignChange DiffChange
-  highlight Halo guifg=white guibg=#F92672 ctermfg=white ctermbg=197
+  " highlight SignifySignAdd ctermfg=151 ctermbg=NONE cterm=NONE
+  " highlight SignifySignDelete ctermfg=181 ctermbg=NONE cterm=NONE
+  " highlight SignifySignChange ctermfg=187 ctermbg=NONE cterm=NONE
+  " highlight Halo guifg=white guibg=#F92672 ctermfg=white ctermbg=197
+endfunction
+
+function! s:colors_fnord() abort
+  highlight link StartifyPath Identifier
+  highlight link StartifyFile Directory
 endfunction
 
 function! s:colors_janah() abort
@@ -454,7 +477,12 @@ function! s:colors_lucius() abort
     highlight Question   ctermfg=24   ctermbg=255  cterm=NONE
     highlight Search     ctermfg=fg   ctermbg=222  cterm=NONE
     highlight Folded                  ctermbg=253  cterm=NONE
-    highlight NormalFloat ctermfg=231 ctermbg=240  cterm=NONE
+    " highlight NormalFloat ctermfg=231 ctermbg=240  cterm=NONE
+    highlight NormalFloat ctermfg=0   ctermbg=223  cterm=NONE
+    highlight DirviewArchive    ctermfg=31
+    highlight DirviewDirectory  ctermfg=88
+    highlight DirviewImage      ctermfg=29
+    highlight DirviewVideo      ctermfg=115
   endif
 endfunction
 
@@ -462,6 +490,7 @@ augroup vimrc
   autocmd ColorScheme *      call s:colors_default()
   autocmd ColorScheme janah  call s:colors_janah()
   autocmd ColorScheme lucius call s:colors_lucius()
+  autocmd ColorScheme fnord  call s:colors_fnord()
 augroup END
 
 if has('gui_running')
@@ -479,12 +508,21 @@ if has('gui_running')
   command! Bigger  let &guifont = substitute(&guifont, '\d\+', '\=submatch(0)+1', '')
   command! Smaller let &guifont = substitute(&guifont, '\d\+', '\=submatch(0)-1', '')
 else
-  if !exists('$ITERM_PROFILE') || $ITERM_PROFILE == 'Light'
+  set termguicolors
+  if !has('nvim')
+    let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+    let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+  endif
+  if $TERM =~ 'alacritty'
+    set background=dark
+    color janah
+    highlight Normal ctermbg=236
+  elseif $ITERM_PROFILE == 'Light'
     set background=light
     colorscheme lucius
   else
     set background=dark
-    colorscheme forest-night
+    colorscheme fnord
   endif
 endif
 
@@ -503,7 +541,7 @@ function! SetStatusline()
   if exists('b:git_dir')
     let stl    .= '%3*:%*'
     let branch  = fugitive#head(8)
-    let stl    .= (branch == 'master') ? '%1*master%*' : '%2*'. branch .'%*'
+    let stl    .= ((branch =~# 'master\|main') ? '%1*' : '%2*'). branch .'%*'
     let stl    .= mhi#sy_stats_wrapper()
   endif
 
@@ -536,13 +574,10 @@ endfunction
 " }}}1
 
 " Plugin {{{1
-" Plugin: committia {{{2
-let g:committia_open_only_vim_starting = 0
-
-" Plugin: exception {{{2
-nnoremap <silent><leader>E :call exception#trace()<cr>
 " Plugin: fzf {{{2
 set runtimepath+=~/local/fzf
+
+let g:fzf_layout = {'down': '40%'}
 
 nnoremap <leader><leader> :Buffers<cr>
 nnoremap <leader>C        :Colorschemes<cr>
@@ -591,16 +626,6 @@ command! Colorschemes call fzf#run({
       \ 'left':    30
       \ })
 
-" Plugin: helpful {{{2
-function! s:helpful()
-  if plug#load('helpful.vim')
-    autocmd! help_versions
-    augroup! help_versions
-  endif
-  call helpful#cursor_word()
-endfunction
-autocmd FileType help nnoremap <buffer><silent> <leader>h :call <sid>helpful()<cr>
-
 " Plugin: netrw {{{2
 " let g:loaded_netrwPlugin = 1
 let g:netrw_banner       = 0
@@ -608,27 +633,6 @@ let g:netrw_bufsettings  = 'relativenumber'
 let g:netrw_keepdir      = 0
 let g:netrw_liststyle    = 1
 let g:netrw_sort_options = 'i'
-
-" Plugin: nvim-langserver {{{2
-let g:ls = {
-      \ 'c':          {'cmd': ['clangd']},
-      \ 'objc':       {'cmd': ['clangd']},
-      \ 'go':         {'cmd': ['gopls']},
-      \ 'python':     {'cmd': ['pyls']},
-      \ 'rust':       {'cmd': ['rls']},
-      \ 'javascript': {'cmd': ['javascript-typescript-stdio']},
-      \ 'typescript': {'cmd': ['javascript-typescript-stdio']},
-      \ }
-      " \ 'ruby': {
-      " \   'cmd': ['solargraph', 'stdio'],
-      " \   'initializationOptions': { 'diagnostics': v:true },
-      " \ 'elixir':     {'cmd': [$ME.'/elixir/elixir-ls/build/language_server.sh']},
-
-nmap <leader>jd <plug>(ls-definition)
-nmap <leader>jh <plug>(ls-hover)
-nmap <leader>jr <plug>(ls-references)
-nmap <leader>js <plug>(ls-signature-help)
-nmap <leader>jf <plug>(ls-formatting)
 
 " Plugin: surround {{{2
 let g:surround_indent = 1
@@ -642,30 +646,8 @@ let g:tagbar_autoclose = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact   = 1
 
-" Plugin: undotree {{{2
-nnoremap <f3>  :UndotreeToggle<cr>
-
-" Plugin: vim-dirvish {{{2
-autocmd FileType dirvish nmap <buffer> <c-o> -
-autocmd VimEnter * if &ft == 'dirvish' | exe 'lcd' expand('%') | endif
-nnoremap <expr> <f1> (&ft == 'dirvish' ? ':close' : ':leftabove 40vs +Dirvish')."\<cr>"
-
 " Plugin: vim-easy-align {{{2
 xmap <cr> <plug>(LiveEasyAlign)
-
-" Plugin: vim-easymotion {{{2
-let g:EasyMotion_do_mapping        = 0
-let g:EasyMotion_do_shade          = 1
-let g:EasyMotion_inc_highlight     = 0
-let g:EasyMotion_landing_highlight = 0
-let g:EasyMotion_off_screen_search = 0
-let g:EasyMotion_smartcase         = 0
-let g:EasyMotion_startofline       = 0
-let g:EasyMotion_use_smartsign_us  = 1
-let g:EasyMotion_use_upper         = 0
-let g:EasyMotion_skipfoldedline    = 0
-
-map <silent><space> <plug>(easymotion-s2)
 
 " Plugin: vim-grepper {{{2
 nnoremap <leader>g :Grepper<cr>
@@ -694,7 +676,7 @@ let g:sayonara_confirm_quit = 0
 nnoremap <leader>st :Startify<cr>
 
 let g:startify_change_to_dir       = 0
-let g:startify_custom_header       = 'startify#pad(startify#fortune#boxed())'
+" let g:startify_custom_header       = 'startify#pad(startify#fortune#boxed())'
 let g:startify_enable_special      = 0
 let g:startify_fortune_use_unicode = 1
 let g:startify_update_oldfiles     = 1
@@ -708,10 +690,9 @@ augroup vimrc
   autocmd FileType nasm let &commentstring = '; %s'
 
   " Filetype: C {{{2
+  autocmd FileType c,cpp setl com=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/
   autocmd BufLeave *.{c,cpp} mark C
   autocmd BufLeave *.h       mark H
-
-  " -> after/ftplugin/c.vim
 
   " Filetype: cmake {{{2
   autocmd FileType cmake setlocal commentstring=#\ %s
@@ -802,23 +783,11 @@ augroup vimrc
         \|   nnoremap <buffer> .. :edit %:h<cr>
         \| endif
 
-  " gv
-  autocmd FileType GV
-        \  set foldlevel=1
-        \| nnoremap <buffer> q :qa<cr>
-        \| nmap     <buffer> j ]]<cr>
-        \| nmap     <buffer> k [[<cr>
-        \| nmap     <buffer> <LeftRelease> o
-
-  highlight link diffAdded     DiffAdd
-  highlight link diffRemoved   DiffDelete
-  highlight link diffFile      Directory
-  highlight link diffLine      Comment
-  highlight link diffIndexLine Comment
-  highlight link diffSubname   Comment
-
   " signify
-  let g:signify_sign_show_text = 0
+  let g:signify_sign_show_text = 1
+  let g:signify_sign_add = '▊'
+  let g:signify_sign_change = '▊'
+  let g:signify_sign_delete = '▊'
   omap ic <plug>(signify-motion-inner-pending)
   xmap ic <plug>(signify-motion-inner-visual)
   omap ac <plug>(signify-motion-outer-pending)
@@ -830,9 +799,12 @@ augroup vimrc
   " Filetype: Vim, Vader {{{2
   autocmd FileType vim nnoremap <buffer><silent> <bs> :call lookup#pop()<bar>call halo#run()<cr>
   autocmd FileType vim setl sts=2 sw=2 isk-=#
-  autocmd BufRead *.{vader,vim} command! -buffer Test call mhi#run_exercism_tests()
 " }}}2
 augroup END
 " }}}1
+
+if filereadable($v.'/magic.vim')
+  source $v/magic.vim
+endif
 
 " vim: sw=2 sts=2 tw=0 fdm=marker

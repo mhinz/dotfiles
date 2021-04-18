@@ -18,6 +18,19 @@ function! mhi#git_blame_current_line() abort
 endfunction
 
 "
+" Show evolution of current line
+"
+function mhi#git_log_evolution(startline, endline, file) abort
+  let cmd = printf('git log -L %s,%s:%s', a:startline, a:endline, a:file)
+  enew
+  set buftype=nofile
+  setfiletype git
+  let &l:statusline = cmd
+  nnoremap <silent><buffer> q :bd<cr>
+  execute 'silent! %!' cmd
+endfunction
+
+"
 " Close nearest open bracket.
 "
 function! mhi#close_bracket() abort
