@@ -10,6 +10,7 @@
   filemode     = false
 [init]
   templatedir = ~/.config/git/template
+  defaultBranch = main
 [commit]
   gpgsign = true
 [fetch]

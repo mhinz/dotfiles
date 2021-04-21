@@ -3,10 +3,13 @@
 dir="${ME}/github/vim/vim"
 prefix="${HOME}/local/vim"
 
+# python3-config --configdir
 flags=(
     "--prefix=${prefix}"
     '--with-compiledby=mhi'
     '--enable-rubyinterp=dynamic'
+    '--enable-python3interp'
+    '--with-python3-config-dir=/usr/local/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9/config-3.9-darwin'
 )
 
 [[ $(uname) == Linux ]] && flags+=('--with-x')

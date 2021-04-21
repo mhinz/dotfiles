@@ -12,13 +12,9 @@ formulae=(
     asdf
     automake
     bash
-    bats-core
     cmake
     coreutils
     curl-openssl
-    emacs
-    erlang
-    gawk
     git
     gnupg
     go
@@ -53,21 +49,35 @@ brew install "${formulae[@]}"
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
 brew tap caskroom/cask
+brew tap homebrew/services
 brew tap homebrew/cask-fonts
 brew tap homebrew/cask-versions
 
 formulae=(
+    brave-browser
     calibre
+    dbeaver-community
     docker-edge
     flux
+    font-dejavu
     font-fira-code
+    font-juliamono
     gifox
+    gimp
     iterm2
+    karabiner-elements
+    kitty
     magicavoxel
+    rar
     tor-browser
     vienna
     virtualbox
     virtualbox-extension-pack
+    vlc
+    wireshark
+
+    blockblock
+    lulu
 )
 
-brew cask install "${formulae[@]}"
+brew install --cask "${formulae[@]}"

@@ -16,6 +16,7 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 20
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSRequiresAquaSystemAppearance  -bool true
 defaults write com.apple.finder AppleShowAllFiles -boolean true
+defaults write com.google.Keystone.Agent checkInterval 172800
 
 # Defaults (need disabled SIP) {{{1
 if [[ "$(csrutil status)" =~ enabled ]]; then
