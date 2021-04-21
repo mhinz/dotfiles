@@ -27,7 +27,8 @@ case $1 in
     arg=$2
     declare -A configs=(
       [g]=~/.config/git/config
-      [m]=~/.muttrc
+      [l]=~/.vim/lua/mhi.lua
+      [m]=~/.vim/magic.vim
       [t]=~/.tmux.conf
       [v]=~/.vim/vimrc
       [ze]=~/.zsh/.zshenv

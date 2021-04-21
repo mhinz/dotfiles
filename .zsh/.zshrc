@@ -75,9 +75,7 @@ setopt share_history        # share history between sessions
 
 autoload -U colors && colors
 
-precmd() {
-    PS1='$(_prompt)'
-}
+precmd() { _prompt }
 SPROMPT="%R -> %r:%f "
 PROMPT2="+%f "
 PROMPT3="Select:%f "
@@ -167,7 +165,7 @@ bindkey -M menuselect 'l' forward-char
 
 zstyle ':completion:*'                    matcher-list 'm:{a-z}={A-Z} r:|[-_.+,]=** r:|=*'
 zstyle ':completion:*:default'            list-colors  ${(s.:.)LS_COLORS} 'ma=01;38;05;255;48;05;161'
-zstyle ':completion:*:descriptions'       format       $'%{\e[0;31m%}=> %B%d%b%{\e[0m%}'
+zstyle ':completion:*:descriptions'       format       '→ %B%d%b%'
 zstyle ':completion:*:approximate:*'      max-errors   '(( reply=($#PREFIX+$#SUFFIX)/3 ))'
 zstyle ':completion::complete:*'          use-cache    true
 zstyle ':completion:*'                    cache-path   ~/.zsh/cache
@@ -176,8 +174,8 @@ zstyle ':completion:*'                    menu         select=2
 zstyle ':completion:*'                    special-dirs ..
 zstyle ':completion:*'                    group-name   ''
 
-zstyle ':completion:*:kill:*'             command      'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
-zstyle ':completion:*:*:kill:*:processes' list-colors  '=(#b) #([0-9]#)*=0=01;31'
+# zstyle ':completion:*:kill:*'             command      'ps f -u $USER -wo pid,ppid,state,%cpu,%mem,tty,cmd'
+# zstyle ':completion:*:*:kill:*:processes' list-colors  '=(#b) #([0-9]#)*=0=01;31'
 
 compctl -g '*.class'      java
 compctl -g '*.(c|o|a)':   cc gcc
@@ -207,6 +205,8 @@ compctl -g '*.(htm|html|php)' firefox iceweasel opera lynx w3m link2 dillo uzbl 
 compctl -fg '*.(avi|mp*g|mp4|wmv|ogm|mkv|xvid|divx)' mplayer gmplayer vlc
 compctl -g '*.(jp*g|gif|xpm|png|bmp)'                display gimp feh geeqie fbsetbg
 compctl -g '*.(mp3|m4a|ogg|au|wav)'                  cmus cmus-remote xmms cr
+
+compctl -g '*.(rar|zip)' unbook
 
 _completion_tmux_sessions() {
     local -a sessions=( ${(f)"$(command tmux list-sessions)"} )
@@ -249,4 +249,4 @@ backdoor() {
     fi
 }
 
-# vim: ft=sh fdm=marker
+# vim: fdm=marker

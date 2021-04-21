@@ -75,7 +75,7 @@ TERM xterm-debian
 #FILE 00 # regular file: use no color at all
 RESET 0 # reset to "normal" color
 # DIR 38;5;150 # directory
-DIR 38;5;88 # directory
+DIR 38;5;31;1 # directory
 # LINK 38;5;174 # symbolic link. (If you set this to 'target' instead of a
 LINK 38;5;24 # symbolic link. (If you set this to 'target' instead of a
 # ORPHAN 40;31;01 # symlink to nonexistent file, or non-stat'able file
@@ -141,7 +141,7 @@ EXEC 4;38;5;16
 .war 01;31
 .ear 01;31
 .sar 01;31
-.rar 01;31
+.rar 38;05;164
 .alz 01;31
 .ace 01;31
 .zoo 01;31
@@ -163,7 +163,7 @@ EXEC 4;38;5;16
 .tif  38;5;29
 .tiff 38;5;29
 .png  38;5;29
-.svg  38;5;115
+.svg  38;5;29
 .svgz 38;5;115
 .mng  38;5;115
 .pcx  38;5;115
@@ -218,3 +218,6 @@ EXEC 4;38;5;16
 .oga 00;36
 .spx 00;36
 .xspf 00;36
+# misc
+.conf 38;05;161
+.log 38;05;161

@@ -2,12 +2,15 @@
 
 # PATH {{{1
 newpath=(
-    /usr/local/sbin  # homebrew
-    /usr/local/opt/coreutils/libexec/gnubin  # homebrew; keg-only
-    /usr/local/opt/ncurses/bin  # homebrew; keg-only
-    /usr/local/opt/ruby/bin  # homebrew; keg-only
+    # homebrew (keg-only)
+    /usr/local/sbin
+    /usr/local/opt/coreutils/libexec/gnubin
+    /usr/local/opt/ncurses/bin
+    /usr/local/opt/ruby/bin
+    /usr/local/lib/ruby/gems/*/bin
+    /usr/local/opt/llvm/bin
+
     ~/data/go/bin  # $GOPATH
-    ~/.gem/ruby/*/bin  # --user-install from ~/.gemrc
     ~/.npm/bin
     ~/.asdf/bin
     ~/.asdf/shims

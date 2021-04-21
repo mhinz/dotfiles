@@ -4,7 +4,17 @@ os="$(uname -s)"
 
 stty discard undef
 
-if [ "$ITERM_PROFILE" = Dark ]; then
+if [[ -z $THEME ]]; then
+    if [[ -n $ITERM_PROFILE  ]]; then
+        export THEME=$ITERM_PROFILE
+    elif [[ -n $KITTY_WINDOW_ID ]]; then
+        export THEME=Light
+    else
+        export THEME=Dark
+    fi
+fi
+
+if [[ $THEME = Dark ]]; then
     eval $(dircolors ~/.zsh/dircolors.dark)
     ln -fs \
         ~/.config/git/config.colors.dark \
@@ -20,6 +30,7 @@ fi
 if [[ -n ${ZSH_VERSION-} ]]; then
     _p_pink='%F{161}'
     _p_red='%F{9}'
+    _p_green='%F{46}' # 77
     _p_blue='%F{67}'
     _p_clear='%f%k%b%u'
     _p_bold='%B'
@@ -29,6 +40,7 @@ if [[ -n ${ZSH_VERSION-} ]]; then
 else
     _p_pink='\[\e[38;5;161m\]'
     _p_red='\[\e[38;5;9m\]'
+    _p_green='\[\e[38;5;46m\]'
     _p_blue='\[\e[38;5;67m\]'
     _p_clear='\[\e[0m\]'
     _p_bold='\[\e[1m\]'
@@ -37,9 +49,11 @@ else
     _p_host='\[\e[38;5;32m\]'
 fi
 
+[[ $THEME = Dark ]] && _p_main=$_p_green || _p_main=$_p_pink
+
 _prompt() {
     local exitval=$?
-    local jobs="$(jobs | wc -l)"
+    local jobs="$(jobs | wc -l | tr -d '\n')"
     local gittop="$(git rev-parse --show-toplevel 2>/dev/null)"
     local pwd="$(pwd -P)"
     local p
@@ -56,7 +70,7 @@ _prompt() {
         p+="${_p_host}$(hostname) "
     fi
 
-    p+=$_p_pink
+    p+=$_p_main
 
     if [[ -z $gittop ]]; then
         p+="$pwd "
@@ -64,7 +78,7 @@ _prompt() {
         local parentdir="${gittop%/*}"
         local front="${parentdir/#${HOME}/~}"
         local middle="${_p_underline}${_p_bold}${gittop##*/}${_p_clear}"
-        local back="${_p_pink}${pwd#${gittop}}"
+        local back="${_p_main}${pwd#${gittop}}"
         p+="${front}/${middle}${back}${_p_clear} "
 
         # branch name or short SHA if detached
@@ -94,12 +108,12 @@ _prompt() {
         fi
     fi
 
-    p+="${_p_clear}\n"
+    p+="${_p_clear}"$'\n'
 
     (( $jobs )) && p+="[${_p_blue}${_p_bold}${jobs}${_p_clear}]"
     (( $exitval )) && p+="[${_p_red}${_p_bold}${exitval}${_p_clear}]"
 
-    echo -e "${p}❯ "
+    PS1="${p}❯ "
 }
 
 # Aliases {{{1
@@ -112,13 +126,11 @@ alias t='task'
 alias tf='task -f'
 alias tn='task | head -n 1'
 
-alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
-
-alias pip3up="pip3 list --outdated | sed -e '1,2d; s/ .*//' | xargs pip3 --no-cache-dir install --use-feature=2020-resolver -U"
+alias pip3up="pip3 list --outdated | sed -e '1,2d; s/ .*//' | xargs pip3 --no-cache-dir install -U"
 alias gemup="gem update --system && gem update && gem cleanup"
 alias npmup="npm install npm@latest -g && npm -g update"
 if [[ $os = Darwin ]]; then
-    alias brewup='brew update && brew upgrade && brew upgrade --cask && brew cleanup --prune 1'
+    alias brewup='brew update && brew upgrade && brew upgrade --cask --greedy && brew cleanup --prune 1'
     alias allup="pip3up; gemup; npmup; brewup"
 elif [[ $os = Linux ]]; then
     alias aptup='sudo apt update && sudo apt upgrade && sudo apt autoremove'
@@ -126,20 +138,12 @@ elif [[ $os = Linux ]]; then
 fi
 
 alias stripcolors='sed -r "s/\x1b\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
-
 alias mirror='wget --mirror --no-parent --continue'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias val='valgrind -v --leak-check=full --show-reachable=yes'
 alias yt2mp3='youtube-dl -x --audio-format mp3 --audio-quality 0 -o "%(title)s.%(ext)s"'
-
-alias rt='cd ~torrent/../session && rtorrent'
-
-if [[ $os = Darwin ]]; then
-    alias chrome='open -a Google\ Chrome'
-    alias preview='open -a Preview'
-    alias vlc='open -a VLC'
-    alias xcode='open -a Xcode'
-fi
+alias yt2mp3-chapters='yt-dlp -x --audio-format mp3 --audio-quality 0 --split-chapters -o "%(title)s - %(chapter_number)s. %(chapter)s.%(ext)s"'
+alias yt2mp3-playlist='yt-dlp -x --audio-format mp3 --audio-quality 0 --yes-playlist -o "%(title)s - %(playlist_index)s. %(playlist)s.%(ext)s"'
 
 if [[ $os = FreeBSD ]]; then
     alias ls='gnuls --color=auto -N'
@@ -158,6 +162,25 @@ alias 3='fg %3'
 alias 11='bg %1'
 alias 22='bg %2'
 alias 33='bg %3'
+
+if [[ $os = Darwin ]]; then
+    alias chrome='open -a Google\ Chrome'
+    alias preview='open -a Preview'
+    alias vlc='open -a VLC'
+    alias xcode='open -a Xcode'
+
+    if [[ -x /Applications/LuLu.app/Contents/Resources/Netiquette.app/Contents/MacOS/Netiquette ]]; then
+        alias objsee-netiquette='/Applications/LuLu.app/Contents/Resources/Netiquette.app/Contents/MacOS/Netiquette -list'
+    fi
+
+    if [[ -x /Applications/FileMonitor.app/Contents/MacOS/FileMonitor ]]; then
+        alias objsee-filemonitor='sudo /Applications/FileMonitor.app/Contents/MacOS/FileMonitor'
+    fi
+
+    if [[ -x /Applications/ProcessMonitor.app/Contents/MacOS/ProcessMonitor ]]; then
+        alias objsee-processmonitor='sudo /Applications/ProcessMonitor.app/Contents/MacOS/ProcessMonitor'
+    fi
+fi
 
 # Functions {{{1
 dsf() {
@@ -252,6 +275,10 @@ asn() {
 hex() {
     { echo 'obase=16'; seq "$1" "$2"; } | bc | paste -s -d ' '
 }
+
+mount() {
+    command mount | sed -e 's/^\(.*\) on \([^ ]*\)/\1\t\2\t/' | sort -t$'\t' -k2 -f | column -s$'\t' -t
+}
 # }}}
 
 # Chrome {{{1
@@ -295,23 +322,21 @@ p() {
   [[ -n $dir ]] && cd "$dir" && clear
 }
 
-pf() {
-  p && f
-}
-
 c() {
   local configs=(
-    $HOME/.bash_profile
-    $HOME/.bashrc
-    $HOME/.config/git/config
-    $HOME/.profile
-    $HOME/.shrc
-    $HOME/.tmux.conf
-    $HOME/.vim/autoload/mhi.vim
-    $HOME/.vim/vimrc
-    $HOME/.zsh/.zprofile
-    $HOME/.zsh/.zshrc
-    $HOME/.zshenv
+    ~/.bash_profile
+    ~/.bashrc
+    ~/.config/git/config
+    ~/.profile
+    ~/.shrc
+    ~/.tmux.conf
+    ~/.vim/autoload/mhi.vim
+    ~/.vim/lua/config.lua
+    ~/.vim/magic.vim
+    ~/.vim/vimrc
+    ~/.zsh/.zprofile
+    ~/.zsh/.zshrc
+    ~/.zshenv
   )
   local IFS=$'\n'
   local files=($(echo "${configs[*]}" | fzf-tmux -m -1 --tac --tiebreak=index))
@@ -395,8 +420,8 @@ gho() {
   open ${url}/tree/${branch}/${prefix}${1:-}
 }
 
-gv() {
-    nvim +"GV $*" +'sil tabc 2' +'exe "normal \<cr>"'
+gl() {
+    nvim +'Gclog'
 }
 
 # iTerm2 {{{1
@@ -465,12 +490,6 @@ va() {
 
 vg() {
     nvim -q <(git grep -nI "$@")
-}
-
-# Run a legacy test in ~v/src/testdir
-vt() {
-    vim -u unix.vim -U NONE --noplugin -s dotest.in $1
-    test -f ${1%.*}.failed && diff -u ${1%.*}.ok ${1%.*}.failed
 }
 
 test -r ~/.shenv && . ~/.shenv
