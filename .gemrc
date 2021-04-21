@@ -3,4 +3,4 @@
 :verbose: true
 :benchmark: false
 :backtrace: false
-gem: --user-install --no-document
+gem: --no-document
