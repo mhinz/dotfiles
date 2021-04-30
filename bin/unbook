@@ -32,10 +32,16 @@ if [[ -z $book ]]; then
     exit 1
 fi
 
-mv "$book" ..
+if command -v rlwrap 1>/dev/null; then
+    new_name="$(rlwrap -pYellow -S 'New name> ' -P "${book##*/}" -o cat)"
+    mv "$book" ../"${new_name}"
+    echo "→ ${new_name}"
+else
+    mv "$book" ..
+    echo "→ ${book##*/}"
+fi
+
 cd ..
 
-echo "→ ${book##*/}"
-
-read -n 1 -p 'Remove __unbook? [y/n] ' choice
+read -r -n 1 -p 'Remove __unbook? [y/n] ' choice
 [[ $choice == [yY] ]] && rm -r __unbook
