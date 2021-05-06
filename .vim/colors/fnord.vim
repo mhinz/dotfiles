@@ -11,8 +11,8 @@ if !has('gui_running') || &termguicolors == 0
   endif
 endif
 
-highlight clear
-syntax reset
+" highlight clear
+" syntax reset
 
 function! s:hi(group, fg, bg, gui, guisp)
   let config = a:group
@@ -38,6 +38,7 @@ let s:yellow0 = '#e5e568'
 let s:purple  = '#5e50ba'
 let s:orange  = '#d69a66'
 let s:orange2 = '#e3c08e'
+let s:orange3 = '#d2a500'
 " let s:red     = '#772d26'
 let s:green   = '#97dd7b'
 let s:green2  = '#103850'
@@ -48,8 +49,23 @@ let s:pink    = '#d371e3'
 
 call s:hi('Normal', s:gray0, s:blue2, 'NONE', '')
 
-" call s:hi('NormalFloat', '', s:blue3,  'NONE', '')
-" call s:hi('FloatBorder', s:red3, s:blue3, 'NONE', '')
+call s:hi('NormalFloat', '', s:blue3,  'NONE', '')
+call s:hi('FloatBorder', s:red3, s:blue3, 'NONE', '')
+
+" call s:hi('StatusLine', 'black', s:blue0, 'NONE', '')
+call s:hi('StatusLine', s:gray0, s:blue7, 'bold', '')
+call s:hi('StatusLineNC', s:gray0, s:blue7, 'NONE', '')
+
+call s:hi('User1', '#6acdef', s:blue7, 'bold', '')  " main/master branch
+call s:hi('User2', s:yellow0, s:blue7, 'bold', '')  " other branch
+call s:hi('User3', s:blue7,   s:blue7, '',     '')  " hunkline brackets
+call s:hi('User4', s:green,   s:blue7, 'bold', '')  " filename
+call s:hi('User5', '#ef8a55', s:blue7, '',     '')  " hunkline
+call s:hi('User6', s:blue6,   s:blue7, '',     '')  " separators
+
+call s:hi('TabLineSel', 'black', s:blue5, 'NONE', '')
+call s:hi('TabLine', s:gray0, s:blue7, 'NONE', '')
+call s:hi('TabLineFill', s:gray1, s:blue2, 'NONE', '')
 
 call s:hi('Visual', s:blue2, s:green, 'NONE', 'NONE')
 call s:hi('CursorLine', '', s:blue7, 'NONE', 'NONE')
@@ -60,9 +76,6 @@ call s:hi('Function', s:yellow0, '', 'NONE', '')
 call s:hi('Identifier', s:blue0, '', 'NONE', '')
 call s:hi('PreProc', s:blue0, '', 'NONE', '')
 call s:hi('String', s:green, '', 'NONE', '')
-" call s:hi('StatusLine', 'black', s:blue0, 'NONE', '')
-call s:hi('StatusLine', s:gray0, s:blue7, 'NONE', '')
-call s:hi('StatusLineNC', 'black', s:blue1, 'NONE', '')
 call s:hi('Type', s:blue0, '', 'bold', '')
 call s:hi('VertSplit', '', s:blue7, 'NONE', '')
 call s:hi('Comment', s:blue4, '', 'NONE', '')
@@ -86,9 +99,16 @@ call s:hi('PmenuThumb', 'black', s:blue2, 'NONE', '')
 
 call s:hi('RFCType', s:blue6, '', 'NONE', '')
 call s:hi('RFCID', s:blue4, '', 'NONE', '')
-call s:hi('RFCDelim', s:blue6, '', 'NONE', '')      " fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+call s:hi('RFCDelim', s:blue6, '', 'NONE', '')
 
-call s:hi('ErrorMsg', s:red3, s:blue2, 'NONE', '')
+call s:hi('ErrorMsg', s:red3, s:blue2, 'bold', '')
+call s:hi('Todo', s:yellow0, s:blue2, 'bold', '')
+call s:hi('Question', s:pink, s:blue2, 'bold', '')
+
+call s:hi('QuickFixLine', s:orange2, '', 'bold', '')
+
+call s:hi('Search', 'black', s:yellow0, 'NONE', '')
+call s:hi('IncSearch', 'black', s:red3, 'NONE', '')
 
 highlight default link diffAdded     DiffAdd
 highlight default link diffRemoved   DiffDelete

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+os="$(uname -o)"
+
+if [ "$os" = Darwin ]; then
+    pmset -g batt | awk 'NR==2 { gsub(/;/, ""); print $3 }'
+    exit 0
+fi
+
+exit 1
