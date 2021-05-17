@@ -44,6 +44,8 @@ export LANG=en_US.UTF-8
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
 export FZF_DEFAULT_OPTS='--inline-info --color=light'
 
+export RIPGREP_CONFIG_PATH="$HOME/.config/rg/rgrc"
+
 export ELIXIR_EDITOR='ec +__LINE__ __FILE__'
 
 export GOPATH=$ME/go
